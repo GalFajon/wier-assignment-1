@@ -1,0 +1,88 @@
+from flask import Blueprint, request, jsonify, abort
+from sqlalchemy.exc import IntegrityError
+import database.database as database
+
+bp = Blueprint("pages", __name__, url_prefix="/pages")
+
+def to_dict_page(p):
+    return {
+        "id": p.id,
+        "site_id": p.site_id,
+        "page_type_code": p.page_type_code,
+        "url": p.url,
+        "html_content": p.html_content,
+        "http_status_code": p.http_status_code,
+        "accessed_time": p.accessed_time,
+    }
+
+@bp.route("/", methods=["GET"])
+def list_pages():
+    db = database.SessionLocal()
+    try:
+        pages = db.query(database.Page).all()
+        return jsonify([to_dict_page(p) for p in pages])
+    finally:
+        db.close()
+
+@bp.route("/<int:page_id>", methods=["GET"])
+def get_page(page_id):
+    db = database.SessionLocal()
+    try:
+        p = db.query(database.Page).get(page_id)
+        if not p:
+            abort(404)
+        return jsonify(to_dict_page(p))
+    finally:
+        db.close()
+
+@bp.route("/", methods=["POST"])
+def create_page():
+    payload = request.get_json(force=True)
+    db = database.SessionLocal()
+    try:
+        p = database.Page(
+            site_id=payload.get("site_id"),
+            page_type_code=payload.get("page_type_code"),
+            url=payload.get("url"),
+            html_content=payload.get("html_content"),
+            http_status_code=payload.get("http_status_code"),
+            accessed_time=payload.get("accessed_time"),
+        )
+        db.add(p)
+        db.commit()
+        db.refresh(p)
+        return jsonify(to_dict_page(p)), 201
+    except IntegrityError:
+        db.rollback()
+        abort(400)
+    finally:
+        db.close()
+
+@bp.route("/<int:page_id>", methods=["PUT"])
+def update_page(page_id):
+    payload = request.get_json(force=True)
+    db = database.SessionLocal()
+    try:
+        p = db.query(database.Page).get(page_id)
+        if not p:
+            abort(404)
+        for k in ("site_id", "page_type_code", "url", "html_content", "http_status_code", "accessed_time"):
+            if k in payload:
+                setattr(p, k, payload[k])
+        db.commit()
+        return jsonify(to_dict_page(p))
+    finally:
+        db.close()
+
+@bp.route("/<int:page_id>", methods=["DELETE"])
+def delete_page(page_id):
+    db = database.SessionLocal()
+    try:
+        p = db.query(database.Page).get(page_id)
+        if not p:
+            abort(404)
+        db.delete(p)
+        db.commit()
+        return "", 204
+    finally:
+        db.close()
