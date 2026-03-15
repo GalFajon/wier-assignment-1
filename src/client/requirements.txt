@@ -1,2 +1,7 @@
 Flask>=2.0
 requests>=2.0
+seaborn
+scikit-learn
+beautifulsoup4
+selenium
+robotexclusionrulesparser
