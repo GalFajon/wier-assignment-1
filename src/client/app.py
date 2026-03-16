@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-import api_client
+import utils.api_client as api_client # type: ignore
 
 app = Flask(__name__)
 
