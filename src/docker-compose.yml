@@ -6,29 +6,35 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
-      POSTGRES_DB: appdb
+      POSTGRES_DB: crawldb
     volumes:
       - ./db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
     ports:
       - "5432:5432"
 
   client:
     build: ./client
     depends_on:
-      - db
+      - server
     environment:
       PORT: 5000
-      DATABASE_URL: postgres://postgres:example@db:5432/appdb
+      DATABASE_URL: postgresql://postgres:example@db:5432/crawldb
     ports:
       - "5001:5000"
 
   server:
     build: ./server
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       PORT: 5000
-      DATABASE_URL: postgres://postgres:example@db:5432/appdb
+      DATABASE_URL: postgresql://postgres:example@db:5432/crawldb
     ports:
       - "5002:5000"
 
