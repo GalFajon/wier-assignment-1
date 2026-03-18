@@ -2,6 +2,7 @@ import logging
 import sys
 import time
 from typing import List
+from bs4 import BeautifulSoup
 import requests
 import threading
 from queue import PriorityQueue
@@ -81,6 +82,8 @@ class WebCrawler24Ur:
         self._shared_last_access = {}
         self._lock_website_access_info = threading.Lock()
 
+        self._site_table_data = {}
+
         # robots.txt info
         for domain in self._domains:
             robots_url = domain.rstrip("/") + "/robots.txt"
@@ -88,7 +91,9 @@ class WebCrawler24Ur:
                 r = requests.get(robots_url, timeout=5)
                 rp = RobotExclusionRulesParser()
                 rp.parse(r.text)
-
+                # print(rp.sitemaps)
+                sitemap_r = requests.get(rp.sitemaps[0], timeout=5)
+                # print(sitemap_r.text)
                 delay = rp.get_crawl_delay(self._crawler_id)
 
                 if delay is None:
@@ -101,6 +106,13 @@ class WebCrawler24Ur:
                     "info": rp,
                     "delay": delay
                 }
+
+                self._site_table_data[domain] = {
+                    "robots_content": r.text,
+                    "sitemap_content": sitemap_r.text,
+                }
+                
+
             except Exception:
                 self._shared_robots_info[domain] = {
                     "info": None,
@@ -148,10 +160,17 @@ class WebCrawler24Ur:
                 ) == "complete"
             )
             try:
+                # print(url)
+                # print("looking for proad")
+                self._logger.debug(worker_driver.page_source)
                 proad = worker_driver.find_element(By.ID, "proad")
+                # print("found proad?")
+                # print(BeautifulSoup(worker_driver.page_source))
                 ActionChains(worker_driver).scroll_to_element(proad).perform()
                 wait = WebDriverWait(worker_driver, timeout=3)
+                # print("trying to scroll to proad-stat")
                 wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "proad-stat")))
+                
             except:
                 self._logger.info("proad-stat container doesn't exist")
             return worker_driver.page_source
