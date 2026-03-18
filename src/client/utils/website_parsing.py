@@ -38,6 +38,9 @@ def get_url_parts(url, delim="/"):
     return urlsplit(url).path.split(delim)
 
 def extract_urls(html, url):
+
+    # add url cleaning
+
     bs = BeautifulSoup(html)
     metadata_dict = dict()
     #print(bs.prettify())

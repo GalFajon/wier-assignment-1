@@ -12,6 +12,9 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
 
 from utils.priority_scoring import priority_score  # type: ignore
 from utils.url_cleaning import normalize_url # type: ignore
@@ -144,6 +147,13 @@ class WebCrawler24Ur:
                     "return document.readyState"
                 ) == "complete"
             )
+            try:
+                proad = worker_driver.find_element(By.ID, "proad")
+                ActionChains(worker_driver).scroll_to_element(proad).perform()
+                wait = WebDriverWait(worker_driver, timeout=3)
+                wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "proad-stat")))
+            except:
+                self._logger.info("proad-stat container doesn't exist")
             return worker_driver.page_source
         except Exception:
             return None
@@ -235,21 +245,23 @@ class WebCrawler24Ur:
                 self._shared_visited_urls.add(url)
 
 
-            website_data = parse_website_content(html)
-            website_urls = website_data['urls']
+            website_data = parse_website_content(html, url)
+            website_urls = list(website_data.keys())
+            # print(website_urls)
             
             self._logger.info(f"[{worker_name}] Crawled:   {url}")
             self._logger.info(f"  - Found {len(website_urls)} links")
 
-            for url_data in website_urls:
-                link, tag = url_data[0], url_data[1] # dummy simple unclean dat
+            for link in website_urls:
+                # link, tag = url_data[0], url_data[1] # dummy simple unclean dat
                 link_norm = normalize_url(link)
+                # print(link_norm)
 
                 with self._lock_visited_urls:
                     if link_norm in self._shared_visited_urls:
                         continue
 
-                priority = priority_score(html, url_data)
+                priority = priority_score(html, link)
                 self._shared_crawling_front.put((priority, link_norm))
 
             self._shared_crawling_front.task_done()
@@ -286,7 +298,7 @@ if __name__ == "__main__":
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
         max_pages=10,
-        worker_count=4,
+        worker_count=2,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG'
