@@ -18,7 +18,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
-from utils.priority_scoring import priority_score  # type: ignore
+from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT  # type: ignore
 from utils.url_cleaning import normalize_url # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
 
@@ -31,6 +31,7 @@ class WebCrawler24Ur:
         page_timeout_seconds: int = 15,
         max_pages: int = 10,
         worker_count: int = 4,
+        scoring_method: str = 'BERT',
         web_driver_location: str = "/usr/local/bin/geckodriver",
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
@@ -45,6 +46,10 @@ class WebCrawler24Ur:
         self._worker_count = worker_count
         self._web_driver_location = web_driver_location
         self._query_text = query
+        self._scoring_method = scoring_method
+
+        if scoring_method == 'BERT':
+            self._query_embed = embed_BERT(self._query_text)
 
         # setup logging
         self._logger = logging.getLogger(crawler_id)
@@ -313,8 +318,13 @@ class WebCrawler24Ur:
                         self._link_version_dict[link] = 0
 
                     link_version = self._link_version_dict[link]
-
-                priority = priority_score(html, link, self._front_metadata_dict[link], self._query_text)
+                
+                priority = 0
+                if self._scoring_method == 'BERT':
+                    priority = priority_score_BERT(self._logger, html, link, self._front_metadata_dict[link], self._query_embed)
+                elif self._scoring_method == 'BOW':
+                    priority = priority_score_BOW(self._logger, html, link, self._front_metadata_dict[link], self._query_text)
+                
                 # self._logger.debug(f"Priority: {priority}, link: {link}")
                 self._shared_crawling_front.put((-priority, (link, link_version))) # minus priority, because priority queue returns smallest priority
 
@@ -357,12 +367,12 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=20,
-        worker_count=2,
+        max_pages=40,
+        worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',
-        query="ZDA"
+        query="Vojna ZDA in Irana."
     )
 
     crawler.crawl()

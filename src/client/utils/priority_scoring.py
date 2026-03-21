@@ -1,8 +1,41 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import classla
+import torch
+from transformers import AutoTokenizer, AutoModel
+import torch.nn.functional as F
 
-def priority_score(website_html, link, metadata_list, query):
+DEVICE = "cpu"
+MODEL_CACHE_DIR = "./model_cache/sloberta"
+EMBEDDING_TOKEN_MAX_LENGTH = 256
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "EMBEDDIA/sloberta",
+    cache_dir=MODEL_CACHE_DIR
+)
+model = AutoModel.from_pretrained(
+    "EMBEDDIA/sloberta",
+    cache_dir=MODEL_CACHE_DIR
+)
+
+def embed_BERT(text: str):
+    inputs = tokenizer(
+        text,
+        return_tensors="pt",
+        truncation=True,
+        padding=True,
+        max_length=EMBEDDING_TOKEN_MAX_LENGTH
+    ).to(DEVICE)
+
+    with torch.no_grad():
+        outputs = model(**inputs)
+
+    return outputs.last_hidden_state.mean(dim=1)
+
+def torch_cosine_distance(a, b):
+    return F.cosine_similarity(a, b).item()
+
+def priority_score_BOW(logger, website_html, link, metadata_list, query):
     
     final_score = 0
     # query = classla_nlp(query)
@@ -57,3 +90,61 @@ def priority_score(website_html, link, metadata_list, query):
         #if metadata[""]
 
     return final_score
+
+
+def priority_score_BERT(logger, website_html, link, metadata_list, query_emb):
+    #logger.debug(f"Scoring {link}")
+
+    titles = set()
+    summaries = set()
+    keywords = set()
+
+    for m in metadata_list:
+        title = m.get("link_title", "").strip()
+        if title:
+            titles.add(title.replace("_", " "))
+
+        summary = m.get("summary")
+        if summary:
+            summaries.add(summary.replace("...", "").strip())
+
+        topic = m.get("topic", "")
+        if topic:
+            keywords.add(topic.replace("-", " ").strip())
+
+        section = m.get("section", "")
+        if section:
+            keywords.add(section.replace("-", " ").strip())
+
+        article_keywords = m.get("article_keywords", [])
+        if article_keywords:
+            for kw in article_keywords:
+                if kw:
+                    keywords.add(kw.replace("-", " ").strip())
+
+        #logger.debug(f"Metadata: {m}")
+
+    if not titles and not summaries and not keywords:
+        return 0.0
+    
+    metadata_parts = []
+    if titles:
+        metadata_parts.append("Naslovi: " + ". ".join(titles) + ".")
+
+    if summaries:
+        metadata_parts.append("Povzetki: " + ". ".join(summaries) + ".")
+
+    if keywords:
+        metadata_parts.append("Ključne besede: " + ", ".join(keywords) + ".")
+
+    metadata_str = " ".join(metadata_parts)
+    metadata_emb = embed_BERT(metadata_str)
+    title_score = float(torch_cosine_distance(query_emb, metadata_emb))
+
+    #logger.debug(f'     Metadata_str="{metadata_str}", Score={title_score},     len(m_str)={len(metadata_str)}')
+    return title_score
+ 
+
+    
+
+    
