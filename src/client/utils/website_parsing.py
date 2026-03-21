@@ -60,6 +60,9 @@ def extract_urls(html, url):
     for l in links:
         key = normalize_url(urljoin(url, l["href"]))
         key_parts = get_url_parts(key)
+
+        summary_p = l.find("p", class_="summary")
+
         #print(url_parts)
         if len(key_parts) < 2:
             #print("URL parts too short")
@@ -75,6 +78,7 @@ def extract_urls(html, url):
             "section": key_parts[1] if len(key_parts) > 1 else None,
             "topic": key_parts[2] if len(key_parts) > 2 else None,
             "link_title": key_parts[-1].replace("-", " ")[:-5] if ".html" in key else "",
+            "summary": summary_p.text if summary_p != None else None,
             "container_id": [],
             "article_keywords":  article_keywords
         })

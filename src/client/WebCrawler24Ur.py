@@ -89,8 +89,8 @@ class WebCrawler24Ur:
 
         self._site_table_data = {}
 
-        classla.download("sl")
-        self.classla_nlp = classla.Pipeline("sl")
+        # classla.download("sl")
+        # self.classla_nlp = classla.Pipeline("sl")
 
         # robots.txt info
         for domain in self._domains:
@@ -293,7 +293,7 @@ class WebCrawler24Ur:
                 # link, tag = url_data[0], url_data[1] # dummy simple unclean dat
                 # link_norm = normalize_url(link) # link norm is already called in parse website content
                 #print(link_norm)
-                #print(website_data[link])
+                # print(website_data[link])
                 link_version = 0
 
                 with self._lock_visited_urls:
@@ -314,7 +314,7 @@ class WebCrawler24Ur:
 
                     link_version = self._link_version_dict[link]
 
-                priority = priority_score(html, link, self._front_metadata_dict[link], self._query_text, self.classla_nlp)
+                priority = priority_score(html, link, self._front_metadata_dict[link], self._query_text)
                 # self._logger.debug(f"Priority: {priority}, link: {link}")
                 self._shared_crawling_front.put((-priority, (link, link_version))) # minus priority, because priority queue returns smallest priority
 
@@ -353,6 +353,7 @@ class WebCrawler24Ur:
 if __name__ == "__main__":
 
     seed = "https://www.24ur.com/"
+    # seed = "https://www.24ur.com/avtor/2001674"
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
@@ -361,7 +362,7 @@ if __name__ == "__main__":
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',
-        query="Temperatura"
+        query="ZDA"
     )
 
     crawler.crawl()
