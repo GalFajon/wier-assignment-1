@@ -5,3 +5,4 @@ scikit-learn
 beautifulsoup4
 selenium
 robotexclusionrulesparser
+classla

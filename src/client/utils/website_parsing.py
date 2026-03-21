@@ -7,23 +7,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from utils.url_cleaning import normalize_url # type: ignore
+
+
 # dummy function for future website parsing
-def parse_website_content(html, url):
-    # soup = BeautifulSoup(html, "html.parser")
-    # urls = []
+def parse_website_content(html, url, robots):
+    
+    urls_dict = extract_urls(html, url)
+    for key in list(urls_dict.keys()):
+        if not robots.is_allowed(robots.user_agent, key):
+            del urls_dict[key]
 
-    # for a_tag in soup.find_all("a", href=True):
-    #     href = a_tag["href"]
-    #     if href.startswith("http"):
-    #         urls.append((href, a_tag))
-    #     elif href.startswith("//"):
-    #         urls.append(("https:" + href, a_tag))
-
-
-    # return {
-    #     'urls' : urls
-    # }
-    return extract_urls(html, url)
+    return urls_dict
 
 
 def get_topic_from_url(url):
@@ -37,6 +32,10 @@ def get_topic_from_url(url):
 def get_url_parts(url, delim="/"):
     return urlsplit(url).path.split(delim)
 
+def append_data(dictionary, key, new_metadata):
+    # assuming key already exists in dictionary
+    dictionary[key]["container_id"].extend(new_metadata["container_id"])
+
 def extract_urls(html, url):
 
     # add url cleaning
@@ -46,9 +45,20 @@ def extract_urls(html, url):
     #print(bs.prettify())
     links = bs.find_all("a", href=True)
     print(f"Num of all links: {len(links)}")
+
+    # extract all article keywords
+    article_keywords = []
+    keyword_links_div = bs.find(id="article-keywords")
+    if keyword_links_div is not None:
+        keyword_links = keyword_links_div.find_all("a")
+        for keyword in keyword_links:
+            article_keywords.append(keyword.text.rstrip())
+    
+    # print(article_keywords)
+
     url_parts = get_url_parts(url)
     for l in links:
-        key = urljoin(url, l["href"])
+        key = normalize_url(urljoin(url, l["href"]))
         key_parts = get_url_parts(key)
         #print(url_parts)
         if len(key_parts) < 2:
@@ -58,21 +68,22 @@ def extract_urls(html, url):
             continue
         if "24ur.com" not in key:
             continue
-        metadata_dict[key] = dict({
+        
+        new_metadata = dict({
             "source": url,
             "source_title": url_parts[-1] if ".html" in url else None,
             "section": key_parts[1] if len(key_parts) > 1 else None,
             "topic": key_parts[2] if len(key_parts) > 2 else None,
-            "container_id": None
+            "link_title": key_parts[-1].replace("-", " ")[:-5] if ".html" in key else "",
+            "container_id": [],
+            "article_keywords":  article_keywords
         })
 
-        if key_parts[1] == "kljucna-beseda":
-            metadata_dict[key]["container_id"] = "kljucna-beseda"
 
-        if key_parts[1] == "spored":
-            metadata_dict[key]["container_id"] = "spored"
-        # if key_parts[1] == "vreme":
-        #     print("Vreme")
+        if key_parts[1] == "kljucna-beseda":
+            new_metadata["container_id"].append("kljucna-beseda")
+        elif key_parts[1] == "spored":
+            new_metadata["container_id"].append("spored")
 
         parent_3 = l.parent.parent.parent
         parent_2 = l.parent.parent
@@ -80,40 +91,44 @@ def extract_urls(html, url):
 
         if parent_3.has_attr("class"):
             if "menu__items" in parent_3.attrs["class"]:
-                metadata_dict[key]["container_id"] = "menu"
+                new_metadata["container_id"].append("menu")
             elif "submenu" in parent_3.attrs["class"]:
-                metadata_dict[key]["container_id"] = "submenu"
+                new_metadata["container_id"].append("submenu")
         # print(parent_2.attrs)
         if parent_2.has_attr("id"):
             if parent_2.attrs["id"] == "footer-bottom":
-                metadata_dict[key]["container_id"] = "footer"
+                new_metadata["container_id"].append("footer")
             
+        if key in metadata_dict:
+            append_data(metadata_dict, key, new_metadata)
+        else:
+            metadata_dict[key] = new_metadata
 
 
     # related articles
     related_articles = bs.find(id="related-articles")
     if related_articles != None:
         related_links = related_articles.find_all("a", href=True)
-        print("Related articles:")
+        # print("Related articles:")
         for l in related_links:
             key = urljoin(url, l["href"])
             if key not in metadata_dict:
                 continue
             metadata_dict[key]["container_id"] = "related-articles"
-            print(key)
+            # print(key)
 
     # Read more links
     read_mores = bs.find_all("a", class_="read-more")
-    print("Read mores:")
+    # print("Read mores:")
     for l in read_mores:
         key = urljoin(url, l["href"])
         if key not in metadata_dict:
             continue
         metadata_dict[key]["container_id"] = "read-more"
-        print(key)
+        # print(key)
 
     # Proad recommends
-    print("Proad links: ")
+    # print("Proad links: ")
     proads_div = bs.find(id="proad")
     if proads_div != None:
         proads_links = proads_div.find_all("a", href=True)
@@ -124,5 +139,5 @@ def extract_urls(html, url):
             if key not in metadata_dict:
                 continue
             metadata_dict[key]["container_id"] = "proad"
-            print(key)
+            # print(key)
     return metadata_dict

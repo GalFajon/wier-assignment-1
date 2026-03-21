@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import requests
 import threading
 from queue import PriorityQueue
+import classla
 
 from urllib.parse import urlsplit
 from robotexclusionrulesparser import RobotExclusionRulesParser
@@ -34,7 +35,8 @@ class WebCrawler24Ur:
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
         logging_file: str = './crawler.log',
-        log_to_stdout: bool = True
+        log_to_stdout: bool = True,
+        query: str = ""
     ) -> None:
         self._seed_urls = seed_urls
         self._max_pages = max_pages
@@ -42,6 +44,7 @@ class WebCrawler24Ur:
         self._crawler_id = crawler_id
         self._worker_count = worker_count
         self._web_driver_location = web_driver_location
+        self._query_text = query
 
         # setup logging
         self._logger = logging.getLogger(crawler_id)
@@ -74,6 +77,8 @@ class WebCrawler24Ur:
         self._lock_visited_urls = threading.Lock()
 
         self._shared_crawling_front = PriorityQueue()
+        self._front_metadata_dict = dict()
+        self._link_version_dict = dict()
 
         self._shared_downloaded_page_count = 0
         self._lock_downloaded_page_count = threading.Lock()
@@ -84,6 +89,9 @@ class WebCrawler24Ur:
 
         self._site_table_data = {}
 
+        classla.download("sl")
+        self.classla_nlp = classla.Pipeline("sl")
+
         # robots.txt info
         for domain in self._domains:
             robots_url = domain.rstrip("/") + "/robots.txt"
@@ -91,6 +99,7 @@ class WebCrawler24Ur:
                 r = requests.get(robots_url, timeout=5)
                 rp = RobotExclusionRulesParser()
                 rp.parse(r.text)
+                
                 # print(rp.sitemaps)
                 sitemap_r = requests.get(rp.sitemaps[0], timeout=5)
                 # print(sitemap_r.text)
@@ -127,7 +136,7 @@ class WebCrawler24Ur:
 
         # initialize queue
         for seed in seed_urls:
-            self._shared_crawling_front.put((0, seed))
+            self._shared_crawling_front.put((0, (seed, 0)))
 
 
 
@@ -159,20 +168,20 @@ class WebCrawler24Ur:
                     "return document.readyState"
                 ) == "complete"
             )
-            try:
-                # print(url)
-                # print("looking for proad")
-                self._logger.debug(worker_driver.page_source)
-                proad = worker_driver.find_element(By.ID, "proad")
-                # print("found proad?")
-                # print(BeautifulSoup(worker_driver.page_source))
-                ActionChains(worker_driver).scroll_to_element(proad).perform()
-                wait = WebDriverWait(worker_driver, timeout=3)
-                # print("trying to scroll to proad-stat")
-                wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "proad-stat")))
+            # try:
+            #     # print(url)
+            #     # print("looking for proad")
+            #     #self._logger.debug(worker_driver.page_source)
+            #     proad = worker_driver.find_element(By.ID, "proad")
+            #     # print("found proad?")
+            #     # print(BeautifulSoup(worker_driver.page_source))
+            #     ActionChains(worker_driver).scroll_to_element(proad).perform()
+            #     wait = WebDriverWait(worker_driver, timeout=3)
+            #     # print("trying to scroll to proad-stat")
+            #     wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "proad-stat")))
                 
-            except:
-                self._logger.info("proad-stat container doesn't exist")
+            # except:
+            #     self._logger.info("proad-stat container doesn't exist")
             return worker_driver.page_source
         except Exception:
             return None
@@ -231,14 +240,21 @@ class WebCrawler24Ur:
 
         while True:
             try:
-                priority, url = self._shared_crawling_front.get(timeout=3)
+                priority, (url, link_version) = self._shared_crawling_front.get(timeout=3)
             except:
                 break
             
+            # throw out links with old priority score
+            if url in self._link_version_dict and link_version < self._link_version_dict[url]:
+                self._logger.info(f"Old link (v{link_version}): {url}")
+                self._shared_crawling_front.task_done()
+                continue
+
             # validate url
             if not self._valid_url(url):
                 self._shared_crawling_front.task_done()
                 continue
+
             
             # end if reached page count max
             with self._lock_downloaded_page_count:
@@ -250,6 +266,10 @@ class WebCrawler24Ur:
             # process url
             url_parts = urlsplit(url)
             domain = url_parts.scheme + "://" + url_parts.netloc
+
+            rb : RobotExclusionRulesParser = self._shared_robots_info[domain]["info"]
+            if not rb.is_allowed(rb.user_agent, url):
+                continue
 
             self._respect_crawl_delay(domain)
             html = self._fetch_page(worker_web_driver, url)
@@ -264,30 +284,50 @@ class WebCrawler24Ur:
                 self._shared_visited_urls.add(url)
 
 
-            website_data = parse_website_content(html, url)
+            website_data = parse_website_content(html, url, rb)
             website_urls = list(website_data.keys())
-            # print(website_urls)
             
             self._logger.info(f"[{worker_name}] Crawled:   {url}")
             self._logger.info(f"  - Found {len(website_urls)} links")
-
             for link in website_urls:
                 # link, tag = url_data[0], url_data[1] # dummy simple unclean dat
-                link_norm = normalize_url(link)
-                # print(link_norm)
+                # link_norm = normalize_url(link) # link norm is already called in parse website content
+                #print(link_norm)
+                #print(website_data[link])
+                link_version = 0
 
                 with self._lock_visited_urls:
-                    if link_norm in self._shared_visited_urls:
+                    if link in self._shared_visited_urls:
                         continue
 
-                priority = priority_score(html, link)
-                self._shared_crawling_front.put((priority, link_norm))
+                    # add metadata to list of metadata for the found link
+                    if link in self._front_metadata_dict:
+                        self.append_metadata(link, website_data[link])
+                    else:
+                        self._front_metadata_dict[link] = [website_data[link]]
 
+                    # increment and store the latest version of the link in the priority queue, so older ones are thrown out
+                    if link in self._link_version_dict:
+                        self._link_version_dict[link] += 1
+                    else:
+                        self._link_version_dict[link] = 0
+
+                    link_version = self._link_version_dict[link]
+
+                priority = priority_score(html, link, self._front_metadata_dict[link], self._query_text, self.classla_nlp)
+                # self._logger.debug(f"Priority: {priority}, link: {link}")
+                self._shared_crawling_front.put((-priority, (link, link_version))) # minus priority, because priority queue returns smallest priority
+
+            with self._lock_visited_urls:
+                for i in range(5):
+                    element = self._shared_crawling_front.queue[i]
+                    self._logger.debug(f"[Top {i+1}] Priority: {-element[0]}, link: {element[1][0]}")
             self._shared_crawling_front.task_done()
 
         worker_web_driver.quit()
 
-
+    def append_metadata(self, link, metadata):
+        self._front_metadata_dict[link].append(metadata)
 
     def crawl(self):
         self._logger.info(f"Beginning crawl")
@@ -316,11 +356,12 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=10,
+        max_pages=20,
         worker_count=2,
         log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='DEBUG'
+        logging_level='DEBUG',
+        query="Temperatura"
     )
 
     crawler.crawl()
