@@ -1,0 +1,10 @@
+**/model_cache/**
+**/.cache/**
+**/sloberta/**
+
+__pycache__/
+*.pyc
+
+*.pt
+*.bin
+*.ckpt
