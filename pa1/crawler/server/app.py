@@ -16,6 +16,9 @@ app.register_blueprint(page_data_bp)
 app.register_blueprint(images_bp)
 app.register_blueprint(links_bp)
 
+
+# ADD PROPER FLASK RACE CONDITION HANDLING!!!
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
 

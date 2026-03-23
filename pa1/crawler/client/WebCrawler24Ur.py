@@ -21,6 +21,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT  # type: ignore
 from utils.url_cleaning import normalize_url # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
+from utils.database_saving import save_page_to_db # type: ignore
+from utils.api_client import APIClient
 
 class WebCrawler24Ur:
 
@@ -32,6 +34,7 @@ class WebCrawler24Ur:
         max_pages: int = 10,
         worker_count: int = 4,
         scoring_method: str = 'BERT',
+        database_base_url: str = "http://localhost:5000",
         web_driver_location: str = "/usr/local/bin/geckodriver",
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
@@ -47,9 +50,8 @@ class WebCrawler24Ur:
         self._web_driver_location = web_driver_location
         self._query_text = query
         self._scoring_method = scoring_method
-
-        if scoring_method == 'BERT':
-            self._query_embed = embed_BERT(self._query_text)
+        
+        self._db_api = APIClient(base_url=database_base_url)
 
         # setup logging
         self._logger = logging.getLogger(crawler_id)
@@ -138,6 +140,8 @@ class WebCrawler24Ur:
         delay_info = {d: v["delay"] for d, v in self._shared_robots_info.items()}
         self._logger.debug(f"Crawl delays: {delay_info}" )
 
+        if scoring_method == 'BERT':
+            self._query_embed = embed_BERT(self._query_text)
 
         # initialize queue
         for seed in seed_urls:
@@ -289,6 +293,12 @@ class WebCrawler24Ur:
                 self._shared_visited_urls.add(url)
 
 
+            # save to DB
+            db_save_status = save_page_to_db(self._logger, url, html, self._db_api)
+            if db_save_status != True:
+                self._logger.warning(f"Error saving html contents of {url} to DB")
+
+            # process links
             website_data = parse_website_content(html, url, rb)
             website_urls = list(website_data.keys())
             
@@ -367,7 +377,7 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=40,
+        max_pages=3,
         worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',

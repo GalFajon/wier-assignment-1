@@ -1,4 +1,47 @@
-from urllib.parse import ParseResult, urlparse, urlunparse, parse_qs
+from urllib.parse import urlparse, urlunparse, parse_qsl, parse_qs, urlencode, ParseResult
+import posixpath
+
+PROTOCOL_SCHEME = 'https'
+TRACKING_PARAMS = {
+    "utm_source", "utm_medium", "utm_campaign",
+    "utm_term", "utm_content", "utm_id",
+    "fbclid", "gclid", "yclid"
+}
+REDIRECT_DOMAINS = {
+    "go-ctr-tracker.pub.24ur.si"
+}
+
+def canonicalize_url(url: str) -> str:
+    parsed = urlparse(url)
+
+    if parsed.netloc in REDIRECT_DOMAINS:
+        qs = dict(parse_qsl(parsed.query))
+        redirect_url = qs.get("redir") or qs.get("amp;redir")
+        if redirect_url:
+            parsed = urlparse(redirect_url)
+
+    netloc = parsed.netloc.lower()
+
+    if netloc.startswith("www."):
+        netloc = netloc[4:]
+
+    path = parsed.path or "/"
+    path = posixpath.normpath(path)
+
+    if parsed.path.endswith("/") and not path.endswith("/"):
+        path += "/"
+
+    if path == ".":
+        path = "/"
+
+    query_pairs = parse_qsl(parsed.query, keep_blank_values=True)
+    filtered = [ (k, v) for (k, v) in query_pairs if k not in TRACKING_PARAMS]
+
+    filtered.sort()
+    query = urlencode(filtered, doseq=True)
+
+    canonicalized = urlunparse((PROTOCOL_SCHEME, netloc, path, "", query, ""))
+    return canonicalized
 
 def normalize_url(url):
     parsed_url = urlparse(url)
