@@ -1,3 +1,5 @@
+from datetime import datetime
+import hashlib
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlsplit
 from sklearn.feature_extraction.text import CountVectorizer
@@ -7,10 +9,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from utils.url_cleaning import normalize_url # type: ignore
+from utils.url_cleaning import normalize_url, canonicalize_url # type: ignore
+from utils.page_data_objects import PageDbSaveObject
 
+BINARY_FILE_TYPES = {"PDF", "DOC", "DOCX", "PPT", "PPTX"}
+BINARY_FILE_EXTENSIONS = (".pdf", ".doc", ".docx", ".ppt", ".pptx")
 
-# dummy function for future website parsing
 def parse_website_content(html, url, robots):
     
     urls_dict = extract_urls(html, url)
@@ -150,3 +154,82 @@ def extract_urls(html, url):
             metadata_dict[key]["container_id"] = "proad"
             # print(key)
     return metadata_dict
+
+
+
+
+def get_page_database_save_object(logger, url, html):
+    try:
+        normalized_url = canonicalize_url(url)
+        parsed = urlsplit(normalized_url)
+        domain = parsed.netloc
+        soup = BeautifulSoup(html, "html.parser")
+
+
+        if normalized_url.lower().endswith(BINARY_FILE_EXTENSIONS):
+            page_type = "BINARY"
+            html_content = None
+        else:
+            page_type = "HTML"
+            html_content = html
+
+        page_obj = PageDbSaveObject(
+            url=normalized_url,
+            site_domain=domain,
+            page_type_code=page_type,
+            html_content=html_content,
+            http_status_code=200,
+            accessed_time=datetime.now()
+        )
+
+        if html_content:
+            page_obj.content_hash = hashlib.sha256(
+                html_content.encode("utf-8", errors="ignore")
+            ).hexdigest()
+
+        seen_links = set()
+        for a in soup.find_all("a", href=True):
+            href = a.get("href").strip()
+
+            # Skip invalid schemes
+            if href.startswith(("javascript:", "mailto:", "tel:", "#")):
+                continue
+
+            absolute_url = urljoin(normalized_url, href)
+            clean_url = canonicalize_url(absolute_url)
+
+            if clean_url and clean_url not in seen_links:
+                seen_links.add(clean_url)
+                page_obj.add_link(clean_url)
+
+
+        for img in soup.find_all("img"):
+            src = img.get("src")
+            if not src:
+                continue
+
+            img_url = urljoin(normalized_url, src)
+            img_url = normalize_url(img_url)
+
+            filename = img_url.split("/")[-1] or "image"
+
+            page_obj.add_image(
+                filename=filename,
+                content_type="image",
+                data=b"",
+                accessed_time=datetime.now()
+            )
+
+        if page_type == "BINARY":
+            ext = normalized_url.split(".")[-1].upper()
+
+            page_obj.add_page_data(
+                data_type_code=ext if ext in BINARY_FILE_TYPES else "PDF",
+                data=b"" 
+            )
+
+        return page_obj
+
+    except Exception as e:
+        logger.error(f"Error parsing {url}: {e}")
+        return None

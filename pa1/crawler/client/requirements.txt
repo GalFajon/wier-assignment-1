@@ -6,3 +6,6 @@ beautifulsoup4
 selenium
 robotexclusionrulesparser
 classla
+torch
+sentencepiece
+transformers==4.33.3

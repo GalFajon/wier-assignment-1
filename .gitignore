@@ -1,5 +1,5 @@
 # custom stuff
-db_data/
+**/db_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -210,4 +210,49 @@ marimo/_lsp/
 __marimo__/
 
 
-/src/.devcontainer
+/**/.devcontainer
+**/model_cache
+
+
+# latex
+**/svg-inkscape
+*.aux
+*.lof
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+*.log
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.acn
+*.acr
+*.alg
+*.lol
+*.brf
+*.nav
+*.snm
+*.dpth
+*.md5
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.run.xml
+*~
+*.swp
+*.bak
+*.tmp

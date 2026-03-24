@@ -18,9 +18,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
-from utils.priority_scoring import priority_score  # type: ignore
+from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT  # type: ignore
 from utils.url_cleaning import normalize_url # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
+from utils.database_saving import save_page_to_db # type: ignore
+from utils.api_client import APIClient
 
 class WebCrawler24Ur:
 
@@ -31,6 +33,8 @@ class WebCrawler24Ur:
         page_timeout_seconds: int = 15,
         max_pages: int = 10,
         worker_count: int = 4,
+        scoring_method: str = 'BERT',
+        database_base_url: str = "http://localhost:5000",
         web_driver_location: str = "/usr/local/bin/geckodriver",
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
@@ -45,6 +49,9 @@ class WebCrawler24Ur:
         self._worker_count = worker_count
         self._web_driver_location = web_driver_location
         self._query_text = query
+        self._scoring_method = scoring_method
+        
+        self._db_api = APIClient(base_url=database_base_url)
 
         # setup logging
         self._logger = logging.getLogger(crawler_id)
@@ -133,6 +140,8 @@ class WebCrawler24Ur:
         delay_info = {d: v["delay"] for d, v in self._shared_robots_info.items()}
         self._logger.debug(f"Crawl delays: {delay_info}" )
 
+        if scoring_method == 'BERT':
+            self._query_embed = embed_BERT(self._query_text)
 
         # initialize queue
         for seed in seed_urls:
@@ -284,6 +293,12 @@ class WebCrawler24Ur:
                 self._shared_visited_urls.add(url)
 
 
+            # save to DB
+            db_save_status = save_page_to_db(self._logger, url, html, self._db_api)
+            if db_save_status != True:
+                self._logger.warning(f"Error saving html contents of {url} to DB")
+
+            # process links
             website_data = parse_website_content(html, url, rb)
             website_urls = list(website_data.keys())
             
@@ -313,8 +328,13 @@ class WebCrawler24Ur:
                         self._link_version_dict[link] = 0
 
                     link_version = self._link_version_dict[link]
-
-                priority = priority_score(html, link, self._front_metadata_dict[link], self._query_text)
+                
+                priority = 0
+                if self._scoring_method == 'BERT':
+                    priority = priority_score_BERT(self._logger, html, link, self._front_metadata_dict[link], self._query_embed)
+                elif self._scoring_method == 'BOW':
+                    priority = priority_score_BOW(self._logger, html, link, self._front_metadata_dict[link], self._query_text)
+                
                 # self._logger.debug(f"Priority: {priority}, link: {link}")
                 self._shared_crawling_front.put((-priority, (link, link_version))) # minus priority, because priority queue returns smallest priority
 
@@ -357,13 +377,12 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=20,
-        worker_count=2,
+        max_pages=3,
+        worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',
-        # query="Zastoj zastoji zastoja cestni cesta ceste cesti nesreče nesrečo avta avtu nesreča avto"
-        query="Trump"
+        query="Vojna ZDA in Irana."
     )
 
     crawler.crawl()
