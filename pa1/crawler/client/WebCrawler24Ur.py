@@ -34,7 +34,7 @@ class WebCrawler24Ur:
         max_pages: int = 10,
         worker_count: int = 4,
         scoring_method: str = 'BERT',
-        database_base_url: str = "http://localhost:5000",
+        database_base_url: str = "http://web-scraper-server-1:5000",
         web_driver_location: str = "/usr/local/bin/geckodriver",
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
@@ -368,8 +368,6 @@ class WebCrawler24Ur:
 
 
 
-
-
 if __name__ == "__main__":
 
     seed = "https://www.24ur.com/"
@@ -377,12 +375,12 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=3,
+        max_pages=10,
         worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',
-        query="Vojna ZDA in Irana."
+        query="Olimpijske igre."
     )
 
     crawler.crawl()

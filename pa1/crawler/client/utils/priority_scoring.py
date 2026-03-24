@@ -38,6 +38,7 @@ def torch_cosine_distance(a, b):
 def priority_score_BOW(logger, website_html, link, metadata_list, query):
     
     final_score = 0
+
     # query = classla_nlp(query)
     # print(query)
 
@@ -67,22 +68,41 @@ def priority_score_BOW(logger, website_html, link, metadata_list, query):
         else:
             textst.append("")
 
+
+        # extract text from the url
+        link_text = ""
+        if metadata["section"] != None:
+            link_text += metadata["section"] + " "
+        if metadata["topic"] != None:
+            link_text += metadata["topic"] + " "
+        textst.append(link_text)
+
+        if metadata["link_keywords"] != None:
+            textst.append(metadata["link_keywords"])
+        else:
+            textst.append("")
+
+
         vectors = vectorizer.fit_transform(textst)
         query_vector = vectors[0]
         source_title_vector = vectors[1]
         keyword_vector = vectors[2]
         link_title_vector = vectors[3]
         summary_vector = vectors[4]
+        link_text_vector = vectors[5]
+        link_keywords_vector = vectors[6]
 
         source_title_score = cosine_similarity(query_vector, source_title_vector)
         keywords_score = cosine_similarity(query_vector, keyword_vector)
         link_title_score = cosine_similarity(query_vector, link_title_vector)
         summary_score = cosine_similarity(query_vector, summary_vector)
-        if summary_score[0][0] > 0:
-            print(link)
-            print(metadata)
-            print(f"Source: {source_title_score}, Keywords: {keywords_score}, Link title: {link_title_score} Summary: {summary_score}")
-        score = source_title_score + keywords_score + link_title_score + summary_score
+        link_text_score = cosine_similarity(query_vector, link_text_vector)
+        link_keywords_score = cosine_similarity(query_vector, link_keywords_vector)
+        # if link_keywords_score[0][0] > 0:
+        #     print(link)
+        #     print(metadata)
+        #     print(f"Source: {source_title_score}, Keywords: {keywords_score}, Link title: {link_title_score} Summary: {summary_score}, Link text: {link_text_score}, Link keywords: {link_keywords_score}")
+        score = source_title_score + keywords_score + link_title_score + summary_score + link_text_score + link_keywords_score
 
         final_score += score
 
@@ -121,6 +141,10 @@ def priority_score_BERT(logger, website_html, link, metadata_list, query_emb):
             for kw in article_keywords:
                 if kw:
                     keywords.add(kw.replace("-", " ").strip())
+
+        link_keywords = m.get("link_keywords", "")
+        if link_keywords:
+            keywords.add(link_keywords.strip())
 
         #logger.debug(f"Metadata: {m}")
 
