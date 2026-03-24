@@ -57,7 +57,7 @@ def create_page():
         abort(400)
     finally:
         db.close()
-
+        
 @bp.route("/<int:page_id>", methods=["PUT"])
 def update_page(page_id):
     payload = request.get_json(force=True)

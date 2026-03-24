@@ -87,9 +87,27 @@ class APIClient:
         r.raise_for_status()
         return r.json().get("id")
 
+
     def create_page(self, payload: Dict[str, Any]) -> Dict[str, Any]:
-        r = self._get_session().post(self._url("/pages/"), json=payload, timeout=self.timeout)
-        r.raise_for_status()
+        r = self._get_session().post(
+            self._url("/pages/"),
+            json=payload,
+            timeout=self.timeout
+        )
+
+        if r.status_code >= 400:
+            print("STATUS:", r.status_code)
+            print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
+            try:
+                error_body = r.json()
+            except Exception:
+                error_body = {"raw": r.text}
+
+            raise requests.exceptions.HTTPError(
+                f"HTTP {r.status_code} Error | {error_body}",
+                response=r
+            )
+
         return r.json()
 
     def update_page(self, page_id: int, payload: Dict[str, Any]) -> Dict[str, Any]:

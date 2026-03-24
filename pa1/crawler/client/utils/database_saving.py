@@ -56,18 +56,41 @@ def save_page_or_update(logger, page_payload, db_api: APIClient):
         logger.error(f"Unexpected HTTP error: {e}")
         raise
 
-def save_page_to_db(logger, url, html, db_api: APIClient):
+def save_link(logger, from_page_id: int, to_page_id: int, db_api: APIClient) -> bool:
+    if from_page_id == to_page_id:
+        logger.debug(f"Skipping self-link ({from_page_id} -> {to_page_id})")
+        return False
+
+    link_payload = {
+        "from_page": from_page_id,
+        "to_page": to_page_id
+    }
+
+    try:
+        resp = db_api.create_link(link_payload)
+        logger.debug(f"Created link: {resp}")
+        return True
+
+    except HTTPError as e:
+        if e.response is not None and e.response.status_code == 400:
+            logger.debug(f"Invalid Link Pair or Already Exists: {from_page_id} -> {to_page_id}")
+            return True
+
+        logger.error(f"Unexpected error creating link: {e}")
+        raise
+
+def save_page_to_db(logger, url, html, from_page_id, db_api: APIClient):
     url_norm = canonicalize_url(url)
 
     logger.info(f"Saving {url_norm} to DB ({url})")
 
     database_save_object: PageDbSaveObject = get_page_database_save_object(logger, url, html)
 
-    logger.debug(f"Database save object: {database_save_object}")
+    #logger.debug(f"Database save object: {database_save_object}")
 
     if database_save_object is None:
         logger.warning("Database save object IS NOT VALID")
-        return False
+        return -1
 
     site_id = get_site_id_or_create_site(logger, database_save_object.site_domain, db_api)
 
@@ -77,39 +100,49 @@ def save_page_to_db(logger, url, html, db_api: APIClient):
         "url": database_save_object.url,
         "html_content": database_save_object.html_content,
         "http_status_code": database_save_object.http_status_code,
-        "accessed_time": str(database_save_object.accessed_time)
+        'accessed_time': database_save_object.accessed_time.isoformat()
     }
 
     debug_payload = dict(page_payload)
     debug_payload["html_content"] = "..."
     logger.debug(f"Saving {debug_payload}, hash={database_save_object.content_hash}")
 
-    page_json_data =  save_page_or_update(logger, page_payload, db_api)
+    page_json_data = save_page_or_update(logger, page_payload, db_api)
+    if page_json_data == None:
+        logger.error(f"ERROR DURING PAGE DB SAVE")
+        return -1
+    
     page_id = page_json_data['id']
 
     # image saving
+    logger.debug(f"Saving {len(database_save_object.images)} images.")
     for image in database_save_object.images:
         image_payload = {
             'page_id' : page_id,
             'filename' : image.filename,
             'content_type' : image.content_type,
             'data' : None,
-            'accessed_time' : str(image.accessed_time)
+            'accessed_time' : image.accessed_time.isoformat()
         }
 
         resp = db_api.create_image_json(image_payload)
-        logger.debug(f"Saving image response {resp}")
+        #logger.debug(f"Saving image response {resp}")
 
-    #page data saving
+    # page data saving
+    logger.debug(f"Saving {len(database_save_object.page_data)} page data entries.")
     for page_data_entry in database_save_object.page_data:
+        page_data_entry_payload = {
+            'page_id' : page_id,
+            'data_type_code' : page_data_entry.data_type_code,
+            'data' : None,
+        }
 
-        pass
+        resp = db_api.create_page_data(page_data_entry_payload)
+        #logger.debug(f"Saving page data response {resp}")
 
-    for link in database_save_object.links:
+    # link saving
+    logger.debug(f"Saving Link.")
+    save_link(logger, from_page_id, page_id, db_api)
 
-        pass
-
-
-
-    return True
+    return page_id
 

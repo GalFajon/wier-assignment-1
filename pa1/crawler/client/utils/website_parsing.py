@@ -15,6 +15,7 @@ from utils.website_hashing import hash_website # type: ignore
 
 BINARY_FILE_TYPES = {"PDF", "DOC", "DOCX", "PPT", "PPTX"}
 BINARY_FILE_EXTENSIONS = (".pdf", ".doc", ".docx", ".ppt", ".pptx")
+IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg")
 
 def parse_website_content(html, url, robots):
     
@@ -164,8 +165,8 @@ def get_page_database_save_object(logger, url, html):
         normalized_url = canonicalize_url(url)
         parsed = urlsplit(normalized_url)
         domain = parsed.netloc
-        soup = BeautifulSoup(html, "html.parser")
 
+        soup = BeautifulSoup(html, "html.parser")
 
         if normalized_url.lower().endswith(BINARY_FILE_EXTENSIONS):
             page_type = "BINARY"
@@ -190,7 +191,6 @@ def get_page_database_save_object(logger, url, html):
         for a in soup.find_all("a", href=True):
             href = a.get("href").strip()
 
-            # Skip invalid schemes
             if href.startswith(("javascript:", "mailto:", "tel:", "#")):
                 continue
 
@@ -201,14 +201,24 @@ def get_page_database_save_object(logger, url, html):
                 seen_links.add(clean_url)
                 page_obj.add_link(clean_url)
 
-
         for img in soup.find_all("img"):
             src = img.get("src")
+
             if not src:
                 continue
 
+            src = src.strip()
+
             img_url = urljoin(normalized_url, src)
             img_url = normalize_url(img_url)
+
+            if not img_url:
+                continue
+
+            lower_url = img_url.lower()
+
+            if not lower_url.endswith(IMAGE_EXTENSIONS):
+                continue
 
             filename = img_url.split("/")[-1] or "image"
 
@@ -224,7 +234,7 @@ def get_page_database_save_object(logger, url, html):
 
             page_obj.add_page_data(
                 data_type_code=ext if ext in BINARY_FILE_TYPES else "PDF",
-                data=b"" 
+                data=b""
             )
 
         return page_obj

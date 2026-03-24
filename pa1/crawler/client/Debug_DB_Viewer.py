@@ -10,22 +10,36 @@ if __name__ == '__main__':
 
     db_client = APIClient(base_url='http://server:5000')
 
+    #clear page data
+    print('Clearing links')
+    for link in db_client.list_links():
+        #print(link)
+        fp = link['from_page']
+        tp = link['to_page']
+        response = db_client.delete_link(fp, tp)
+        #print(f"cleared {response}")
+
+    #clear images
+    print('Clearing images')
+    for image in db_client.list_images():
+        id = image['id']
+        response = db_client.delete_image(id)
+        #print(f"cleared {id}")
+
+    #clear pages
+    print('Clearing pages')
+    for page in db_client.list_pages():
+        id = page['id']
+        response = db_client.delete_page(id)
+        #print(f"cleared {id}")
+
     #clear sites
     print('Clearing sites')
     for site in db_client.list_sites():
         id = site['id']
         response = db_client.delete_site(id)
-        print(f"cleared {id}")
+        #print(f"cleared {id}")
 
-    #clear pages
-    print('Clearing pages')
-    for site in db_client.list_pages():
-        id = site['id']
-        response = db_client.delete_page(id)
-        print(f"cleared {id}")
-
-
-    
     # response = db_client.list_sites()
     # print(f"Resp: {response}")
 

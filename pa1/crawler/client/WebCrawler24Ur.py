@@ -145,7 +145,7 @@ class WebCrawler24Ur:
 
         # initialize queue
         for seed in seed_urls:
-            self._shared_crawling_front.put((0, (seed, 0)))
+            self._shared_crawling_front.put((0, (seed, 0, -1)))
 
 
 
@@ -249,7 +249,7 @@ class WebCrawler24Ur:
 
         while True:
             try:
-                priority, (url, link_version) = self._shared_crawling_front.get(timeout=3)
+                priority, (url, link_version, from_page_id) = self._shared_crawling_front.get(timeout=3)
             except:
                 break
             
@@ -294,8 +294,8 @@ class WebCrawler24Ur:
 
 
             # save to DB
-            db_save_status = save_page_to_db(self._logger, url, html, self._db_api)
-            if db_save_status != True:
+            page_id = save_page_to_db(self._logger, url, html, from_page_id, self._db_api)
+            if page_id == -1:
                 self._logger.warning(f"Error saving html contents of {url} to DB")
 
             # process links
@@ -336,7 +336,7 @@ class WebCrawler24Ur:
                     priority = priority_score_BOW(self._logger, html, link, self._front_metadata_dict[link], self._query_text)
                 
                 # self._logger.debug(f"Priority: {priority}, link: {link}")
-                self._shared_crawling_front.put((-priority, (link, link_version))) # minus priority, because priority queue returns smallest priority
+                self._shared_crawling_front.put((-priority, (link, link_version, page_id))) # minus priority, because priority queue returns smallest priority
 
             with self._lock_visited_urls:
                 for i in range(5):
@@ -375,7 +375,7 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=1,
+        max_pages=10,
         worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
