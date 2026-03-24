@@ -7,6 +7,7 @@ import requests
 import threading
 from queue import PriorityQueue
 import classla
+import ppdeep
 
 from urllib.parse import urlsplit
 from robotexclusionrulesparser import RobotExclusionRulesParser
@@ -287,7 +288,7 @@ class WebCrawler24Ur:
             if not html:
                 self._shared_crawling_front.task_done()
                 continue
-            
+
             # add to visited set
             with self._lock_visited_urls:
                 self._shared_visited_urls.add(url)
@@ -371,7 +372,8 @@ class WebCrawler24Ur:
 if __name__ == "__main__":
 
     seed = "https://www.24ur.com/"
-    # seed = "https://www.24ur.com/novice/tujina"
+    # seed = "https://www.24ur.com/novice/gospodarstvo/za-50-litrski-rezervoar-dizla-85-evrov-bencina-pa-79-evrov.html"
+    print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
@@ -382,5 +384,6 @@ if __name__ == "__main__":
         logging_level='DEBUG',
         query="Olimpijske igre."
     )
+
 
     crawler.crawl()
