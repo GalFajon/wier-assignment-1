@@ -61,7 +61,11 @@ def extract_urls(html, url):
         key = normalize_url(urljoin(url, l["href"]))
         key_parts = get_url_parts(key)
 
-        summary_p = l.find("p", class_="summary")
+        # find summary text
+        summary_p = l.find(["p", "span"], class_="summary")
+        
+        # find label text
+        label_span = l.find("span", class_="label")
 
         #print(url_parts)
         if len(key_parts) < 2:
@@ -75,12 +79,13 @@ def extract_urls(html, url):
         new_metadata = dict({
             "source": url,
             "source_title": url_parts[-1] if ".html" in url else None,
-            "section": key_parts[1] if len(key_parts) > 1 else None,
-            "topic": key_parts[2] if len(key_parts) > 2 else None,
+            "section": key_parts[1].replace("-", " ") if len(key_parts) > 1 else None,
+            "topic": key_parts[2].replace("-", " ") if len(key_parts) > 2 else None,
             "link_title": key_parts[-1].replace("-", " ")[:-5] if ".html" in key else "",
             "summary": summary_p.text if summary_p != None else None,
             "container_id": [],
-            "article_keywords":  article_keywords
+            "article_keywords":  article_keywords,
+            "link_keywords": label_span.text if label_span != None else None
         })
 
 

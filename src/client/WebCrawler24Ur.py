@@ -293,7 +293,7 @@ class WebCrawler24Ur:
                 # link, tag = url_data[0], url_data[1] # dummy simple unclean dat
                 # link_norm = normalize_url(link) # link norm is already called in parse website content
                 #print(link_norm)
-                # print(website_data[link])
+                #rint(website_data[link])
                 link_version = 0
 
                 with self._lock_visited_urls:
@@ -353,7 +353,7 @@ class WebCrawler24Ur:
 if __name__ == "__main__":
 
     seed = "https://www.24ur.com/"
-    # seed = "https://www.24ur.com/avtor/2001674"
+    # seed = "https://www.24ur.com/novice/tujina"
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
@@ -362,7 +362,8 @@ if __name__ == "__main__":
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',
-        query="ZDA"
+        # query="Zastoj zastoji zastoja cestni cesta ceste cesti nesreče nesrečo avta avtu nesreča avto"
+        query="Trump"
     )
 
     crawler.crawl()
