@@ -86,3 +86,21 @@ def delete_page(page_id):
         return "", 204
     finally:
         db.close()
+
+@bp.route("/by-url", methods=["GET"])
+def get_page_by_url():
+    url = request.args.get("url")
+
+    if not url:
+        abort(400, description="Missing 'url' parameter")
+
+    db = database.SessionLocal()
+    try:
+        p = db.query(database.Page).filter(database.Page.url == url).first()
+
+        if not p:
+            abort(404)
+
+        return jsonify(to_dict_page(p))
+    finally:
+        db.close()

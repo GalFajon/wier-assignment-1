@@ -50,6 +50,19 @@ class APIClient:
         r = self._get_session().delete(self._url(f"/sites/{site_id}"), timeout=self.timeout)
         r.raise_for_status()
 
+    def get_site_id_by_domain(self, domain: str) -> Optional[int]:
+        r = self._get_session().get(
+            self._url("/sites/by-domain"),
+            params={"domain": domain},
+            timeout=self.timeout
+        )
+
+        if r.status_code == 404:
+            return None
+
+        r.raise_for_status()
+        return r.json().get("id")
+
     # --- Pages ---
     def list_pages(self) -> List[Dict[str, Any]]:
         r = self._get_session().get(self._url("/pages/"), timeout=self.timeout)
@@ -60,6 +73,19 @@ class APIClient:
         r = self._get_session().get(self._url(f"/pages/{page_id}"), timeout=self.timeout)
         r.raise_for_status()
         return r.json()
+    
+    def get_page_id_by_url(self, url: str) -> Optional[int]:
+        r = self._get_session().get(
+            self._url("/pages/by-url"),
+            params={"url": url},
+            timeout=self.timeout
+        )
+
+        if r.status_code == 404:
+            return None
+
+        r.raise_for_status()
+        return r.json().get("id")
 
     def create_page(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         r = self._get_session().post(self._url("/pages/"), json=payload, timeout=self.timeout)
@@ -205,8 +231,7 @@ class APIClient:
         r = self._get_session().delete(self._url(f"/images/{image_id}"), timeout=self.timeout)
         r.raise_for_status()
 
-    # --- Health ---
-    def health(self) -> Dict[str, Any]:
+    def _do_not_use_health(self) -> Dict[str, Any]:
         r = self._get_session().get(self._url("/health"), timeout=self.timeout)
         r.raise_for_status()
         return r.json()

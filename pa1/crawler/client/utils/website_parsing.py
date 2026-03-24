@@ -11,6 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from utils.url_cleaning import normalize_url, canonicalize_url # type: ignore
 from utils.page_data_objects import PageDbSaveObject
+from utils.website_hashing import hash_website # type: ignore
 
 BINARY_FILE_TYPES = {"PDF", "DOC", "DOCX", "PPT", "PPTX"}
 BINARY_FILE_EXTENSIONS = (".pdf", ".doc", ".docx", ".ppt", ".pptx")
@@ -44,7 +45,7 @@ def extract_urls(html, url):
 
     # add url cleaning
 
-    bs = BeautifulSoup(html)
+    bs = BeautifulSoup(html, "html.parser")
     metadata_dict = dict()
     #print(bs.prettify())
     links = bs.find_all("a", href=True)
@@ -183,9 +184,7 @@ def get_page_database_save_object(logger, url, html):
         )
 
         if html_content:
-            page_obj.content_hash = hashlib.sha256(
-                html_content.encode("utf-8", errors="ignore")
-            ).hexdigest()
+            page_obj.content_hash = hash_website(html_content, normalized_url)
 
         seen_links = set()
         for a in soup.find_all("a", href=True):

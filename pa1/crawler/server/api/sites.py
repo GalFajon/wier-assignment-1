@@ -27,6 +27,24 @@ def get_site(site_id):
     finally:
         db.close()
 
+@bp.route("/by-domain", methods=["GET"])
+def get_site_by_domain():
+    domain = request.args.get("domain")
+
+    if not domain:
+        abort(400, description="Missing 'domain' query parameter")
+
+    db = database.SessionLocal()
+    try:
+        s = db.query(database.Site).filter(database.Site.domain == domain).first()
+
+        if not s:
+            abort(404, description="Site not found")
+
+        return jsonify({"id": s.id})
+    finally:
+        db.close()
+
 @bp.route("/", methods=["POST"])
 def create_site():
     payload = request.get_json(force=True)

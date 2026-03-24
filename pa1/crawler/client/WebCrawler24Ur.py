@@ -34,7 +34,7 @@ class WebCrawler24Ur:
         max_pages: int = 10,
         worker_count: int = 4,
         scoring_method: str = 'BERT',
-        database_base_url: str = "http://web-scraper-server-1:5000",
+        database_base_url: str = 'http://server:5000',
         web_driver_location: str = "/usr/local/bin/geckodriver",
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
@@ -375,7 +375,7 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=10,
+        max_pages=1,
         worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
