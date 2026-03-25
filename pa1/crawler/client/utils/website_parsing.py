@@ -166,7 +166,7 @@ def get_page_database_save_object(logger, url, html):
         parsed = urlsplit(normalized_url)
         domain = parsed.netloc
 
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html, features="html.parser")
 
         if normalized_url.lower().endswith(BINARY_FILE_EXTENSIONS):
             page_type = "BINARY"

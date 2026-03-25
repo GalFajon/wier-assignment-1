@@ -1,4 +1,6 @@
 
+from urllib.parse import urlsplit
+
 from utils.url_cleaning import canonicalize_url
 from utils.page_data_objects import PageDbSaveObject, LinkData, ImageData, PageData
 from utils.website_parsing import get_page_database_save_object
@@ -115,7 +117,9 @@ def save_page_to_db(logger, url, html, from_page_id, db_api: APIClient):
         "url": database_save_object.url,
         "html_content": database_save_object.html_content,
         "http_status_code": database_save_object.http_status_code,
-        'accessed_time': database_save_object.accessed_time.isoformat()
+        "content_hash": database_save_object.content_hash,
+        'accessed_time': database_save_object.accessed_time.isoformat(),
+        "priority": 0
     }
 
     debug_payload = dict(page_payload)
@@ -161,3 +165,26 @@ def save_page_to_db(logger, url, html, from_page_id, db_api: APIClient):
 
     return page_id
 
+def save_frontier_pages_to_db(logger, page_data, db_api: APIClient):
+    url_norm = canonicalize_url(page_data[0].get("url"))
+    parsed = urlsplit(url_norm)
+    domain = parsed.netloc
+
+    # logger.info(f"Saving {url_norm} from frontier to DB ({url})")
+
+    site_id = get_site_id_or_create_site(logger, domain, db_api) # TODO: fetch all kinds of domains that are in the page_data urls
+
+    pages_payload = []
+    for pd in page_data:
+        pages_payload.append({
+            "site_id": site_id,
+            "url": pd.get("url"),
+            "priority": pd.get("priority")
+        })
+
+    try:
+        db_api.create_frontier_pages(pages_payload)
+    except HTTPError as e:
+        print("ERRORRRR")
+        print(e)
+    
