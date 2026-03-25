@@ -24,6 +24,8 @@ from utils.url_cleaning import normalize_url # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
 from utils.database_saving import save_page_to_db # type: ignore
 from utils.api_client import APIClient
+from utils.url_cleaning import canonicalize_url
+from utils.database_saving import get_site_id_or_create_site
 
 class WebCrawler24Ur:
 
@@ -51,6 +53,7 @@ class WebCrawler24Ur:
         self._web_driver_location = web_driver_location
         self._query_text = query
         self._scoring_method = scoring_method
+        self._default_crawl_delay = 1.0
         
         self._db_api = APIClient(base_url=database_base_url)
 
@@ -95,52 +98,8 @@ class WebCrawler24Ur:
         self._shared_last_access = {}
         self._lock_website_access_info = threading.Lock()
 
-        self._site_table_data = {}
-
-        # classla.download("sl")
-        # self.classla_nlp = classla.Pipeline("sl")
-
-        # robots.txt info
-        for domain in self._domains:
-            robots_url = domain.rstrip("/") + "/robots.txt"
-            try:
-                r = requests.get(robots_url, timeout=5)
-                rp = RobotExclusionRulesParser()
-                rp.parse(r.text)
-                
-                # print(rp.sitemaps)
-                sitemap_r = requests.get(rp.sitemaps[0], timeout=5)
-                # print(sitemap_r.text)
-                delay = rp.get_crawl_delay(self._crawler_id)
-
-                if delay is None:
-                    delay = rp.get_crawl_delay("*")
-
-                if delay is None:
-                    delay = default_crawl_delay
-
-                self._shared_robots_info[domain] = {
-                    "info": rp,
-                    "delay": delay
-                }
-
-                self._site_table_data[domain] = {
-                    "robots_content": r.text,
-                    "sitemap_content": sitemap_r.text,
-                }
-                
-
-            except Exception:
-                self._shared_robots_info[domain] = {
-                    "info": None,
-                    "delay": default_crawl_delay
-                }
-            self._shared_last_access[domain] = time.time()
-
-        self._logger.info(f"INITIALIZED CRAWLER")
-        delay_info = {d: v["delay"] for d, v in self._shared_robots_info.items()}
-        self._logger.debug(f"Crawl delays: {delay_info}" )
-
+        self._get_robots_data()
+        
         if scoring_method == 'BERT':
             self._query_embed = embed_BERT(self._query_text)
 
@@ -149,7 +108,70 @@ class WebCrawler24Ur:
             self._shared_crawling_front.put((0, (seed, 0, -1)))
 
 
+    def _get_robots_data(self):
 
+        # robots.txt info
+        site_data = []
+
+        for domain in self._domains:
+            robots_url = domain.rstrip("/") + "/robots.txt"
+
+            normalized_url = canonicalize_url(domain)
+            parsed = urlsplit(normalized_url)
+            canon_domain = parsed.netloc
+
+            try:
+                r = requests.get(robots_url, timeout=5)
+
+                rp = RobotExclusionRulesParser()
+                rp.parse(r.text)
+
+                sitemap_content = None
+                sitemap_url = None
+
+                if rp.sitemaps:
+                    sitemap_url = rp.sitemaps[0]
+                    sitemap_r = requests.get(sitemap_url, timeout=5)
+                    sitemap_content = sitemap_r.text
+
+                delay = rp.get_crawl_delay(self._crawler_id)
+                if delay is None:
+                    delay = rp.get_crawl_delay("*")
+                if delay is None:
+                    delay = self._default_crawl_delay
+
+                self._shared_robots_info[domain] = {
+                    "info": rp,
+                    "delay": delay
+                }
+
+                site_data.append({
+                    "domain": canon_domain,
+                    "robots_content": r.text,
+                    "sitemap_content": sitemap_content
+                })
+
+            except Exception:
+                self._shared_robots_info[domain] = {
+                    "info": None,
+                    "delay": self._default_crawl_delay
+                }
+
+                site_data.append({
+                    "domain": canon_domain,
+                    "robots_content": '',
+                    "sitemap_content": ''
+                })
+
+            self._shared_last_access[domain] = time.time()
+
+        self._logger.info("INITIALIZED CRAWLER")
+        delay_info = {d: v["delay"] for d, v in self._shared_robots_info.items()}
+        self._logger.debug(f"Crawl delays: {delay_info}")
+
+        #save sites to DB
+        for site in site_data:
+            id = get_site_id_or_create_site(self._logger, site, self._db_api)
 
 
 
@@ -211,6 +233,9 @@ class WebCrawler24Ur:
             return False
 
         domain_info = self._shared_robots_info.get(domain)
+        if not domain_info:
+            return False
+
         rp = domain_info['info']
         if rp is not None and not rp.is_allowed(self._crawler_id, url):
             self._logger.info('URL:', url, "is NOT allowed by robots.txt")
@@ -373,15 +398,15 @@ if __name__ == "__main__":
 
     seed = "https://www.24ur.com/"
     # seed = "https://www.24ur.com/novice/gospodarstvo/za-50-litrski-rezervoar-dizla-85-evrov-bencina-pa-79-evrov.html"
-    print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
+    #print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=400,
+        max_pages=3,
         worker_count=1,
-        log_to_stdout=False,
+        log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='INFO',
+        logging_level='DEBUG',
         query="Vojna med Rusijo in Ukraino."
     )
 

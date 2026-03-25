@@ -36,12 +36,12 @@ if __name__ == "__main__":
 
         #embedding
         articles, lemmas = load_articles_and_lemmas_filtered()
-        tfidf_embedded_lemmas = embed_TFIDF(lemmas, vector_length = 15000, use_cache = False, pickle_file='tmp_caching/0_tfidf.pkl')
-        reduced_embeddings, explained_variance = truncated_SVD_reduction(tfidf_embedded_lemmas, reduce_to_dim = 50, use_cache = False, pickle_file='tmp_caching/1_tsvd.pkl')
+        tfidf_embedded_lemmas = embed_TFIDF(lemmas, vector_length = 20000, use_cache = False, pickle_file='tmp_caching/0_tfidf.pkl')
+        reduced_embeddings, explained_variance = truncated_SVD_reduction(tfidf_embedded_lemmas, reduce_to_dim = 30, use_cache = False, pickle_file='tmp_caching/1_tsvd.pkl')
         print("Explained variance of SVD:", explained_variance)
 
         #cluster k selection
-        cluster_labels, best_k, best_score = KMeans_get_best_k_silhouette(reduced_embeddings, k_range=range(5, 100, 1))
+        cluster_labels, best_k, best_score = KMeans_get_best_k_silhouette(reduced_embeddings, k_range=range(2, 100, 1))
         print(best_k, best_score)
 
         #clustering

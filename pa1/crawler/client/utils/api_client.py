@@ -96,8 +96,8 @@ class APIClient:
         )
 
         if r.status_code >= 400:
-            print("STATUS:", r.status_code)
-            print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
+            # print("STATUS:", r.status_code)
+            # print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
             try:
                 error_body = r.json()
             except Exception:

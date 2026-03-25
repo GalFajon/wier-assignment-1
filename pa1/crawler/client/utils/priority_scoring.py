@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 DEVICE = "cpu"
 MODEL_CACHE_DIR = "./model_cache/sloberta"
-EMBEDDING_TOKEN_MAX_LENGTH = 256
+EMBEDDING_TOKEN_MAX_LENGTH = 128
 
 tokenizer = AutoTokenizer.from_pretrained(
     "EMBEDDIA/sloberta",

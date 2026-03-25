@@ -1,5 +1,6 @@
 import yaml
 from utils.api_client import APIClient
+from tqdm import tqdm
 
 if __name__ == '__main__':
 
@@ -9,7 +10,7 @@ if __name__ == '__main__':
 
     data = []
 
-    for page in pages:
+    for page in tqdm(pages, desc="Fetching pages", total=len(pages)):
         entry = {
             "id": page["id"],
             "url": page["url"],
@@ -18,4 +19,10 @@ if __name__ == '__main__':
         data.append(entry)
 
     with open("/client/output/pages.yaml", "w", encoding="utf-8") as f:
-        yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+        for page in tqdm(data, desc="Saving YAML", total=len(data)):
+            yaml.dump(
+                [page],
+                f,
+                allow_unicode=True,
+                sort_keys=False
+            )

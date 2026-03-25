@@ -6,25 +6,40 @@ from utils.api_client import APIClient
 from requests.exceptions import HTTPError
 
 
-def get_site_id_or_create_site(logger, domain, db_api: APIClient):
+def get_site_id_or_create_site(logger, site_payload, db_api: APIClient):
+
+    domain = site_payload['domain']
+    
+    try:
+        site_id = db_api.get_site_id_by_domain(domain)
+
+        if site_id is not None:
+            logger.debug(f"Site found: {domain} with ID={site_id}")
+            return site_id
+
+        logger.debug(f"Site not found, creating: {domain}")
+
+        response = db_api.create_site(site_payload)
+
+        return response["id"]
+
+    except Exception as e:
+        logger.error(f"Failed to get/create site for {domain}: {e}")
+        raise
+
+def get_site_id(logger, domain, db_api: APIClient):
+
     try:
         site_id = db_api.get_site_id_by_domain(domain)
 
         if site_id is not None:
             return site_id
 
-        logger.debug(f"Site not found, creating: {domain}")
+        logger.error(f"Site not found.")
 
-        response = db_api.create_site({
-            "domain": domain,
-            "robots_content": "",
-            "sitemap_content": ""
-        })
-
-        return response["id"]
-
+        return -1
     except Exception as e:
-        logger.error(f"Failed to get/create site for {domain}: {e}")
+        logger.error(f"Failed to get site for {domain}: {e}")
         raise
 
 
@@ -92,7 +107,7 @@ def save_page_to_db(logger, url, html, from_page_id, db_api: APIClient):
         logger.warning("Database save object IS NOT VALID")
         return -1
 
-    site_id = get_site_id_or_create_site(logger, database_save_object.site_domain, db_api)
+    site_id = get_site_id(logger, database_save_object.site_domain, db_api)
 
     page_payload = {
         "site_id": site_id,

@@ -1,7 +1,6 @@
 import yaml
 from bs4 import BeautifulSoup
-import tqdm
-
+from tqdm import tqdm
 
 def extract_text(html):
     soup = BeautifulSoup(html, "lxml")
@@ -53,7 +52,7 @@ if __name__ == "__main__":
 
     cleaned = []
 
-    for page in tqdm(pages, desc="Cleaning pages"):
+    for page in tqdm(pages, desc="Cleaning pages", total=len(pages)):
         extracted = extract_text(page["html_content"])
 
         cleaned.append({

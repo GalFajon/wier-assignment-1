@@ -50,7 +50,7 @@ def extract_urls(html, url):
     metadata_dict = dict()
     #print(bs.prettify())
     links = bs.find_all("a", href=True)
-    print(f"Num of all links: {len(links)}")
+    #print(f"Num of all links: {len(links)}")
 
     # extract all article keywords
     article_keywords = []
