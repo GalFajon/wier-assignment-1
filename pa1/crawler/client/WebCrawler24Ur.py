@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 import requests
 import threading
 from queue import PriorityQueue
-import classla
 import ppdeep
 
 from urllib.parse import urlsplit
@@ -22,7 +21,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT  # type: ignore
 from utils.url_cleaning import normalize_url # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
-from utils.database_saving import save_page_to_db # type: ignore
+from utils.database_saving import save_frontier_pages_to_db, save_frontier_pages_to_db, save_page_to_db # type: ignore
 from utils.api_client import APIClient
 
 class WebCrawler24Ur:
@@ -305,6 +304,7 @@ class WebCrawler24Ur:
             
             self._logger.info(f"[{worker_name}] Crawled:   {url}")
             self._logger.info(f"  - Found {len(website_urls)} links")
+            new_frontier_pairs_for_db = []
             for link in website_urls:
                 # link, tag = url_data[0], url_data[1] # dummy simple unclean dat
                 # link_norm = normalize_url(link) # link norm is already called in parse website content
@@ -336,8 +336,14 @@ class WebCrawler24Ur:
                 elif self._scoring_method == 'BOW':
                     priority = priority_score_BOW(self._logger, html, link, self._front_metadata_dict[link], self._query_text)
                 
+                new_frontier_pairs_for_db.append({
+                    "priority": -priority,
+                    "url": link
+                })
                 # self._logger.debug(f"Priority: {priority}, link: {link}")
                 self._shared_crawling_front.put((-priority, (link, link_version, page_id))) # minus priority, because priority queue returns smallest priority
+
+            save_frontier_pages_to_db(self._logger, new_frontier_pairs_for_db, self._db_api)
 
             with self._lock_visited_urls:
                 for i in range(5):
@@ -371,17 +377,17 @@ class WebCrawler24Ur:
 
 if __name__ == "__main__":
 
+    # seed = "https://www.24ur.com/"
     seed = "https://www.24ur.com/"
-    # seed = "https://www.24ur.com/novice/gospodarstvo/za-50-litrski-rezervoar-dizla-85-evrov-bencina-pa-79-evrov.html"
     print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=400,
+        max_pages=1,
         worker_count=1,
-        log_to_stdout=False,
+        log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='INFO',
+        logging_level='DEBUG',
         query="Vojna med Rusijo in Ukraino."
     )
 

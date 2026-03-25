@@ -1,6 +1,6 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import classla
+import os
 import torch
 from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as F

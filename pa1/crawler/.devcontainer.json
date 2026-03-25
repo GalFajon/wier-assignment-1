@@ -1,0 +1,23 @@
+{
+    "name": "Existing Docker Compose (Extend)",
+
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "docker-compose.yml"
+    ],
+
+    "service": "client",
+
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-toolsai.jupyter",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    }
+
+}

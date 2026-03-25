@@ -57,6 +57,7 @@ class PageDbSaveObject:
     # for deduplication
     content_hash: Optional[str] = None
     duplicate_of_url: Optional[str] = None
+    priority: Optional[float] = None
 
     def is_html(self) -> bool:
         return self.page_type_code == "HTML"

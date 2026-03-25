@@ -1,3 +1,4 @@
+
 from sqlalchemy import (
     create_engine,
     Column,
@@ -9,7 +10,9 @@ from sqlalchemy import (
     Index,
     UniqueConstraint,
     PrimaryKeyConstraint,
-    text
+    text,
+    DECIMAL,
+    null
 )
 
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
@@ -61,7 +64,8 @@ class Page(Base):
     html_content = Column(Text)
     http_status_code = Column(Integer)
     accessed_time = Column(String)
-
+    content_hash = Column(String)
+    priority = Column(DECIMAL(6,5))
     site = relationship("Site", backref="pages")
 
 
