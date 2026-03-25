@@ -1,5 +1,9 @@
 # custom stuff
 **/db_data/
+**/lemmatized_texts
+**/pages.yaml
+**/cleaned_pages.yaml
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

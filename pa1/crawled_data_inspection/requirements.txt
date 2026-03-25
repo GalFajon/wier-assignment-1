@@ -1,0 +1,13 @@
+PyYAML
+numpy
+pandas
+tqdm
+stanza
+scikit-learn
+umap-learn
+keybert
+plotly
+psycopg2-binary
+pyyaml 
+beautifulsoup4 
+lxml

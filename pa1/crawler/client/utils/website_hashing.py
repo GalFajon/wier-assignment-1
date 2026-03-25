@@ -32,7 +32,7 @@ def hash_website(html: str, url: str) -> str:
     to_hash = to_hash.get_text(separator=" ", strip=True)
     to_hash = re.sub(r"\s+", " ", to_hash)
     # text = text[:10000]
-    print(to_hash[:10000])
+    #print(to_hash[:10000])
     h = ppdeep.hash(to_hash)
     
     # return hashlib.sha256(text.encode("utf-8")).hexdigest()

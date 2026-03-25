@@ -26,6 +26,8 @@ services:
       DATABASE_URL: postgresql://postgres:example@db:5432/crawldb
     ports:
       - "5001:5000"
+    volumes:
+      - ./client_output:/client/output
 
   server:
     build: ./server

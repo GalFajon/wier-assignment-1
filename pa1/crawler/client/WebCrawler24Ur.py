@@ -377,12 +377,12 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=10,
+        max_pages=400,
         worker_count=1,
-        log_to_stdout=True,
+        log_to_stdout=False,
         logging_file='./crawler.log',
-        logging_level='DEBUG',
-        query="Olimpijske igre."
+        logging_level='INFO',
+        query="Vojna med Rusijo in Ukraino."
     )
 
 
