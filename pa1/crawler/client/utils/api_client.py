@@ -118,15 +118,15 @@ class APIClient:
         )
 
         if r.status_code >= 400:
-            print("STATUS:", r.status_code)
-            print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
+            # print("STATUS:", r.status_code)
+            # print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
             try:
                 error_body = r.json()
             except Exception:
                 error_body = {"raw": r.text}
 
             raise requests.exceptions.HTTPError(
-                f"HTTP {r.status_code} Error | {error_body}",
+                f"Create frontier pages - HTTP {r.status_code} Error | {error_body}",
                 response=r
             )
 

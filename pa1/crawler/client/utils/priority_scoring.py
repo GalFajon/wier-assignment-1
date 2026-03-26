@@ -4,33 +4,33 @@ import os
 import torch
 from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as F
+import time
+from sentence_transformers import SentenceTransformer
 
 DEVICE = "cpu"
 MODEL_CACHE_DIR = "./model_cache/sloberta"
 EMBEDDING_TOKEN_MAX_LENGTH = 128
 
-tokenizer = AutoTokenizer.from_pretrained(
-    "EMBEDDIA/sloberta",
-    cache_dir=MODEL_CACHE_DIR
-)
-model = AutoModel.from_pretrained(
-    "EMBEDDIA/sloberta",
-    cache_dir=MODEL_CACHE_DIR
+# tokenizer = AutoTokenizer.from_pretrained(
+#     "EMBEDDIA/sloberta",
+#     cache_dir=MODEL_CACHE_DIR
+# )
+# model = AutoModel.from_pretrained(
+#     "EMBEDDIA/sloberta",
+#     cache_dir=MODEL_CACHE_DIR
+# )
+
+model = SentenceTransformer(
+    "paraphrase-multilingual-MiniLM-L12-v2",
+    device=DEVICE
 )
 
 def embed_BERT(text: str):
-    inputs = tokenizer(
+    return model.encode(
         text,
-        return_tensors="pt",
-        truncation=True,
-        padding=True,
-        max_length=EMBEDDING_TOKEN_MAX_LENGTH
-    ).to(DEVICE)
-
-    with torch.no_grad():
-        outputs = model(**inputs)
-
-    return outputs.last_hidden_state.mean(dim=1)
+        convert_to_tensor=True,
+        normalize_embeddings=True
+    )
 
 def torch_cosine_distance(a, b):
     return F.cosine_similarity(a, b).item()
@@ -165,10 +165,101 @@ def priority_score_BERT(logger, website_html, link, metadata_list, query_emb):
     metadata_emb = embed_BERT(metadata_str)
     title_score = float(torch_cosine_distance(query_emb, metadata_emb))
 
-    #logger.debug(f'     Metadata_str="{metadata_str}", Score={title_score},     len(m_str)={len(metadata_str)}')
+    logger.info(f'SCORED URL: Score={title_score},     len(m_str)={len(metadata_str)}')
     return title_score
  
 
-    
+def embed_batch(texts):
+    return model.encode(
+        texts,
+        convert_to_tensor=True,
+        normalize_embeddings=True  # important for cosine similarity
+    )
 
-    
+def BERT_score_batch(logger, candidates, query_emb):
+    if not candidates:
+        return []
+
+    t_start = time.perf_counter()
+
+    metadata_strings = []
+    for c in candidates:
+        metadata_list = c["metadata"]
+
+        titles = set()
+        summaries = set()
+        keywords = set()
+
+        for m in metadata_list:
+            title = m.get("link_title", "").strip()
+            if title:
+                titles.add(title.replace("_", " "))
+
+            summary = m.get("summary")
+            if summary:
+                summaries.add(summary.replace("...", "").strip())
+
+            topic = m.get("topic", "")
+            if topic:
+                keywords.add(topic.replace("-", " ").strip())
+
+            section = m.get("section", "")
+            if section:
+                keywords.add(section.replace("-", " ").strip())
+
+            article_keywords = m.get("article_keywords", [])
+            if article_keywords:
+                for kw in article_keywords:
+                    if kw:
+                        keywords.add(kw.replace("-", " ").strip())
+
+            link_keywords = m.get("link_keywords", "")
+            if link_keywords:
+                keywords.add(link_keywords.strip())
+
+        if not titles and not summaries and not keywords:
+            metadata_strings.append("")
+            continue
+
+        parts = []
+        if titles:
+            parts.append("Naslovi: " + ". ".join(titles) + ".")
+        if summaries:
+            parts.append("Povzetki: " + ". ".join(summaries) + ".")
+        if keywords:
+            parts.append("Ključne besede: " + ", ".join(keywords) + ".")
+
+        metadata_strings.append(" ".join(parts))
+
+    t_after_build = time.perf_counter()
+
+    embeddings = embed_batch(metadata_strings)
+
+    t_after_embed = time.perf_counter()
+
+    if query_emb.dim() == 2:
+        query_emb = query_emb.squeeze(0)
+
+    scores = F.cosine_similarity(
+        embeddings,
+        query_emb.unsqueeze(0),
+        dim=1
+    )
+
+    t_after_score = time.perf_counter()
+
+    if logger:
+        logger.info(
+            f"BERT batch timing | total={t_after_score - t_start:.4f}s | "
+            f"build={t_after_build - t_start:.4f}s | "
+            f"embed={t_after_embed - t_after_build:.4f}s | "
+            f"cosine={t_after_score - t_after_embed:.4f}s | "
+            f"n={len(candidates)}"
+        )
+
+        # for i, s in enumerate(scores):
+        #     logger.info(
+        #         f"SCORED URL: Score={float(s)}, len(m_str)={len(metadata_strings[i])}"
+        #     )
+
+    return scores

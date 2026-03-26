@@ -18,7 +18,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
-from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT  # type: ignore
+from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT, BERT_score_batch  # type: ignore
 from utils.url_cleaning import normalize_url # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
 from utils.database_saving import save_frontier_pages_to_db, save_frontier_pages_to_db, save_page_to_db # type: ignore
@@ -52,7 +52,7 @@ class WebCrawler24Ur:
         self._web_driver_location = web_driver_location
         self._query_text = query
         self._scoring_method = scoring_method
-        self._default_crawl_delay = 1.0
+        self._default_crawl_delay = default_crawl_delay
         
         self._db_api = APIClient(base_url=database_base_url)
 
@@ -280,7 +280,7 @@ class WebCrawler24Ur:
             
             # throw out links with old priority score
             if url in self._link_version_dict and link_version < self._link_version_dict[url]:
-                self._logger.info(f"Old link (v{link_version}): {url}")
+                self._logger.debug(f"Old link (v{link_version}): {url}")
                 self._shared_crawling_front.task_done()
                 continue
 
@@ -297,6 +297,9 @@ class WebCrawler24Ur:
                     break
                 self._shared_downloaded_page_count += 1
 
+                if self._shared_downloaded_page_count % 25 == 0:
+                    self._logger.info(f"CRAWLED {self._shared_downloaded_page_count} PAGES SO FAR!")
+
             # process url
             url_parts = urlsplit(url)
             domain = url_parts.scheme + "://" + url_parts.netloc
@@ -304,7 +307,8 @@ class WebCrawler24Ur:
             rb : RobotExclusionRulesParser = self._shared_robots_info[domain]["info"]
             if not rb.is_allowed(rb.user_agent, url):
                 continue
-
+            
+            self._logger.info(f"Beginning to process page: {url} with domain {domain} pulled with prio {priority}")
             self._respect_crawl_delay(domain)
             html = self._fetch_page(worker_web_driver, url)
 
@@ -329,51 +333,56 @@ class WebCrawler24Ur:
             
             self._logger.info(f"[{worker_name}] Crawled:   {url}")
             self._logger.info(f"  - Found {len(website_urls)} links")
-            new_frontier_pairs_for_db = []
-            for link in website_urls:
-                # link, tag = url_data[0], url_data[1] # dummy simple unclean dat
-                # link_norm = normalize_url(link) # link norm is already called in parse website content
-                #print(link_norm)
-                #rint(website_data[link])
-                link_version = 0
 
+            # url scoring inside page
+            candidates = []
+            for link in website_urls:
                 with self._lock_visited_urls:
                     if link in self._shared_visited_urls:
                         continue
 
-                    # add metadata to list of metadata for the found link
                     if link in self._front_metadata_dict:
                         self.append_metadata(link, website_data[link])
                     else:
                         self._front_metadata_dict[link] = [website_data[link]]
 
-                    # increment and store the latest version of the link in the priority queue, so older ones are thrown out
                     if link in self._link_version_dict:
                         self._link_version_dict[link] += 1
                     else:
                         self._link_version_dict[link] = 0
 
                     link_version = self._link_version_dict[link]
+
+                candidates.append({
+                    "link": link,
+                    "version": link_version,
+                    "metadata": self._front_metadata_dict[link]
+                })
+
+
+            scores = BERT_score_batch(self._logger, candidates, self._query_embed)
+            scores = scores.cpu().numpy()
+
+            new_frontier_pairs_for_db = []
+            for i, candidate in enumerate(candidates):
                 
-                priority = 0
-                if self._scoring_method == 'BERT':
-                    priority = priority_score_BERT(self._logger, html, link, self._front_metadata_dict[link], self._query_embed)
-                elif self._scoring_method == 'BOW':
-                    priority = priority_score_BOW(self._logger, html, link, self._front_metadata_dict[link], self._query_text)
-                
+                priority = float(-scores[i])
+                link = candidate['link']
+                link_version = candidate['version']
+
                 new_frontier_pairs_for_db.append({
-                    "priority": -priority,
+                    "priority": priority,
                     "url": link
                 })
-                # self._logger.debug(f"Priority: {priority}, link: {link}")
-                self._shared_crawling_front.put((-priority, (link, link_version, page_id))) # minus priority, because priority queue returns smallest priority
+
+                self._shared_crawling_front.put((priority, (link, link_version, page_id))) # minus priority, because priority queue returns smallest priority
 
             save_frontier_pages_to_db(self._logger, new_frontier_pairs_for_db, self._db_api)
 
             with self._lock_visited_urls:
                 for i in range(5):
                     element = self._shared_crawling_front.queue[i]
-                    self._logger.debug(f"[Top {i+1}] Priority: {-element[0]}, link: {element[1][0]}")
+                    #self._logger.debug(f"[Top {i+1}] Priority: {-element[0]}, link: {element[1][0]}")
             self._shared_crawling_front.task_done()
 
         worker_web_driver.quit()
@@ -408,11 +417,11 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=1,
-        worker_count=1,
+        max_pages=5000,
+        worker_count=4,
         log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='DEBUG',
+        logging_level='INFO',
         query="Vojna med Rusijo in Ukraino."
     )
 

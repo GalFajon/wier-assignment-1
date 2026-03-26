@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
         #embedding
         articles, lemmas = load_articles_and_lemmas_filtered()
-        tfidf_embedded_lemmas = embed_TFIDF(lemmas, vector_length = 20000, use_cache = False, pickle_file='tmp_caching/0_tfidf.pkl')
+        tfidf_embedded_lemmas = embed_TFIDF(lemmas, vector_length = 15000, use_cache = False, pickle_file='tmp_caching/0_tfidf.pkl')
         reduced_embeddings, explained_variance = truncated_SVD_reduction(tfidf_embedded_lemmas, reduce_to_dim = 30, use_cache = False, pickle_file='tmp_caching/1_tsvd.pkl')
         print("Explained variance of SVD:", explained_variance)
 

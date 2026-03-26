@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import null
 import database.database as database
+from sqlalchemy.dialects.postgresql import insert
 
 bp = Blueprint("pages", __name__, url_prefix="/pages")
 
@@ -37,6 +38,7 @@ def get_page(page_id):
         return jsonify(to_dict_page(p))
     finally:
         db.close()
+
 
 @bp.route("/", methods=["POST"])
 def create_page():

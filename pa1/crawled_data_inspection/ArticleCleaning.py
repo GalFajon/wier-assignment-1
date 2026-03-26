@@ -53,6 +53,9 @@ if __name__ == "__main__":
     cleaned = []
 
     for page in tqdm(pages, desc="Cleaning pages", total=len(pages)):
+        if not page["html_content"]:
+            continue
+
         extracted = extract_text(page["html_content"])
 
         cleaned.append({

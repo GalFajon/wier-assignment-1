@@ -172,7 +172,7 @@ def save_frontier_pages_to_db(logger, page_data, db_api: APIClient):
 
     # logger.info(f"Saving {url_norm} from frontier to DB ({url})")
 
-    site_id = get_site_id_or_create_site(logger, domain, db_api) # TODO: fetch all kinds of domains that are in the page_data urls
+    site_id = get_site_id(logger, domain, db_api) # TODO: fetch all kinds of domains that are in the page_data urls
 
     pages_payload = []
     for pd in page_data:
@@ -185,6 +185,6 @@ def save_frontier_pages_to_db(logger, page_data, db_api: APIClient):
     try:
         db_api.create_frontier_pages(pages_payload)
     except HTTPError as e:
-        print("ERRORRRR")
-        print(e)
+        logger.error(f"ERROR AT SAVING FRONTIER to DB - {e}")
+
     
