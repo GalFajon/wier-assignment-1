@@ -24,7 +24,7 @@ Assignment 1 webcrawler repo.
 * [ ] 
 
 ### WEBSITE RENDERING / PARSING
-* [ ] when parsing links, include links from href attributes and onclick Javascript events (e.g. location.href or document.location). Be careful to correctly extend the relative URLs before adding them to the frontier
+* [x] when parsing links, include links from href attributes and onclick Javascript events (e.g. location.href or document.location). Be careful to correctly extend the relative URLs before adding them to the frontier
 * [x] detect images on a web page only based on img tag, where the src attribute points to an image URL
 * [x] detect the relevance of each link to your domain and crawl more relevant links first
 * [x] download HTML content only (and PDF where required for the domain) - List all other content (.doc, .docx, .ppt and .pptx) in the page_data table - there is no need to populate data field (i.e. binary content), In case you put a link into a frontier and identify content as a binary source, you can just set its page_type to BINARY. The same holds for the image data
