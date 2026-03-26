@@ -8,18 +8,6 @@ import time
 from sentence_transformers import SentenceTransformer
 
 DEVICE = "cpu"
-MODEL_CACHE_DIR = "./model_cache/sloberta"
-EMBEDDING_TOKEN_MAX_LENGTH = 128
-
-# tokenizer = AutoTokenizer.from_pretrained(
-#     "EMBEDDIA/sloberta",
-#     cache_dir=MODEL_CACHE_DIR
-# )
-# model = AutoModel.from_pretrained(
-#     "EMBEDDIA/sloberta",
-#     cache_dir=MODEL_CACHE_DIR
-# )
-
 model = SentenceTransformer(
     "paraphrase-multilingual-MiniLM-L12-v2",
     device=DEVICE

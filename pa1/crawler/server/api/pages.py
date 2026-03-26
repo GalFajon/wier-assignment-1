@@ -44,57 +44,138 @@ def get_page(page_id):
 def create_page():
     payload = request.get_json(force=True)
     db = database.SessionLocal()
+    try:
+        p = database.Page(
+            site_id=payload.get("site_id"),
+            page_type_code=payload.get("page_type_code"),
+            url=payload.get("url"),
+            html_content=payload.get("html_content"),
+            http_status_code=payload.get("http_status_code"),
+            content_hash=payload.get("content_hash"),
+            priority=payload.get("priority"),
+            accessed_time=payload.get("accessed_time"),
+        )
+        db.add(p)
+        db.commit()
+        db.refresh(p)
+        return jsonify(to_dict_page(p)), 201
+    except IntegrityError:
+        db.rollback()
+        abort(400)
+    finally:
+        db.close()
 
-    # if the payload is an array, handle as frontier pages
-    if type(payload) is list:
-        try:
-            pages = []
-            for f_page in payload:
-                p = database.Page(
-                    site_id=f_page.get("site_id"),
-                    page_type_code="FRONTIER",
-                    url=f_page.get("url"),
-                    html_content=null(),
-                    http_status_code=null(),
-                    content_hash=null(),
-                    priority=f_page.get("priority"),
-                    accessed_time=null(),
-                )
-                pages.append(p)
-                db.add(p)
-            db.commit()
-            p_dicts = []
-            for p in pages:
-                db.refresh(p)
-                p_dicts.append(to_dict_page(p))
-            return jsonify({}), 201
-        except IntegrityError:
-            db.rollback()
-            abort(400)
-        finally:
-            db.close()
-    else:
-        try:
+@bp.route("/frontier/", methods=["POST"])
+def create_frontier_page():
+    payload = request.get_json(force=True)
+    db = database.SessionLocal()
+    try:
+        pages = []
+        for f_page in payload:
             p = database.Page(
-                site_id=payload.get("site_id"),
-                page_type_code=payload.get("page_type_code"),
-                url=payload.get("url"),
-                html_content=payload.get("html_content"),
-                http_status_code=payload.get("http_status_code"),
-                content_hash=payload.get("content_hash"),
-                priority=payload.get("priority"),
-                accessed_time=payload.get("accessed_time"),
+                site_id=f_page.get("site_id"),
+                page_type_code="FRONTIER",
+                url=f_page.get("url"),
+                html_content=null(),
+                http_status_code=null(),
+                content_hash=null(),
+                priority=f_page.get("priority"),
+                accessed_time=null(),
             )
+            pages.append(p)
             db.add(p)
-            db.commit()
+        db.commit()
+        p_dicts = []
+        for p in pages:
             db.refresh(p)
-            return jsonify(to_dict_page(p)), 201
-        except IntegrityError:
-            db.rollback()
-            abort(400)
-        finally:
-            db.close()
-        
+            p_dicts.append(to_dict_page(p))
+        return jsonify({}), 201
+    except IntegrityError:
+        db.rollback()
+        abort(400)
+    finally:
+        db.close()
+
+
+@bp.route("/frontier/", methods=["PUT"])
+def update_frontier_page():
+    payload = request.get_json(force=True)
+    urls = list(filter(lambda x: x.get("url"), payload))
+    print(urls)
+    db = database.SessionLocal()
+    try:
+        ps = db.query(database.Page) \
+        .filter(database.Page.url.in_(urls)).all()
+        if not ps:
+            abort(404)
+        for p in ps:
+            for k in ("site_id", "page_type_code", "url", "html_content", "http_status_code", "content_hash", "priority", "accessed_time"):
+                if k in payload:
+                    setattr(p, k, payload[k])
+        db.commit()
+        return jsonify({})
+    finally:
+        db.close()
+
+@bp.route("/frontier_single/", methods=["POST"])
+def create_frontier_page_single():
+    payload = request.get_json(force=True)
+    db = database.SessionLocal()
+    try:
+        p = database.Page(
+            site_id=payload.get("site_id"),
+            page_type_code="FRONTIER",
+            url=payload.get("url"),
+            html_content=null(),
+            http_status_code=null(),
+            content_hash=null(),
+            priority=payload.get("priority"),
+            accessed_time=null(),
+        )
+
+        db.add(p)
+        db.commit()
+        db.refresh(p)
+        return jsonify(to_dict_page(p)), 201
+    except IntegrityError:
+        db.rollback()
+        abort(400)
+    finally:
+        db.close()
+
+@bp.route("/frontier_single/", methods=["PUT"])
+def update_frontier_page_single():
+    payload = request.get_json(force=True)
+
+    if not payload or "url" not in payload:
+        abort(404)
+
+    db = database.SessionLocal()
+    try:
+        p = db.query(database.Page).filter(database.Page.url == payload.get("url")).first()
+
+        if not p:
+            abort(404)
+
+        for k in (
+            "site_id",
+            "page_type_code",
+            "url",
+            "html_content",
+            "http_status_code",
+            "content_hash",
+            "priority",
+            "accessed_time"
+        ):
+            if k in payload:
+                setattr(p, k, payload[k])
+
+        db.commit()
+        db.refresh(p)
+        return jsonify(to_dict_page(p)), 201
+    finally:
+        db.close()
+
 @bp.route("/<int:page_id>", methods=["PUT"])
 def update_page(page_id):
     payload = request.get_json(force=True)
@@ -110,6 +191,7 @@ def update_page(page_id):
         return jsonify(to_dict_page(p))
     finally:
         db.close()
+        
 
 @bp.route("/<int:page_id>", methods=["DELETE"])
 def delete_page(page_id):

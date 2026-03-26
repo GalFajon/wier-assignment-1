@@ -18,13 +18,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
-from utils.priority_scoring import priority_score_BOW, priority_score_BERT, embed_BERT, BERT_score_batch  # type: ignore
-from utils.url_cleaning import normalize_url # type: ignore
+from utils.priority_scoring import embed_BERT, BERT_score_batch  # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
-from utils.database_saving import save_frontier_pages_to_db, save_frontier_pages_to_db, save_page_to_db # type: ignore
 from utils.api_client import APIClient
 from utils.url_cleaning import canonicalize_url
-from utils.database_saving import get_site_id_or_create_site
+from utils.database_saving import get_site_id_or_create_site, save_frontier_page_to_db, save_page_to_db, save_link
 
 class WebCrawler24Ur:
 
@@ -104,7 +102,7 @@ class WebCrawler24Ur:
 
         # initialize queue
         for seed in seed_urls:
-            self._shared_crawling_front.put((0, (seed, 0, -1)))
+            self._shared_crawling_front.put((0, (seed, 0, -1, -1)))
 
 
     def _get_robots_data(self):
@@ -274,7 +272,7 @@ class WebCrawler24Ur:
 
         while True:
             try:
-                priority, (url, link_version, from_page_id) = self._shared_crawling_front.get(timeout=3)
+                priority, (url, link_version, from_page_id, crawling_page_front_id) = self._shared_crawling_front.get(timeout=3)
             except:
                 break
             
@@ -288,17 +286,6 @@ class WebCrawler24Ur:
             if not self._valid_url(url):
                 self._shared_crawling_front.task_done()
                 continue
-
-            
-            # end if reached page count max
-            with self._lock_downloaded_page_count:
-                if self._shared_downloaded_page_count >= self._max_pages:
-                    self._shared_crawling_front.task_done()
-                    break
-                self._shared_downloaded_page_count += 1
-
-                if self._shared_downloaded_page_count % 25 == 0:
-                    self._logger.info(f"CRAWLED {self._shared_downloaded_page_count} PAGES SO FAR!")
 
             # process url
             url_parts = urlsplit(url)
@@ -323,7 +310,7 @@ class WebCrawler24Ur:
 
 
             # save to DB
-            page_id = save_page_to_db(self._logger, url, html, from_page_id, self._db_api)
+            page_id = save_page_to_db(self._logger, url, html, from_page_id, crawling_page_front_id, self._db_api)
             if page_id == -1:
                 self._logger.warning(f"Error saving html contents of {url} to DB")
 
@@ -363,27 +350,40 @@ class WebCrawler24Ur:
             scores = BERT_score_batch(self._logger, candidates, self._query_embed)
             scores = scores.cpu().numpy()
 
-            new_frontier_pairs_for_db = []
             for i, candidate in enumerate(candidates):
                 
                 priority = float(-scores[i])
                 link = candidate['link']
                 link_version = candidate['version']
 
-                new_frontier_pairs_for_db.append({
+                frontier_page_entry = {
                     "priority": priority,
                     "url": link
-                })
+                }
 
-                self._shared_crawling_front.put((priority, (link, link_version, page_id))) # minus priority, because priority queue returns smallest priority
+                frontier_page_id = save_frontier_page_to_db(self._logger, frontier_page_entry, self._db_api)
+                if frontier_page_id == None:
+                    continue
+                
+                save_link(self._logger, page_id, frontier_page_id, self._db_api)
+                self._shared_crawling_front.put((priority, (link, link_version, page_id, frontier_page_id)))
 
-            save_frontier_pages_to_db(self._logger, new_frontier_pairs_for_db, self._db_api)
 
             with self._lock_visited_urls:
                 for i in range(5):
                     element = self._shared_crawling_front.queue[i]
                     #self._logger.debug(f"[Top {i+1}] Priority: {-element[0]}, link: {element[1][0]}")
             self._shared_crawling_front.task_done()
+
+            # end if reached page count max
+            with self._lock_downloaded_page_count:
+                if self._shared_downloaded_page_count >= self._max_pages:
+                    self._shared_crawling_front.task_done()
+                    break
+                self._shared_downloaded_page_count += 1
+
+                if self._shared_downloaded_page_count % 25 == 0:
+                    self._logger.info(f"CRAWLED {self._shared_downloaded_page_count} PAGES SO FAR!")
 
         worker_web_driver.quit()
 
@@ -413,15 +413,15 @@ if __name__ == "__main__":
 
     # seed = "https://www.24ur.com/"
     seed = "https://www.24ur.com/"
-    print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
+    #print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
         max_pages=10,
-        worker_count=4,
+        worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='INFO',
+        logging_level='DEBUG',
         query="Vojna med Rusijo in Ukraino."
     )
 

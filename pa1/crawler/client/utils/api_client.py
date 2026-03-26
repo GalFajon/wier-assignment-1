@@ -86,6 +86,19 @@ class APIClient:
 
         r.raise_for_status()
         return r.json().get("id")
+    
+    def get_page_by_url(self, url: str) -> Optional[Dict[str, Any]]:
+        r = self._get_session().get(
+            self._url("/pages/by-url"),
+            params={"url": url},
+            timeout=self.timeout
+        )
+
+        if r.status_code == 404:
+            return None
+
+        r.raise_for_status()
+        return r.json()
 
 
     def create_page(self, payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -104,7 +117,7 @@ class APIClient:
                 error_body = {"raw": r.text}
 
             raise requests.exceptions.HTTPError(
-                f"HTTP {r.status_code} Error | {error_body}",
+                f"APIClient - create_page - HTTP {r.status_code} Error | {error_body}",
                 response=r
             )
 
@@ -112,7 +125,7 @@ class APIClient:
     
     def create_frontier_pages(self, payload: List[Dict[str, Any]]) -> Dict[str, Any]:
         r = self._get_session().post(
-            self._url("/pages/"),
+            self._url("/pages/frontier/"),
             json=payload,
             timeout=self.timeout
         )
@@ -126,11 +139,76 @@ class APIClient:
                 error_body = {"raw": r.text}
 
             raise requests.exceptions.HTTPError(
-                f"Create frontier pages - HTTP {r.status_code} Error | {error_body}",
+                f"APIClient - create_frontier_pages - HTTP {r.status_code} Error | {error_body}",
+                response=r
+            )
+        return r.json()
+    
+    def create_frontier_page(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        r = self._get_session().post(
+            self._url("/pages/frontier_single/"),
+            json=payload,
+            timeout=self.timeout
+        )
+
+        if r.status_code >= 400:
+            # print("STATUS:", r.status_code)
+            # print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
+            try:
+                error_body = r.json()
+            except Exception:
+                error_body = {"raw": r.text}
+            raise requests.exceptions.HTTPError(
+                f"APIClient - create_frontier_page - HTTP {r.status_code} Error | {error_body}",
+                response=r
+            )
+        return r.json()
+    
+    def update_frontier_pages(self, payload: List[Dict[str, Any]]) -> Dict[str, Any]:
+        r = self._get_session().put(
+            self._url("/pages/frontier/"),
+            json=payload,
+            timeout=self.timeout
+        )
+
+        if r.status_code >= 400:
+            # print("STATUS:", r.status_code)
+            # print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
+            try:
+                error_body = r.json()
+            except Exception:
+                error_body = {"raw": r.text}
+
+            raise requests.exceptions.HTTPError(
+                f"APIClient - update_frontier_pages - HTTP {r.status_code} Error | {error_body}",
                 response=r
             )
 
         return r.json()
+    
+    def update_frontier_page(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        r = self._get_session().put(
+            self._url("/pages/frontier_single/"),
+            json=payload,
+            timeout=self.timeout
+        )
+
+        if r.status_code >= 400:
+            # print("STATUS:", r.status_code)
+            # print("RESPONSE:", r.text[:300]) # WIP REMOVE LATER
+            try:
+                error_body = r.json()
+            except Exception:
+                error_body = {"raw": r.text}
+
+            raise requests.exceptions.HTTPError(
+                f"APIClient - update_frontier_page - HTTP {r.status_code} Error | {error_body}",
+                response=r
+            )
+
+        return r.json()
+    
+    
 
     def update_page(self, page_id: int, payload: Dict[str, Any]) -> Dict[str, Any]:
         r = self._get_session().put(self._url(f"/pages/{page_id}"), json=payload, timeout=self.timeout)
