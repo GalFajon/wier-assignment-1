@@ -165,7 +165,11 @@ def save_page_to_db(logger, url, html, from_page_id, db_api: APIClient):
 
     return page_id
 
-def save_frontier_pages_to_db(logger, page_data, db_api: APIClient):
+def save_frontier_pages_to_db(logger, page_data, db_api: APIClient, isUpdate=False):
+    
+    if len(page_data) == 0:
+        return
+    
     url_norm = canonicalize_url(page_data[0].get("url"))
     parsed = urlsplit(url_norm)
     domain = parsed.netloc
@@ -183,8 +187,9 @@ def save_frontier_pages_to_db(logger, page_data, db_api: APIClient):
         })
 
     try:
-        db_api.create_frontier_pages(pages_payload)
+        if isUpdate:
+            db_api.update_frontier_pages(pages_payload)
+        else:
+            db_api.create_frontier_pages(pages_payload)
     except HTTPError as e:
         logger.error(f"ERROR AT SAVING FRONTIER to DB - {e}")
-
-    

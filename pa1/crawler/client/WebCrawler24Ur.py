@@ -89,6 +89,7 @@ class WebCrawler24Ur:
         self._shared_crawling_front = PriorityQueue()
         self._front_metadata_dict = dict()
         self._link_version_dict = dict()
+        self._all_front_urls = set() # a set of all urls that have ever been added to the front. Elements aren't removed.
 
         self._shared_downloaded_page_count = 0
         self._lock_downloaded_page_count = threading.Lock()
@@ -105,6 +106,7 @@ class WebCrawler24Ur:
         # initialize queue
         for seed in seed_urls:
             self._shared_crawling_front.put((0, (seed, 0, -1)))
+            self._all_front_urls.add(seed)
 
 
     def _get_robots_data(self):
@@ -363,21 +365,29 @@ class WebCrawler24Ur:
             scores = BERT_score_batch(self._logger, candidates, self._query_embed)
             scores = scores.cpu().numpy()
 
-            new_frontier_pairs_for_db = []
+            new_db_frontier_pairs = []
+            existing_db_frontier_pairs = []
             for i, candidate in enumerate(candidates):
                 
                 priority = float(-scores[i])
                 link = candidate['link']
                 link_version = candidate['version']
 
-                new_frontier_pairs_for_db.append({
+                frontier_page_pair = {
                     "priority": priority,
                     "url": link
-                })
+                }
+
+                new_db_frontier_pairs.append(frontier_page_pair)
+
+                if link in self._all_front_urls:
+                    existing_db_frontier_pairs.append(frontier_page_pair)
 
                 self._shared_crawling_front.put((priority, (link, link_version, page_id))) # minus priority, because priority queue returns smallest priority
+                self._all_front_urls.add(link)
 
-            save_frontier_pages_to_db(self._logger, new_frontier_pairs_for_db, self._db_api)
+            save_frontier_pages_to_db(self._logger, new_db_frontier_pairs, self._db_api, isUpdate=False)
+            # save_frontier_pages_to_db(self._logger, existing_db_frontier_pairs, self._db_api, isUpdate=True) # TODO: Fix error in the /pages/frontier/ PUT route
 
             with self._lock_visited_urls:
                 for i in range(5):
@@ -417,8 +427,8 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=5000,
-        worker_count=4,
+        max_pages=10,
+        worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='INFO',
