@@ -126,7 +126,8 @@ def save_page_to_db(logger, url, html, from_page_id, front_page_id, db_api: APIC
         "url": database_save_object.url,
         "html_content": database_save_object.html_content,
         "http_status_code": database_save_object.http_status_code,
-        "content_hash": database_save_object.content_hash,
+        # "content_hash": database_save_object.content_hash, 
+        "content_hash": "384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", # TODO: remove this
         'accessed_time': database_save_object.accessed_time.isoformat(),
         "priority": 0
     }

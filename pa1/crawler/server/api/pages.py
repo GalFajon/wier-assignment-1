@@ -90,7 +90,8 @@ def create_frontier_page():
             db.refresh(p)
             p_dicts.append(to_dict_page(p))
         return jsonify({}), 201
-    except IntegrityError:
+    except IntegrityError as e:
+        print(e)
         db.rollback()
         abort(400)
     finally:
@@ -189,6 +190,10 @@ def update_page(page_id):
                 setattr(p, k, payload[k])
         db.commit()
         return jsonify(to_dict_page(p))
+    except IntegrityError as e:
+        print("Update page Integrity error")
+        print(e)
+        return jsonify({}), 400
     finally:
         db.close()
         

@@ -422,7 +422,7 @@ if __name__ == "__main__":
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',
-        query="Vojna med Rusijo in Ukraino."
+        query="Vojna med Rusijo in Ukrajino."
     )
 
 
