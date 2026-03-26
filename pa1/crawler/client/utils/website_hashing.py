@@ -50,10 +50,11 @@ def hash_website(html: str, url: str) -> str:
             for span in uppercase_spans:
                 keywords.append(span.text)
 
-        h1s = pageContent.find_all("h1")
-        # print(h1s)
-        for h1 in h1s:
-            keywords.append(h1.text)
+        if pageContent:
+            h1s = pageContent.find_all("h1")
+            # print(h1s)
+            for h1 in h1s:
+                keywords.append(h1.text)
 
 
     if to_hash:

@@ -14,8 +14,8 @@ from utils.url_cleaning import normalize_url, canonicalize_url # type: ignore
 from utils.page_data_objects import PageDbSaveObject
 from utils.website_hashing import hash_website # type: ignore
 
-BINARY_FILE_TYPES = {"DOC", "DOCX", "PPT", "PPTX"}
-BINARY_FILE_EXTENSIONS = (".doc", ".docx", ".ppt", ".pptx")
+BINARY_FILE_TYPES = {"PDF", "DOC", "DOCX", "PPT", "PPTX"}
+BINARY_FILE_EXTENSIONS = (".pdf", ".doc", ".docx", ".ppt", ".pptx")
 IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg")
 
 def parse_website_content(html, url, robots):
@@ -189,30 +189,42 @@ def get_page_database_save_object(logger, url, html):
         parsed = urlsplit(normalized_url)
         domain = parsed.netloc
 
-        soup = BeautifulSoup(html, features="html.parser")
-
         if normalized_url.lower().endswith(BINARY_FILE_EXTENSIONS):
-            page_type = "BINARY"
-            html_content = None
-        else:
-            page_type = "HTML"
-            html_content = html
+            return PageDbSaveObject(
+                url=normalized_url,
+                site_domain=domain,
+                page_type_code="BINARY",
+                html_content=None,
+                http_status_code=200,
+                accessed_time=datetime.now()
+            )
+
+        soup = BeautifulSoup(html, features="html.parser")
+        if soup is None:
+            logger.error("get_page_database_save_object - SOUP RETURNED A NONE OBJECT")
+            return None
 
         page_obj = PageDbSaveObject(
             url=normalized_url,
             site_domain=domain,
-            page_type_code=page_type,
-            html_content=html_content,
+            page_type_code="HTML",
+            html_content=html,
             http_status_code=200,
             accessed_time=datetime.now()
         )
 
-        if html_content:
-            page_obj.content_hash = hash_website(html_content, normalized_url)
+        page_obj.content_hash = hash_website(html, normalized_url)
 
         seen_links = set()
+        seen_page_data = set()
+        seen_images = set()
+
         for a in soup.find_all("a", href=True):
-            href = a.get("href").strip()
+            href = a.get("href")
+            if not href:
+                continue
+
+            href = href.strip()
 
             if href.startswith(("javascript:", "mailto:", "tel:", "#")):
                 continue
@@ -220,48 +232,64 @@ def get_page_database_save_object(logger, url, html):
             absolute_url = urljoin(normalized_url, href)
             clean_url = canonicalize_url(absolute_url)
 
-            if clean_url and clean_url not in seen_links:
+            if not clean_url:
+                continue
+
+            lower_url = clean_url.lower()
+
+            binary_type = None
+            for ext in BINARY_FILE_TYPES:
+                if lower_url.endswith(f".{ext.lower()}"):
+                    binary_type = ext
+                    break
+
+            if binary_type:
+                if clean_url not in seen_page_data:
+                    seen_page_data.add(clean_url)
+                    page_obj.add_page_data(
+                        data_type_code=binary_type,
+                        data=b""
+                    )
+                continue
+
+            if clean_url not in seen_links:
                 seen_links.add(clean_url)
                 page_obj.add_link(clean_url)
 
         for img in soup.find_all("img"):
             src = img.get("src")
-
             if not src:
                 continue
 
             src = src.strip()
 
             img_url = urljoin(normalized_url, src)
-            img_url = normalize_url(img_url)
+            img_url = canonicalize_url(img_url)
 
             if not img_url:
                 continue
 
             lower_url = img_url.lower()
-
             if not lower_url.endswith(IMAGE_EXTENSIONS):
                 continue
 
+            if img_url in seen_images:
+                continue
+            seen_images.add(img_url)
+
             filename = img_url.split("/")[-1] or "image"
 
+            ext = filename.split(".")[-1].lower() if "." in filename else ""
+            
             page_obj.add_image(
                 filename=filename,
-                content_type="image",
+                content_type=ext,
                 data=b"",
                 accessed_time=datetime.now()
-            )
-
-        if page_type == "BINARY":
-            ext = normalized_url.split(".")[-1].upper()
-
-            page_obj.add_page_data(
-                data_type_code=ext if ext in BINARY_FILE_TYPES else "PDF",
-                data=b""
             )
 
         return page_obj
 
     except Exception as e:
-        logger.error(f"Error parsing {url}: {e}")
+        logger.error(f"get_page_database_save_object - Error parsing {url}: {e}")
         return None

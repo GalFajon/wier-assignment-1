@@ -153,7 +153,7 @@ def priority_score_BERT(logger, website_html, link, metadata_list, query_emb):
     metadata_emb = embed_BERT(metadata_str)
     title_score = float(torch_cosine_distance(query_emb, metadata_emb))
 
-    logger.info(f'SCORED URL: Score={title_score},     len(m_str)={len(metadata_str)}')
+    #logger.info(f'SCORED URL: Score={title_score},     len(m_str)={len(metadata_str)}')
     return title_score
  
 
@@ -238,7 +238,7 @@ def BERT_score_batch(logger, candidates, query_emb):
 
     if logger:
         logger.info(
-            f"BERT batch timing | total={t_after_score - t_start:.4f}s | "
+            f"BERT_score_batch - BERT batch timing | total={t_after_score - t_start:.4f}s | "
             f"build={t_after_build - t_start:.4f}s | "
             f"embed={t_after_embed - t_after_build:.4f}s | "
             f"cosine={t_after_score - t_after_embed:.4f}s | "
