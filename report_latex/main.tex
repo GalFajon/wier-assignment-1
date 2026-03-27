@@ -2,22 +2,9 @@
 \documentclass[conference]{IEEEtran}
 
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
 \else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  % \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
+
 \fi
 
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -26,20 +13,16 @@
 
 
 \begin{document}
-%
-% paper title
-% can use linebreaks \\ within to get better formatting as desired
+
 \title{WEIR - Assignment 1 - Preferential web crawling}
 
 
-% author names and affiliations
 
 \author{\IEEEauthorblockN{Maj Bregar, Gal Fajon, Alen Leban}
 
 \IEEEauthorblockA{ Faculty of Computer and Information Science\\Večna pot 113, 1000 Ljubljana}
 }
 
-% make the title area
 \maketitle
 
 
@@ -54,18 +37,76 @@ Abstract? I find it quite simple actually.
 \section{Introduction}
 I dont.
 
+
+
+
 \section{Methodology}
 Meth.
 
-\section{Web Page Analysis}
+\subsection{Crawler Architecture}
+-mention the docker container based approach
+-mention db implementation, packages etc
+
+- predefined number of workers deployed using threading package
+- each thread creates its own selenium firefox headless web browser \cite{selenium}
+- the crawler locally keeps:
+  * PQ for frontier links - 
+  * front metadata dict -  Alen what is this?
+  * allowed site urls and dict of robots.txt of sites
+- communicates with database with PUT, GET, POST requests via custom Client API
+  * if insertions to db fail because of URL or HASH uniqueness constraints the client returns an error code which we service by getting the preexisitng page and updating it or creating a DUPLICATE page
+
+
+
+\subsection{24Ur.com Page Parsing}
+- alen do this shit i cant be asked
+- mention how to extract links and their metadata
+- maybe also mention how to detect the images/binary files - i can do that im just lazy rn
+
+
+
+\subsection{Preferential Crawling}
+- from page extract metadata
+- using metadata construct a string with the format "Naslovi: {titles}. Povzetki: {summaries}. Ključne besede: {keywords}"
+- use the generated natural language string to embed metadata into a BERT encoding vector (uses model "paraphrase-multilingual-MiniLM-L12-v2" \cite{BERTmodel})
+- at the start of crawling embed the query sentence with the same model
+- use cosine similarity as a measure of how well a link matches our query, links with no metadata get a priority of 0 (worst priority)
+
+
+
+\subsection{Deduplication}
+- alen pls im dying over here
+
+
+\section{Crawling Analysis}
+
+- sites - just 24ur
+- html, binary, duplicate, frontier page counts
+- link count globally, avg per page
+- image count globally, avg per page
+- time crawling per page (different stages)
+
+
+\subsection{Crawling Quality}
+- include visualization of clustering
+- include accuracy, precision, recall etc of our crawling (page is what we are looking for with query - TP, page is not what we are looking for with query - TN)
+
+\subsection{24Ur.com Topography}
+- visualization of link table
+- maybe vis representing clusters as nodes, size of connection between nodes how many links are between those clusters?
+
 
 \section{Disscussion}
-Dis.
+- mention the fact we do not pick up many duplicates/binary files
+- mention crawling quality, how we could improve it etc
 
 \section{Conclusion}
+- yap yap yap
 
-\bibliographystyle{IEEEtran}  % or plain, unsrt, etc.
-\bibliography{ref}              % matches your ref.bib file name (without .bib)
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
 
 \end{document}
 

@@ -419,19 +419,17 @@ class WebCrawler24Ur:
 
 if __name__ == "__main__":
 
-    # seed = "https://www.24ur.com/"
 
     seed = "https://www.24ur.com/"
     #seed = 'https://www.sdl.si/bivanje-v-sdl/domski-red/'
-    #print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=5100,
-        worker_count=1,
+        max_pages=10,
+        worker_count=8,
         log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='DEBUG',
+        logging_level='INFO',
         query="Vojna med Rusijo in Ukrajino."
     )
 
