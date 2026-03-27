@@ -249,7 +249,14 @@ def get_page_by_hash():
 
     db = database.SessionLocal()
     try:
-        p = db.query(database.Page).filter(database.Page.content_hash == content_hash).first()
+        p = (
+            db.query(database.Page)
+            .filter(
+                database.Page.content_hash == content_hash,
+                database.Page.page_data_type == 'HTML'
+            )
+            .first()
+        )
 
         if not p:
             abort(404)

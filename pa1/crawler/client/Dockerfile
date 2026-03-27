@@ -25,14 +25,15 @@ RUN apt-get update && \
     libpangocairo-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# geckodriver install
-RUN wget -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.36.0-linux-aarch64.tar.gz && \
+# geckodriver install (x86_64 / linux64)
+RUN wget -O /tmp/geckodriver.tar.gz \
+      https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz && \
     tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin && \
     chmod +x /usr/local/bin/geckodriver && \
     rm /tmp/geckodriver.tar.gz
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 5000
-CMD ["python", "app.py"]
+CMD ["python", "WebCrawler24Ur.py"]

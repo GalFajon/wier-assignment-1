@@ -11,3 +11,4 @@ sentencepiece
 ppdeep
 pyyaml
 sentence_transformers
+tldextract
