@@ -9,7 +9,7 @@ def get_n_colors(n, colorscale='Turbo', vmin=0.17, vmax=0.8):
     return pc.sample_colorscale(colorscale, scale_range)
 
 
-def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls, cluster_keywords):
+def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls, ids, cluster_keywords):
     print("Loading clustering visualization")
 
     noise_ratio = sum(label == -1 for label in point_cluster_labels) / len(point_cluster_labels)
@@ -18,6 +18,7 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
     df['cluster'] = point_cluster_labels
     df['title'] = titles
     df['url'] = urls
+    df['id'] = ids
     df['cluster'] = df['cluster'].astype(str)
 
     sorted_cluster_labels = sorted(
@@ -81,11 +82,13 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
             customdata=np.stack((
                 np.full(len(cluster_df), f"Cluster {cluster_label}"),
                 cluster_df['title'],
-                cluster_df['url']
+                cluster_df['url'],
+                cluster_df['id'],
             ), axis=-1),
             hovertemplate=(
                 "Cluster: %{customdata[0]}<br>"
                 "Title: %{customdata[1]}<br>"
+                "ID: %{customdata[3]}<br>"
                 "<a href='%{customdata[2]}' target='_blank'>Open article</a>"
                 "<extra></extra>"
             ),

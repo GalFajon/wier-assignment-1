@@ -74,6 +74,7 @@ def load_articles_and_lemmas_filtered():
         raw_text = art['title'] + ' ' + art['summary'] + ' ' + art['body']
 
         c_art = {
+            'id' : art['id'],
             'title' : art['title'],
             'url' : art['url'],
             'raw_text' : raw_text

@@ -421,12 +421,12 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=15,
-        worker_count=1,
+        max_pages=5100,
+        worker_count=4,
         log_to_stdout=True,
         logging_file='./crawler.log',
-        logging_level='DEBUG',
-        query="Vojna med Rusijo in Ukraino."
+        logging_level='INFO',
+        query="Vojna med Rusijo in Ukrajino."
     )
 
 

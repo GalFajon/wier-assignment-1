@@ -37,20 +37,20 @@ if __name__ == "__main__":
         #embedding
         articles, lemmas = load_articles_and_lemmas_filtered()
         tfidf_embedded_lemmas = embed_TFIDF(lemmas, vector_length = 15000, use_cache = False, pickle_file='tmp_caching/0_tfidf.pkl')
-        reduced_embeddings, explained_variance = truncated_SVD_reduction(tfidf_embedded_lemmas, reduce_to_dim = 30, use_cache = False, pickle_file='tmp_caching/1_tsvd.pkl')
+        reduced_embeddings, explained_variance = truncated_SVD_reduction(tfidf_embedded_lemmas, reduce_to_dim = 40, use_cache = False, pickle_file='tmp_caching/1_tsvd.pkl')
         print("Explained variance of SVD:", explained_variance)
 
         #cluster k selection
-        cluster_labels, best_k, best_score = KMeans_get_best_k_silhouette(reduced_embeddings, k_range=range(2, 100, 1))
+        cluster_labels, best_k, best_score = KMeans_get_best_k_silhouette(reduced_embeddings, k_range=range(20, 60, 1))
         print(best_k, best_score)
 
         #clustering
         cluster_labels = cluster_KMeans(reduced_embeddings, k=best_k, use_cache = False, verbose = True, pickle_file='tmp_caching/3_kmeans.pkl')
 
         #discarding bad clusters/labels
-        cluster_labels = mark_outliers_by_distance(reduced_embeddings, cluster_labels, threshold_std=5.0, use_cache = False, verbose = True, pickle_file="tmp_caching/4_reject_outliers.pkl")
+        cluster_labels = mark_outliers_by_distance(reduced_embeddings, cluster_labels, threshold_std=3.0, use_cache = False, verbose = True, pickle_file="tmp_caching/4_reject_outliers.pkl")
 
-        remove_bottom_percent = 0
+        remove_bottom_percent = 1
         cluster_silhouettes = cluster_silhouette_scores(reduced_embeddings, cluster_labels)
         scores = np.array([score for _, score in cluster_silhouettes])
         threshold = np.percentile(scores, remove_bottom_percent)
@@ -78,7 +78,15 @@ if __name__ == "__main__":
         #display
         titles = [art['title'] for art in articles]
         urls = [art['url'] for art in articles]
-        visualize_clusters_interactive(umap_2d_points, cluster_labels, titles, urls, cluster_keywords = cluster_keywords)
+        ids = [art['id'] for art in articles]
+        visualize_clusters_interactive(umap_2d_points, cluster_labels, titles, urls, ids, cluster_keywords = cluster_keywords)
+
+        for art in articles:
+            if art['id'] != 372067:
+                continue
+
+            print(art)
+ 
 
         if save_run_for_display:
             with open('final_display/umap.pkl', "wb") as f:

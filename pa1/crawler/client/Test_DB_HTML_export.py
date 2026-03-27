@@ -4,13 +4,16 @@ from tqdm import tqdm
 
 if __name__ == '__main__':
 
-    db_client = APIClient(base_url='http://server:5000')
+    db_client = APIClient(base_url='http://server:5000', timeout=200)
 
     pages = db_client.list_pages()
 
     data = []
 
     for page in tqdm(pages, desc="Fetching pages", total=len(pages)):
+        if page['page_type_code'] != 'HTML':
+            continue
+
         entry = {
             "id": page["id"],
             "url": page["url"],
