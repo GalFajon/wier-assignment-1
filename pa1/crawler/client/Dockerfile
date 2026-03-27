@@ -33,7 +33,7 @@ RUN wget -O /tmp/geckodriver.tar.gz \
     rm /tmp/geckodriver.tar.gz
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --default-timeout=100 -r requirements.txt
 COPY . .
 EXPOSE 5000
 CMD ["python", "WebCrawler24Ur.py"]
