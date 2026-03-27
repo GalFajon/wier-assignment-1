@@ -87,6 +87,19 @@ class APIClient:
         r.raise_for_status()
         return r.json().get("id")
     
+    def get_page_id_by_hash(self, hash: str) ->  Optional[int]:
+        r = self._get_session().get(
+            self._url("/pages/by-hash"),
+            params={"content_hash": hash},
+            timeout=self.timeout
+        )
+
+        if r.status_code == 404:
+            return None
+
+        r.raise_for_status()
+        return r.json().get("id")
+    
     def get_page_by_url(self, url: str) -> Optional[Dict[str, Any]]:
         r = self._get_session().get(
             self._url("/pages/by-url"),

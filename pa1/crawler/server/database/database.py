@@ -52,6 +52,7 @@ class Page(Base):
     __tablename__ = "page"
     __table_args__ = (
         UniqueConstraint("url", name="unq_url_idx"),
+        UniqueConstraint("content_hash", name="unq_hash_idx"),
         Index("idx_page_site_id", "site_id"),
         Index("idx_page_page_type_code", "page_type_code"),
         {"schema": "public"},

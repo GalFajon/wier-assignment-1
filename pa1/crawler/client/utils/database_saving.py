@@ -45,6 +45,7 @@ def get_site_id(logger, domain, db_api: APIClient):
 
 
 def save_page_or_update(logger, page_payload, db_api: APIClient):
+    print("save_page_or_update")
     try:
         page_json = db_api.create_page(page_payload)
         logger.debug(f"Created page: {page_json['id']} {page_json['url']}")
@@ -75,7 +76,15 @@ def save_page_or_update(logger, page_payload, db_api: APIClient):
 def update_page(logger, id, page_payload, db_api: APIClient):
     try:
         page_json = db_api.update_page(id, page_payload)
-        logger.debug(f"Updating page: {id} - {page_json['url']}")
+        if "constraint" in page_json:
+            # this means we violated a constraint
+            if page_json.get("constraint") == "unq_hash_idx":
+                # the hash constraint was violated
+                print(page_json)
+                logger.debug(f"Hash constraint violated: {page_json.get('url')}")
+                return page_json
+        else:
+            logger.debug(f"Updating page: {id} - {page_json['url']}")
         return page_json
 
     except HTTPError as e:
@@ -94,7 +103,7 @@ def save_link(logger, from_page_id: int, to_page_id: int, db_api: APIClient) -> 
 
     try:
         resp = db_api.create_link(link_payload)
-        #logger.debug(f"Created link: {resp}")
+        # logger.debug(f"Created link: {resp}")
         return True
 
     except HTTPError as e:
@@ -126,7 +135,8 @@ def save_page_to_db(logger, url, html, from_page_id, front_page_id, db_api: APIC
         "url": database_save_object.url,
         "html_content": database_save_object.html_content,
         "http_status_code": database_save_object.http_status_code,
-        "content_hash": database_save_object.content_hash,
+        "content_hash": database_save_object.content_hash, 
+        #"content_hash": "384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", # TODO: comment this
         'accessed_time': database_save_object.accessed_time.isoformat(),
         "priority": 0
     }
@@ -136,11 +146,33 @@ def save_page_to_db(logger, url, html, from_page_id, front_page_id, db_api: APIC
     logger.debug(f"Saving {debug_payload}, hash={database_save_object.content_hash}")
 
     page_json_data = None
+
     if front_page_id != -1:
         page_json_data = update_page(logger, front_page_id, page_payload, db_api)
     else:
         page_json_data = save_page_or_update(logger, page_payload, db_api)
 
+    # a constraint was violated, probably unq_hash_idx
+    if "constraint" in page_json_data and page_json_data.get("constraint") == "unq_hash_idx":
+
+        # first find the page by hash that is causing this constraint error
+        error_page_id = db_api.get_page_id_by_hash(page_payload["content_hash"])
+
+        # mark the current page as duplicate and send it without hash
+        page_payload["content_hash"] = None
+        page_payload["page_type_code"] = "DUPLICATE"
+        page_payload["html_content"] = None
+
+
+        new_page_json_data = save_page_or_update(logger, page_payload, db_api)
+        if save_link(logger, new_page_json_data.get("id"), error_page_id, db_api):
+            logger.debug("Saved link to duplicate")
+        else:
+            logger.error("FAILED TO SAVE LINK TO DUPLICATE")
+        # print(page_json_data)
+
+        page_json_data = new_page_json_data
+    
     if page_json_data == None:
         logger.error(f"save_page_to_db - ERROR DURING PAGE DB UPDATE/CREATION")
         return -1

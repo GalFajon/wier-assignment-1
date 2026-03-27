@@ -26,11 +26,12 @@ CREATE TABLE crawldb.page (
 	url                  varchar(3000)  ,
 	html_content         text  ,
 	http_status_code     integer  ,
-	content_hash		 varchar(200) 	UNIQUE,
+	content_hash		 varchar(200),
 	priority			 decimal(6,5),
 	accessed_time        timestamp  ,
 	CONSTRAINT pk_page_id PRIMARY KEY ( id ),
-	CONSTRAINT unq_url_idx UNIQUE ( url ) 
+	CONSTRAINT unq_url_idx UNIQUE ( url ),
+	CONSTRAINT unq_hash_idx UNIQUE ( content_hash ) 
  );
 
 CREATE INDEX "idx_page_site_id" ON crawldb.page ( site_id );

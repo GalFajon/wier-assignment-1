@@ -39,7 +39,6 @@ def get_page(page_id):
     finally:
         db.close()
 
-
 @bp.route("/", methods=["POST"])
 def create_page():
     payload = request.get_json(force=True)
@@ -90,7 +89,8 @@ def create_frontier_page():
             db.refresh(p)
             p_dicts.append(to_dict_page(p))
         return jsonify({}), 201
-    except IntegrityError:
+    except IntegrityError as e:
+        print(e)
         db.rollback()
         abort(400)
     finally:
@@ -101,7 +101,7 @@ def create_frontier_page():
 def update_frontier_page():
     payload = request.get_json(force=True)
     urls = list(filter(lambda x: x.get("url"), payload))
-    print(urls)
+    # print(urls)
     db = database.SessionLocal()
     try:
         ps = db.query(database.Page) \
@@ -189,6 +189,22 @@ def update_page(page_id):
                 setattr(p, k, payload[k])
         db.commit()
         return jsonify(to_dict_page(p))
+    except IntegrityError as e:
+
+        print(e, flush=True)
+
+        # extract the violated constraint name from the error message
+        split_result = str(e.orig).split("\"")
+        if len(split_result) != 3:
+            print("Not enough quotes to split on", flush=True)
+            return jsonify(), 400
+        
+        return jsonify({
+            "constraint": split_result[1],
+            "url": payload.get("url"),
+            "duplicate_id": page_id
+        }), 200
+        
     finally:
         db.close()
         
@@ -216,6 +232,24 @@ def get_page_by_url():
     db = database.SessionLocal()
     try:
         p = db.query(database.Page).filter(database.Page.url == url).first()
+
+        if not p:
+            abort(404)
+
+        return jsonify(to_dict_page(p))
+    finally:
+        db.close()
+
+@bp.route("/by-hash", methods=["GET"])
+def get_page_by_hash():
+    content_hash = request.args.get("content_hash")
+
+    if not content_hash:
+        abort(400, description="Missing 'hash' parameter")
+
+    db = database.SessionLocal()
+    try:
+        p = db.query(database.Page).filter(database.Page.content_hash == content_hash).first()
 
         if not p:
             abort(404)
