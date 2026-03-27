@@ -21,7 +21,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from utils.priority_scoring import embed_BERT, BERT_score_batch  # type: ignore
 from utils.website_parsing import parse_website_content # type: ignore
 from utils.api_client import APIClient
-from utils.url_cleaning import canonicalize_url
+from utils.url_cleaning import canonicalize_url, link_domain
 from utils.database_saving import get_site_id_or_create_site, save_frontier_page_to_db, save_page_to_db, save_link
 
 class WebCrawler24Ur:
@@ -77,8 +77,9 @@ class WebCrawler24Ur:
         # domain prep
         self._domains = []
         for seed in seed_urls:
-            seed_url_parts = urlsplit(seed)
-            self._domains.append(seed_url_parts.scheme + "://" + seed_url_parts.netloc)
+            domain = link_domain(seed)
+            self._domains.append(domain)
+            self._logger.debug(f'Saving domain into set - {domain}')
 
         # shared structures and locks
         self._shared_visited_urls = set()
@@ -102,7 +103,9 @@ class WebCrawler24Ur:
 
         # initialize queue
         for seed in seed_urls:
-            self._shared_crawling_front.put((0, (seed, 0, -1, -1)))
+            seed_norm = canonicalize_url(seed)
+            self._shared_crawling_front.put((0, (seed_norm, 0, -1, -1)))
+            self._logger.debug(f"Initialize seed: {seed_norm}")
 
 
     def _get_robots_data(self):
@@ -111,11 +114,7 @@ class WebCrawler24Ur:
         site_data = []
 
         for domain in self._domains:
-            robots_url = domain.rstrip("/") + "/robots.txt"
-
-            normalized_url = canonicalize_url(domain)
-            parsed = urlsplit(normalized_url)
-            canon_domain = parsed.netloc
+            robots_url = domain + "/robots.txt"
 
             try:
                 r = requests.get(robots_url, timeout=5)
@@ -143,7 +142,7 @@ class WebCrawler24Ur:
                 }
 
                 site_data.append({
-                    "domain": canon_domain,
+                    "domain": domain,
                     "robots_content": r.text,
                     "sitemap_content": sitemap_content
                 })
@@ -155,7 +154,7 @@ class WebCrawler24Ur:
                 }
 
                 site_data.append({
-                    "domain": canon_domain,
+                    "domain": domain,
                     "robots_content": '',
                     "sitemap_content": ''
                 })
@@ -219,24 +218,26 @@ class WebCrawler24Ur:
     def _valid_url(self, url):
         with self._lock_visited_urls:
             if url in self._shared_visited_urls:
+                self._logger.debug(f"_valid_url - URL ALREADY VISITED")
                 return False
 
-        url_parts = urlsplit(url)
-        host = url_parts.netloc
-        domain = url_parts.scheme + "://" + host
+        domain = link_domain(url)
 
-        allowed_hosts = {urlsplit(d).netloc for d in self._domains}
-        if host not in allowed_hosts:
+        if domain not in self._domains:
+            self._logger.debug(f"_valid_url - {domain} NOT ALLOWED BY DOMAIN SET - {self._domains}")
             return False
-
+        
         domain_info = self._shared_robots_info.get(domain)
         if not domain_info:
+            self._logger.debug(f"_valid_url - COULD NOT RETRIEVE ROBOTS INFO - {domain}")
             return False
-
+        
         rp = domain_info['info']
         if rp is not None and not rp.is_allowed(self._crawler_id, url):
             self._logger.info('_valid_url - URL:', url, "is NOT allowed by robots.txt")
             return False
+        
+        
 
         return True
 
@@ -281,15 +282,16 @@ class WebCrawler24Ur:
                 self._logger.debug(f"Old link (v{link_version}): {url}")
                 self._shared_crawling_front.task_done()
                 continue
-
+            
             # validate url
             if not self._valid_url(url):
                 self._shared_crawling_front.task_done()
                 continue
+            
+            self._logger.debug(f"LINK IS VALID")
 
             # process url
-            url_parts = urlsplit(url)
-            domain = url_parts.scheme + "://" + url_parts.netloc
+            domain = link_domain(url)
 
             rb : RobotExclusionRulesParser = self._shared_robots_info[domain]["info"]
             if not rb.is_allowed(rb.user_agent, url):
@@ -307,7 +309,6 @@ class WebCrawler24Ur:
             # add to visited set
             with self._lock_visited_urls:
                 self._shared_visited_urls.add(url)
-
 
             # save to DB
             page_id = save_page_to_db(self._logger, url, html, from_page_id, crawling_page_front_id, self._db_api)
@@ -328,6 +329,10 @@ class WebCrawler24Ur:
             for link in website_urls:
                 with self._lock_visited_urls:
                     if link in self._shared_visited_urls:
+                        continue
+
+                    l_domain = link_domain(link)
+                    if l_domain not in self._domains:
                         continue
 
                     if link in self._front_metadata_dict:
@@ -363,6 +368,7 @@ class WebCrawler24Ur:
                     "url": link
                 }
 
+                #self._logger.debug(f'FRONTIER PAGE: {frontier_page_entry}')
                 frontier_page_id = save_frontier_page_to_db(self._logger, frontier_page_entry, self._db_api)
                 if frontier_page_id == None:
                     continue
@@ -422,7 +428,7 @@ if __name__ == "__main__":
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
         max_pages=5100,
-        worker_count=4,
+        worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='DEBUG',

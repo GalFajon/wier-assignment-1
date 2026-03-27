@@ -1,7 +1,7 @@
 
 from urllib.parse import urlsplit
 
-from utils.url_cleaning import canonicalize_url
+from utils.url_cleaning import canonicalize_url, link_domain
 from utils.page_data_objects import PageDbSaveObject, LinkData, ImageData, PageData
 from utils.website_parsing import get_page_database_save_object
 from utils.api_client import APIClient
@@ -80,7 +80,7 @@ def update_page(logger, id, page_payload, db_api: APIClient):
             # this means we violated a constraint
             if page_json.get("constraint") == "unq_hash_idx":
                 # the hash constraint was violated
-                print(page_json)
+                #print(page_json)
                 logger.debug(f"Hash constraint violated: {page_json.get('url')}")
                 return page_json
         else:
@@ -88,7 +88,7 @@ def update_page(logger, id, page_payload, db_api: APIClient):
         return page_json
 
     except HTTPError as e:
-        logger.error(f"update_page - Unexpected HTTP error at save_page_or_update: {e}")
+        logger.error(f"update_page - Unexpected HTTP error: {e}")
         raise
 
 def save_link(logger, from_page_id: int, to_page_id: int, db_api: APIClient) -> bool:
@@ -209,69 +209,13 @@ def save_page_to_db(logger, url, html, from_page_id, front_page_id, db_api: APIC
 
 
 
-# def save_frontier_pages_to_db_UNUSED(logger, page_data, db_api: APIClient):
-    
-#     if len(page_data) == 0:
-#         return
-
-#     site_id_dict = dict()
-#     for pd in page_data:
-
-#         url_norm = canonicalize_url(pd.get("url"))
-#         parsed = urlsplit(url_norm)
-#         domain = parsed.netloc
-
-#         site_id = site_id_dict.get(domain)
-#         if site_id is None:
-#             site_id = get_site_id(logger, domain, db_api)
-#             if site_id == -1:
-#                 continue
-#             site_id_dict[domain] = site_id
-
-
-#         front_payload = {
-#             "site_id": site_id,
-#             "url": url_norm,
-#             "priority": pd.get("priority")
-#         }
-
-#         #logger.debug(f'FRONT PAYLOAD: {front_payload}')
-
-#         front_page_id = -1
-#         try:
-#             front_page_json = db_api.create_frontier_page(front_payload)
-#             fp_url = front_page_json['url']
-#             front_page_id = front_page_json['id']
-#             logger.debug(f'Created FRONTIER PAGE: {fp_url} with ID={front_page_id}')
-            
-#         except HTTPError as e:
-#             if e.response is not None and e.response.status_code == 400:
-#                 #logger.debug(f"Frontier already exists - TRYING UPDATING IT")
-#                 page_json = db_api.get_page_by_url(url_norm)
-
-#                 if page_json == None:
-#                     logger.debug(f"ERROR - could not find the page by URL")
-#                     continue
-
-#                 if page_json.get('page_type_code') != 'FRONTIER':
-#                     logger.debug(f"ERROR - Trying to overwrite real page data with frontier")
-#                     continue
-
-#                 front_page_json = db_api.update_frontier_page(front_payload)
-#                 front_page_id = front_page_json['id']
-#                 #logger.debug(f"Updated")
-#             else:
-#                 logger.error(f"ERROR AT SAVING FRONTIER to DB - {e}")
-
-
 def save_frontier_page_to_db(logger, pd, db_api: APIClient):
 
     if not pd:
         return None
 
     url_norm = canonicalize_url(pd.get("url"))
-    parsed = urlsplit(url_norm)
-    domain = parsed.netloc
+    domain = link_domain(url_norm)
 
     site_id = get_site_id(logger, domain, db_api)
     if site_id == -1:

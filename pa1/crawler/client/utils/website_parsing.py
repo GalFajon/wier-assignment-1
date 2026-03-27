@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from utils.url_cleaning import normalize_url, canonicalize_url # type: ignore
+from utils.url_cleaning import canonicalize_url, link_domain # type: ignore
 from utils.page_data_objects import PageDbSaveObject
 from utils.website_hashing import hash_website # type: ignore
 
@@ -77,7 +77,7 @@ def extract_onclick_url(onclick_str):
     return candidates
 
 def process_link(raw_url, l, base_url, url_parts, metadata_dict, article_keywords):
-    key = normalize_url(urljoin(base_url, raw_url))
+    key = canonicalize_url(urljoin(base_url, raw_url))
     key_parts = get_url_parts(key)
 
     if len(key_parts) < 2:
@@ -186,8 +186,8 @@ def extract_urls(html, url):
 def get_page_database_save_object(logger, url, html):
     try:
         normalized_url = canonicalize_url(url)
-        parsed = urlsplit(normalized_url)
-        domain = parsed.netloc
+        domain = link_domain(normalized_url)
+
 
         if normalized_url.lower().endswith(BINARY_FILE_EXTENSIONS):
             return PageDbSaveObject(

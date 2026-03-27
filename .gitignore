@@ -3,7 +3,7 @@
 **/lemmatized_texts*
 **/pages*.yaml
 **/cleaned_pages*.yaml
-
+**/cache
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
