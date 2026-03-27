@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 if __name__ == '__main__':
 
-    db_client = APIClient(base_url='http://server:5000', timeout=200)
+    db_client = APIClient(base_url='https://server:5000', timeout=200)
 
     pages = db_client.list_pages()
 
