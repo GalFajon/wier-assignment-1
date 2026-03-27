@@ -29,7 +29,7 @@ class WebCrawler24Ur:
     def __init__(
         self,
         seed_urls: List[str],
-        crawler_id: str = "fri-ieps-24Ur-crawler",
+        crawler_id: str = "fri-wier-D",
         page_timeout_seconds: int = 15,
         max_pages: int = 10,
         worker_count: int = 4,
@@ -162,7 +162,7 @@ class WebCrawler24Ur:
 
             self._shared_last_access[domain] = time.time()
 
-        self._logger.info("INITIALIZED CRAWLER")
+        self._logger.info("MAIN - INITIALIZED CRAWLER")
         delay_info = {d: v["delay"] for d, v in self._shared_robots_info.items()}
         self._logger.debug(f"Crawl delays: {delay_info}")
 
@@ -235,7 +235,7 @@ class WebCrawler24Ur:
 
         rp = domain_info['info']
         if rp is not None and not rp.is_allowed(self._crawler_id, url):
-            self._logger.info('URL:', url, "is NOT allowed by robots.txt")
+            self._logger.info('_valid_url - URL:', url, "is NOT allowed by robots.txt")
             return False
 
         return True
@@ -295,7 +295,7 @@ class WebCrawler24Ur:
             if not rb.is_allowed(rb.user_agent, url):
                 continue
             
-            self._logger.info(f"Beginning to process page: {url} with domain {domain} pulled with prio {priority}")
+            self._logger.info(f"_deploy_crawl_worker - Beginning to process page: {url} with domain {domain} pulled with prio {priority}")
             self._respect_crawl_delay(domain)
             html = self._fetch_page(worker_web_driver, url)
 
@@ -312,13 +312,15 @@ class WebCrawler24Ur:
             # save to DB
             page_id = save_page_to_db(self._logger, url, html, from_page_id, crawling_page_front_id, self._db_api)
             if page_id == -1:
-                self._logger.warning(f"Error saving html contents of {url} to DB")
+                self._logger.warning(f"_deploy_crawl_worker - Error saving html contents of {url} to DB")
+                continue
+
 
             # process links
             website_data = parse_website_content(html, url, rb)
             website_urls = list(website_data.keys())
             
-            self._logger.info(f"[{worker_name}] Crawled:   {url}")
+            self._logger.info(f"_deploy_crawl_worker - [{worker_name}] Crawled:   {url}")
             self._logger.info(f"  - Found {len(website_urls)} links")
 
             # url scoring inside page
@@ -346,9 +348,9 @@ class WebCrawler24Ur:
                     "metadata": self._front_metadata_dict[link]
                 })
 
-
-            scores = BERT_score_batch(self._logger, candidates, self._query_embed)
-            scores = scores.cpu().numpy()
+            if candidates:
+                scores = BERT_score_batch(self._logger, candidates, self._query_embed)
+                scores = scores.cpu().numpy()
 
             for i, candidate in enumerate(candidates):
                 
@@ -370,7 +372,7 @@ class WebCrawler24Ur:
 
 
             with self._lock_visited_urls:
-                for i in range(5):
+                for i in range(min(len(self._shared_crawling_front.queue), 5)):
                     element = self._shared_crawling_front.queue[i]
                     #self._logger.debug(f"[Top {i+1}] Priority: {-element[0]}, link: {element[1][0]}")
             self._shared_crawling_front.task_done()
@@ -383,7 +385,7 @@ class WebCrawler24Ur:
                 self._shared_downloaded_page_count += 1
 
                 if self._shared_downloaded_page_count % 25 == 0:
-                    self._logger.info(f"CRAWLED {self._shared_downloaded_page_count} PAGES SO FAR!")
+                    self._logger.info(f"_deploy_crawl_worker - CRAWLED {self._shared_downloaded_page_count} PAGES SO FAR!")
 
         worker_web_driver.quit()
 
@@ -391,7 +393,7 @@ class WebCrawler24Ur:
         self._front_metadata_dict[link].append(metadata)
 
     def crawl(self):
-        self._logger.info(f"Beginning crawl")
+        self._logger.info(f"MAIN - Beginning crawl")
 
         worker_threads = []
         for worker_id in range(self._worker_count):
@@ -412,12 +414,14 @@ class WebCrawler24Ur:
 if __name__ == "__main__":
 
     # seed = "https://www.24ur.com/"
+
     seed = "https://www.24ur.com/"
+    #seed = 'https://www.sdl.si/bivanje-v-sdl/domski-red/'
     #print(ppdeep.compare("384:TmYpaRqjmWQwzbymqP2UuPcEBc2CZNXtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpaRqjFbbMukWc2StvmYmTEIAlo/P0", "384:TmYpHCi5mWQrqZymqP2UuPcEBc2WtULtPHGT4K/GwHkQ7wP/TJy6JUqPcUmYmTE1:TmYpHCi5FRZMukWc21LvmYmTEIAlo/P0"))
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=10,
+        max_pages=15,
         worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
