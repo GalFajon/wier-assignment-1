@@ -1,13 +1,24 @@
 from typing import Optional, Dict, Any, List
 import requests
 import threading
+import os
+from requests.auth import HTTPBasicAuth
 
 
 class APIClient:
-    def __init__(self, base_url: str, timeout: int = 10):
+    def __init__(
+        self,
+        base_url: str,
+        timeout: int = 10,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+    ):
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self._local = threading.local()
+
+        self._username = username if username is not None else os.environ.get("API_USER", "crawler")
+        self._password = password if password is not None else os.environ.get("API_PASSWORD", "supersecret")
 
     def _debug_session_identity(self) -> dict:
         session = self._get_session()
@@ -20,6 +31,7 @@ class APIClient:
     def _get_session(self) -> requests.Session:
         if not hasattr(self._local, "session"):
             self._local.session = requests.Session()
+            self._local.session.auth = HTTPBasicAuth(self._username, self._password)
         return self._local.session
 
     def _url(self, path: str) -> str:
