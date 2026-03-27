@@ -426,7 +426,7 @@ if __name__ == "__main__":
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
         max_pages=10,
-        worker_count=8,
+        worker_count=1,
         log_to_stdout=True,
         logging_file='./crawler.log',
         logging_level='INFO',
