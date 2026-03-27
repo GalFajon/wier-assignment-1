@@ -32,7 +32,7 @@ RUN wget -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/relea
     rm /tmp/geckodriver.tar.gz
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 5000
 CMD ["python", "app.py"]
