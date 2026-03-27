@@ -45,7 +45,7 @@ def get_site_id(logger, domain, db_api: APIClient):
 
 
 def save_page_or_update(logger, page_payload, db_api: APIClient):
-    print("save_page_or_update")
+    #print("save_page_or_update")
     try:
         page_json = db_api.create_page(page_payload)
         logger.debug(f"Created page: {page_json['id']} {page_json['url']}")

@@ -15,6 +15,10 @@ REDIRECT_DOMAINS = {
 }
 
 
+def link_domain(url):
+    ext = extractor(url)
+    domain = f"{ext.domain}.{ext.suffix}"
+    return f"https://{domain}"
 
 
 def canonicalize_url(url: str) -> str:
@@ -26,10 +30,8 @@ def canonicalize_url(url: str) -> str:
         if redirect_url:
             parsed = urlparse(redirect_url)
 
-    netloc = parsed.netloc.lower()
-
-    if netloc.startswith("www."):
-        netloc = netloc[4:]
+    ext = extractor(parsed.geturl())
+    netloc = f"{ext.domain}.{ext.suffix}"
 
     path = parsed.path or "/"
 
@@ -40,7 +42,7 @@ def canonicalize_url(url: str) -> str:
         path = path.rstrip("/")
 
     query_pairs = parse_qsl(parsed.query, keep_blank_values=True)
-    filtered = [ (k, v) for (k, v) in query_pairs if k not in TRACKING_PARAMS]
+    filtered = [(k, v) for (k, v) in query_pairs if k not in TRACKING_PARAMS]
 
     filtered.sort()
     query = urlencode(filtered, doseq=True)
@@ -48,11 +50,6 @@ def canonicalize_url(url: str) -> str:
     canonicalized = urlunparse((PROTOCOL_SCHEME, netloc, path, "", query, ""))
     return canonicalized
 
-def link_domain(url: str) -> str:
-    canon_url = canonicalize_url(url)
-    ext = extractor(canon_url)
-    domain = f"{ext.domain}.{ext.suffix}"
-    return f"https://{domain}"
 
 
 
@@ -72,7 +69,11 @@ def normalize_url(url):
 if __name__ == "__main__":
     #normalize_url("https://go-ctr-tracker.pub.24ur.si/rec/JS_1/c/1/48ed56fa-f1af-448f-9e82-e1e54c97222c/1.gif?articleId=4422781&amp;at=1773862800&amp;mobile=0&amp;redir=https%3A%2F%2Fwww.24ur.com%2Fnovice%2Fslovenija%2Fgolob-na-visku-kampanje-z-ostrimi-besedami-proti-politicnim-nasprotnikom.html%3Futm_source%3DProAd%26utm_medium%3D24ur%26utm_content%3DProAd_24ur__%26utm_campaign%3DProAd&amp;source=vector&amp;sig=3ddbd03ce6de900ff91a61393b722bb611a6e57722f3ad0d335b1448d56b5e54")
 
-    url = 'https://24ur.com/'
-    print(canonicalize_url(url))
+    url1 = 'http://wikipedia.com'
+    url2 = 'http://www.wikipedia.com'
+    url3 = 'http://www.wikipedia.com/?source=asdf'
 
-    print(link_domain(url))
+    print(canonicalize_url(url1))
+    print(canonicalize_url(url2))
+    print(canonicalize_url(url3))
+

@@ -253,7 +253,7 @@ def get_page_by_hash():
             db.query(database.Page)
             .filter(
                 database.Page.content_hash == content_hash,
-                database.Page.page_data_type == 'HTML'
+                database.Page.page_type_code == 'HTML'
             )
             .first()
         )
