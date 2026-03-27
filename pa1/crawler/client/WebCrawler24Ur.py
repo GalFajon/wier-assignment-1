@@ -7,6 +7,8 @@ import requests
 import threading
 from queue import PriorityQueue
 import ppdeep
+import csv
+import os
 
 from urllib.parse import urlsplit
 from robotexclusionrulesparser import RobotExclusionRulesParser
@@ -39,6 +41,7 @@ class WebCrawler24Ur:
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
         logging_file: str = './crawler.log',
+        time_logging_file: str = './time_logs.csv',
         log_to_stdout: bool = True,
         query: str = ""
     ) -> None:
@@ -51,6 +54,7 @@ class WebCrawler24Ur:
         self._query_text = query
         self._scoring_method = scoring_method
         self._default_crawl_delay = default_crawl_delay
+        self._time_logging_file = time_logging_file
         
         self._db_api = APIClient(base_url=database_base_url)
 
@@ -277,6 +281,8 @@ class WebCrawler24Ur:
             except:
                 break
             
+            performance_measure = {}
+
             # throw out links with old priority score
             if url in self._link_version_dict and link_version < self._link_version_dict[url]:
                 self._logger.debug(f"Old link (v{link_version}): {url}")
@@ -299,7 +305,12 @@ class WebCrawler24Ur:
             
             self._logger.info(f"_deploy_crawl_worker - Beginning to process page: {url} with domain {domain} pulled with prio {priority}")
             self._respect_crawl_delay(domain)
+
+            start_t = time.perf_counter()
             html = self._fetch_page(worker_web_driver, url)
+            end_t = time.perf_counter()
+
+            performance_measure["fetch_time"] = end_t - start_t
 
             # invalid response - no body
             if not html:
@@ -310,17 +321,25 @@ class WebCrawler24Ur:
             with self._lock_visited_urls:
                 self._shared_visited_urls.add(url)
 
+
+            start_t = time.perf_counter()
             # save to DB
             page_id = save_page_to_db(self._logger, url, html, from_page_id, crawling_page_front_id, self._db_api)
             if page_id == -1:
                 self._logger.warning(f"_deploy_crawl_worker - Error saving html contents of {url} to DB")
                 continue
+            end_t = time.perf_counter()
+            performance_measure["page_save_time"] = end_t - start_t
 
 
             # process links
+            start_t = time.perf_counter()
             website_data = parse_website_content(html, url, rb)
             website_urls = list(website_data.keys())
-            
+            end_t = time.perf_counter()
+            performance_measure["page_parse_time"] = end_t - start_t
+
+
             self._logger.info(f"_deploy_crawl_worker - [{worker_name}] Crawled:   {url}")
             self._logger.info(f"  - Found {len(website_urls)} links")
 
@@ -353,9 +372,14 @@ class WebCrawler24Ur:
                     "metadata": self._front_metadata_dict[link]
                 })
 
+
+            start_t = time.perf_counter()
             if candidates:
                 scores = BERT_score_batch(self._logger, candidates, self._query_embed)
                 scores = scores.cpu().numpy()
+            end_t = time.perf_counter()
+            performance_measure["links_score_time"] = end_t - start_t
+            performance_measure["link_count"] = len(candidates)
 
             for i, candidate in enumerate(candidates):
                 
@@ -393,6 +417,18 @@ class WebCrawler24Ur:
                 if self._shared_downloaded_page_count % 25 == 0:
                     self._logger.info(f"_deploy_crawl_worker - CRAWLED {self._shared_downloaded_page_count} PAGES SO FAR!")
 
+                #time logging
+                time_log_file = self._time_logging_file
+                if time_log_file:
+                    file_exists = os.path.isfile(time_log_file)
+
+                    with open(time_log_file, "a", newline="", encoding="utf-8") as f:
+                        writer = csv.DictWriter(f, fieldnames=performance_measure.keys())
+                        if not file_exists:
+                            writer.writeheader()
+                        writer.writerow(performance_measure)
+                
+
         worker_web_driver.quit()
 
     def append_metadata(self, link, metadata):
@@ -425,10 +461,11 @@ if __name__ == "__main__":
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=10,
-        worker_count=1,
+        max_pages=150,
+        worker_count=4,
         log_to_stdout=True,
         logging_file='./crawler.log',
+        time_logging_file='./crawler_time_log.csv',
         logging_level='INFO',
         query="Vojna med Rusijo in Ukrajino."
     )
