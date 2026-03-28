@@ -1,4 +1,3 @@
-version: '3.8'
 name: web-scraper
 services:
   db:
@@ -10,7 +9,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d crawldb"]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -24,6 +23,10 @@ services:
     environment:
       PORT: 5000
       DATABASE_URL: postgresql://postgres:example@db:5432/crawldb
+      URL_SEED: https://www.24ur.com/
+      MAX_PAGES: 150
+      WORKER_COUNT: 4
+      QUERY: "Vojna med Ukrajino in Rusijo"
     ports:
       - "5001:5000"
     volumes:

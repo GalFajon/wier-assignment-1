@@ -8,7 +8,7 @@ from utils.api_client import APIClient
 if __name__ == '__main__':
 
 
-    db_client = APIClient(base_url='http://server:5000')
+    db_client = APIClient(base_url='https://server:5000')
 
     #clear page data
     print('Clearing links')

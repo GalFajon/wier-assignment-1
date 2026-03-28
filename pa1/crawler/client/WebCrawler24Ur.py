@@ -36,7 +36,7 @@ class WebCrawler24Ur:
         max_pages: int = 10,
         worker_count: int = 4,
         scoring_method: str = 'BERT',
-        database_base_url: str = 'http://server:5000',
+        database_base_url: str = 'https://server:5000',
         web_driver_location: str = "/usr/local/bin/geckodriver",
         default_crawl_delay: float = 1.0,
         logging_level: str = 'DEBUG',
@@ -346,6 +346,7 @@ class WebCrawler24Ur:
             # url scoring inside page
             candidates = []
             for link in website_urls:
+                # print(link)
                 with self._lock_visited_urls:
                     if link in self._shared_visited_urls:
                         continue
@@ -454,18 +455,20 @@ class WebCrawler24Ur:
 
 
 if __name__ == "__main__":
-    seed = "https://www.24ur.com/"
-    #seed = 'https://www.sdl.si/bivanje-v-sdl/domski-red/'
+    seed = os.environ.get("URL_SEED", "https://www.24ur.com/")
+    max_pages = os.environ.get("MAX_PAGES", "150")
+    worker_count = os.environ.get("WORKER_COUNT", "4")
+    query = os.environ.get("QUERY", "Vojna med Rusijo in Ukrajino")
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=5100,
-        worker_count=4,
+        max_pages= int(max_pages),
+        worker_count=int(worker_count),
         log_to_stdout=True,
         logging_file='./crawler.log',
         time_logging_file='./crawler_time_log.csv',
         logging_level='INFO',
-        query="Vojna med Rusijo in Ukrajino."
+        query=query
     )
 
     crawler.crawl()
