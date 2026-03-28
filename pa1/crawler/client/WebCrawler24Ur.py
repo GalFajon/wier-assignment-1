@@ -455,22 +455,20 @@ class WebCrawler24Ur:
 
 
 if __name__ == "__main__":
-
-
-    #seed = "https://www.24ur.com/novice/slovenija/svet-v-katerega-smo-verjeli-se-rusi-kaj-to-pomeni-za-naso-psiho.html"
-    seed = "https://www.24ur.com/"
-    #seed = "https://www.24ur.com/novice/slovenija-odloca"
-    #seed = 'https://www.sdl.si/bivanje-v-sdl/domski-red/'
+    seed = os.environ.get("URL_SEED", "https://www.24ur.com/")
+    max_pages = os.environ.get("MAX_PAGES", "150")
+    worker_count = os.environ.get("WORKER_COUNT", "4")
+    query = os.environ.get("QUERY", "Vojna med Rusijo in Ukrajino")
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=150,
-        worker_count=4,
+        max_pages= int(max_pages),
+        worker_count=int(worker_count),
         log_to_stdout=True,
         logging_file='./crawler.log',
         time_logging_file='./crawler_time_log.csv',
         logging_level='INFO',
-        query="Vojna med Rusijo in Ukrajino."
+        query=query
     )
 
 
