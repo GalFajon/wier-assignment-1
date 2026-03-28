@@ -65,13 +65,13 @@ def lemmatize_with_cache(corpus):
 def load_articles_and_lemmas_filtered():
     articles = load_articles()
 
-    corpus = [article['title'] + ' ' + article['summary'] + ' ' + article['body'] for article in articles]
+    corpus = [article['title'] + ' ' + article.get('summary') if article.get('summary') is not None else '' + ' ' + article['body'] for article in articles]
     lemmatized_texts = lemmatize_with_cache(corpus)
 
     #cleaning up articles
     clean_articles = []
     for art in articles:
-        raw_text = art['title'] + ' ' + art['summary'] + ' ' + art['body']
+        raw_text = art['title'] + ' ' + art.get('summary') if art.get('summary') is not None else '' + ' ' + art['body']
 
         c_art = {
             'id' : art['id'],

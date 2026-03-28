@@ -454,14 +454,12 @@ class WebCrawler24Ur:
 
 
 if __name__ == "__main__":
-
-
     seed = "https://www.24ur.com/"
     #seed = 'https://www.sdl.si/bivanje-v-sdl/domski-red/'
 
     crawler = WebCrawler24Ur(
         seed_urls=[seed],
-        max_pages=150,
+        max_pages=5100,
         worker_count=4,
         log_to_stdout=True,
         logging_file='./crawler.log',
@@ -469,6 +467,5 @@ if __name__ == "__main__":
         logging_level='INFO',
         query="Vojna med Rusijo in Ukrajino."
     )
-
 
     crawler.crawl()

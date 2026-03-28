@@ -9,7 +9,15 @@ def get_n_colors(n, colorscale='Turbo', vmin=0.17, vmax=0.8):
     return pc.sample_colorscale(colorscale, scale_range)
 
 
-def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls, ids, cluster_keywords):
+def visualize_clusters_interactive(
+    points_2d,
+    point_cluster_labels,
+    titles,
+    urls,
+    ids,
+    cluster_keywords,
+    output_file="clusters_interactive.html"
+):
     print("Loading clustering visualization")
 
     noise_ratio = sum(label == -1 for label in point_cluster_labels) / len(point_cluster_labels)
@@ -29,6 +37,7 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
     # Assign colors
     n_clusters = sum(1 for c in sorted_cluster_labels if c != '-1')
     color_list = get_n_colors(n_clusters, colorscale='Turbo')
+
     cluster_colors = {}
     color_index = 0
     for cluster in sorted_cluster_labels:
@@ -41,8 +50,10 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
     # Axis range with padding
     x_min, x_max = df['x'].min(), df['x'].max()
     y_min, y_max = df['y'].min(), df['y'].max()
+
     x_pad = (x_max - x_min) * 0.05
     y_pad = (y_max - y_min) * 0.05
+
     x_range = [x_min - x_pad, x_max + x_pad]
     y_range = [y_min - y_pad, y_max + y_pad]
 
@@ -68,9 +79,9 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
         else:
             legend_label = f"noise ({noise_ratio:.2%} of all points)"
 
-        # Plot points
         fig.add_trace(go.Scatter(
-            x=x, y=y,
+            x=x,
+            y=y,
             mode='markers',
             name=legend_label,
             legendgroup=f"Cluster {cluster_label}",
@@ -89,7 +100,7 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
                 "Cluster: %{customdata[0]}<br>"
                 "Title: %{customdata[1]}<br>"
                 "ID: %{customdata[3]}<br>"
-                "<a href='%{customdata[2]}' target='_blank'>Open article</a>"
+                "Click to open article"
                 "<extra></extra>"
             ),
             showlegend=True
@@ -100,6 +111,7 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
             centroid_y = y.mean()
             label_positions.append((centroid_x, centroid_y, cluster_label))
 
+    # Add cluster labels
     for cx, cy, cluster_label in label_positions:
         offset = -(y_range[1] - y_range[0]) * 0.02
         fig.add_trace(go.Scatter(
@@ -119,34 +131,57 @@ def visualize_clusters_interactive(points_2d, point_cluster_labels, titles, urls
             legendgroup=f"Cluster {cluster_label}"
         ))
 
-    # Annotation
-    fig.add_annotation(
-        text=(
-            "<b>How to use this visualization:</b><br>"
-            "• Clicking on a cluster in the legend hides it, double clicking selects only the cluster. Double click again to show everything.<br>"
-            "• Hover over points to see the article's title and click to open the URL.<br>"
-            "• Each color represents a cluster of semantically similar articles. Black dots are outliers (noise)"
-        ),
-        xref="paper", yref="paper",
-        x=0, y=-0.05,
-        yanchor="top",
-        xanchor="left",
-        showarrow=False,
-        align="left",
-        font=dict(size=16),
-        borderpad=10,
-        bgcolor="rgba(255,255,255,0.9)",
-    )
+    # # Annotation
+    # fig.add_annotation(
+    #     text=(
+    #         "<b>How to use:</b><br>"
+    #         "• Click a point to open the article<br>"
+    #         "• Click legend to filter clusters"
+    #     ),
+    #     xref="paper",
+    #     yref="paper",
+    #     x=0,
+    #     y=-0.05,
+    #     yanchor="top",
+    #     xanchor="left",
+    #     showarrow=False,
+    #     align="left",
+    #     font=dict(size=16),
+    #     borderpad=10,
+    #     bgcolor="rgba(255,255,255,0.9)",
+    # )
 
     fig.update_layout(
         title='UMAP projection of 24Ur.com article clusters',
         legend_title_text='Cluster Keyword Legend:',
-        clickmode='event+select',
+        clickmode='event',
         xaxis=dict(fixedrange=True, range=x_range),
         yaxis=dict(fixedrange=True, range=y_range, scaleanchor='x', scaleratio=0.65),
-        height=1200,
+        height=1480,
         width=2300,
         margin=dict(b=230),
     )
 
-    fig.show()
+    html_str = fig.to_html(include_plotlyjs='cdn')
+
+    custom_js = """
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var plot = document.querySelector('.plotly-graph-div');
+
+        plot.on('plotly_click', function(data) {
+            var url = data.points[0].customdata[2];
+            if (url) {
+                window.open(url, '_blank');
+            }
+        });
+    });
+    </script>
+    """
+
+    html_str = html_str.replace("</body>", custom_js + "</body>")
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(html_str)
+
+    print(f"Saved to {output_file}. Open it in a browser.")
