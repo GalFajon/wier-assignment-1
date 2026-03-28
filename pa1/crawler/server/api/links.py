@@ -58,6 +58,7 @@ def list_links_with_urls():
                 database.Link.to_page,
                 p1.url.label("from_url"),
                 p2.url.label("to_url"),
+                p1.accessed_time.label("time")
             )
             .join(p1, database.Link.from_page == p1.id)
             .join(p2, database.Link.to_page == p2.id)
@@ -70,6 +71,7 @@ def list_links_with_urls():
                 "to_page": row.to_page,
                 "from_url": row.from_url,
                 "to_url": row.to_url,
+                "accessed_time": row.time
             }
             for row in items
         ])
