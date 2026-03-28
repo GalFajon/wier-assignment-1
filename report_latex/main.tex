@@ -25,24 +25,35 @@
 
 \maketitle
 
+% WIP text, will be cleaned and reformatted
 
 \begin{abstract}
-Abstract? I find it quite simple actually.
+In this assignment we developed a preferential web crawler for the news site 24ur.com\cite{24ur} that collects pages relevant to a user‑specified topical query (for example, the conflict between Russia and Ukraine). Relevance is estimated by embedding page metadata, such as titles, summaries, and keywords, into a vector space using a pre‑trained language model, then computing cosine similarity between the page embeddings and an embedding of the query. The crawler is comprised of an SQL database server, a RESTful API server that exposes database operations, and a client that uses browser automation to extract page content and hyperlinks and applies machine‑learning scoring to prioritize crawl targets.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
-
-
 \section{Introduction}
-I dont.
+% TODO - bolj razpiši dejansko strukturo kode (katere komponente so in kaj delajo)
+This report describes the design and implementation of a preferential web crawler developed to extract pages 
+relevant to a user‑specified topical query within a chosen domain. For this assignment, the chosen domain 
+is the Slovenian news website 24ur.com.
 
+The crawler comprises several components: a headless browser HTTP downloader and renderer, 
+a data extractor for hyperlinks and images, a duplicate detector, a preferential URL frontier 
+and a PostgreSQL database accessed via a RESTful API. The system is designed to run multiple parallel workers.
 
+Pages are prioritised according to their relevance to a user‑specified topical query (e.g. 
+the conflict between Russia and Ukraine) by embedding page metadata into a natural‑language string 
+that is then converted into a vector representation using a pre‑trained language model and ranked 
+using cosine similarity. The implementation also enforces canonical URLs, respects robots.txt directives 
+and crawl delay constraints, and records pages, images and binary files found within the domain in 
+the database.
 
+The following sections document implementation details, parameter choices, performance evaluation, 
+and visualisations of the resulting data.
 
 \section{Methodology}
-Meth.
-
 \subsection{Crawler Architecture}
 -mention the docker container based approach
 -mention db implementation, packages etc
@@ -56,14 +67,14 @@ Meth.
 - communicates with database with PUT, GET, POST requests via custom Client API
   * if insertions to db fail because of URL or HASH uniqueness constraints the client returns an error code which we service by getting the preexisitng page and updating it or creating a DUPLICATE page
 
-
+\subsection{API server}
+- mention auth and ssl stuff
+- mention REST architecture
 
 \subsection{24Ur.com Page Parsing}
 - alen do this shit i cant be asked
 - mention how to extract links and their metadata
 - maybe also mention how to detect the images/binary files - i can do that im just lazy rn
-
-
 
 \subsection{Preferential Crawling}
 - from page extract metadata
@@ -72,14 +83,10 @@ Meth.
 - at the start of crawling embed the query sentence with the same model
 - use cosine similarity as a measure of how well a link matches our query, links with no metadata get a priority of 0 (worst priority)
 
-
-
 \subsection{Deduplication}
 - alen pls im dying over here
 
-
 \section{Crawling Analysis}
-
 - sites - just 24ur
 - html, binary, duplicate, frontier page counts
 - link count globally, avg per page
@@ -102,8 +109,6 @@ Meth.
 
 \section{Conclusion}
 - yap yap yap
-
-
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref}
