@@ -120,11 +120,41 @@ are not added to the link frontier, but are instead stored as \texttt{page\_data
 the corresponding type (\texttt{PDF}/\texttt{DOC}/\texttt{DOCX}/\texttt{PPT}/\texttt{PPTX}), de-duplicated per page.
 
 \subsection{Preferential Crawling}
-- from page extract metadata
-- using metadata construct a string with the format "Naslovi: {titles}. Povzetki: {summaries}. Ključne besede: {keywords}"
-- use the generated natural language string to embed metadata into a BERT encoding vector (uses model "paraphrase-multilingual-MiniLM-L12-v2" \cite{BERTmodel})
-- at the start of crawling embed the query sentence with the same model
-- use cosine similarity as a measure of how well a link matches our query, links with no metadata get a priority of 0 (worst priority)
+Preferential crawling is implemented by maintaining a shared in-memory URL frontier as a thread-safe \texttt{PriorityQueue}. 
+Each worker repeatedly removes the currently best-ranked URL, downloads the page, stores it in the database, and then extracts 
+outgoing links together with lightweight metadata.
+
+For each discovered URL, the crawler first applies canonicalization and filters out already visited URLs, 
+off-domain URLs, and URLs disallowed by \texttt{robots.txt}. The parsing stage (Section \emph{Page parsing})
+associates each link with metadata such as an inferred link title (from the URL slug), an optional 
+summary (from nearby \texttt{p}/\texttt{span} elements with class \texttt{summary}), page-level article 
+keywords (from the \texttt{article-keywords} block), and additional keyword-like signals (URL section/topic 
+and optional label text). Since the same URL can be encountered multiple times from different pages and 
+page regions, metadata is accumulated across occurrences in a per-URL list; every time new metadata is 
+appended, a per-URL \emph{version counter} is incremented.
+
+Relevance scoring is performed with a multilingual sentence-transformer model 
+(\texttt{paraphrase-multilingual-MiniLM-L12-v2} \cite{BERTmodel}). At the start of crawling 
+the user query is embedded once, producing a normalized query embedding $\mathbf{e}_q$. For every 
+candidate frontier URL $u$, the crawler constructs a short natural-language metadata string by 
+concatenating de-duplicated fields in the form \emph{Naslovi: \dots{} Povzetki: \dots{} Klju\v{c}ne besede: \dots{}} 
+and embeds it into $\mathbf{e}_u$. The relevance score is then computed as cosine similarity
+
+\begin{equation}
+s(u) = \cos(\mathbf{e}_q, \mathbf{e}_u).
+\end{equation}
+
+Candidates with no available metadata are assigned an empty metadata string and a neutral score of $0$.
+Because Python\textquotesingle s \texttt{PriorityQueue} dequeues the smallest numeric key, 
+the crawler converts similarity into a frontier priority by negation ($p(u)=-s(u)$), causing more 
+relevant pages (larger $s$) to be scheduled earlier. To avoid using outdated scores, frontier entries 
+carry the version number that was current when they were inserted; if a URL is encountered again and 
+its metadata (and thus its version) increases, older queued entries are discarded when popped. 
+
+In addition to the in-memory frontier, every candidate is also stored in the database as a 
+\texttt{FRONTIER} page with its current priority, and a link edge is recorded from the currently 
+crawled page to the corresponding frontier entry; when a frontier URL is later crawled, that database 
+entry is updated with the full page content.
 
 \subsection{Deduplication}
 - alen pls im dying over here
