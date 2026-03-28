@@ -471,5 +471,4 @@ if __name__ == "__main__":
         query=query
     )
 
-
     crawler.crawl()

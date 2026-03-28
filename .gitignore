@@ -4,6 +4,7 @@
 **/pages*.yaml
 **/cleaned_pages*.yaml
 **/cache
+**/page_table.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
