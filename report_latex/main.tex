@@ -157,7 +157,23 @@ crawled page to the corresponding frontier entry; when a frontier URL is later c
 entry is updated with the full page content.
 
 \subsection{Deduplication}
-- alen pls im dying over here
+To avoid storing identical (or near-identical) content multiple times, every downloaded HTML page is 
+assigned a content fingerprint and the database enforces uniqueness of this fingerprint. The fingerprint 
+is computed by \texttt{hash\_website} (\texttt{utils/website\_hashing.py}) using the \texttt{ppdeep} (ssdeep) 
+fuzzy-hashing algorithm.
+
+Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \texttt{style}, \texttt{noscript}) 
+are removed. If the page contains an \texttt{<article>} element, its text is used as the primary content; 
+two highly dynamic sub-blocks are explicitly removed when present: the comments placeholder (\texttt{id=comments\_placeholder}) 
+and a promotional widget (\texttt{data-upscore-zone=microsite\_promo}). The remaining article text is extracted, whitespace-normalized, 
+and hashed. For non-article pages, a fallback signature is constructed from stable navigation/text cues, such as submenu item titles 
+and page headers (e.g., \texttt{h1} elements under \texttt{pageContent}).
+
+The resulting hash is stored in the \texttt{content\_hash} field of the \texttt{page} table, which is protected by a unique constraint 
+(\texttt{unq\_hash\_idx}). When inserting or updating a page violates this constraint, the client resolves the conflict by locating the 
+already-stored page with the same hash and creating a new entry marked as \texttt{DUPLICATE} (with \texttt{html\_content} cleared and the 
+hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the 
+crawl graph while preventing redundant storage of page bodies.
 
 \section{Crawling Analysis}
 - sites - just 24ur
