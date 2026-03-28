@@ -346,6 +346,7 @@ class WebCrawler24Ur:
             # url scoring inside page
             candidates = []
             for link in website_urls:
+                # print(link)
                 with self._lock_visited_urls:
                     if link in self._shared_visited_urls:
                         continue
@@ -456,7 +457,9 @@ class WebCrawler24Ur:
 if __name__ == "__main__":
 
 
+    #seed = "https://www.24ur.com/novice/slovenija/svet-v-katerega-smo-verjeli-se-rusi-kaj-to-pomeni-za-naso-psiho.html"
     seed = "https://www.24ur.com/"
+    #seed = "https://www.24ur.com/novice/slovenija-odloca"
     #seed = 'https://www.sdl.si/bivanje-v-sdl/domski-red/'
 
     crawler = WebCrawler24Ur(

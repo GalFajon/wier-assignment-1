@@ -328,6 +328,11 @@ class APIClient:
         r.raise_for_status()
         return r.json()
 
+    # def list_links(self) -> List[Dict[str, Any]]:
+    #     r = self._get_session().get(self._url("/links/"), timeout=self.timeout, verify=False)
+    #     r.raise_for_status()
+    #     return r.json()
+
     def create_link(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         r = self._get_session().post(self._url("/links/"), json=payload, timeout=self.timeout, verify=False)
         r.raise_for_status()

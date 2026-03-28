@@ -43,3 +43,19 @@ def delete_link(from_page, to_page):
         return "", 204
     finally:
         db.close()
+
+@bp.route("/with-urls", methods=["GET"])
+def list_links_with_urls():
+    db = database.SessionLocal()
+    try:
+        items = db.query(database.Link) \
+            .join(database.Page.label("p1"), database.Link.from_page == database.Page.label("p1").id) \
+            .join(database.Page.label("p2"), database.Link.to_page == database.Page.label("p2").id) \
+            .with_entities(
+                database.Link.from_page,
+                database.Link.to_page,
+                database.Page.label("p1").url,
+                database.Page.label("p2").url)
+        return jsonify([to_dict_link(l) for l in items])
+    finally:
+        db.close()

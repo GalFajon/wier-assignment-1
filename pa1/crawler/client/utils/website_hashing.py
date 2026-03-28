@@ -44,11 +44,24 @@ def hash_website(html: str, url: str) -> str:
         pageContent = soup.find(id="pageContent")
         main_div = soup.find("main")
 
+        ids = set()
+        for el in pageContent.find_all(attrs={"id" : True}):
+            id = el["id"]
+            if "clip" in id or "div-gpt" in id or "Layer" in id:
+                continue
+            no_digits_id = ''.join([i for i in id if not i.isdigit()])
+            if no_digits_id == "":
+                continue
+            ids.add(no_digits_id)
+        
+        keywords.extend(list(ids))
+
         if pageContent and not main_div:
             # if it doesnt have main tag, then its a smaller page, where we can take the titles
             uppercase_spans = pageContent.find_all("span", class_="uppercase")
             for span in uppercase_spans:
                 keywords.append(span.text)
+
 
         if pageContent:
             h1s = pageContent.find_all("h1")
@@ -56,12 +69,18 @@ def hash_website(html: str, url: str) -> str:
             for h1 in h1s:
                 keywords.append(h1.text)
 
+        if main_div:
+            keywords.append("has_main")
+
+
+
 
     if to_hash:
         to_hash = to_hash.get_text(separator=" ", strip=True)
         to_hash = re.sub(r"\s+", " ", to_hash)
     else:
         to_hash = " ".join(keywords)
+    # print(to_hash)
     # text = text[:10000]
     #print(to_hash[:10000])
     h = ppdeep.hash(to_hash)
