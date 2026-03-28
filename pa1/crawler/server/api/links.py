@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, abort
 from sqlalchemy.exc import IntegrityError
 import database.database as database
+from sqlalchemy.orm import aliased
 
 bp = Blueprint("links", __name__, url_prefix="/links")
 
@@ -44,18 +45,36 @@ def delete_link(from_page, to_page):
     finally:
         db.close()
 
-@bp.route("/with-urls", methods=["GET"])
+@bp.route("/with-urls/", methods=["GET"])
 def list_links_with_urls():
     db = database.SessionLocal()
     try:
-        items = db.query(database.Link) \
-            .join(database.Page.label("p1"), database.Link.from_page == database.Page.label("p1").id) \
-            .join(database.Page.label("p2"), database.Link.to_page == database.Page.label("p2").id) \
-            .with_entities(
+        p1 = aliased(database.Page)
+        p2 = aliased(database.Page)
+
+        items = (
+            db.query(
                 database.Link.from_page,
                 database.Link.to_page,
-                database.Page.label("p1").url,
-                database.Page.label("p2").url)
-        return jsonify([to_dict_link(l) for l in items])
+                p1.url.label("from_url"),
+                p2.url.label("to_url"),
+            )
+            .join(p1, database.Link.from_page == p1.id)
+            .join(p2, database.Link.to_page == p2.id)
+            .all()
+        )
+
+        return jsonify([
+            {
+                "from_page": row.from_page,
+                "to_page": row.to_page,
+                "from_url": row.from_url,
+                "to_url": row.to_url,
+            }
+            for row in items
+        ])
+
+    except IntegrityError as e:
+        print(e, flush=True)
     finally:
         db.close()
