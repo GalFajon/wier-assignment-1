@@ -223,8 +223,7 @@ There are, however, limitations and opportunities for improvement. The use of a 
 
 Database error handling could have been done on the server side instead of client for faster communication. Some database queries weren't equipped with rollback options in case of database insertion errors. Sending frontier pages to the database was at first implemented roughly with batches, but later changed to sending individual ones due to risks of concurrent writing and difficulty of error handling.
 
-Future work should therefore focus on improving the robustness of the server component, canonicalization of URLs, metadata extraction, and scoring.
-
+Future work should focus on improving both the efficiency and robustness of the crawling pipeline. In particular, the server component could be enhanced through server-side conflict resolution and reintroducing batch-based frontier insertion with proper concurrency control, enabling more efficient communication and reduced overhead. URL canonicalization should be extended to handle query parameters more consistently. Additionally, the metadata extraction and scoring pipeline could be improved by generating more context-rich yet compact representations.
 
 
 \section{Conclusion}

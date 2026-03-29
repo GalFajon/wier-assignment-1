@@ -28,4 +28,4 @@ Steps:
 The database dump linked in `googledrive.txt` can be imported with `pg_restore` using the credentials from `docker-compose.yml`.
 
 ```bash
-pg_restore -h localhost -p 5432 -U postgres --dbname=crawldb ./dump.sql
+pg_restore -h localhost -p 5432 -U postgres --dbname=crawldb ./4thcrawl.sql
