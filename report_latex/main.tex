@@ -45,8 +45,7 @@ a data extractor for hyperlinks and images, a duplicate detector, a preferential
 and a PostgreSQL database accessed via a RESTful API. The system is designed to run multiple parallel workers.
 
 Pages are prioritised according to their relevance to a user‑specified topical query (e.g. 
-the conflict between Russia and Ukraine) by embedding page metadata into a natural‑language string 
-that is then converted into a vector representation using a pre‑trained language model and ranked 
+the conflict between Russia and Ukraine) by constructing a natural‑language string from page metadata that is then converted into a vector representation using a pre‑trained language model and ranked 
 using cosine similarity. 
 
 The implementation also enforces canonical URLs, deduplication, respects robots.txt directives 
@@ -56,9 +55,14 @@ the database.
 The following sections document implementation details, parameter choices, performance evaluation, 
 and visualisations of the resulting data.
 
+
+
+
 \section{Methodology}
+
+
 \subsection{Crawler Architecture}
-The crawler is implemented as a modular system consisting of a RESTful API, a database server, and a client service. Is is deployed using a Docker Compose project, with service configuration and crawling parameters defined in the Docker Compose project configuration file.
+The crawler is implemented as a modular system consisting of a RESTful API, a database server, and a client service. It is deployed using a Docker Compose project, with service configuration and crawling parameters defined in the Docker Compose project configuration file.
 
 \subsection{API Server and Database}
 The RESTful API service is implemented using a Python Flask\cite{flask} web server. It utilizes the SQLAlchemy\cite{sqlalchemy} library to define and initialize the database schema in accordance with the schema provided in the assignment instructions.
@@ -79,12 +83,16 @@ If an insertion into the database fails due to URL or content hash uniqueness co
 
 The crawler respects the \texttt{robots.txt} file of the specified domain by adhering to the specified crawl delay.
 
+
+
+
+
 \subsection{Page parsing}
 Each subpage is parsed using the BeautifulSoup\cite{beautifulsoup} module. The parser is used to extract article keywords and link URLs to other pages (in the \texttt{href} property or \texttt{onclick} JavaScript event handler).
 
 The \texttt{onclick} event handler is processed by extracting URL candidates with regular-expression patterns that detect common JavaScript redirects as well as embedded JSON-like fields (\texttt{Url:}, \texttt{PlaybackUrl:}); if none match, it falls back to any quoted \texttt{.html} substring and returns the list of candidate URLs.
 
-When saving a page to the database, each extracted URL is canonicalized using urllib\cite{urllib} and tldextract\cite{tldextract}. Redirection links belonging to the domain \texttt{go-ctr-tracker.pub.24ur.si} are resolved using the \texttt{redir} key in the query string, the host is reduced to the highest level domain, the path is normalized, removing trailing slashes and redundant separators, common tracking parameters relating to UTM, as well as \texttt{fbclid}, \texttt{gclid}, \texttt{yclid} are removed, remaining query parameters are sorted deterministically, and the final URL is returned with the \texttt{https} scheme and without fragments.
+When saving a page to the database, each extracted URL is canonicalized using urllib\cite{urllib} and tldextract\cite{tldextract}. Redirection links belonging to the domain \texttt{go-ctr-tracker.pub.24ur.si} are resolved using the \texttt{redir} key in the query string, the host is reduced to the highest level domain, the path is normalized, removing trailing slashes and redundant separators, common tracking parameters are removed, remaining query parameters are sorted deterministically, and the final URL is returned with the \texttt{https} scheme and without fragments.
 
 Binary resources are detected by file extension (\texttt{.pdf}, \texttt{.doc}, \texttt{.docx}, \texttt{.ppt}, \texttt{.pptx}). 
 For HTML pages, all outgoing \texttt{<a href>} targets are canonicalized and then checked for these extensions; matching targets 
@@ -126,9 +134,12 @@ Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \t
 
 The resulting hash is stored in the content hash field of the page table, which is protected by a unique constraint. When inserting or updating a page violates this constraint, the client resolves the conflict by locating the already-stored page with the same hash and creating a new entry marked as a duplicate (with the content cleared and the hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the crawl graph while preventing redundant storage of page bodies.
 
+
+
+
 \section{Crawling Analysis}
-\subsection{Statistics}
-We conducted a performance analysis of our web crawler on a single target site, as described previously. The crawler was configured with a maximum page count of 5,100, four concurrent workers, and the query parameter: "Vojna med Ukrajino in Rusijo." 
+
+We conducted a performance analysis of our web crawler on a single target site. The crawler was configured with a maximum HTML-type page count of 5,100, four concurrent workers, and the query parameter: "Vojna med Ukrajino in Rusijo." 
 
 The results of the crawling process are summarized in Table~\ref{tab:crawler-stats}, highlighting the total number of pages retrieved, the count of duplicate pages, the total number of images extracted, and the average number of images per page.
 
@@ -136,22 +147,19 @@ The results of the crawling process are summarized in Table~\ref{tab:crawler-sta
 \centering
 \caption{Summary of crawler performance statistics}
 \label{tab:crawler-stats}
-\begin{tabular}{l|l|l|l|l}
+\begin{tabular}{l|l|l|l}
 \hline
-Total Pages & Duplicates & Images & Avg. Images/page & Avg. links/page \\
+Total Pages & Duplicate Pages & Total Images & Avg. Im. per Page \\
 \hline
-39,874 & 13 & 121,238 & 23.75 & 13.22 \\
+39,874 & 13 & 121,238 & 3 \\
 \hline
 \end{tabular}
 \end{table}
 
-The crawler retrieved a total of 39,874 pages, of which only 13 were duplicates, indicating that it successfully avoided redundant content. The total number of images extracted was 121,238, resulting in an average of 23.75 images per page, which is understandable, as the target site is highly media-rich, with each page containing numerous visual elements. Additionally, the crawler discovered an average of 13.22 links per page, which indicates a well-connected site structure.
-
-We also found that the page data table contains a single row, corresponding to a link to a PDF report, referenced in a news article. No other binary data was found.
 
 \subsection{Crawling Quality}
 
-To assess the quality of the crawler, we performed a semi-manual evaluation by constructing an interactive data map in which HTML pages are represented as two-dimensional points. This visualization enables inspection of the semantic structure of the collected data and helps identify potential inconsistencies or noise in the crawling process.
+To assess the quality of the crawler, we performed a semi-manual evaluation by constructing an interactive data map in which HTML-type pages are represented as two-dimensional points. This visualization enables inspection of the semantic structure of the collected data and helps identify potential inconsistencies or noise in the crawling process.
 
 The pipeline begins by encoding page content using TF-IDF with a vocabulary size of 15{,}000. To reduce the impact of high-frequency noise and compress the representation, the vectors are projected into a 40-dimensional space using truncated SVD. Clustering is then performed on these reduced representations using the K-means algorithm, where the optimal number of clusters is selected based on the silhouette score.
 
@@ -191,15 +199,12 @@ The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that we
 
 
 
-\section{Discussion}
-The crawler achieved a large, diverse crawl of the target domain while respecting domain constraints and prioritizing topical relevance. The low duplicate count suggests that the content-hash based deduplication is effective for the target site, while the very small number of binary resources indicates that most relevant material is delivered as HTML. The preferential strategy also appears to improve topical focus: the clustering analysis shows that more than half of the collected pages fall into query-aligned semantic clusters, which is consistent with the intended behavior of the scoring and frontier prioritization.
-
-There are, however, limitations and opportunities for improvement. The use of a headless browser increases robustness on dynamic pages but is computationally expensive and limits crawl throughput. The relevance model is based on short metadata strings; if metadata is missing or noisy, scores may be less reliable. Future work should therefore focus on improving metadata extraction and scoring.
+\section{Disscussion}
+- mention the fact we do not pick up many duplicates/binary files
+- mention crawling quality, how we could improve it etc
 
 \section{Conclusion}
-We implemented a preferential web crawler for a target website using a modular architecture with a RESTful API, PostgreSQL storage, and a multi-threaded Selenium-based client. The crawler respects robots.txt, canonicalizes URLs, performs deduplication, and prioritizes pages by semantic relevance to a user query using a language model. Our analysis of a 5,100 page crawl indicated low duplicate rates and strong topical concentration, as confirmed by clustering-based quality analysis.
-
-Overall, the system meets the assignment requirements and demonstrates how relevance-driven frontier scheduling can improve the usefulness of a focused crawl.
+- yap yap yap
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref}
