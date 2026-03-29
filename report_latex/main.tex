@@ -126,23 +126,25 @@ Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \t
 The resulting hash is stored in the content hash field of the page table, which is protected by a unique constraint. When inserting or updating a page violates this constraint, the client resolves the conflict by locating the already-stored page with the same hash and creating a new entry marked as a duplicate (with the content cleared and the hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the crawl graph while preventing redundant storage of page bodies.
 
 \section{Crawling Analysis}
-We analyzed the performance of our crawler on only one site, as mentioned above. When analyzing the results of our crawling, we discovered the following statistics:
+
+We conducted a performance analysis of our web crawler on a single target site, as described previously. The crawler was configured with a maximum page count of 5,100, four concurrent workers, and the query parameter: "Vojna med Ukrajino in Rusijo." 
+
+The results of the crawling process are summarized in Table~\ref{tab:crawler-stats}, highlighting the total number of pages retrieved, the count of duplicate pages, the total number of images extracted, and the average number of images per page.
 
 \begin{table}[H]
 \centering
+\caption{Summary of crawler performance statistics}
+\label{tab:crawler-stats}
 \begin{tabular}{l|l|l|l}
-Page count & Duplicate count & Image count & Avg. images per page \\
 \hline
-39874 & 13 & 121238 & 3 \\
+Total Pages & Duplicate Pages & Total Images & Avg. Images per Page \\
+\hline
+39,874 & 13 & 121,238 & 3 \\
 \hline
 \end{tabular}
 \end{table}
 
-%- sites - just 24ur
-%- html, binary, duplicate, frontier page counts
-%- link count globally, avg per page
-%- image count globally, avg per page
-%- time crawling per page (different stages)
+The page data table contains a single row, corresponding to a link to a PDF report, referenced in a news article.
 
 \subsection{Crawling Quality}
 
