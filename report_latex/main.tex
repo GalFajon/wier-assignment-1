@@ -10,6 +10,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 \usepackage{amsmath}
 \usepackage{caption}
+\usepackage{float}\usepackage{graphicx}
 
 
 \begin{document}
@@ -24,6 +25,8 @@
 }
 
 \maketitle
+
+% WIP text, will be cleaned and reformatted
 
 \begin{abstract}
 In this assignment we developed a preferential web crawler for the news site 24ur.com\cite{24ur} that collects pages relevant to a user‑specified topical query (for example, the conflict between Russia and Ukraine). Relevance is estimated by embedding page metadata, such as titles, summaries, and keywords, into a vector space using a pre‑trained language model, then computing cosine similarity between the page embeddings and an embedding of the query. The crawler is comprised of an SQL database server, a RESTful API server that exposes database operations, and a client that uses browser automation to extract page content and hyperlinks and applies machine‑learning scoring to prioritize crawl targets.
@@ -123,14 +126,56 @@ Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \t
 The resulting hash is stored in the content hash field of the page table, which is protected by a unique constraint. When inserting or updating a page violates this constraint, the client resolves the conflict by locating the already-stored page with the same hash and creating a new entry marked as a duplicate (with the content cleared and the hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the crawl graph while preventing redundant storage of page bodies.
 
 \section{Crawling Analysis}
-- sites - just 24ur
-- html, binary, duplicate, frontier page counts
-- link count globally, avg per page
-- image count globally, avg per page
-- time crawling per page (different stages)
 
+We conducted a performance analysis of our web crawler on a single target site, as described previously. The crawler was configured with a maximum page count of 5,100, four concurrent workers, and the query parameter: "Vojna med Ukrajino in Rusijo." 
+
+The results of the crawling process are summarized in Table~\ref{tab:crawler-stats}, highlighting the total number of pages retrieved, the count of duplicate pages, the total number of images extracted, and the average number of images per page.
+
+\begin{table}[H]
+\centering
+\caption{Summary of crawler performance statistics}
+\label{tab:crawler-stats}
+\begin{tabular}{l|l|l|l}
+\hline
+Total Pages & Duplicate Pages & Total Images & Avg. Images per Page \\
+\hline
+39,874 & 13 & 121,238 & 3 \\
+\hline
+\end{tabular}
+\end{table}
+
+The page data table contains a single row, corresponding to a link to a PDF report, referenced in a news article.
 
 \subsection{Crawling Quality}
+
+To assess the quality of the crawler, we performed a semi-manual evaluation by constructing an interactive data map in which HTML pages are represented as two-dimensional points. This visualization enables inspection of the semantic structure of the collected data and helps identify potential inconsistencies or noise in the crawling process.
+
+The pipeline begins by encoding page content using TF-IDF with a vocabulary size of 15{,}000. To reduce the impact of high-frequency noise and compress the representation, the vectors are projected into a 40-dimensional space using truncated Singular Value Decomposition (SVD). Clustering is then performed on these reduced representations using the K-means algorithm, where the optimal number of clusters is selected based on the silhouette score.
+
+For visualization, the clustered data is embedded into two dimensions using UMAP, which preserves local and global structure sufficiently for qualitative inspection. To improve interpretability, each cluster is labeled with representative keywords. This is achieved by concatenating the text of all documents within a cluster into a single corpus, applying TF-IDF to extract 30 candidate keywords, and then re-ranking them using a BERT-based semantic similarity model. The top six keywords are selected to describe each cluster.
+
+
+\begin{figure*}[t]
+    \centering
+
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/umap_all_clusters.png}
+        \caption*{(a) All clusters}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/umap_query_clusters.png}
+        \caption*{(b) Query clusters}
+    \end{minipage}
+
+    \caption{UMAP projections of crawled HTML pages. (a) All pages grouped into semantic clusters. (b) Query-specific subset highlighting cluster distribution.}
+    \label{fig:umap_combined}
+\end{figure*}
+
+
+
 - include visualization of clustering
 
 To visualize all 5000 pages and their links, we plotted a circular link diagram \ref{fig:circular-diagram}. Pages were groupped based on the part of the url after the domain - topics. Links were drawn in the color of the topic that the source article is on, showing how often each topic referenced others.
@@ -146,6 +191,8 @@ Most pages are articles from the ''novice'' topic, which is what we hoped for. E
 - maybe vis representing clusters as nodes, size of connection between nodes how many links are between those clusters?
 
 
+
+
 \section{Disscussion}
 - mention the fact we do not pick up many duplicates/binary files
 - mention crawling quality, how we could improve it etc
@@ -157,5 +204,3 @@ Most pages are articles from the ''novice'' topic, which is what we hoped for. E
 \bibliography{ref}
 
 \end{document}
-
-

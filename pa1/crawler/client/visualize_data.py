@@ -1,4 +1,4 @@
-from math import log, sqrt
+from math import ceil, log, sqrt
 from urllib.parse import urlparse
 
 from pycirclize import Circos
@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from utils.api_client import APIClient
 
 from pycirclize.utils import ColorCycler
+import random
 
 ColorCycler.set_cmap("tab10")
 
@@ -115,17 +116,16 @@ def visualize_path(page_links):
 
     section_counters = {}
 
-    new_id_map = {}
+    used_ids = set()
 
+    page_links = [l for l in page_links if l.get("accessed_time") is not None]
     page_links = sorted(page_links, key=lambda x: x.get("accessed_time"))
 
     ordered_sections = []
 
     for link in page_links:
-        p1_id = link.get("from_page")
-        p2_id = link.get("to_page")
+        from_id = link.get("from_page")
         from_page_url = link.get("from_url")
-        to_page_url = link.get("to_url")
 
         from_parsed = urlparse(from_page_url)
 
@@ -136,18 +136,22 @@ def visualize_path(page_links):
 
         if from_parsed_section not in section_counters:
             section_counters[from_parsed_section] = 1
-        else:
+        elif from_id not in used_ids:
             section_counters[from_parsed_section] += 1
-
+            used_ids.add(from_id)
+        else:
+            continue
+        if from_parsed_section == "veriga-dobrih-ljudi":
+            print("here")
         ordered_sections.append(from_parsed_section)
 
-    time_slot_size = 200
+    time_slot_size = 10
     counter = 0
     time_slot_counter = {s: 0 for s in section_counters.keys()}
-
     stack_plot_data = {s: [] for s in section_counters.keys()}
 
     for section in ordered_sections:
+        print(section)
         if section not in time_slot_counter:
             time_slot_counter[section] = 1
         else:
@@ -156,18 +160,24 @@ def visualize_path(page_links):
         if counter >= time_slot_size:
             for k,v in time_slot_counter.items():
                 stack_plot_data[k].append(v)
+            print(time_slot_counter)
             counter = 0
             time_slot_counter = {s: 0 for s in section_counters.keys()}
+            print(time_slot_counter)
+    if counter > 0:
+        for k,v in time_slot_counter.items():
+            stack_plot_data[k].append(v)
 
     #print(new_id_map)
+    print(stack_plot_data)
 
     fig, ax = plt.subplots()
-    ax.stackplot(range(0, len(links)-time_slot_size, time_slot_size), stack_plot_data.values(),
+    ax.stackplot(range(0, ceil(len(used_ids) / time_slot_size)), stack_plot_data.values(),
                 labels=stack_plot_data.keys(), alpha=1)
     ax.legend(loc='lower right')
-    ax.set_title('Page topics crawled')
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Num. pages')
+    ax.set_title('Topics crawled through time')
+    ax.set_xlabel('Crawled page number')
+    ax.set_ylabel('Ratios')
     plt.savefig("crawler_path.png")
     
 
@@ -178,7 +188,12 @@ if __name__ == "__main__":
     _db_api = APIClient(base_url=database_base_url)
 
     links = _db_api.list_links_with_urls()
-    print(links[0])
-    print(len(links))
 
-    visualize_path(links)
+    k = 50000
+    k = min(k, len(links))
+    sampled_links = random.sample(links, k)
+
+    print(sampled_links[0])
+    print(len(sampled_links))
+
+    visualize_path(sampled_links)

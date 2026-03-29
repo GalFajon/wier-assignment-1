@@ -7,7 +7,7 @@ from Explaination import *
 from Visualization import visualize_clusters_interactive
 
 display_run = False
-save_run_for_display = False
+save_run_for_display = True
 
 if __name__ == "__main__":
 
@@ -24,17 +24,19 @@ if __name__ == "__main__":
         with open('final_display/titles.pkl', "rb") as f:
             titles = pickle.load(f)
 
-        with open('final_display/topics.pkl', "rb") as f:
-            topics = pickle.load(f)
+        with open('final_display/urls.pkl', "rb") as f:
+            urls = pickle.load(f)
+
+        with open('final_display/ids.pkl', "rb") as f:
+            ids = pickle.load(f)
 
         with open('final_display/cluster_keywords.pkl', "rb") as f:
             cluster_keywords = pickle.load(f)
 
-        visualize_clusters_interactive(umap_2d_points, cluster_labels, titles, topics, cluster_keywords)
+        visualize_clusters_interactive(umap_2d_points, cluster_labels, titles, urls, ids, cluster_keywords = cluster_keywords)
+
     else:
         #recompute everything
-
-        
 
         #embedding
         articles, lemmas = load_articles_and_lemmas_filtered()
@@ -100,10 +102,10 @@ if __name__ == "__main__":
         visualize_clusters_interactive(umap_2d_points, cluster_labels, titles, urls, ids, cluster_keywords = cluster_keywords)
 
 
-        # output_file = "hide_clusters.txt"
+        # output_file = "hide_ids.txt"
         # with open(output_file, "w", encoding="utf-8") as f:
         #     for i, label in enumerate(cluster_labels):
-        #         if label != 10:
+        #         if label != 32:
         #             continue
         #         f.write(str(articles[i]['id']) + "\n")
         # print(f"Saved to {output_file}")
@@ -120,6 +122,9 @@ if __name__ == "__main__":
 
             with open('final_display/urls.pkl', "wb") as f:
                 pickle.dump(urls, f)
+
+            with open('final_display/ids.pkl', "wb") as f:
+                pickle.dump(ids, f)
 
             with open('final_display/cluster_keywords.pkl', "wb") as f:
                 pickle.dump(cluster_keywords, f)
