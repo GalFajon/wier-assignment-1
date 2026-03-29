@@ -59,7 +59,7 @@ The crawler is implemented as a modular system consisting of a RESTful API, a da
 \subsection{API Server and Database}
 The RESTful API service is implemented using a Python Flask\cite{flask} web server. It utilizes the SQLAlchemy\cite{sqlalchemy} library to define and initialize the database schema in accordance with the schema provided in the assignment instructions.
 
-The server supports configurable HTTP Basic authentication and uses Flask’s built-in ad hoc SSL context to 
+The server supports configurable HTTP Basic authentication and uses Flask's built-in ad hoc SSL context to 
 enable HTTPS, ensuring secure communication between components.
 
 The crawler client interacts with the API using a Python module, which sends HTTP requests 
