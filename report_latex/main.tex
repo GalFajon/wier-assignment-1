@@ -25,61 +25,104 @@
 
 \maketitle
 
-
 \begin{abstract}
-Abstract? I find it quite simple actually.
+In this assignment we developed a preferential web crawler for the news site 24ur.com\cite{24ur} that collects pages relevant to a user‑specified topical query (for example, the conflict between Russia and Ukraine). Relevance is estimated by embedding page metadata, such as titles, summaries, and keywords, into a vector space using a pre‑trained language model, then computing cosine similarity between the page embeddings and an embedding of the query. The crawler is comprised of an SQL database server, a RESTful API server that exposes database operations, and a client that uses browser automation to extract page content and hyperlinks and applies machine‑learning scoring to prioritize crawl targets.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
-
-
 \section{Introduction}
-I dont.
+This report describes the design and implementation of a preferential web crawler developed to extract pages 
+relevant to a user‑specified topical query within a chosen domain. For this assignment, the chosen domain 
+is the Slovenian news website 24ur.com.
 
+The crawler comprises several components: a headless browser HTTP downloader and renderer, 
+a data extractor for hyperlinks and images, a duplicate detector, a preferential URL frontier 
+and a PostgreSQL database accessed via a RESTful API. The system is designed to run multiple parallel workers.
 
+Pages are prioritised according to their relevance to a user‑specified topical query (e.g. 
+the conflict between Russia and Ukraine) by embedding page metadata into a natural‑language string 
+that is then converted into a vector representation using a pre‑trained language model and ranked 
+using cosine similarity. 
 
+The implementation also enforces canonical URLs, deduplication, respects robots.txt directives 
+and crawl delay constraints and records pages, images and binary files found within the domain in 
+the database.
+
+The following sections document implementation details, parameter choices, performance evaluation, 
+and visualisations of the resulting data.
 
 \section{Methodology}
-Meth.
-
 \subsection{Crawler Architecture}
--mention the docker container based approach
--mention db implementation, packages etc
+The crawler is implemented as a modular system consisting of a RESTful API, a database server, and a client service. Is is deployed using a Docker Compose project, with service configuration and crawling parameters defined in the Docker Compose project configuration file.
 
-- predefined number of workers deployed using threading package
-- each thread creates its own selenium firefox headless web browser \cite{selenium}
-- the crawler locally keeps:
-  * PQ for frontier links - 
-  * front metadata dict -  Alen what is this?
-  * allowed site urls and dict of robots.txt of sites
-- communicates with database with PUT, GET, POST requests via custom Client API
-  * if insertions to db fail because of URL or HASH uniqueness constraints the client returns an error code which we service by getting the preexisitng page and updating it or creating a DUPLICATE page
+\subsection{API Server and Database}
+The RESTful API service is implemented using a Python Flask\cite{flask} web server. It utilizes the SQLAlchemy\cite{sqlalchemy} library to define and initialize the database schema in accordance with the schema provided in the assignment instructions.
 
+The server supports configurable HTTP Basic authentication and uses Flask’s built-in ad hoc SSL context to 
+enable HTTPS, ensuring secure communication between components.
 
+The crawler client interacts with the API using a Python module, which sends HTTP requests 
+using the requests\cite{requests} library.
 
-\subsection{24Ur.com Page Parsing}
-- alen do this shit i cant be asked
-- mention how to extract links and their metadata
-- maybe also mention how to detect the images/binary files - i can do that im just lazy rn
+\subsection{Crawler client}
+The crawler client uses the threading module to spawn a specified number of worker threads, 
+which process URLs from a shared URL frontier. The Selenium \cite{selenium} Firefox headless web browser is used to parse pages and extract metadata.
 
+Links found on pages are extracted, scored, and added to the frontier. This process repeats until the desired number of pages has been crawled. 
 
+If an insertion into the database fails due to URL or content hash uniqueness constraints, the client handles the error by creating a page entry, marked as a duplicate.
+
+The crawler respects the \texttt{robots.txt} file of the specified domain by adhering to the specified crawl delay.
+
+\subsection{Page parsing}
+Each subpage is parsed using the BeautifulSoup\cite{beautifulsoup} module. The parser is used to extract article keywords and link URLs to other pages (in the \texttt{href} property or \texttt{onclick} JavaScript event handler).
+
+The \texttt{onclick} event handler is processed by extracting URL candidates with regular-expression patterns that detect common JavaScript redirects as well as embedded JSON-like fields (\texttt{Url:}, \texttt{PlaybackUrl:}); if none match, it falls back to any quoted \texttt{.html} substring and returns the list of candidate URLs.
+
+When saving a page to the database, each extracted URL is canonicalized using urllib\cite{urllib} and tldextract\cite{tldextract}. Redirection links belonging to the domain \texttt{go-ctr-tracker.pub.24ur.si} are resolved using the \texttt{redir} key in the query string, the host is reduced to the highest level domain, the path is normalized, removing trailing slashes and redundant separators, common tracking parameters relating to UTM, as well as \texttt{fbclid}, \texttt{gclid}, \texttt{yclid} are removed, remaining query parameters are sorted deterministically, and the final URL is returned with the \texttt{https} scheme and without fragments.
+
+Binary resources are detected by file extension (\texttt{.pdf}, \texttt{.doc}, \texttt{.docx}, \texttt{.ppt}, \texttt{.pptx}). 
+For HTML pages, all outgoing \texttt{<a href>} targets are canonicalized and then checked for these extensions; matching targets 
+are not added to the link frontier, but are instead stored as page data entries with their type code set to the corresponding type.
+
+Images are detected in a similar way, using common image file extensions (\texttt{.jpg}, \texttt{.jpeg}, \texttt{.png}, \texttt{.gif}, \texttt{.webp}, \texttt{.bmp}, \texttt{.svg}), and are stored in the corresponding database table.
 
 \subsection{Preferential Crawling}
-- from page extract metadata
-- using metadata construct a string with the format "Naslovi: {titles}. Povzetki: {summaries}. Ključne besede: {keywords}"
-- use the generated natural language string to embed metadata into a BERT encoding vector (uses model "paraphrase-multilingual-MiniLM-L12-v2" \cite{BERTmodel})
-- at the start of crawling embed the query sentence with the same model
-- use cosine similarity as a measure of how well a link matches our query, links with no metadata get a priority of 0 (worst priority)
+Preferential crawling is implemented by maintaining a shared in-memory URL frontier as a priority queue. Each worker repeatedly removes the currently best-ranked URL and processes the corresponding page.
 
+For each discovered URL, the crawler first applies canonicalization and filters out already visited URLs, 
+off-domain URLs, and URLs disallowed by \texttt{robots.txt}. The parsing stage associates each link with metadata such as an inferred link title (from the URL slug), an optional summary (from nearby \texttt{p}/\texttt{span} elements with class \texttt{summary}), page-level article keywords (from the \texttt{article-keywords} block), and additional keyword-like text (\texttt{span} elements with the \texttt{label} class).
 
+Since the same URL can be encountered multiple times from different pages and page regions, metadata is accumulated across occurrences in a per-URL list; every time new metadata is appended, a per-URL \emph{version counter} is incremented.
+
+Relevance scoring is performed with a multilingual sentence-transformer model (\texttt{paraphrase-multilingual-MiniLM-L12-v2} \cite{BERTmodel}). At the start of crawling the user query is embedded once, producing a normalized query embedding $\mathbf{e}_q$. For every candidate frontier URL $u$, the crawler constructs a short natural-language metadata string by concatenating de-duplicated fields in the form \emph{Naslovi: \dots{} Povzetki: \dots{} Ključne besede: \dots{}} and embeds it into $\mathbf{e}_u$. The relevance score is then computed as cosine similarity
+
+\begin{equation}
+s(u) = \cos(\mathbf{e}_q, \mathbf{e}_u).
+\end{equation}
+
+Candidates with no available metadata are assigned an empty metadata string and a neutral score of $0$.
+Because the priority queue dequeues the smallest numeric key, 
+the crawler converts similarity into a frontier priority by negation ($p(u)=-s(u)$), causing more 
+relevant pages (larger $s$) to be scheduled earlier. To avoid using outdated scores, frontier entries 
+carry the version number that was current when they were inserted; if a URL is encountered again and 
+its metadata (and thus its version) increases, older queued entries are discarded when popped. 
+
+In addition to the in-memory frontier, every candidate is also stored in the database as a 
+frontier page with its current priority, and a link edge is recorded from the currently 
+crawled page to the corresponding frontier entry; when a frontier URL is later crawled, that database 
+entry is updated with the full page content.
 
 \subsection{Deduplication}
-- alen pls im dying over here
+To avoid storing identical (or near-identical) content multiple times, every downloaded HTML page is 
+assigned a content hash and the database enforces uniqueness of this hash. The hash is computed with the ppdeep\cite{ppdeep} library.
 
+Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \texttt{style}, \texttt{noscript}) are removed. If the page contains an \texttt{<article>} element, its text is used as the primary content; two highly dynamic sub-blocks are explicitly removed when present: the comments placeholder (\texttt{id=comments\_placeholder}) and a promotional widget (\texttt{data-upscore-zone=microsite\_promo}). The remaining article text is extracted, whitespace-normalized, and hashed. For non-article pages, a fallback signature is constructed from stable navigation/text cues, such as submenu item titles and page headers (e.g., \texttt{h1} elements under \texttt{pageContent}).
+
+The resulting hash is stored in the content hash field of the page table, which is protected by a unique constraint. When inserting or updating a page violates this constraint, the client resolves the conflict by locating the already-stored page with the same hash and creating a new entry marked as a duplicate (with the content cleared and the hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the crawl graph while preventing redundant storage of page bodies.
 
 \section{Crawling Analysis}
-
 - sites - just 24ur
 - html, binary, duplicate, frontier page counts
 - link count globally, avg per page
@@ -102,8 +145,6 @@ Meth.
 
 \section{Conclusion}
 - yap yap yap
-
-
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref}

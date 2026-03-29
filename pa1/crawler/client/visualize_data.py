@@ -11,6 +11,11 @@ import random
 
 ColorCycler.set_cmap("tab10")
 
+cmap = plt.get_cmap("hsv")  # or "jet", "turbo", "hsv"
+
+def get_rainbow_color(t):
+    return cmap(t)  # t ∈ [0, 1]
+
 def visualize_links(page_links):
 
     sectors = {}
@@ -104,6 +109,69 @@ def visualize_links(page_links):
 
     fig = circos.plotfig(figsize=(12, 12))
     circos.savefig("plot.png", dpi=180)
+
+
+
+def visualize_path(page_links):
+
+    section_counters = {}
+
+    new_id_map = {}
+
+    page_links = sorted(page_links, key=lambda x: x.get("accessed_time"))
+
+    ordered_sections = []
+
+    for link in page_links:
+        p1_id = link.get("from_page")
+        p2_id = link.get("to_page")
+        from_page_url = link.get("from_url")
+        to_page_url = link.get("to_url")
+
+        from_parsed = urlparse(from_page_url)
+
+        from_parsed_section = from_parsed.path.split("/")[1]
+
+        if ".html" in from_parsed_section:
+            from_parsed_section = "other"
+
+        if from_parsed_section not in section_counters:
+            section_counters[from_parsed_section] = 1
+        else:
+            section_counters[from_parsed_section] += 1
+
+        ordered_sections.append(from_parsed_section)
+
+    time_slot_size = 200
+    counter = 0
+    time_slot_counter = {s: 0 for s in section_counters.keys()}
+
+    stack_plot_data = {s: [] for s in section_counters.keys()}
+
+    for section in ordered_sections:
+        if section not in time_slot_counter:
+            time_slot_counter[section] = 1
+        else:
+            time_slot_counter[section] += 1
+        counter += 1
+        if counter >= time_slot_size:
+            for k,v in time_slot_counter.items():
+                stack_plot_data[k].append(v)
+            counter = 0
+            time_slot_counter = {s: 0 for s in section_counters.keys()}
+
+    #print(new_id_map)
+
+    fig, ax = plt.subplots()
+    ax.stackplot(range(0, len(links)-time_slot_size, time_slot_size), stack_plot_data.values(),
+                labels=stack_plot_data.keys(), alpha=1)
+    ax.legend(loc='lower right')
+    ax.set_title('Page topics crawled')
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Num. pages')
+    plt.savefig("crawler_path.png")
+    
+
 
 if __name__ == "__main__":
 
