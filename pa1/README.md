@@ -1,4 +1,5 @@
 ## WIER - Assignment 1 - Web crawler
+
 Web crawler implementation, consists of:
 - crawler client (Python + Selenium) that fetches pages and parses content
 - Flask API server that stores crawl results,
@@ -23,6 +24,7 @@ Steps:
    docker compose up --build
 
 ## Import database
+
 The database dump linked in `googledrive.txt` can be imported with `pg_restore` using the credentials from `docker-compose.yml`.
 
 ```bash
