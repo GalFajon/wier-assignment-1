@@ -190,7 +190,7 @@ def update_page(page_id):
         db.commit()
         return jsonify(to_dict_page(p))
     except IntegrityError as e:
-
+        db.rollback()
         print(e, flush=True)
 
         # extract the violated constraint name from the error message
@@ -204,7 +204,6 @@ def update_page(page_id):
             "url": payload.get("url"),
             "duplicate_id": page_id
         }), 200
-        
     finally:
         db.close()
         
