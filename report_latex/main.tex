@@ -10,7 +10,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 \usepackage{amsmath}
 \usepackage{caption}
-
+\usepackage{float}
 
 \begin{document}
 
@@ -24,6 +24,8 @@
 }
 
 \maketitle
+
+% WIP text, will be cleaned and reformatted
 
 \begin{abstract}
 In this assignment we developed a preferential web crawler for the news site 24ur.com\cite{24ur} that collects pages relevant to a user‑specified topical query (for example, the conflict between Russia and Ukraine). Relevance is estimated by embedding page metadata, such as titles, summaries, and keywords, into a vector space using a pre‑trained language model, then computing cosine similarity between the page embeddings and an embedding of the query. The crawler is comprised of an SQL database server, a RESTful API server that exposes database operations, and a client that uses browser automation to extract page content and hyperlinks and applies machine‑learning scoring to prioritize crawl targets.
@@ -59,7 +61,7 @@ The crawler is implemented as a modular system consisting of a RESTful API, a da
 \subsection{API Server and Database}
 The RESTful API service is implemented using a Python Flask\cite{flask} web server. It utilizes the SQLAlchemy\cite{sqlalchemy} library to define and initialize the database schema in accordance with the schema provided in the assignment instructions.
 
-The server supports configurable HTTP Basic authentication and uses Flask's built-in ad hoc SSL context to 
+The server supports configurable HTTP Basic authentication and uses Flask’s built-in ad hoc SSL context to 
 enable HTTPS, ensuring secure communication between components.
 
 The crawler client interacts with the API using a Python module, which sends HTTP requests 
@@ -123,12 +125,23 @@ Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \t
 The resulting hash is stored in the content hash field of the page table, which is protected by a unique constraint. When inserting or updating a page violates this constraint, the client resolves the conflict by locating the already-stored page with the same hash and creating a new entry marked as a duplicate (with the content cleared and the hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the crawl graph while preventing redundant storage of page bodies.
 
 \section{Crawling Analysis}
-- sites - just 24ur
-- html, binary, duplicate, frontier page counts
-- link count globally, avg per page
-- image count globally, avg per page
-- time crawling per page (different stages)
+We analyzed the performance of our crawler on only one site, as mentioned above. When analyzing the results of our crawling, we discovered the following statistics:
 
+\begin{table}[H]
+\centering
+\begin{tabular}{l|l|l|l}
+Page count & Duplicate count & Image count & Avg. images per page \\
+\hline
+39874 & 13 & 121238 & 3 \\
+\hline
+\end{tabular}
+\end{table}
+
+%- sites - just 24ur
+%- html, binary, duplicate, frontier page counts
+%- link count globally, avg per page
+%- image count globally, avg per page
+%- time crawling per page (different stages)
 
 \subsection{Crawling Quality}
 - include visualization of clustering
@@ -150,5 +163,3 @@ The resulting hash is stored in the content hash field of the page table, which 
 \bibliography{ref}
 
 \end{document}
-
-
