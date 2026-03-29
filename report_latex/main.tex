@@ -30,7 +30,7 @@
 % WIP text, will be cleaned and reformatted
 
 \begin{abstract}
-In this assignment we developed a preferential web crawler for the news site 24ur.com\cite{24ur} that collects pages relevant to a user‑specified topical query (for example, the conflict between Russia and Ukraine). Relevance is estimated by embedding page metadata, such as titles, summaries, and keywords, into a vector space using a pre‑trained language model, then computing cosine similarity between the page embeddings and an embedding of the query. The crawler is comprised of an SQL database server, a RESTful API server that exposes database operations, and a client that uses browser automation to extract page content and hyperlinks and applies machine‑learning scoring to prioritize crawl targets.
+In this assignment we developed a preferential web crawler for the news site 24ur.com that collects pages relevant to a user‑specified topical query (for example, the conflict between Russia and Ukraine). Relevance is estimated by embedding page metadata, such as titles, summaries, and keywords, into a vector space using a pre‑trained language model, then computing cosine similarity between the page embeddings and an embedding of the query. The crawler is comprised of an SQL database server, a RESTful API server that exposes database operations, and a client that uses browser automation to extract page content and hyperlinks and applies machine‑learning scoring to prioritize crawl targets.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -45,7 +45,7 @@ a data extractor for hyperlinks and images, a duplicate detector, a preferential
 and a PostgreSQL database accessed via a RESTful API. The system is designed to run multiple parallel workers.
 
 Pages are prioritised according to their relevance to a user‑specified topical query (e.g. 
-the conflict between Russia and Ukraine) by constructing a natural‑language string from page metadata that is then converted into a vector representation using a pre‑trained language model and ranked 
+the conflict between Russia and Ukraine) by constructing a natural‑language string from link metadata that is then converted into a vector representation using a pre‑trained language model and ranked 
 using cosine similarity. 
 
 The implementation also enforces canonical URLs, deduplication, respects robots.txt directives 
@@ -143,7 +143,7 @@ We conducted a performance analysis of our web crawler on a single target site. 
 
 The results of the crawling process are summarized in Table~\ref{tab:crawler-stats}, highlighting the total number of pages retrieved, the count of duplicate pages, the total number of images extracted, and the average number of images per page.
 
-\begin{table}
+\begin{table}[H]
 \centering
 \caption{Summary of crawler performance statistics}
 \label{tab:crawler-stats}
@@ -199,7 +199,7 @@ We conducted a focused categorical and topographical analysis of our crawl of \t
 
 To visualize all 5100 crawled pages and their links, we plotted a circular link diagram \ref{fig:category_links}. Pages were groupped based on the part of the URL after the domain - topics. Links were drawn in the color of the topic that the source article is on, showing how often each topic referenced others.
 
-Most pages are articles from the \textit{novice} topic, which is what we hoped for. Each article contains some keywords, which have their own pages, listing other articles with the same keywords. For our test query, \textit{šport} articles are second most common as Iran is also participating in a football tournament at the time of writing.
+Most pages are articles from the \textit{novice} topic, which is what we hoped for. Each article contains some keywords, which have their own pages, listing other articles with the same keywords. For our test query, \textit{šport} articles are second most common as Russia is also very involved in sports.
 
  \textit{Avtor} pages are a useful source of relevant articles, because each author usuall writes articles on specific topics. That's why \textit{avtor} pages have lots of outgoing links. However, we could only extracted the first 60 articles from each author since that's the maximum number of displayed articles on any \textit{avtor} page.
 
