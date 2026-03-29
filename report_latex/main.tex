@@ -156,6 +156,17 @@ Total Pages & Duplicate Pages & Total Images & Avg. Im. per Page \\
 \end{tabular}
 \end{table}
 
+During crawling, we recorded processing times for individual pipeline stages, as shown in Figure~\ref{fig:runtimes}. The results indicate that overall crawling time is dominated by the BERT-based scoring of URL metadata, suggesting that optimizing this component would yield the most significant performance improvements. Additionally, we observe a gradual increase in scoring time as the number of processed pages grows. This trend is likely due to a combination of hardware effects, such as thermal throttling, and the increasing size of internal data structures used to manage the crawling process.
+
+The green line in Figure~\ref{fig:runtimes} represents the crawl delay specified in the \textit{robots.txt} file of the target site. This value defines the minimum allowable time between consecutive page fetches, effectively imposing a lower bound on the crawler’s runtime. During the first half of the $5100$-page crawl, the system operates close to this theoretical limit, indicating that the pipeline is able to sustain near-optimal throughput under these constraints.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/crawler_runtimes.png}
+    \caption{Processing runtimes per page.}
+    \label{fig:runtimes}
+\end{figure}
+
 
 \subsection{Crawling Quality}
 
@@ -184,7 +195,7 @@ The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that we
     \begin{minipage}{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/umap_query_clusters.png}
-        \captionof{figure}{UMAP projection highlighting clusters relevant to the query. Selected clusters were identified based on semantic alignment of their keywords with the query.}
+        \captionof{figure}{UMAP projection highlighting clusters relevant to the query. Selected clusters were manually identified based on semantic alignment of their keywords with the query.}
         \label{fig:umap_query_clusters}
     \end{minipage}
 \end{figure*}
@@ -192,9 +203,31 @@ The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that we
 
 
 
+
+
 \subsection{24Ur.com Topography}
-- visualization of link table
-- maybe vis representing clusters as nodes, size of connection between nodes how many links are between those clusters?
+
+We conducted a focused categorical and topographical analysis of our crawl of \textit{24Ur.com}. Specifically, we examined a sequence of 500 consecutively crawled pages and analyzed the distribution of link topics within them. As shown in Figure~\ref{fig:topic_ratios}, the crawl is strongly dominated by links belonging to the \textit{novice} category, while links under \textit{kljucna-beseda} constitute the second largest proportion. This distribution is consistent with the query parameter, as articles related to international conflicts are predominantly categorized within these topics.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/crawler_path.png}
+    \caption{Ratios.}
+    \label{fig:topic_ratios}
+\end{figure}
+
+
+- alen write the explaination here i dont know what this is really
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/crawler_category_links.png}
+    \caption{Category links.}
+    \label{fig:category_links}
+\end{figure}
+
+
+
 
 
 
