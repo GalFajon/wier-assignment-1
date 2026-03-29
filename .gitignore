@@ -261,3 +261,5 @@ __marimo__/
 *.swp
 *.bak
 *.tmp
+
+pa1/db/*.sql
