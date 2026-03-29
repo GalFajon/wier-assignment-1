@@ -127,7 +127,7 @@ Before hashing, the HTML is parsed and non-content elements (\texttt{script}, \t
 The resulting hash is stored in the content hash field of the page table, which is protected by a unique constraint. When inserting or updating a page violates this constraint, the client resolves the conflict by locating the already-stored page with the same hash and creating a new entry marked as a duplicate (with the content cleared and the hash omitted to avoid re-triggering the constraint). A link is then recorded from the duplicate entry to the original page, preserving the crawl graph while preventing redundant storage of page bodies.
 
 \section{Crawling Analysis}
-
+\subsection{Statistics}
 We conducted a performance analysis of our web crawler on a single target site, as described previously. The crawler was configured with a maximum page count of 5,100, four concurrent workers, and the query parameter: "Vojna med Ukrajino in Rusijo." 
 
 The results of the crawling process are summarized in Table~\ref{tab:crawler-stats}, highlighting the total number of pages retrieved, the count of duplicate pages, the total number of images extracted, and the average number of images per page.
@@ -138,14 +138,16 @@ The results of the crawling process are summarized in Table~\ref{tab:crawler-sta
 \label{tab:crawler-stats}
 \begin{tabular}{l|l|l|l|l}
 \hline
-Total Pages & Duplicate Pages & Total Images & Avg. Images per page & Avg. links per page \\
+Total Pages & Duplicates & Images & Avg. Images/page & Avg. links/page \\
 \hline
 39,874 & 13 & 121,238 & 23.75 & 13.22 \\
 \hline
 \end{tabular}
 \end{table}
 
-The page data table contains a single row, corresponding to a link to a PDF report, referenced in a news article.
+The crawler retrieved a total of 39,874 pages, of which only 13 were duplicates, indicating that it successfully avoided redundant content. The total number of images extracted was 121,238, resulting in an average of 23.75 images per page, which is understandable, as the target site is highly media-rich, with each page containing numerous visual elements. Additionally, the crawler discovered an average of 13.22 links per page, which indicates a well-connected site structure.
+
+We also found that the page data table contains a single row, corresponding to a link to a PDF report, referenced in a news article. No other binary data was found.
 
 \subsection{Crawling Quality}
 
