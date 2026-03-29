@@ -147,14 +147,18 @@ The results of the crawling process are summarized in Table~\ref{tab:crawler-sta
 \centering
 \caption{Summary of crawler performance statistics}
 \label{tab:crawler-stats}
-\begin{tabular}{l|l|l|l}
+\begin{tabular}{l|l|l|l|l}
 \hline
-Total Pages & Duplicate Pages & Total Images & Avg. Im. per Page \\
+Total pages & Duplicates & Images & Avg. img./page & Avg. links/page \\
 \hline
-39,874 & 13 & 121,238 & 3 \\
+39,874 & 13 & 121,238 & 23.75 & 13.22 \\
 \hline
 \end{tabular}
 \end{table}
+
+The crawler retrieved a total of 39,874 pages, of which only 13 were duplicates, indicating that it successfully avoided redundant content. The total number of images extracted was 121,238, resulting in an average of 23.75 images per page, which is understandable, as the target site is highly media-rich, with each page containing numerous visual elements. Additionally, the crawler discovered an average of 13.22 links per page, which indicates a well-connected site structure.
+
+We also found that the page data table contains a single row, corresponding to a link to a PDF report, referenced in a news article. No other binary data was found.
 
 During crawling, we recorded processing times for individual pipeline stages, as shown in Figure~\ref{fig:runtimes}. The results indicate that overall crawling time is dominated by the BERT-based scoring of URL metadata, suggesting that optimizing this component would yield the most significant performance improvements. Additionally, we observe a gradual increase in scoring time as the number of processed pages grows. This trend is likely due to a combination of hardware effects, such as thermal throttling, and the increasing size of internal data structures used to manage the crawling process.
 
@@ -193,7 +197,7 @@ We conducted a focused categorical and topographical analysis of our crawl of \t
 \end{figure}
 
 
-To visualize all 5000 crawled pages and their links, we plotted a circular link diagram \ref{fig:category_links}. Pages were groupped based on the part of the URL after the domain - topics. Links were drawn in the color of the topic that the source article is on, showing how often each topic referenced others.
+To visualize all 5100 crawled pages and their links, we plotted a circular link diagram \ref{fig:category_links}. Pages were groupped based on the part of the URL after the domain - topics. Links were drawn in the color of the topic that the source article is on, showing how often each topic referenced others.
 
 Most pages are articles from the \textit{novice} topic, which is what we hoped for. Each article contains some keywords, which have their own pages, listing other articles with the same keywords. For our test query, \textit{šport} articles are second most common as Iran is also participating in a football tournament at the time of writing.
 
