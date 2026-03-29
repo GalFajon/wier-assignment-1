@@ -118,6 +118,7 @@ def visualize_path(page_links):
 
     new_id_map = {}
 
+    page_links = [l for l in page_links if l.get("accessed_time") is not None]
     page_links = sorted(page_links, key=lambda x: x.get("accessed_time"))
 
     ordered_sections = []
@@ -180,7 +181,7 @@ if __name__ == "__main__":
 
     links = _db_api.list_links_with_urls()
 
-    k = 100000
+    k = 50000
     k = min(k, len(links))
     sampled_links = random.sample(links, k)
 
@@ -188,3 +189,5 @@ if __name__ == "__main__":
     print(len(sampled_links))
 
     visualize_links(sampled_links)
+
+    #visualize_path(sampled_links)

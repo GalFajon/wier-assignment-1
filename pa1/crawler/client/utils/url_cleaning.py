@@ -71,6 +71,11 @@ if __name__ == "__main__":
     url1 = 'https://24ur.com/novice/svet/preiskovalci-zakljucili-malezijsko-letalo-nad-ukrajino-sestrelila-ruska-vojska.html?q=letalo%2C+raketa&sort=score&t=article'
     url2 = 'https://24ur.com/spored/kanal/popkino?e=12817738'
 
+    url3 = 'https://24ur.com/kljucna-beseda/RUSIJA'
+    url4 = 'https://24ur.com/kljucna-beseda/Rusija'
+
     print(canonicalize_url(url1))
     print(canonicalize_url(url2))
+    print(canonicalize_url(url3))
+    print(canonicalize_url(url4))
 

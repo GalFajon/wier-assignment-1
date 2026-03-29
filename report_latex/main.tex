@@ -10,6 +10,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 \usepackage{amsmath}
 \usepackage{caption}
+\usepackage{graphicx}
 
 
 \begin{document}
@@ -131,12 +132,41 @@ The resulting hash is stored in the content hash field of the page table, which 
 
 
 \subsection{Crawling Quality}
-- include visualization of clustering
-- include accuracy, precision, recall etc of our crawling (page is what we are looking for with query - TP, page is not what we are looking for with query - TN)
+
+To assess the quality of the crawler, we performed a semi-manual evaluation by constructing an interactive data map in which HTML pages are represented as two-dimensional points. This visualization enables inspection of the semantic structure of the collected data and helps identify potential inconsistencies or noise in the crawling process.
+
+The pipeline begins by encoding page content using TF-IDF with a vocabulary size of 15{,}000. To reduce the impact of high-frequency noise and compress the representation, the vectors are projected into a 40-dimensional space using truncated Singular Value Decomposition (SVD). Clustering is then performed on these reduced representations using the K-means algorithm, where the optimal number of clusters is selected based on the silhouette score.
+
+For visualization, the clustered data is embedded into two dimensions using UMAP, which preserves local and global structure sufficiently for qualitative inspection. To improve interpretability, each cluster is labeled with representative keywords. This is achieved by concatenating the text of all documents within a cluster into a single corpus, applying TF-IDF to extract 30 candidate keywords, and then re-ranking them using a BERT-based semantic similarity model. The top six keywords are selected to describe each cluster.
+
+
+\begin{figure*}[t]
+    \centering
+
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/umap_all_clusters.png}
+        \caption*{(a) All clusters}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/umap_query_clusters.png}
+        \caption*{(b) Query clusters}
+    \end{minipage}
+
+    \caption{UMAP projections of crawled HTML pages. (a) All pages grouped into semantic clusters. (b) Query-specific subset highlighting cluster distribution.}
+    \label{fig:umap_combined}
+\end{figure*}
+
+
+
 
 \subsection{24Ur.com Topography}
 - visualization of link table
 - maybe vis representing clusters as nodes, size of connection between nodes how many links are between those clusters?
+
+
 
 
 \section{Disscussion}
