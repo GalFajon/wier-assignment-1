@@ -72,14 +72,15 @@ def hash_website(html: str, url: str) -> str:
         if main_div:
             keywords.append("has_main")
 
-
-
+    keywords: list[str] = sorted(keywords)
+    keywords = [k.lower() for k in keywords]
 
     if to_hash:
         to_hash = to_hash.get_text(separator=" ", strip=True)
         to_hash = re.sub(r"\s+", " ", to_hash)
     else:
         to_hash = " ".join(keywords)
+    print(to_hash)
     # print(to_hash)
     # text = text[:10000]
     #print(to_hash[:10000])
