@@ -191,12 +191,15 @@ The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that we
 
 
 
-\section{Disscussion}
-- mention the fact we do not pick up many duplicates/binary files
-- mention crawling quality, how we could improve it etc
+\section{Discussion}
+The crawler achieved a large, diverse crawl of the target domain while respecting domain constraints and prioritizing topical relevance. The low duplicate count suggests that the content-hash based deduplication is effective for the target site, while the very small number of binary resources indicates that most relevant material is delivered as HTML. The preferential strategy also appears to improve topical focus: the clustering analysis shows that more than half of the collected pages fall into query-aligned semantic clusters, which is consistent with the intended behavior of the scoring and frontier prioritization.
+
+There are, however, limitations and opportunities for improvement. The use of a headless browser increases robustness on dynamic pages but is computationally expensive and limits crawl throughput. The relevance model is based on short metadata strings; if metadata is missing or noisy, scores may be less reliable. Future work should therefore focus on improving metadata extraction and scoring.
 
 \section{Conclusion}
-- yap yap yap
+We implemented a preferential web crawler for a target website using a modular architecture with a RESTful API, PostgreSQL storage, and a multi-threaded Selenium-based client. The crawler respects robots.txt, canonicalizes URLs, performs deduplication, and prioritizes pages by semantic relevance to a user query using a language model. Our analysis of a 5,100 page crawl indicated low duplicate rates and strong topical concentration, as confirmed by clustering-based quality analysis.
+
+Overall, the system meets the assignment requirements and demonstrates how relevance-driven frontier scheduling can improve the usefulness of a focused crawl.
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref}
