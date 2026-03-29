@@ -157,7 +157,7 @@ def visualize_clusters_interactive(
         clickmode='event',
         xaxis=dict(fixedrange=True, range=x_range),
         yaxis=dict(fixedrange=True, range=y_range, scaleanchor='x', scaleratio=0.65),
-        height=1480,
+        height=1520,
         width=2300,
         margin=dict(b=230),
     )

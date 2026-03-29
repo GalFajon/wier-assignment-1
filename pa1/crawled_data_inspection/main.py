@@ -100,10 +100,10 @@ if __name__ == "__main__":
         visualize_clusters_interactive(umap_2d_points, cluster_labels, titles, urls, ids, cluster_keywords = cluster_keywords)
 
 
-        # output_file = "hide_clusters.txt"
+        # output_file = "hide_ids.txt"
         # with open(output_file, "w", encoding="utf-8") as f:
         #     for i, label in enumerate(cluster_labels):
-        #         if label != 10:
+        #         if label != 32:
         #             continue
         #         f.write(str(articles[i]['id']) + "\n")
         # print(f"Saved to {output_file}")
