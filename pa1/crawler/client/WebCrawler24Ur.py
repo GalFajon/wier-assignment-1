@@ -381,6 +381,7 @@ class WebCrawler24Ur:
             end_t = time.perf_counter()
             performance_measure["links_score_time"] = end_t - start_t
             performance_measure["link_count"] = len(candidates)
+            performance_measure["page_id"] = page_id
 
             for i, candidate in enumerate(candidates):
                 

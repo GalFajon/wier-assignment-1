@@ -105,7 +105,7 @@ def extract_text(html):
 
 if __name__ == "__main__":
     INPUT = "page_table.csv"
-    OUTPUT = "cleaned_pages_test.yaml"
+    OUTPUT = "cleaned_pages.yaml"
 
 
     # IDS_FILE = "cluster_19_ids.txt"

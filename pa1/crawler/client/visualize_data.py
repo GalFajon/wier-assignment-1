@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from utils.api_client import APIClient
 
 from pycirclize.utils import ColorCycler
+import random
 
 ColorCycler.set_cmap("tab10")
 
@@ -178,7 +179,12 @@ if __name__ == "__main__":
     _db_api = APIClient(base_url=database_base_url)
 
     links = _db_api.list_links_with_urls()
-    print(links[0])
-    print(len(links))
 
-    visualize_path(links)
+    k = 100000
+    k = min(k, len(links))
+    sampled_links = random.sample(links, k)
+
+    print(sampled_links[0])
+    print(len(sampled_links))
+
+    visualize_links(sampled_links)

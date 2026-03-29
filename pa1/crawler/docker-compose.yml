@@ -24,7 +24,7 @@ services:
       PORT: 5000
       DATABASE_URL: postgresql://postgres:example@db:5432/crawldb
       URL_SEED: https://www.24ur.com/
-      MAX_PAGES: 150
+      MAX_PAGES: 5100
       WORKER_COUNT: 4
       QUERY: "Vojna med Ukrajino in Rusijo"
     ports:
