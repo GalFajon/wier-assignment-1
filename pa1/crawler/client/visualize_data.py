@@ -108,14 +108,12 @@ def visualize_links(page_links):
     
 
     fig = circos.plotfig(figsize=(12, 12))
-    circos.savefig("plot.png", dpi=180)
-
+    circos.savefig("crawler_category_links", dpi=180)
 
 
 def visualize_path(page_links):
 
     section_counters = {}
-
     used_ids = set()
 
     page_links = [l for l in page_links if l.get("accessed_time") is not None]
@@ -128,8 +126,8 @@ def visualize_path(page_links):
         from_page_url = link.get("from_url")
 
         from_parsed = urlparse(from_page_url)
-
-        from_parsed_section = from_parsed.path.split("/")[1]
+        parts = from_parsed.path.split("/")
+        from_parsed_section = parts[1] if len(parts) > 1 and parts[1] else "other"
 
         if ".html" in from_parsed_section:
             from_parsed_section = "other"
@@ -141,8 +139,7 @@ def visualize_path(page_links):
             used_ids.add(from_id)
         else:
             continue
-        if from_parsed_section == "veriga-dobrih-ljudi":
-            print("here")
+
         ordered_sections.append(from_parsed_section)
 
     time_slot_size = 10
@@ -151,35 +148,57 @@ def visualize_path(page_links):
     stack_plot_data = {s: [] for s in section_counters.keys()}
 
     for section in ordered_sections:
-        print(section)
         if section not in time_slot_counter:
             time_slot_counter[section] = 1
         else:
             time_slot_counter[section] += 1
+
         counter += 1
+
         if counter >= time_slot_size:
-            for k,v in time_slot_counter.items():
+            for k, v in time_slot_counter.items():
                 stack_plot_data[k].append(v)
-            print(time_slot_counter)
+
             counter = 0
             time_slot_counter = {s: 0 for s in section_counters.keys()}
-            print(time_slot_counter)
+
     if counter > 0:
-        for k,v in time_slot_counter.items():
+        for k, v in time_slot_counter.items():
             stack_plot_data[k].append(v)
 
-    #print(new_id_map)
-    print(stack_plot_data)
-
     fig, ax = plt.subplots()
-    ax.stackplot(range(0, ceil(len(used_ids) / time_slot_size)), stack_plot_data.values(),
-                labels=stack_plot_data.keys(), alpha=1)
+
+    sections = list(stack_plot_data.keys())
+    values = [stack_plot_data[s] for s in sections]
+
+    if len(values) == 0 or len(values[0]) == 0:
+        print("No data to plot")
+        return
+
+    # --- Convert to percentages ---
+    num_slots = len(values[0])
+    for i in range(num_slots):
+        total = sum(values[j][i] for j in range(len(values)))
+        if total > 0:
+            for j in range(len(values)):
+                values[j][i] = (values[j][i] / total) * 100
+
+    x = range(num_slots)
+
+    ax.stackplot(
+        x,
+        values,
+        labels=sections,
+        alpha=1
+    )
+
     ax.legend(loc='lower right')
     ax.set_title('Topics crawled through time')
     ax.set_xlabel('Crawled page number')
-    ax.set_ylabel('Ratios')
-    plt.savefig("crawler_path.png")
-    
+    ax.set_ylabel('Percentage (%)')
+
+    plt.savefig("crawler_path.png", dpi=300, bbox_inches="tight")
+
 
 
 if __name__ == "__main__":
@@ -189,11 +208,13 @@ if __name__ == "__main__":
 
     links = _db_api.list_links_with_urls()
 
-    k = 50000
+    k = 100000
     k = min(k, len(links))
     sampled_links = random.sample(links, k)
 
-    print(sampled_links[0])
-    print(len(sampled_links))
+    visualize_links(sampled_links)
 
-    visualize_path(sampled_links)
+    # print(sampled_links[0])
+    # print(len(sampled_links))
+
+    visualize_path(links)

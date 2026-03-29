@@ -10,7 +10,8 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 \usepackage{amsmath}
 \usepackage{caption}
-\usepackage{float}\usepackage{graphicx}
+\usepackage{float}
+\usepackage{graphicx}
 
 
 \begin{document}
@@ -148,28 +149,32 @@ Page count & Duplicate count & Image count & Avg. images per page \\
 
 To assess the quality of the crawler, we performed a semi-manual evaluation by constructing an interactive data map in which HTML pages are represented as two-dimensional points. This visualization enables inspection of the semantic structure of the collected data and helps identify potential inconsistencies or noise in the crawling process.
 
-The pipeline begins by encoding page content using TF-IDF with a vocabulary size of 15{,}000. To reduce the impact of high-frequency noise and compress the representation, the vectors are projected into a 40-dimensional space using truncated Singular Value Decomposition (SVD). Clustering is then performed on these reduced representations using the K-means algorithm, where the optimal number of clusters is selected based on the silhouette score.
+The pipeline begins by encoding page content using TF-IDF with a vocabulary size of 15{,}000. To reduce the impact of high-frequency noise and compress the representation, the vectors are projected into a 40-dimensional space using truncated SVD. Clustering is then performed on these reduced representations using the K-means algorithm, where the optimal number of clusters is selected based on the silhouette score.
 
 For visualization, the clustered data is embedded into two dimensions using UMAP, which preserves local and global structure sufficiently for qualitative inspection. To improve interpretability, each cluster is labeled with representative keywords. This is achieved by concatenating the text of all documents within a cluster into a single corpus, applying TF-IDF to extract 30 candidate keywords, and then re-ranking them using a BERT-based semantic similarity model. The top six keywords are selected to describe each cluster.
 
+The Figure~\ref{fig:umap_all_clusters} presents the complete data map, where each point corresponds to an individual article that can be interactively opened in a browser. Points are annotated with cluster identifiers, and the associated keywords for each cluster are listed alongside the visualization to aid interpretation. Using the silhouette score as a selection criterion, the data was partitioned into 40 clusters.
+
+The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that were identified as relevant to the query. This selection was performed by manually inspecting the cluster keywords and determining their semantic alignment with the query topic. In total, 23 clusters were marked as relevant, collectively accounting for 55.74\% of all data points.
 
 \begin{figure*}[t]
     \centering
 
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/umap_all_clusters.png}
-        \caption*{(a) All clusters}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/umap_query_clusters.png}
-        \caption*{(b) Query clusters}
+        \includegraphics[width=\textwidth]{images/umap_all_clusters.png}
+        \captionof{figure}{UMAP projection of all crawled HTML pages grouped into semantic clusters. Each point represents an article, with cluster identifiers and associated keywords shown for interpretation.}
+        \label{fig:umap_all_clusters}
     \end{minipage}
 
-    \caption{UMAP projections of crawled HTML pages. (a) All pages grouped into semantic clusters. (b) Query-specific subset highlighting cluster distribution.}
-    \label{fig:umap_combined}
+    \vspace{0.5cm}
+
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/umap_query_clusters.png}
+        \captionof{figure}{UMAP projection highlighting clusters relevant to the query. Selected clusters were identified based on semantic alignment of their keywords with the query.}
+        \label{fig:umap_query_clusters}
+    \end{minipage}
 \end{figure*}
 
 
