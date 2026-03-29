@@ -132,6 +132,13 @@ The resulting hash is stored in the content hash field of the page table, which 
 
 \subsection{Crawling Quality}
 - include visualization of clustering
+
+To visualize all 5000 pages and their links, we plotted a circular link diagram \ref{fig:circular-diagram}. Pages were groupped based on the part of the url after the domain - topics. Links were drawn in the color of the topic that the source article is on, showing how often each topic referenced others.
+
+Most pages are articles from the ''novice'' topic, which is what we hoped for. Each article contains some keywords, which have their own pages, listing other articles with the same keywords. For our test query, ''šport'' articles are second most common as Iran is also participating in a football tournament at the time of writing.
+
+''Avtor'' pages are a useful source of relevant articles, because each author usuall writes articles on specific topics. That's why ''avtor'' pages have lots of outgoing links. However, we could only extracted the first 60 articles from each author since that's the maximum number of displayed articles on the page.
+
 - include accuracy, precision, recall etc of our crawling (page is what we are looking for with query - TP, page is not what we are looking for with query - TN)
 
 \subsection{24Ur.com Topography}
