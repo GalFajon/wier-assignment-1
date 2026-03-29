@@ -142,7 +142,7 @@ def visualize_path(page_links):
 
         ordered_sections.append(from_parsed_section)
 
-    time_slot_size = 10
+    time_slot_size = 30
     counter = 0
     time_slot_counter = {s: 0 for s in section_counters.keys()}
     stack_plot_data = {s: [] for s in section_counters.keys()}
@@ -175,15 +175,21 @@ def visualize_path(page_links):
         print("No data to plot")
         return
 
-    # --- Convert to percentages ---
+    # --- Convert to percentages and track actual pages per slot ---
     num_slots = len(values[0])
+    slot_totals = []
     for i in range(num_slots):
         total = sum(values[j][i] for j in range(len(values)))
+        slot_totals.append(total)
         if total > 0:
             for j in range(len(values)):
                 values[j][i] = (values[j][i] / total) * 100
 
-    x = range(num_slots)
+    x = []
+    running_total = 0
+    for total in slot_totals:
+        running_total += total
+        x.append(running_total)
 
     ax.stackplot(
         x,
