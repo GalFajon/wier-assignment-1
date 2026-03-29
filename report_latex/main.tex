@@ -143,7 +143,7 @@ We conducted a performance analysis of our web crawler on a single target site. 
 
 The results of the crawling process are summarized in Table~\ref{tab:crawler-stats}, highlighting the total number of pages retrieved, the count of duplicate pages, the total number of images extracted, and the average number of images per page.
 
-\begin{table}[H]
+\begin{table}
 \centering
 \caption{Summary of crawler performance statistics}
 \label{tab:crawler-stats}
@@ -160,7 +160,7 @@ During crawling, we recorded processing times for individual pipeline stages, as
 
 The green line in Figure~\ref{fig:runtimes} represents the crawl delay specified in the \textit{robots.txt} file of the target site. This value defines the minimum allowable time between consecutive page fetches, effectively imposing a lower bound on the crawler’s runtime. During the first half of the $5100$-page crawl, the system operates close to this theoretical limit, indicating that the pipeline is able to sustain near-optimal throughput under these constraints.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{images/crawler_runtimes.png}
     \caption{Processing runtimes per page.}
@@ -179,6 +179,57 @@ For visualization, the clustered data is embedded into two dimensions using UMAP
 The Figure~\ref{fig:umap_all_clusters} presents the complete data map, where each point corresponds to an individual article that can be interactively opened in a browser. Points are annotated with cluster identifiers, and the associated keywords for each cluster are listed alongside the visualization to aid interpretation. Using the silhouette score as a selection criterion, the data was partitioned into 40 clusters.
 
 The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that were identified as relevant to the query. This selection was performed by manually inspecting the cluster keywords and determining their semantic alignment with the query topic. In total, 23 clusters were marked as relevant, collectively accounting for 55.74\% of all data points.
+
+
+\subsection{24Ur.com Topography}
+
+We conducted a focused categorical and topographical analysis of our crawl of \textit{24Ur.com}. Specifically, we examined a sequence of 500 consecutively crawled pages and analyzed the distribution of link topics within them. As shown in Figure~\ref{fig:topic_ratios}, the crawl is strongly dominated by links belonging to the \textit{novice} category, while links under \textit{kljucna-beseda} constitute the second largest proportion. This distribution is consistent with the query parameter, as articles related to international conflicts are predominantly categorized within these topics. As the number of crawled pages increases, the \textit{novice} category slightly shrinks as the crawler has to start exploring other unvisited alternatives (\textit{ekskluziv}, more of \textit{kljucna-beseda} and \textit{other}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{images/crawler_path.png}
+    \caption{Ratios of different topics as the number of crawled pages was increasing.}
+    \label{fig:topic_ratios}
+\end{figure}
+
+
+To visualize all 5000 crawled pages and their links, we plotted a circular link diagram \ref{fig:category_links}. Pages were groupped based on the part of the URL after the domain - topics. Links were drawn in the color of the topic that the source article is on, showing how often each topic referenced others.
+
+Most pages are articles from the \textit{novice} topic, which is what we hoped for. Each article contains some keywords, which have their own pages, listing other articles with the same keywords. For our test query, \textit{šport} articles are second most common as Iran is also participating in a football tournament at the time of writing.
+
+ \textit{Avtor} pages are a useful source of relevant articles, because each author usuall writes articles on specific topics. That's why \textit{avtor} pages have lots of outgoing links. However, we could only extracted the first 60 articles from each author since that's the maximum number of displayed articles on any \textit{avtor} page.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{images/crawler_category_links.png}
+    \caption{Category links.}
+    \label{fig:category_links}
+\end{figure}
+
+
+
+
+
+
+
+\section{Disscussion}
+The crawler achieved a large, diverse crawl of the target domain while respecting domain constraints and prioritizing topical relevance. The low duplicate count suggests that the content-hash based deduplication is effective for the target site, while the very small number of binary resources indicates that most relevant material is delivered as HTML. The preferential strategy also appears to improve topical focus: the clustering analysis shows that more than half of the collected pages fall into query-aligned semantic clusters, which is consistent with the intended behavior of the scoring and frontier prioritization.
+
+There are, however, limitations and opportunities for improvement. The use of a headless browser increases robustness on dynamic pages but is computationally expensive and limits crawl throughput. The relevance model is based on short metadata strings; if metadata is missing or noisy, scores may be less reliable. URL canonicalization was satisfactory, but had unusual edge cases with query strings. 
+
+Database error handling could have been done on the server side instead of client for faster communication. Some database queries weren't equipped with rollback options in case of database insertion errors. Sending frontier pages to the database was at first implemented roughly with batches, but later changed to sending individual ones due to risks of concurrent writing and difficulty of error handling.
+
+Future work should therefore focus on improving the robustness of the server component, canonicalization of URLs, metadata extraction, and scoring.
+
+
+
+\section{Conclusion}
+We implemented a preferential web crawler for a target website using a modular architecture with a RESTful API, PostgreSQL storage, and a multi-threaded Selenium-based client. The crawler respects robots.txt, canonicalizes URLs, performs deduplication, and prioritizes pages by semantic relevance to a user query using a language model. Our analysis of a 5,100 page crawl indicated low duplicate rates and strong topical concentration, as confirmed by clustering-based quality analysis.
+
+Overall, the system meets the assignment requirements and demonstrates how relevance-driven frontier scheduling can improve the usefulness of a focused crawl.
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
 
 \begin{figure*}[t]
     \centering
@@ -199,50 +250,5 @@ The Figure~\ref{fig:umap_query_clusters} highlights a subset of clusters that we
         \label{fig:umap_query_clusters}
     \end{minipage}
 \end{figure*}
-
-
-
-
-
-
-\subsection{24Ur.com Topography}
-
-We conducted a focused categorical and topographical analysis of our crawl of \textit{24Ur.com}. Specifically, we examined a sequence of 500 consecutively crawled pages and analyzed the distribution of link topics within them. As shown in Figure~\ref{fig:topic_ratios}, the crawl is strongly dominated by links belonging to the \textit{novice} category, while links under \textit{kljucna-beseda} constitute the second largest proportion. This distribution is consistent with the query parameter, as articles related to international conflicts are predominantly categorized within these topics.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{images/crawler_path.png}
-    \caption{Ratios.}
-    \label{fig:topic_ratios}
-\end{figure}
-
-
-- alen write the explaination here i dont know what this is really
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\columnwidth]{images/crawler_category_links.png}
-    \caption{Category links.}
-    \label{fig:category_links}
-\end{figure}
-
-
-
-
-
-
-
-\section{Disscussion}
-The crawler achieved a large, diverse crawl of the target domain while respecting domain constraints and prioritizing topical relevance. The low duplicate count suggests that the content-hash based deduplication is effective for the target site, while the very small number of binary resources indicates that most relevant material is delivered as HTML. The preferential strategy also appears to improve topical focus: the clustering analysis shows that more than half of the collected pages fall into query-aligned semantic clusters, which is consistent with the intended behavior of the scoring and frontier prioritization.
-
-There are, however, limitations and opportunities for improvement. The use of a headless browser increases robustness on dynamic pages but is computationally expensive and limits crawl throughput. The relevance model is based on short metadata strings; if metadata is missing or noisy, scores may be less reliable. Future work should therefore focus on improving metadata extraction and scoring.
-
-\section{Conclusion}
-We implemented a preferential web crawler for a target website using a modular architecture with a RESTful API, PostgreSQL storage, and a multi-threaded Selenium-based client. The crawler respects robots.txt, canonicalizes URLs, performs deduplication, and prioritizes pages by semantic relevance to a user query using a language model. Our analysis of a 5,100 page crawl indicated low duplicate rates and strong topical concentration, as confirmed by clustering-based quality analysis.
-
-Overall, the system meets the assignment requirements and demonstrates how relevance-driven frontier scheduling can improve the usefulness of a focused crawl.
-
-\bibliographystyle{IEEEtran}
-\bibliography{ref}
 
 \end{document}
