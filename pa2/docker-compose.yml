@@ -1,0 +1,37 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: pa2-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-crawler}
+      POSTGRES_USER: ${POSTGRES_USER:-crawler}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-crawler}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-crawler} -d ${POSTGRES_DB:-crawler}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-crawler}:${POSTGRES_PASSWORD:-crawler}@db:5432/${POSTGRES_DB:-crawler}
+      MIGRATION_FILE: /app/migration.sql
+    command: ["python", "-m", "pa2.migrate"]
+    volumes:
+      - ./:/app
+    profiles:
+      - init
+
+volumes:
+  pgdata:
