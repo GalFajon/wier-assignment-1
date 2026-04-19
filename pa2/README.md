@@ -20,3 +20,9 @@
    ```powershell
    docker compose --profile init up migrate
    ```
+
+5. Run parser (XPath + regex stub over html_content):
+
+   ```powershell
+   docker compose --profile parse up parser
+   ```

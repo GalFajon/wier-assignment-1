@@ -27,11 +27,29 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-crawler}:${POSTGRES_PASSWORD:-crawler}@db:5432/${POSTGRES_DB:-crawler}
       MIGRATION_FILE: /app/migration.sql
-    command: ["python", "-m", "pa2.migrate"]
+    command: ["python", "-m", "migration.migrate"]
     volumes:
       - ./:/app
     profiles:
       - init
+
+  parser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-crawler}:${POSTGRES_PASSWORD:-crawler}@db:5432/${POSTGRES_DB:-crawler}
+      PARSER_TABLE_SCHEMA: ${PARSER_TABLE_SCHEMA:-crawldb}
+      PARSER_TABLE_NAME: ${PARSER_TABLE_NAME:-page}
+      PARSE_LIMIT: ${PARSE_LIMIT:-10}
+    command: ["python", "-m", "parser"]
+    volumes:
+      - ./:/app
+    profiles:
+      - parse
 
 volumes:
   pgdata:
