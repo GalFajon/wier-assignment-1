@@ -70,23 +70,33 @@ def parse_html_stub(html_content: str) -> dict[str, Any]:
 	except (etree.ParserError, ValueError):
 		return {
 			"title": "",
-			"first_h1": "",
-			"token_count": 0,
+			"article-content": "",
 		}
 
-	title = tree.xpath("normalize-space(string(//title))")
-	first_h1 = tree.xpath("normalize-space(string((//h1)[1]))")
+	raw_title = tree.xpath("normalize-space(string(//meta[@property='og:title']/@content))")
+	if not raw_title:
+		raw_title = tree.xpath("normalize-space(string(//title))")
+	title = re.sub(r"\s*\|\s*24ur\.com\s*$", "", raw_title, flags=re.IGNORECASE).strip()
 
-	text_nodes = tree.xpath("//body//text()")
-	text_blob = " ".join(text_nodes)
-	text_blob = re.sub(r"\s+", " ", text_blob).strip()
+	article_nodes = tree.xpath("//*[@id='article-body']")
+	if not article_nodes:
+		return {
+			"title": title,
+			"article-content": "",
+		}
 
-	tokens = re.findall(r"[A-Za-z0-9_]+", text_blob)
+	article_node = article_nodes[0]
+	for removable in article_node.xpath(".//script|.//style|.//noscript|.//img|.//figure|.//svg|.//picture"):
+		parent = removable.getparent()
+		if parent is not None:
+			parent.remove(removable)
+
+	article_text = re.sub(r"\s+", " ", article_node.text_content()).strip()
+
 
 	return {
 		"title": title,
-		"first_h1": first_h1,
-		"token_count": len(tokens),
+		"article-content": article_text,
 	}
 
 
@@ -115,11 +125,10 @@ def main() -> None:
 		for row in rows:
 			parsed = parse_html_stub(row["html_content"])
 			print(
-				"page_id={id} title={title!r} h1={h1!r} token_count={token_count}".format(
+				"page_id={id} title={title!r} article-content={article_content!r}".format(
 					id=row["id"],
 					title=parsed["title"],
-					h1=parsed["first_h1"],
-					token_count=parsed["token_count"],
+					article_content=parsed["article-content"],
 				)
 			)
 	finally:
