@@ -64,7 +64,7 @@ def fetch_html_content_rows(
 	]
 
 
-def parse_html_stub(html_content: str) -> dict[str, Any]:
+def parse_html(html_content: str) -> dict[str, Any]:
 	try:
 		tree = lxml_html.fromstring(html_content)
 	except (etree.ParserError, ValueError):
@@ -123,7 +123,7 @@ def main() -> None:
 		print(f"Fetched rows with html_content: {len(rows)}")
 
 		for row in rows:
-			parsed = parse_html_stub(row["html_content"])
+			parsed = parse_html(row["html_content"])
 			print(
 				"page_id={id} title={title!r} article-content={article_content!r}".format(
 					id=row["id"],
