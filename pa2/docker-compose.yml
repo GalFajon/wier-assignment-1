@@ -50,7 +50,7 @@ services:
       MODEL_NAME: ${MODEL_NAME}
       EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION}
       EMBEDDING_BATCH_SIZE: ${EMBEDDING_BATCH_SIZE}
-    command: ["python", "-m", "parser"]
+    command: ["python", "-m", "run_parsing_and_embedding"]
     volumes:
       - ./:/app
     profiles:

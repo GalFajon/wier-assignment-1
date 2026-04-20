@@ -2,6 +2,8 @@ from sentence_transformers import SentenceTransformer
 import torch
 from pathlib import Path
 
+
+
 def load_model(settings):
     devic_str = settings.model_run_device
     device = devic_str if torch.cuda.is_available() and devic_str == 'cuda' else "cpu"
@@ -15,6 +17,8 @@ def load_model(settings):
         model.save(str(model_dir))
 
     return model
+
+
 
 def embed_chunks(model, chunk_list_raw, settings):
     # print(chunk_list_raw)
@@ -41,3 +45,25 @@ def embed_chunks(model, chunk_list_raw, settings):
         output.append(emb_list)
 
     return output
+
+
+
+
+def embed_string(model, string, settings):
+    emb = model.encode(
+        string,
+        convert_to_numpy=True,
+        show_progress_bar=False,
+        normalize_embeddings=True,
+    )
+
+    target_dim = settings.embedding_dimension
+
+    emb_list = emb.tolist()
+
+    if len(emb_list) < target_dim:
+        emb_list = emb_list + [0.0] * (target_dim - len(emb_list))
+    elif len(emb_list) > target_dim:
+        emb_list = emb_list[:target_dim]
+
+    return emb_list

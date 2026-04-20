@@ -1,26 +1,22 @@
 from __future__ import annotations
 
 import os
-import re
 from dataclasses import dataclass
 from typing import Any
-
-from lxml import etree
-from lxml import html as lxml_html
-from sqlalchemy import MetaData, Table, and_, create_engine, select, insert
-from sqlalchemy.engine import Engine
-from nltk.tokenize import sent_tokenize
-import nltk
 from tqdm import tqdm
 
+from sqlalchemy import MetaData, Table, and_, create_engine, select, insert
+from sqlalchemy.engine import Engine
 from sqlalchemy.dialects.postgresql.base import ischema_names
 from pgvector.sqlalchemy import Vector
 ischema_names["vector"] = Vector
 
-from chunk_embedding import embed_chunks, load_model
+from parsing import parse_html
+from chunking import chunk_segments
+from embedding import embed_chunks, load_model, embed_string
 
-nltk.download("punkt", quiet=True)
-nltk.download("punkt_tab", quiet=True)
+
+
 
 @dataclass(frozen=True)
 class ParserSettings:
@@ -50,6 +46,8 @@ class ParserSettings:
 		)
 
 
+
+
 def load_settings() -> ParserSettings:
 	database_url = os.getenv("DATABASE_URL","postgresql+psycopg://crawler:crawler@localhost:5432/crawler")
 	parse_limit = int(os.getenv("PARSE_LIMIT", "10"))
@@ -73,9 +71,13 @@ def load_settings() -> ParserSettings:
 		batch_size=batch_size
 	)
 
+
+
+
 def get_source_table(engine: Engine, schema_name: str, table_name: str) -> Table:
 	metadata = MetaData()
 	return Table(table_name, metadata, schema=schema_name, autoload_with=engine)
+
 
 
 def put_segments(engine: Engine, table: Table, segments: list[dict[str, Any]]):
@@ -86,6 +88,8 @@ def put_segments(engine: Engine, table: Table, segments: list[dict[str, Any]]):
 		)
 		connection.commit()
 	
+ 
+ 
 
 def fetch_html_content_rows(
     engine: Engine,
@@ -117,78 +121,11 @@ def fetch_html_content_rows(
         for row in rows
     ]
 
-def parse_html(html_content: str) -> dict[str, Any]:
-	#print("")
-	try:
-		tree = lxml_html.fromstring(html_content)
-	except (etree.ParserError, ValueError):
-		return {
-			"title": "",
-			"article-content": "",
-		}
-
-	raw_title = tree.xpath("normalize-space(string(//meta[@property='og:title']/@content))")
-	if not raw_title:
-		raw_title = tree.xpath("normalize-space(string(//title))")
-	title = re.sub(r"\s*\|\s*24ur\.com\s*$", "", raw_title, flags=re.IGNORECASE).strip()
-
-	article_nodes = tree.xpath("//*[@id='article-body']")
-	if not article_nodes:
-		return {
-			"title": title,
-			"article-content": "",
-		}
-	
-		
-
-	article_node = article_nodes[0]
-	for removable in article_node.xpath(".//script|.//style|.//noscript|.//img|.//figure|.//svg|.//picture"):
-		parent = removable.getparent()
-		if parent is not None:
-			parent.remove(removable)
-
-	article_text = re.sub(r"\s+", " ", article_node.text_content()).strip()
-
-	# extract sumamry by detecting the main article image, and moving along hierarchy to the summary <p> element
-	summary = tree.xpath("//picture[@tabindex=0 and @class='media-object']//parent::div//parent::div//parent::div/p//text()")
-	if summary:
-		article_text = f'{summary[0]} {article_text}'
-
-	return {
-		"title": title,
-		"article-content": article_text,
-	}
 
 
 
 
-def chunk_fixed_length(text, chunk_size=50):
-    """Fixed length chunking."""
-    return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
-
-
-def chunk_segments(text, max_words=256):
-	"""Splits text into sentence-based chunks with a max word count limit."""
-	sentences = sent_tokenize(text, language="slovene")  # Split into sentences
-	chunks, current_chunk = [], []
-	current_length = 0
-
-	for sentence in sentences:
-		words = sentence.split()
-		#print(f"sentence: {sentence}")
-		if current_length + len(words) > max_words:
-			chunks.append(" ".join(current_chunk))  # Save current chunk
-			current_chunk, current_length = [], 0  # Reset chunk
-		current_chunk.append(sentence)
-		current_length += len(words)
-    
-	if current_chunk:
-		chunks.append(" ".join(current_chunk))  # Add last chunk
-
-	return chunks
-
-
-def main() -> None:
+def parse_and_embed() -> None:
 	settings = load_settings()
 	print(settings)
  
@@ -244,7 +181,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-	main()
+	parse_and_embed()
+ 
 	#html_content = r.get("https://www.24ur.com/novice/slovenija-odloca/posveti-pri-predsednici-poslanci-se-bodo-prvic-uradno-prestevali.html").text
 	#parsed = parse_html(html_content=html_content)
 	#print(parsed)
+ 
