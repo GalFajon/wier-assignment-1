@@ -21,7 +21,7 @@ class ParserSettings:
 def load_settings() -> ParserSettings:
 	database_url = os.getenv("DATABASE_URL","postgresql+psycopg://crawler:crawler@localhost:5432/crawler")
 	parse_limit = int(os.getenv("PARSE_LIMIT", "10"))
-	table_schema = os.getenv("PARSER_TABLE_SCHEMA", "crawldb")
+	table_schema = os.getenv("PARSER_TABLE_SCHEMA")
 	table_name = os.getenv("PARSER_TABLE_NAME", "page")
 	return ParserSettings(
 		database_url=database_url,
@@ -84,6 +84,10 @@ def parse_html(html_content: str) -> dict[str, Any]:
 			"title": title,
 			"article-content": "",
 		}
+	
+	# pictures = tree.xpath("//picture[@tabindex=0 and @class='media-object']")
+	# for p in pictures:
+	# 	print(etree.tostring(p, pretty_print=True))
 
 	article_node = article_nodes[0]
 	for removable in article_node.xpath(".//script|.//style|.//noscript|.//img|.//figure|.//svg|.//picture"):
@@ -137,3 +141,6 @@ def main() -> None:
 
 if __name__ == "__main__":
 	main()
+	#html_content = r.get("https://www.24ur.com/novice/slovenija-odloca/posveti-pri-predsednici-poslanci-se-bodo-prvic-uradno-prestevali.html").text
+	#parsed = parse_html(html_content=html_content)
+	#print(parsed)
