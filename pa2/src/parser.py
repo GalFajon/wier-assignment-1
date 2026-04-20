@@ -7,8 +7,14 @@ from typing import Any
 
 from lxml import etree
 from lxml import html as lxml_html
-from sqlalchemy import MetaData, Table, and_, create_engine, select
+from sqlalchemy import MetaData, Table, and_, create_engine, select, insert
 from sqlalchemy.engine import Engine
+from nltk.tokenize import sent_tokenize
+import nltk
+
+# Download NLTK sentence tokenizer if not already installed
+nltk.download("punkt")
+nltk.download("punkt_tab")
 
 @dataclass(frozen=True)
 class ParserSettings:
@@ -34,6 +40,15 @@ def get_source_table(engine: Engine, schema_name: str, table_name: str) -> Table
 	metadata = MetaData()
 	return Table(table_name, metadata, schema=schema_name, autoload_with=engine)
 
+
+def put_segments(engine: Engine, table: Table, segments: list[dict[str, Any]]):
+	with engine.connect() as connection:
+		result = connection.execute(
+			insert(table),
+			segments
+		)
+		connection.commit()
+	
 
 def fetch_html_content_rows(
 	engine: Engine,
@@ -65,6 +80,7 @@ def fetch_html_content_rows(
 
 
 def parse_html(html_content: str) -> dict[str, Any]:
+	print("")
 	try:
 		tree = lxml_html.fromstring(html_content)
 	except (etree.ParserError, ValueError):
@@ -85,9 +101,7 @@ def parse_html(html_content: str) -> dict[str, Any]:
 			"article-content": "",
 		}
 	
-	# pictures = tree.xpath("//picture[@tabindex=0 and @class='media-object']")
-	# for p in pictures:
-	# 	print(etree.tostring(p, pretty_print=True))
+		
 
 	article_node = article_nodes[0]
 	for removable in article_node.xpath(".//script|.//style|.//noscript|.//img|.//figure|.//svg|.//picture"):
@@ -97,11 +111,43 @@ def parse_html(html_content: str) -> dict[str, Any]:
 
 	article_text = re.sub(r"\s+", " ", article_node.text_content()).strip()
 
+	# extract sumamry by detecting the main article image, and moving along hierarchy to the summary <p> element
+	summary = tree.xpath("//picture[@tabindex=0 and @class='media-object']//parent::div//parent::div//parent::div/p//text()")
+	if summary:
+		article_text = f'{summary[0]} {article_text}'
 
 	return {
 		"title": title,
 		"article-content": article_text,
 	}
+
+
+
+
+def chunk_fixed_length(text, chunk_size=50):
+    """Fixed length chunking."""
+    return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
+
+
+def chunk_segments(text, max_words=256):
+	"""Splits text into sentence-based chunks with a max word count limit."""
+	sentences = sent_tokenize(text, language="slovene")  # Split into sentences
+	chunks, current_chunk = [], []
+	current_length = 0
+
+	for sentence in sentences:
+		words = sentence.split()
+		#print(f"sentence: {sentence}")
+		if current_length + len(words) > max_words:
+			chunks.append(" ".join(current_chunk))  # Save current chunk
+			current_chunk, current_length = [], 0  # Reset chunk
+		current_chunk.append(sentence)
+		current_length += len(words)
+    
+	if current_chunk:
+		chunks.append(" ".join(current_chunk))  # Add last chunk
+
+	return chunks
 
 
 def main() -> None:
@@ -125,9 +171,21 @@ def main() -> None:
 		)
 		
 		print(f"Fetched rows with html_content: {len(rows)}")
-
+		all_segments = []
 		for row in rows:
 			parsed = parse_html(row["html_content"])
+			
+			chunks = chunk_segments(parsed.get("title") + ". " + parsed.get("article-content", ""), max_words=64)
+
+			embeddings = ["" for c in chunks] # TODO: calculate embedding
+
+			for (chunk, embedding) in zip(chunks, embeddings):
+				all_segments.append({
+					"page_id": row["id"],
+					"page_segment": chunk,
+					"embedding": None
+				})
+
 			print(
 				"page_id={id} title={title!r} article-content={article_content!r}".format(
 					id=row["id"],
@@ -135,6 +193,12 @@ def main() -> None:
 					article_content=parsed["article-content"],
 				)
 			)
+
+		print(all_segments)
+
+		put_segments(engine, get_source_table(engine, source_schema, "page_segment"), all_segments)
+
+
 	finally:
 		engine.dispose()
 
