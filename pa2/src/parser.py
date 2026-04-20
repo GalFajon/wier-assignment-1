@@ -11,10 +11,16 @@ from sqlalchemy import MetaData, Table, and_, create_engine, select, insert
 from sqlalchemy.engine import Engine
 from nltk.tokenize import sent_tokenize
 import nltk
+from tqdm import tqdm
 
-# Download NLTK sentence tokenizer if not already installed
-nltk.download("punkt")
-nltk.download("punkt_tab")
+from sqlalchemy.dialects.postgresql.base import ischema_names
+from pgvector.sqlalchemy import Vector
+ischema_names["vector"] = Vector
+
+from chunk_embedding import embed_chunks, load_model
+
+nltk.download("punkt", quiet=True)
+nltk.download("punkt_tab", quiet=True)
 
 @dataclass(frozen=True)
 class ParserSettings:
@@ -22,6 +28,26 @@ class ParserSettings:
 	parse_limit: int
 	table_schema: str
 	table_name: str
+	chunk_length: int
+	model_run_device: str
+	model_name: str
+	embedding_dimension: int
+	batch_size: int
+ 
+	def __str__(self) -> str:
+		return (
+			f"ParserSettings(\n"
+			f"	database_url='{self.database_url}',\n"
+			f"	parse_limit={self.parse_limit},\n"
+			f"	table_schema='{self.table_schema}',\n"
+			f"	table_name='{self.table_name}',\n"
+			f"	chunk_length={self.chunk_length},\n"
+			f"	model_run_device='{self.model_run_device}',\n"
+   			f"	model_name='{self.model_name}',\n"
+			f"	embedding_dimension={self.embedding_dimension},\n"
+			f"	batch_size={self.batch_size}\n"
+			f")"
+		)
 
 
 def load_settings() -> ParserSettings:
@@ -29,11 +55,22 @@ def load_settings() -> ParserSettings:
 	parse_limit = int(os.getenv("PARSE_LIMIT", "10"))
 	table_schema = os.getenv("PARSER_TABLE_SCHEMA")
 	table_name = os.getenv("PARSER_TABLE_NAME", "page")
+	chunk_lenght = int(os.getenv("CHUNK_LENGTH", "64"))
+	model_run_device = os.getenv("MODEL_RUN_DEVICE", "cpu")
+	model_name = os.getenv("MODEL_NAME", "no-model-found-error-in-env")
+	embedding_dimension = int(os.getenv("EMBEDING_DIMENSION", "768"))
+	batch_size = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
+
 	return ParserSettings(
 		database_url=database_url,
 		parse_limit=parse_limit,
 		table_schema=table_schema,
 		table_name=table_name,
+		chunk_length=chunk_lenght,
+		model_run_device=model_run_device,
+		model_name=model_name,
+  		embedding_dimension=embedding_dimension,
+		batch_size=batch_size
 	)
 
 def get_source_table(engine: Engine, schema_name: str, table_name: str) -> Table:
@@ -51,36 +88,37 @@ def put_segments(engine: Engine, table: Table, segments: list[dict[str, Any]]):
 	
 
 def fetch_html_content_rows(
-	engine: Engine,
-	source_table: Table,
-	limit: int,
+    engine: Engine,
+    source_table: Table,
+    limit: int,
 ) -> list[dict[str, Any]]:
-	query = (
-		select(source_table.c.id, source_table.c.html_content)
-		.where(
-			and_(
-				source_table.c.html_content.is_not(None),
-				source_table.c.html_content != "",
-			)
-		)
-		.order_by(source_table.c.id)
-		.limit(limit)
-	)
+    query = (
+        select(source_table.c.id, source_table.c.html_content)
+        .where(
+            and_(
+                source_table.c.html_content.is_not(None),
+                source_table.c.html_content != "",
+            )
+        )
+        .order_by(source_table.c.id)
+    )
 
-	with engine.connect() as connection:
-		rows = connection.execute(query).mappings().all()
+    if limit > 0:
+        query = query.limit(limit)
 
-	return [
-		{
-			"id": row["id"],
-			"html_content": row["html_content"],
-		}
-		for row in rows
-	]
+    with engine.connect() as connection:
+        rows = connection.execute(query).mappings().all()
 
+    return [
+        {
+            "id": row["id"],
+            "html_content": row["html_content"],
+        }
+        for row in rows
+    ]
 
 def parse_html(html_content: str) -> dict[str, Any]:
-	print("")
+	#print("")
 	try:
 		tree = lxml_html.fromstring(html_content)
 	except (etree.ParserError, ValueError):
@@ -152,8 +190,11 @@ def chunk_segments(text, max_words=256):
 
 def main() -> None:
 	settings = load_settings()
+	print(settings)
+ 
 	engine = create_engine(settings.database_url, pool_pre_ping=True)
-
+	model = load_model(settings)
+ 
 	try:
 		source_table = get_source_table(
 			engine=engine,
@@ -172,29 +213,28 @@ def main() -> None:
 		
 		print(f"Fetched rows with html_content: {len(rows)}")
 		all_segments = []
-		for row in rows:
+		for row in tqdm(rows, desc='Parsing HTML Pages and Embedding their Chunks'):
 			parsed = parse_html(row["html_content"])
 			
-			chunks = chunk_segments(parsed.get("title") + ". " + parsed.get("article-content", ""), max_words=64)
-
-			embeddings = ["" for c in chunks] # TODO: calculate embedding
+			chunks = chunk_segments(parsed.get("title") + ". " + parsed.get("article-content", ""), max_words=settings.chunk_length)
+			embeddings = embed_chunks(model, chunks, settings=settings)
 
 			for (chunk, embedding) in zip(chunks, embeddings):
 				all_segments.append({
 					"page_id": row["id"],
 					"page_segment": chunk,
-					"embedding": None
+					"embedding": embedding
 				})
 
-			print(
-				"page_id={id} title={title!r} article-content={article_content!r}".format(
-					id=row["id"],
-					title=parsed["title"],
-					article_content=parsed["article-content"],
-				)
-			)
+			# print(
+			# 	"page_id={id} title={title!r} article-content={article_content!r}".format(
+			# 		id=row["id"],
+			# 		title=parsed["title"],
+			# 		article_content=parsed["article-content"],
+			# 	)
+			# )
 
-		print(all_segments)
+		#print(all_segments)
 
 		put_segments(engine, get_source_table(engine, source_schema, "page_segment"), all_segments)
 

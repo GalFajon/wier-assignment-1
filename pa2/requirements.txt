@@ -3,3 +3,5 @@ psycopg[binary]>=3.1,<4.0
 sqlparse>=0.5,<1.0
 lxml>=5.0,<6.0
 nltk
+pgvector
+sentence_transformers

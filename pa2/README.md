@@ -13,7 +13,11 @@
    docker compose up -d db
    ```
 
-3. Import your PA1 crawler database dump manually (as you planned).
+3. Import your PA1 crawler database dump manually by downloading the 4thcrawl.sql file
+```powershell
+docker cp .\4thcrawl.sql crawler-postgres:/tmp/4thcrawl.dump
+docker exec -it pa2-postgres pg_restore -U crawler -d crawler --no-owner /tmp/4thcrawl.dump
+```
 
 4. Apply PA2 migration changes:
 
