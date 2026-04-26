@@ -50,6 +50,10 @@ services:
       MODEL_NAME: ${MODEL_NAME}
       EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION}
       EMBEDDING_BATCH_SIZE: ${EMBEDDING_BATCH_SIZE}
+      QUERY_RETURN_N: ${QUERY_RETURN_N}
+      DISTANCE_METRIC: ${DISTANCE_METRIC}
+      RERANKING_MODEL_NAME: ${RERANKING_MODEL_NAME}
+      RERANK_RETURN_N: ${RERANK_RETURN_N}
     command: ["python", "-m", "run_parsing_and_embedding"]
     volumes:
       - ./:/app

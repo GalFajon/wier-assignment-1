@@ -24,7 +24,6 @@ BEGIN
   END IF;
 END $$;
 
-/* store which models produced which segments for later evaluation */
 CREATE TABLE IF NOT EXISTS public.model (
   id serial PRIMARY KEY,
   model_name TEXT UNIQUE NOT NULL

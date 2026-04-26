@@ -8,7 +8,6 @@
 
 pa2/4thcrawl.sql
 pa2/requirements_local.txt
-pa2/run_parser_locally.ps1
 pa2/models
 
 # Byte-compiled / optimized / DLL files
