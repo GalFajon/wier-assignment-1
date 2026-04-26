@@ -5,3 +5,4 @@ lxml>=5.0,<6.0
 nltk
 pgvector
 sentence_transformers
+tqdm

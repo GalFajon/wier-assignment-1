@@ -6,6 +6,7 @@ from typing import Any
 from tqdm import tqdm
 
 from sqlalchemy import MetaData, Table, and_, create_engine, select, insert
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.engine import Engine
 from sqlalchemy.dialects.postgresql.base import ischema_names
 from pgvector.sqlalchemy import Vector
@@ -80,6 +81,22 @@ def get_source_table(engine: Engine, schema_name: str, table_name: str) -> Table
 
 
 
+def register_model(engine: Engine, model_table: Table, model_name: str) -> int:
+	with engine.connect() as connection:
+		try:
+			result = connection.execute(
+				insert(model_table).values(model_name=model_name).returning(model_table.c.id)
+			)
+			connection.commit()
+			return result.scalar_one()
+		except IntegrityError:
+			connection.rollback()
+			result = connection.execute(
+				select(model_table.c.id).where(model_table.c.model_name == model_name)
+			)
+			return result.scalar_one()
+
+
 def put_segments(engine: Engine, table: Table, segments: list[dict[str, Any]]):
 	with engine.connect() as connection:
 		result = connection.execute(
@@ -142,6 +159,10 @@ def parse_and_embed() -> None:
 		source_schema = source_table.schema or settings.table_schema
 		print(f"Using table: {source_schema}.{source_table.name}")
 
+		model_table = get_source_table(engine, source_schema, "model")
+		model_id = register_model(engine, model_table, settings.model_name)
+		print(f"Inserted model '{settings.model_name}' with id={model_id}")
+
 		rows = fetch_html_content_rows(
 			engine=engine,
 			source_table=source_table,
@@ -160,7 +181,8 @@ def parse_and_embed() -> None:
 				all_segments.append({
 					"page_id": row["id"],
 					"page_segment": chunk,
-					"embedding": embedding
+					"embedding": embedding,
+					"model_id": model_id,
 				})
 
 			# print(
