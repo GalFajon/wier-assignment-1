@@ -1,0 +1,74 @@
+
+\documentclass[conference]{IEEEtran}
+
+\ifCLASSINFOpdf
+
+\else
+
+\fi
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+\title{WEIR - Assignment 1 - Preferential web crawling}
+
+
+
+\author{\IEEEauthorblockN{Maj Bregar, Gal Fajon, Alen Leban}
+
+\IEEEauthorblockA{ Faculty of Computer and Information Science\\Večna pot 113, 1000 Ljubljana}
+}
+
+\maketitle
+
+\begin{abstract}
+In this assignment, we created a pipeline for extracting and indexing textual content from
+previously crawled web pages to support domain-specific information retrieval.
+The pipeline parses raw HTML and retrieves semantically coherent chunks of data (article headings, body, etc.), 
+which are then encoded into dense vector representations using a pre-trained language model.
+The resulting embeddings are persisted in a PostgreSQL database extended with the
+pgvector module, enabling efficient similarity search over the document collection.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+This report describes the design and implementation of a parsing and semantic embedding
+pipeline that processes the HTML pages collected by the preferential web crawler developed
+in the previous assignment. The goal is to extract clean article text from the crawled
+pages and represent it in a form that supports efficient domain-specific information retrieval.
+
+The pipeline consists of three main stages: an HTML parser that targets the article
+structure of 24ur.com pages, a text chunker that splits the extracted content into
+semantically coherent segments, and an embedding module that encodes each segment into
+a dense vector representation.
+
+Parsing is implemented with the \texttt{lxml} library and targets the article body of each page by
+locating known structural elements such as the \texttt{\#article-body} block. Article titles
+are recovered from OpenGraph metadata where available. The chunker uses NLTK's Slovene
+sentence tokenizer to split text into sentence-boundary-aware chunks with a configurable
+maximum word count.
+
+% Tlele predpostavljam da bomo še več modelov ponucal pa opisal
+Embeddings are produced by the \texttt{all-MiniLM-L6-v2} SentenceTransformer model and
+stored together with the corresponding text segments and a reference to the model record
+in a PostgreSQL database extended with the pgvector module.
+
+\section{Methodology}
+
+\section{Embedding Analysis}
+
+\section{Disscussion}
+
+\section{Conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+\end{document}
