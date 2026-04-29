@@ -7,7 +7,7 @@ from ParserSettings import ParserSettings, load_settings
 from db_api import get_source_table, register_model, fetch_html_content_rows, put_segments, drop_pgvector_indexes, create_pgvector_indexes
 from parsing import parse_html
 from chunking import chunk_segments
-from embedding import embed_chunks, load_embedding_model
+from embedding import embed_chunks, load_embedding_model, embed_chunks_pooling, load_embedding_model_hf
 
 
 def parse_and_embed() -> None:
@@ -15,7 +15,19 @@ def parse_and_embed() -> None:
 	print(settings)
  
 	engine = create_engine(settings.database_url, pool_pre_ping=True)
-	model = load_embedding_model(settings)
+	model, tokenizer = load_embedding_model_hf(settings)
+ 
+	emb_vec_len = settings.embedding_dimension
+	table_map = {
+		384: "page_segment_vec384",
+		768: "page_segment_vec768",
+		1024: "page_segment_vec1024",
+	} 
+	
+	if emb_vec_len not in table_map:
+		raise ValueError(f"Unsupported vector length: {emb_vec_len}")
+
+	page_segment_table_name = table_map[emb_vec_len]
  
 	try:
 		drop_pgvector_indexes(engine)
@@ -45,7 +57,7 @@ def parse_and_embed() -> None:
 			parsed = parse_html(row["html_content"])
 			
 			chunks = chunk_segments(parsed.get("title") + ". " + parsed.get("article-content", ""), max_words=settings.chunk_length)
-			embeddings = embed_chunks(model, chunks, settings=settings)
+			embeddings = embed_chunks_pooling(model, tokenizer, chunks, settings=settings)
 
 			for (chunk, embedding) in zip(chunks, embeddings):
 				all_segments.append({
@@ -55,7 +67,7 @@ def parse_and_embed() -> None:
 					"model_id": model_id,
 				})
 
-		put_segments(engine, get_source_table(engine, source_schema, "page_segment"), all_segments)
+		put_segments(engine, get_source_table(engine, source_schema, page_segment_table_name), all_segments)
 		create_pgvector_indexes(engine)
 
 	finally:
@@ -65,7 +77,4 @@ def parse_and_embed() -> None:
 if __name__ == "__main__":
 	parse_and_embed()
  
-	#html_content = r.get("https://www.24ur.com/novice/slovenija-odloca/posveti-pri-predsednici-poslanci-se-bodo-prvic-uradno-prestevali.html").text
-	#parsed = parse_html(html_content=html_content)
-	#print(parsed)
  

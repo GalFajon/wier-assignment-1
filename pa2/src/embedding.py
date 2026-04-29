@@ -1,6 +1,7 @@
 from sentence_transformers import SentenceTransformer, CrossEncoder
 import torch
 from pathlib import Path
+from transformers import AutoTokenizer, AutoModel
 
 
 
@@ -17,6 +18,27 @@ def load_embedding_model(settings):
         model.save(str(model_dir))
 
     return model
+
+def load_embedding_model_hf(settings):
+    device_str = settings.model_run_device
+    device = device_str if torch.cuda.is_available() and device_str == "cuda" else "cpu"
+
+    model_dir = Path("./models") / settings.model_name.replace("/", "_")
+
+    if model_dir.exists():
+        tokenizer = AutoTokenizer.from_pretrained(model_dir)
+        model = AutoModel.from_pretrained(model_dir)
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(settings.model_name)
+        model = AutoModel.from_pretrained(settings.model_name)
+
+        tokenizer.save_pretrained(model_dir)
+        model.save_pretrained(model_dir)
+
+    model = model.to(device)
+    model.eval()
+
+    return model, tokenizer
 
 
 def load_reranking_model(settings):
@@ -35,8 +57,6 @@ def load_reranking_model(settings):
 
 
 def embed_chunks(model, chunk_list_raw, settings):
-    # print(chunk_list_raw)
-    # print('Chunk count: ', len(chunk_list_raw))
     embeddings = model.encode(
         chunk_list_raw,
         batch_size=settings.batch_size,
@@ -45,22 +65,41 @@ def embed_chunks(model, chunk_list_raw, settings):
         normalize_embeddings=True,
     )
 
-    target_dim = settings.embedding_dimension
-    output = []
+    return [emb.tolist() for emb in embeddings]
 
-    for emb in embeddings:
-        emb_list = emb.tolist()
+def embed_chunks_pooling(model, tokenizer, chunk_list_raw, settings):
+    device = next(model.parameters()).device 
+    embeddings = []
 
-        if len(emb_list) < target_dim:
-            emb_list = emb_list + [0.0] * (target_dim - len(emb_list))
-        elif len(emb_list) > target_dim:
-            emb_list = emb_list[:target_dim]
+    for i in range(0, len(chunk_list_raw), settings.batch_size):
+        batch = chunk_list_raw[i:i + settings.batch_size]
 
-        output.append(emb_list)
+        inputs = tokenizer(
+            batch,
+            padding=True,
+            truncation=True,
+            return_tensors="pt"
+        )
 
-    return output
+        inputs = {k: v.to(device) for k, v in inputs.items()}
 
+        with torch.no_grad():
+            outputs = model(**inputs)
 
+        token_embeddings = outputs.last_hidden_state
+        attention_mask = inputs["attention_mask"]
+
+        mask = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+        summed = torch.sum(token_embeddings * mask, dim=1)
+        counts = torch.clamp(mask.sum(dim=1), min=1e-9)
+
+        mean_pooled = summed / counts
+
+        mean_pooled = torch.nn.functional.normalize(mean_pooled, p=2, dim=1)
+
+        embeddings.extend(mean_pooled.cpu().numpy())
+
+    return [emb.tolist() for emb in embeddings]
 
 
 def embed_string(model, string, settings):
@@ -71,18 +110,34 @@ def embed_string(model, string, settings):
         normalize_embeddings=True,
     )
 
-    target_dim = settings.embedding_dimension
+    return emb.tolist()
 
-    emb_list = emb.tolist()
+def embed_string_pooling(model, tokenizer, string, settings):
+    device = next(model.parameters()).device
 
-    if len(emb_list) < target_dim:
-        emb_list = emb_list + [0.0] * (target_dim - len(emb_list))
-    elif len(emb_list) > target_dim:
-        emb_list = emb_list[:target_dim]
+    inputs = tokenizer(
+        string,
+        padding=True,
+        truncation=True,
+        return_tensors="pt"
+    )
 
-    return emb_list
+    inputs = {k: v.to(device) for k, v in inputs.items()}
 
+    with torch.no_grad():
+        outputs = model(**inputs)
 
+    token_embeddings = outputs.last_hidden_state
+    attention_mask = inputs["attention_mask"]
+
+    mask = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    summed = torch.sum(token_embeddings * mask, dim=1)
+    counts = torch.clamp(mask.sum(dim=1), min=1e-9)
+
+    mean_pooled = summed / counts
+    mean_pooled = torch.nn.functional.normalize(mean_pooled, p=2, dim=1)
+
+    return mean_pooled[0].cpu().numpy().tolist()
 
 
 

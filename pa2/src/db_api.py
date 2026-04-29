@@ -34,6 +34,8 @@ def register_model(engine: Engine, model_table: Table, model_name: str) -> int:
 			)
 			return result.scalar_one()
 
+
+
 def get_model_id(engine: Engine, model_table: Table, model_name: str) -> int | None:
     with engine.connect() as connection:
         result = connection.execute(
@@ -43,38 +45,62 @@ def get_model_id(engine: Engine, model_table: Table, model_name: str) -> int | N
     return result
 
 
-def drop_pgvector_indexes(engine: Engine):
-    with engine.connect() as connection:
-        connection.exec_driver_sql("DROP INDEX IF EXISTS public.idx_ps_embedding_cosine;")
-        connection.exec_driver_sql("DROP INDEX IF EXISTS public.idx_ps_embedding_l2;")
-        connection.commit()
 
+
+def drop_pgvector_indexes(engine: Engine):
+    tables = [
+        "page_segment_vec384",
+        "page_segment_vec768",
+        "page_segment_vec1024",
+    ]
+
+    with engine.connect() as connection:
+        for table in tables:
+            connection.exec_driver_sql(f"""
+                DROP INDEX IF EXISTS public.idx_{table}_embedding_cosine;
+            """)
+            connection.exec_driver_sql(f"""
+                DROP INDEX IF EXISTS public.idx_{table}_embedding_l2;
+            """)
+            connection.exec_driver_sql(f"""
+                DROP INDEX IF EXISTS public.idx_{table}_model;
+            """)
+        connection.commit()
 
 def create_pgvector_indexes(engine: Engine):
+    tables = [
+        "page_segment_vec384",
+        "page_segment_vec768",
+        "page_segment_vec1024",
+    ]
+
     with engine.connect() as connection:
-        # cos dist
-        connection.exec_driver_sql("""
-            CREATE INDEX IF NOT EXISTS idx_ps_embedding_cosine
-            ON public.page_segment
-            USING hnsw (embedding vector_cosine_ops)
-            WITH (m = 16, ef_construction = 64);
-        """)
+        for table in tables:
+            # cosine index
+            connection.exec_driver_sql(f"""
+                CREATE INDEX IF NOT EXISTS idx_{table}_embedding_cosine
+                ON public.{table}
+                USING hnsw (embedding vector_cosine_ops)
+                WITH (m = 16, ef_construction = 64);
+            """)
 
-        # l2 dist
-        connection.exec_driver_sql("""
-            CREATE INDEX IF NOT EXISTS idx_ps_embedding_l2
-            ON public.page_segment
-            USING hnsw (embedding vector_l2_ops)
-            WITH (m = 16, ef_construction = 64);
-        """)
+            # l2 index
+            connection.exec_driver_sql(f"""
+                CREATE INDEX IF NOT EXISTS idx_{table}_embedding_l2
+                ON public.{table}
+                USING hnsw (embedding vector_l2_ops)
+                WITH (m = 16, ef_construction = 64);
+            """)
 
-        # model id
-        connection.exec_driver_sql("""
-            CREATE INDEX IF NOT EXISTS idx_page_segment_model
-            ON public.page_segment(model_id);
-        """)
+            # model_id index
+            connection.exec_driver_sql(f"""
+                CREATE INDEX IF NOT EXISTS idx_{table}_model
+                ON public.{table}(model_id);
+            """)
 
         connection.commit()
+
+
 
 
 def put_segments(engine: Engine, table: Table, segments: list[dict[str, Any]]):
@@ -119,6 +145,8 @@ def fetch_html_content_rows(
     ]
 
 
+
+
 def query_page_segments(
     engine,
     model_id: int,
@@ -126,18 +154,33 @@ def query_page_segments(
     query_vector,
     top_n: int = 5
 ):
-    if metric == "cosine":
-        op = "<=>"
-    elif metric == "l2":
-        op = "<->"
-    elif metric == "l1":
-        op = "<+>"
-    else:
+    dim = len(query_vector)
+
+    table_map = {
+        384: "page_segment_vec384",
+        768: "page_segment_vec768",
+        1024: "page_segment_vec1024",
+    }
+
+    if dim not in table_map:
+        raise ValueError(f"Unsupported vector length: {dim}")
+
+    table = table_map[dim]
+
+    op_map = {
+        "cosine": "<=>",
+        "l2": "<->",
+        "l1": "<+>",
+    }
+
+    if metric not in op_map:
         raise ValueError("metric must be one of: cosine, l2, l1")
+
+    op = op_map[metric]
 
     sql = f"""
     SELECT page_segment, embedding {op} (:query_vec)::vector AS distance
-    FROM public.page_segment
+    FROM public.{table}
     WHERE model_id = :model_id
     ORDER BY embedding {op} (:query_vec)::vector
     LIMIT :top_n;
