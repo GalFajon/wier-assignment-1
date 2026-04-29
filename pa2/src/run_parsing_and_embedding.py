@@ -36,7 +36,7 @@ def parse_and_embed() -> None:
 		rows = fetch_html_content_rows(
 			engine=engine,
 			source_table=source_table,
-			limit=settings.parse_limit,
+			limit=2000,
 		)
 		
 		print(f"Fetched rows with html_content: {len(rows)}")
