@@ -8,7 +8,7 @@ from sqlalchemy import Engine, create_engine
 import mplcursors
 import string
 from umap import UMAP
-from embedding import embed_string2, load_embedding_model2, load_reranking_model, rerank_candidates, rerank_candidates2
+from embedding import embed_string2, load_embedding_model2, load_reranking_model, rerank_candidates, rerank_candidates2, load_embedding_model_hf2
 from run_query import query_database, query_database2
 
 cmap = plt.get_cmap("tab20")
@@ -206,11 +206,13 @@ def visualize_precision_recall(models, query):
     # model_to_chunk_dict = dict()
     colors=["tab:blue", "tab:red", "tab:green", "tab:orange", "tab:purple"]
     for j,m in enumerate(models):
-        model = load_embedding_model2(model_names[m], settings.model_run_device)
+        if m != 10:
+            model = load_embedding_model2(model_names[m], settings.model_run_device)
+        else:
+            model = load_embedding_model_hf2(settings, model_names[m])
         chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
         print(len(chunks))
-        cleaned_chunks = [c[0].replace("\"\"\"", "").replace("\"\"", "") for c in chunks]
-        texts = [c[c.index("\"")+1:c.index("\"[")-1].lower() for c in cleaned_chunks]
+        texts = [c[0].lower() for c in chunks]
         relevancy = np.where(relevancy_score_keywords(np.array(texts), ["putin", "zelenski", "raket", "ukrajin"]) >= 3, 1, 0)
         # print(texts)
         #for t,r in zip(texts, relevancy):
@@ -222,7 +224,6 @@ def visualize_precision_recall(models, query):
 
         reranked = rerank_candidates2(reranker, query, chunks, return_n)
         texts = [r['text'].lower() for r in reranked]
-        texts = [c[c.index("\"")+1:c.index("\"[")-1] for c in texts]
         relevancy = np.where(relevancy_score_keywords(np.array(texts), ["putin", "zelenski", "raket", "ukrajin"]) >= 3, 1, 0)
         cumsum = np.cumsum(relevancy) / xs
         plt.plot(xs, cumsum, color=colors[j], label=f"{model_names[m][:16]} + rerank", alpha=1, zorder=50)

@@ -54,6 +54,27 @@ def load_embedding_model_hf(settings):
 
     return model, tokenizer
 
+def load_embedding_model_hf2(settings, model_name):
+    device_str = settings.model_run_device
+    device = device_str if torch.cuda.is_available() and device_str == "cuda" else "cpu"
+
+    model_dir = Path("./models") / model_name.replace("/", "_")
+
+    if model_dir.exists():
+        tokenizer = AutoTokenizer.from_pretrained(model_dir)
+        model = AutoModel.from_pretrained(model_dir)
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModel.from_pretrained(model_name)
+
+        tokenizer.save_pretrained(model_dir)
+        model.save_pretrained(model_dir)
+
+    model = model.to(device)
+    model.eval()
+
+    return model, tokenizer
+
 
 def load_reranking_model(settings):
     devic_str = settings.model_run_device
@@ -125,6 +146,25 @@ def embed_string(model, string, settings):
     )
 
     return emb.tolist()
+
+def embed_string2(model, string, embedding_dimension):
+    emb = model.encode(
+        string,
+        convert_to_numpy=True,
+        show_progress_bar=False,
+        normalize_embeddings=True,
+    )
+
+    target_dim = embedding_dimension
+
+    emb_list = emb.tolist()
+
+    if len(emb_list) < target_dim:
+        emb_list = emb_list + [0.0] * (target_dim - len(emb_list))
+    elif len(emb_list) > target_dim:
+        emb_list = emb_list[:target_dim]
+
+    return emb_list
 
 def embed_string_pooling(model, tokenizer, string, settings):
     device = next(model.parameters()).device
