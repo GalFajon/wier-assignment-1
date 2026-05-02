@@ -52,7 +52,7 @@ def load_settings() -> ParserSettings:
 	chunk_lenght = int(os.getenv("CHUNK_LENGTH", "64"))
 	model_run_device = os.getenv("MODEL_RUN_DEVICE", "cpu")
 	model_name = os.getenv("MODEL_NAME", "no-model-found-error-in-env")
-	embedding_dimension = int(os.getenv("EMBEDING_DIMENSION", "768"))
+	embedding_dimension = int(os.getenv("EMBEDDING_DIMENSION", "786"))
 	batch_size = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
 	query_return_n = int(os.getenv("QUERY_RETURN_N", "100"))
 	distance_metric = os.getenv("DISTANCE_METRIC", "cos_similarity")

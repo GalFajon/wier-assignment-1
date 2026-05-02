@@ -267,3 +267,4 @@ __marimo__/
 *.tmp
 
 pa1/db/*.sql
+pa2/DB_with_embeddings.sql

@@ -121,10 +121,11 @@ def fetch_html_content_rows(
 def get_segments_by_model(
     engine: Engine,
     model_id: int,
-    max_segments=2000
+    max_segments=2000,
+    vector_size=384
 ):
     query = f"""
-        SELECT page_segment, embedding FROM page_segment
+        SELECT page_segment, embedding FROM page_segment_vec{vector_size}
         WHERE model_id= :model_id
         LIMIT :max_segments
     """
@@ -134,7 +135,7 @@ def get_segments_by_model(
             text(query),
             {
                 "model_id": model_id,
-                "max_segments": max_segments
+                "max_segments": max_segments,
             }
         ).fetchall()
     return result
@@ -144,6 +145,7 @@ def query_page_segments(
     model_id: int,
     metric: str,
     query_vector,
+    dimension=384,
     top_n: int = 5
 ):
     if metric == "cosine":
@@ -156,8 +158,8 @@ def query_page_segments(
         raise ValueError("metric must be one of: cosine, l2, l1")
 
     sql = f"""
-    SELECT page_segment, embedding {op} (:query_vec)::vector AS distance
-    FROM public.page_segment
+    SELECT page_segment_vec{dimension}, embedding {op} (:query_vec)::vector AS distance
+    FROM public.page_segment_vec{dimension}
     WHERE model_id = :model_id
     ORDER BY embedding {op} (:query_vec)::vector
     LIMIT :top_n;
