@@ -195,7 +195,7 @@ def relevancy_score_keywords(texts: np.ndarray, keywords):
                 scores[i] += 1
     return scores
 
-def visualize_precision_recall(models, query):
+def visualize_precision_recall(models, query, keywords):
     plt.figure()
     plt.title(f"Precision & recall, Query={query}")
     return_n = 40
@@ -213,10 +213,9 @@ def visualize_precision_recall(models, query):
         chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
         print(len(chunks))
         texts = [c[0].lower() for c in chunks]
-        relevancy = np.where(relevancy_score_keywords(np.array(texts), ["putin", "zelenski", "raket", "ukrajin"]) >= 3, 1, 0)
-        # print(texts)
-        #for t,r in zip(texts, relevancy):
-        #    print(t, r)
+        relevancy = np.where(relevancy_score_keywords(np.array(texts), keywords) >= len(keywords)-1, 1, 0)
+        for t in texts:
+            print(t)
         print(relevancy)
         
         cumsum = np.cumsum(relevancy) / xs
@@ -224,9 +223,9 @@ def visualize_precision_recall(models, query):
 
         reranked = rerank_candidates2(reranker, query, chunks, return_n)
         texts = [r['text'].lower() for r in reranked]
-        relevancy = np.where(relevancy_score_keywords(np.array(texts), ["putin", "zelenski", "raket", "ukrajin"]) >= 3, 1, 0)
+        relevancy = np.where(relevancy_score_keywords(np.array(texts), keywords) >= len(keywords)-1, 1, 0)
         cumsum = np.cumsum(relevancy) / xs
-        plt.plot(xs, cumsum, color=colors[j], label=f"{model_names[m][:16]} + rerank", alpha=1, zorder=50)
+        plt.plot(xs, cumsum+0.005, color=colors[j], label=f"{model_names[m][:16]} + rerank", alpha=1, zorder=50)
         # model_to_chunk_dict[m] = chunks
 
     plt.xlabel("# Retrieved results")
@@ -247,5 +246,8 @@ if __name__ == '__main__':
     # visualize_embeddings(engine, 13, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 9, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=1024)
 
-    visualize_precision_recall([1, 8, 9, 13], "Vladimir Putin, rakete nad ukrajino, zelenski odziv")
+    # visualize_precision_recall([1, 8, 10, 13, 9], "Vladimir Putin, raketni napad na urajino, zelenski odziv", ["putin", "zelensk", "ukrajin", "raket"])
+    visualize_precision_recall([1, 8, 10, 13, 9], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ujetni"])
+    # visualize_precision_recall([1, 8, 9, 13], "Putin, Zelenski in Trump pogovor.", ["putin", "zelenski", "trump"])
+    # visualize_precision_recall([1, 8, 10, 13, 9], "Ali bo iran ostal v nogometni ligi?", ["iran", "nogomet", "liga"])
 

@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 
 
 from ParserSettings import ParserSettings, load_settings
-from embedding import load_embedding_model, load_embedding_model2, load_reranking_model, embed_string, rerank_candidates, embed_string2
+from embedding import load_embedding_model, load_embedding_model2, load_reranking_model, embed_string, rerank_candidates, embed_string2, embed_string_pooling
 from db_api import get_source_table, get_model_id, query_page_segments
 
 
@@ -26,7 +26,10 @@ def query_database(model, query_string, settings: ParserSettings):
     return chunks
 
 def query_database2(model, query_string, settings, dimensions, query_return_n, distance_metric, model_name):
-    query_vector = embed_string2(model, query_string, dimensions)
+    if type(model) == tuple:
+        query_vector = embed_string_pooling(model[0], model[1], query_string, settings)
+    else:
+        query_vector = embed_string2(model, query_string, dimensions)
     n_chunks = query_return_n
     distance_metric = distance_metric
     embedding_model_name = model_name
