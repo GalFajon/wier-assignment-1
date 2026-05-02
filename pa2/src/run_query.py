@@ -2,11 +2,11 @@ from sqlalchemy import create_engine
 
 
 from ParserSettings import ParserSettings, load_settings
-from embedding import load_embedding_model, load_reranking_model, embed_string, rerank_candidates
+from embedding import load_embedding_model, load_embedding_model2, load_reranking_model, embed_string, rerank_candidates, embed_string2
 from db_api import get_source_table, get_model_id, query_page_segments
 
 
-def query_database(model, query_string, settings):
+def query_database(model, query_string, settings: ParserSettings):
     query_vector = embed_string(model, query_string, settings)
     n_chunks = settings.query_return_n
     distance_metric = settings.distance_metric
@@ -21,7 +21,26 @@ def query_database(model, query_string, settings):
     if model_id == None:
         raise ValueError('Model Name Not Found In DB')
 
-    chunks = query_page_segments(engine, model_id, distance_metric, query_vector, n_chunks)
+    chunks = query_page_segments(engine, model_id, distance_metric, query_vector, dimension=settings.embedding_dimension, top_n=n_chunks)
+    
+    return chunks
+
+def query_database2(model, query_string, settings, dimensions, query_return_n, distance_metric, model_name):
+    query_vector = embed_string2(model, query_string, dimensions)
+    n_chunks = query_return_n
+    distance_metric = distance_metric
+    embedding_model_name = model_name
+
+    engine = create_engine(settings.database_url, pool_pre_ping=True)
+    source_table = get_source_table(engine=engine, schema_name=settings.table_schema, table_name=settings.table_name)
+    source_schema = source_table.schema or settings.table_schema
+    model_table = get_source_table(engine, source_schema, "model")
+    model_id = get_model_id(engine, model_table, embedding_model_name)
+    
+    if model_id == None:
+        raise ValueError('Model Name Not Found In DB')
+
+    chunks = query_page_segments(engine, model_id, distance_metric, query_vector, dimension=dimensions, top_n=n_chunks)
     
     return chunks
 
@@ -35,6 +54,7 @@ if __name__ == '__main__':
     print(f"Querying with: {QUERY_STRING}")
         
     settings = load_settings()
+    print(settings)
     model = load_embedding_model(settings)
     reranker = load_reranking_model(settings)
 
@@ -45,5 +65,5 @@ if __name__ == '__main__':
         text = final_chunk_data['text']
         dist = final_chunk_data['dist']
         cross_score = final_chunk_data['cross_score']
-        print(f'{i+1}: Text={text[:30]}... Cross_score={cross_score}, Distance={dist}')
+        print(f'{i+1}: Text={text[:300]}... Cross_score={cross_score}, Distance={dist}')
     

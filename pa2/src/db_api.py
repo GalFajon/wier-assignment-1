@@ -144,6 +144,27 @@ def fetch_html_content_rows(
         for row in rows
     ]
 
+def get_segments_by_model(
+    engine: Engine,
+    model_id: int,
+    max_segments=2000,
+    vector_size=384
+):
+    query = f"""
+        SELECT page_segment, embedding FROM page_segment_vec{vector_size}
+        WHERE model_id= :model_id
+        LIMIT :max_segments
+    """
+
+    with engine.connect() as connection:
+        result = connection.execute(
+            text(query),
+            {
+                "model_id": model_id,
+                "max_segments": max_segments,
+            }
+        ).fetchall()
+    return result
 
 
 
@@ -152,6 +173,7 @@ def query_page_segments(
     model_id: int,
     metric: str,
     query_vector,
+    dimension=384,
     top_n: int = 5
 ):
     dim = len(query_vector)
