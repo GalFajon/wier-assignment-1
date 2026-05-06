@@ -28,134 +28,79 @@
 \maketitle
 
 \begin{abstract}
-This assignment builds on the PA1 crawl by extracting meaningful content from HTML pages,
-segmenting it into coherent text chunks, encoding the chunks with a sentence embedding model,
-and storing them in a pgvector-enabled PostgreSQL database for semantic retrieval.
-We implement parsing tailored to 24ur.com articles, apply sentence-aware
-chunking, index embeddings with HNSW, and provide a query and reranking pipeline based on
-vector similarity and a cross-encoder reranker.
+This assignment builds on the PA1 crawl by extracting meaningful content from HTML pages, segmenting it into coherent text chunks, encoding the chunks with a sentence embedding model, and storing them in a pgvector-enabled PostgreSQL database for semantic retrieval.
+
+We implement parsing tailored to 24ur.com articles, apply sentence-aware chunking, index embeddings with HNSW, and provide a query and reranking pipeline based on vector similarity and a cross-encoder reranker.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-This report describes the design and implementation of a parsing and semantic retrieval
-pipeline that processes the HTML pages collected by the preferential crawler in PA1.
-The goal is to extract clean, domain-relevant text from 24ur.com, segment it into
-meaningful chunks, and store vector embeddings in a pgvector database to support
-domain-specific question answering.
+This report describes the design and implementation of a parsing and semantic retrieval pipeline that processes the HTML pages collected by the preferential crawler in PA1. The goal is to extract clean, domain-relevant text from 24ur.com, segment it into meaningful chunks, and store vector embeddings in a pgvector database to support domain-specific question answering.
 
-The system consists of four stages: filtering and parsing HTML pages using XPath and
-regular expressions, chunking the cleaned text into sentence-aware segments,
-embedding each segment and persisting vectors into a pgvector-backed table, and
-retrieving and reranking relevant segments for user queries.
+The system consists of four stages: filtering and parsing HTML pages using XPath and regular expressions, chunking the cleaned text into sentence-aware segments, embedding each segment and persisting vectors into a pgvector-backed table, and retrieving and reranking relevant segments for user queries.
 
 \section{Methodology}
 
 \subsection{Website filtering and data source}
-We reuse the PA1 crawl database from the previous assignment and restrict processing to HTML pages with non-empty
-\texttt{html\_content}. In our pipeline this filtering is performed in the database
-query that fetches page IDs and HTML bodies.
+We reuse the PA1 crawl database from the previous assignment and restrict processing to HTML pages with non-empty \texttt{html\_content}. In our pipeline this filtering is performed in the database query that fetches page IDs and HTML bodies.
 
 \subsection{HTML parsing with XPath and regex}
-HTML parsing is implemented with \texttt{lxml}. We extract the article title by first
-reading the OpenGraph metadata (\texttt{//meta[@property='og:title']/@content}); if
-missing, we fall back to \texttt{//title}. A regex post-process removes the site suffix
-``\texttt{| 24ur.com}'' and normalizes whitespace. The main article body is extracted
-from the \texttt{\#article-body} node using XPath, and non-content elements
-(\texttt{script}, \texttt{style}, \texttt{noscript}, \texttt{img}, \texttt{figure},
-\texttt{svg}, \texttt{picture}) are removed to keep only the textual content.
+HTML parsing is implemented with \texttt{lxml}. We extract the article title by first reading the OpenGraph metadata (\texttt{//meta[@property='og:title']/@content}); if missing, we fall back to \texttt{//title}. A regex post-process removes the site suffix ``\texttt{| 24ur.com}'' and normalizes whitespace. The main article body is extracted from the \texttt{\#article-body} node using XPath, and non-content elements (\texttt{script}, \texttt{style}, \texttt{noscript}, \texttt{img}, \texttt{figure}, \texttt{svg}, \texttt{picture}) are removed to keep only the textual content.
 
-We additionally capture the lead summary by locating the main article picture and the
-adjacent summary paragraph via XPath, then prepend it to the article body. Regex is
-used for lightweight text normalization (whitespace collapsing) and title cleanup.
+We additionally capture the lead summary by locating the main article picture and the adjacent summary paragraph via XPath, then prepend it to the article body. Regex is used for lightweight text normalization (whitespace collapsing) and title cleanup.
+
 This hybrid approach keeps extraction robust while remaining lightweight and transparent.
 
 \subsection{Text chunking strategy}
-We split the extracted text using NLTK's Slovene sentence tokenizer and build chunks by
-accumulating complete sentences until a configurable maximum word count is reached
-(\texttt{CHUNK\_LENGTH} in the environment, default value 256). This preserves sentence boundaries and
-keeps each segment topically coherent.
+We split the extracted text using NLTK's Slovene sentence tokenizer and build chunks by accumulating complete sentences until a configurable maximum word count is reached (\texttt{CHUNK\_LENGTH} in the environment, default value 256). This preserves sentence boundaries and keeps each segment topically coherent.
 
 \subsection{Database schema and pgvector indexing}
-We extend the PA1 database with a \texttt{cleaned\_content} column and three segment tables
-for different embedding sizes: \texttt{page\_segment\_vec384}, \texttt{page\_segment\_vec768},
-and \texttt{page\_segment\_vec1024}. Each segment row stores the page ID, the model ID,
-the text segment, and the vector embedding. A separate \texttt{model} table records the
-embedding model name, enabling multiple models to coexist.
+We extend the PA1 database with a \texttt{cleaned\_content} column and three segment tables for different embedding sizes: \texttt{page\_segment\_vec384}, \texttt{page\_segment\_vec768}, and \texttt{page\_segment\_vec1024}. Each segment row stores the page ID, the model ID, the text segment, and the vector embedding. A separate \texttt{model} table records the embedding model name, enabling multiple models to coexist.
 
-For fast similarity search we add HNSW indexes for cosine and L2 distances, plus a
-\texttt{model\_id} index to speed up model-specific filtering.
+For fast similarity search we add HNSW indexes for cosine and L2 distances, plus a \texttt{model\_id} index to speed up model-specific filtering.
 
 \subsection{Embedding models}
-Embeddings are generated using transformer models. Our initial configuration used \texttt{sentence-transformers/all-MiniLM-L6-v2}
-and mean pooling over the token embeddings with L2 normalization. When evaluating performance, we used multiple 
-models, including \texttt{sentence-transformers/all-mpnet-base-v2}, \texttt{BAAI/bge-m3}, \texttt{EMBEDDIA/sloberta}, and 
-\texttt{cjvt/crosloengual-bert-si-nli}, to analyze quality and language coverage.
+Embeddings are generated using transformer models. Our initial configuration used \texttt{sentence-transformers/all-MiniLM-L6-v2} and mean pooling over the token embeddings with L2 normalization. When evaluating performance, we used multiple  models, including \texttt{sentence-transformers/all-mpnet-base-v2}, \texttt{BAAI/bge-m3}, \texttt{EMBEDDIA/sloberta}, and  \texttt{cjvt/crosloengual-bert-si-nli}, to analyze quality and language coverage.
 
 \subsection{Querying and similarity metrics}
-Query vectors are computed with the same embedding model as the indexed segments and
-searched in pgvector using one of three metrics: cosine distance, L2 distance, or L1
-distance. Our default configuration uses cosine distance.
+Query vectors are computed with the same embedding model as the indexed segments and searched in pgvector using one of three metrics: cosine distance, L2 distance, or L1 distance. Our default configuration uses cosine distance.
 
 \subsection{Reranking}
-To improve relevance ordering, we apply a cross-encoder reranker on the top-$k$ results
-returned by pgvector. The reranker scores each (query, segment) pair and reorders the
-results by predicted relevance. We use \texttt{cross-encoder/ms-marco-MiniLM-L6-v2} as
-the default reranker model.
+To improve relevance ordering, we apply a cross-encoder reranker on the top-$k$ results returned by pgvector. The reranker scores each (query, segment) pair and reorders the results by predicted relevance. We use \texttt{cross-encoder/ms-marco-MiniLM-L6-v2} as the default reranker model.
 
-\section{Embedding Analysis}
-We compared multiple embedding models and dimensions using a small evaluation script that
-measures precision-at-$k$ against keyword-based relevance heuristics and visualizes
-embedding clusters. The tested models include multilingual and Slovene-specific models. 
-We observed that multilingual models offer broader coverage, while Slovene-specific models can improve 
-precision on domain-specific queries.
+\section{Results}
+We compared multiple embedding models and dimensions using a small evaluation script that measures precision-at-$k$ against keyword-based relevance heuristics and visualizes embedding clusters. The tested models include multilingual and Slovene-specific models. 
 
-\section{Retrieval Demo}
-The demo program takes a user query, computes its embedding, performs a similarity search
-over pgvector, and returns the top-$k$ segments. We include three queries that retrieve
-relevant results for our domain and three queries that initially fail to retrieve the
-expected information. The failed queries are used in the reranking evaluation.
+We observed that multilingual models offer broader coverage, while Slovene-specific models can improve precision on domain-specific queries.
+
+\subsection{Retrieval Demo}
+The demo program takes a user query, computes its embedding, performs a similarity search over pgvector, and returns the top-$k$ segments. We include three queries that retrieve relevant results for our domain and three queries that initially fail to retrieve the expected information. The failed queries are used in the reranking evaluation.
 
 % SLIKICA EXAMPLE USE ALNEKI
 
-\section{Reranking Evaluation}
+\subsection{Reranking Evaluation}
 % VIDM DA STA DVE FUNKCIJI
-We apply a cross-encoder reranker to reorder the top-$k$ segments. In our tests this
-improves the ranking of relevant segments when the initial embedding retrieval is noisy.
-We report three examples where reranking improves the result ordering and one example
-where reranking still fails to surface the expected information.
+We apply a cross-encoder reranker to reorder the top-$k$ segments. In our tests this improves the ranking of relevant segments when the initial embedding retrieval is noisy. We report three examples where reranking improves the result ordering and one example where reranking still fails to surface the expected information.
 
-\section{Limitations}
+\subsection{Limitations}
 % PROBABLY SE DA ŠE KEJ DOPISAT
-The parser is tailored to 24ur.com and relies on stable HTML structure. Pages that
-deviate from the \texttt{\#article-body} template or heavily script-rendered content
-can yield empty or partial text. Chunking relies on sentence tokenization quality and
-may produce uneven chunk sizes. Reranking improves accuracy but adds latency, which may
-be problematic for interactive settings.
+The parser is tailored to 24ur.com and relies on stable HTML structure. Pages that deviate from the \texttt{\#article-body} template or heavily script-rendered content can yield empty or partial text. Chunking relies on sentence tokenization quality and may produce uneven chunk sizes. Reranking improves accuracy but adds latency, which may be problematic for interactive settings.
 
-\section{Discussion}
-The pipeline satisfies the assignment requirements by combining parsing,
-sentence-aware chunking, pgvector indexing, and reranking. Its main strength is a
-transparent extraction procedure tailored to 24ur.com that preserves clean article text
-and yields coherent segments for retrieval.
+\subsection{Discussion}
+The pipeline satisfies the assignment requirements by combining parsing, sentence-aware chunking, pgvector indexing, and reranking. Its main strength is a transparent extraction procedure tailored to 24ur.com that preserves clean article text and yields coherent segments for retrieval.
 
 % TUKI SE DA ŠE KEJ DISCUSSAT
 
-There are several limitations. The parser targets the \texttt{\#article-body} structure
-and will fail on pages that deviate from this template, yielding empty content. Chunking
-relies on sentence tokenization quality, which can be noisy in HTML-derived text. 
+There are several limitations. The parser targets the \texttt{\#article-body} structure and will fail on pages that deviate from this template, yielding empty content. Chunking relies on sentence tokenization quality, which can be noisy in HTML-derived text. 
+
 Finally, cross-encoder reranking improves precision but increases query latency.
 
-\paragraph{Examples and failure cases.}
+\subsection{Examples and failure cases.}
 % VIZUALIZACIJE, ACTUAL DATA, ETC. ETC. 
 
 \section{Conclusion}
-We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl of
-24ur.com. The system parses raw HTML, chunks text using sentence boundaries, stores embeddings 
-in a pgvector database with HNSW indexing, and retrieves and reranks results for user queries. 
-The approach is modular, supports multiple embedding models, and can be scaled to the full crawl
-by adjusting the parsing limit.
+We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl of 24ur.com. The system parses raw HTML, chunks text using sentence boundaries, stores embeddings in a pgvector database with HNSW indexing, and retrieves and reranks results for user queries. The approach is modular, supports multiple embedding models, and can be scaled to the full crawl by adjusting the parsing limit.
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref}
