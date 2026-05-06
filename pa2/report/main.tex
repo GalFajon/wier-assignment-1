@@ -61,7 +61,7 @@ We extend the PA1 database with a \texttt{cleaned\_content} column and three seg
 For fast similarity search we add HNSW indexes for cosine and L2 distances, plus a \texttt{model\_id} index to speed up model-specific filtering.
 
 \subsection{Embedding models}
-Embeddings are generated using transformer models. Our initial configuration used \texttt{sentence-transformers/all-MiniLM-L6-v2} and mean pooling over the token embeddings with L2 normalization. When evaluating performance, we used multiple  models, including \texttt{sentence-transformers/all-mpnet-base-v2}, \texttt{BAAI/bge-m3}, \texttt{EMBEDDIA/sloberta}, and  \texttt{cjvt/crosloengual-bert-si-nli}, to analyze quality and language coverage.
+Embeddings are generated using transformer models. Our initial configuration used \texttt{sentence-transformers/all-MiniLM-L6-v2}\cite{all-miniLM} and mean pooling over the token embeddings with L2 normalization. When evaluating performance, we used multiple  models, including \texttt{sentence-transformers/all-mpnet-base-v2}\cite{all-mpnet-base-v2}, \texttt{BAAI/bge-m3}\cite{bge-m3}, \texttt{EMBEDDIA/sloberta}\cite{sloberta}, and  \texttt{cjvt/crosloengual-bert-si-nli}\cite{crosloengual-bert-si-nli}, to analyze quality and language coverage.
 
 \subsection{Querying and similarity metrics}
 Query vectors are computed with the same embedding model as the indexed segments and searched in pgvector using one of three metrics: cosine distance, L2 distance, or L1 distance. Our default configuration uses cosine distance.
