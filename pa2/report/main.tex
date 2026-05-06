@@ -69,6 +69,9 @@ Query vectors are computed with the same embedding model as the indexed segments
 \subsection{Reranking}
 To improve relevance ordering, we apply a cross-encoder reranker on the top-$k$ results returned by pgvector. The reranker scores each (query, segment) pair and reorders the results by predicted relevance. We use \texttt{cross-encoder/ms-marco-MiniLM-L6-v2} as the default reranker model.
 
+\section{Experiments}
+% Methods we tried using but didn't
+
 \section{Results}
 We compared multiple embedding models and dimensions using a small evaluation script that measures precision-at-$k$ against keyword-based relevance heuristics and visualizes embedding clusters. The tested models include multilingual and Slovene-specific models. 
 
