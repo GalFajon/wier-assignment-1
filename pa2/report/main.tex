@@ -183,7 +183,7 @@ Similarly, we evaluated the performance of the reranking models by first retriev
 \end{figure}
 
 
-Finally, we measured the impact of the used distance metric when calculating embedding similarity. Since some models normalize their embeddings by default, we used only \texttt{sentence-transformers/all-MiniLM-L6-v2} for our experiments, allowing us to use both normalized and unnormalized embeddings.
+Finally, we measured the impact of the used distance metric when calculating embedding similarity. We compared cosine, L1 and L2 distance metrics on the embeddings of the best performing embedding model.
 
 \begin{figure}[H]
     \centering

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import os
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class ParserSettings:
     #DB
 	database_url: str

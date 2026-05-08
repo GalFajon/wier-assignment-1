@@ -14,6 +14,10 @@
    docker compose up -d db
    ```
 
+   ```powershell
+   gdown https://drive.google.com/file/d/1ecdRDZfovBy1ImHaQOKT6i7MkgZ5rpZs/view?usp=drive_link
+   ```
+
 3. Import your PA1 crawler database dump manually by downloading the 4thcrawl.sql file
 ```powershell
 docker cp .\4thcrawl.sql crawler-postgres:/tmp/4thcrawl.dump
