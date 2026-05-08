@@ -5,9 +5,13 @@ from ParserSettings import ParserSettings, load_settings
 from embedding import load_embedding_model, load_embedding_model2, load_reranking_model, embed_string, rerank_candidates, embed_string2, embed_string_pooling
 from db_api import get_source_table, get_model_id, query_page_segments
 
+import numpy as np
 
 def query_database(model, query_string, settings: ParserSettings):
     query_vector = embed_string(model, query_string, settings)
+    vector_length = np.linalg.norm(query_vector)
+    print(vector_length)
+    
     n_chunks = settings.query_return_n
     distance_metric = settings.distance_metric
     embedding_model_name = settings.model_name

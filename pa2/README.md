@@ -1,4 +1,11 @@
 # PA2
+
+## TODO:
+- demo program for query -> retrieved chunks
+- graph of similarity metrics
+
+
+
 ## How to use:
 
 1. Create an environment file:

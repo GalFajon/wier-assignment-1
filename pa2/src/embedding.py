@@ -97,7 +97,7 @@ def embed_chunks(model, chunk_list_raw, settings):
         batch_size=settings.batch_size,
         convert_to_numpy=True,
         show_progress_bar=False,
-        normalize_embeddings=True,
+        normalize_embeddings=False,
     )
 
     return [emb.tolist() for emb in embeddings]
@@ -142,7 +142,7 @@ def embed_string(model, string, settings):
         string,
         convert_to_numpy=True,
         show_progress_bar=False,
-        normalize_embeddings=True,
+        normalize_embeddings=False,
     )
 
     return emb.tolist()
