@@ -166,7 +166,76 @@ def get_segments_by_model(
         ).fetchall()
     return result
 
+def get_segments_by_id(
+    engine: Engine,
+    ids: list[int],
+    dim=384
+):
 
+    table_map = {
+        384: "page_segment_vec384",
+        768: "page_segment_vec768",
+        1024: "page_segment_vec1024",
+    }
+
+    if dim not in table_map:
+        raise ValueError(f"Unsupported vector length: {dim}")
+
+    table = table_map[dim]
+
+
+    sql = f"""
+    select id, page_segment from public.{table}
+    where id in {tuple(ids)}
+    """
+
+    with engine.connect() as connection:
+        result = connection.execute(
+            text(sql),
+            {
+                
+            }
+        ).fetchall()
+
+    return result
+
+
+def get_page_segments(
+    engine,
+    dimension=384,
+    n=50
+):
+     
+    dim = dimension
+
+    table_map = {
+        384: "page_segment_vec384",
+        768: "page_segment_vec768",
+        1024: "page_segment_vec1024",
+    }
+
+    if dim not in table_map:
+        raise ValueError(f"Unsupported vector length: {dim}")
+
+    table = table_map[dim]
+
+
+    sql = f"""
+    select page_id, COUNT(*), array_agg(id) from public.{table}
+    group by page_id
+    having COUNT(*) > 6
+    LIMIT {n};
+    """
+
+    with engine.connect() as connection:
+        result = connection.execute(
+            text(sql),
+            {
+                
+            }
+        ).fetchall()
+
+    return result
 
 def query_page_segments(
     engine,
@@ -201,7 +270,7 @@ def query_page_segments(
     op = op_map[metric]
 
     sql = f"""
-    SELECT page_segment, embedding {op} (:query_vec)::vector AS distance
+    SELECT page_segment, embedding {op} (:query_vec)::vector AS distance, id
     FROM public.{table}
     WHERE model_id = :model_id
     ORDER BY embedding {op} (:query_vec)::vector
