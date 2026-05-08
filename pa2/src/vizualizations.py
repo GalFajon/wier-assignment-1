@@ -8,8 +8,12 @@ from sqlalchemy import Engine, create_engine
 import mplcursors
 import string
 from umap import UMAP
-from embedding import embed_string2, load_embedding_model2, load_reranking_model, rerank_candidates, rerank_candidates2, load_embedding_model_hf2
+from embedding import embed_string2, load_embedding_model2, load_reranking_model, load_reranking_model2, rerank_candidates, rerank_candidates2, load_embedding_model_hf2
 from run_query import query_database, query_database2
+import Stemmer
+import stopwordsiso as stopwords
+import bm25s
+from sklearn.metrics import ndcg_score
 
 cmap = plt.get_cmap("tab20")
 
@@ -31,7 +35,7 @@ model_dims = {
     }
 
 from ParserSettings import load_settings
-from db_api import get_segments_by_model
+from db_api import get_page_segments, get_segments_by_model, get_segments_by_id
 
 def get_embedding_pca(embeddings, dim=2):
     pca = PCA(n_components=dim)
@@ -195,59 +199,180 @@ def relevancy_score_keywords(texts: np.ndarray, keywords):
                 scores[i] += 1
     return scores
 
-def visualize_precision_recall(models, query, keywords):
+def relevancy_score_bm25(texts: list[str], query: str):
+
+    # Tokenize the corpus and only keep the ids (faster and saves memory)
+    corpus_tokens = bm25s.tokenize(texts, stopwords=stopwords.stopwords("sl"))
+
+    # Create the BM25 model and index the corpus
+    retriever = bm25s.BM25(method="bm25+")
+    retriever.index(corpus_tokens)
+
+    # Query the corpus
+    query_tokens = bm25s.tokenize(query)
+
+    # Get top-k results as a tuple of (doc ids, scores). Both are arrays of shape (n_queries, k).
+    # To return docs instead of IDs, set the `corpus=corpus` parameter.
+    results, scores = retriever.retrieve(query_tokens, k=len(texts), sorted=False)
+
+    # for i in range(results.shape[1]):
+    #     doc, score = results[0, i], scores[0, i]
+    #     print(f"Rank {i+1} (score: {score:.2f})")
+    return scores[0, :]
+
+
+def visualize_precision_recall(models, reranking_models, queries, reranking_model_nicknames, relevant_seg_ids):
     plt.figure()
-    plt.title(f"Precision & recall, Query={query}")
     return_n = 40
+    plt.title(f"NDCG @ k ({len(queries)} queries)")
     settings = load_settings()
-    reranker = load_reranking_model(settings)
-    xs = np.arange(1, return_n+1)
+    # rerankers = [load_reranking_model2(settings, rr) for rr in reranking_models]
+    xs = np.arange(1, return_n)
+
+    patterns = ["--", ":", "-.", "-"]
     # query the database
     # model_to_chunk_dict = dict()
+    cumsums_per_model = dict()
     colors=["tab:blue", "tab:red", "tab:green", "tab:orange", "tab:purple"]
+
+    model_to_query_to_chunks = dict()
+
+    print ("------- Gettings chunks from retrieval models ------------")
+    # get chunks for each model for each query
     for j,m in enumerate(models):
+        print(f"Model: {model_names[m]}")
         if m != 10:
             model = load_embedding_model2(model_names[m], settings.model_run_device)
         else:
             model = load_embedding_model_hf2(settings, model_names[m])
-        chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
-        print(len(chunks))
-        texts = [c[0].lower() for c in chunks]
-        relevancy = np.where(relevancy_score_keywords(np.array(texts), keywords) >= len(keywords)-1, 1, 0)
-        for t in texts:
-            print(t)
-        print(relevancy)
-        
-        cumsum = np.cumsum(relevancy) / xs
-        plt.plot(xs, cumsum, color=colors[j], label=f"{model_names[m][:16]}", alpha=0.3)
+        for q,query in enumerate(queries):
+            print(f"Query {q}: {query}")
+            chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
+            print([(c[0][:100], c[1], c[2]) for c in chunks])
+            if m not in model_to_query_to_chunks:
+                model_to_query_to_chunks[m] = dict()
+            if q not in model_to_query_to_chunks[m]:
+                model_to_query_to_chunks[m][q] = chunks
 
-        reranked = rerank_candidates2(reranker, query, chunks, return_n)
-        texts = [r['text'].lower() for r in reranked]
-        relevancy = np.where(relevancy_score_keywords(np.array(texts), keywords) >= len(keywords)-1, 1, 0)
-        cumsum = np.cumsum(relevancy) / xs
-        plt.plot(xs, cumsum+0.005, color=colors[j], label=f"{model_names[m][:16]} + rerank", alpha=1, zorder=50)
-        # model_to_chunk_dict[m] = chunks
+    print ("------- Reranking and scoring ------------")
+    # reranking and scoring
+    for j,m in enumerate(model_to_query_to_chunks.keys()):
+        print(f"Model: {model_names[m]}")
 
-    plt.xlabel("# Retrieved results")
-    plt.ylabel("% Relevant results")
+        for i, rr in enumerate(reranking_models):
+            print(f"Reranking model: {rr}")
+            rr_nickname = "No rerank"
+            if rr != None:
+                reranker = load_reranking_model2(settings, rr)
+                rr_nickname = reranking_model_nicknames[i]
+
+            for query_keys in model_to_query_to_chunks[m].keys():
+                # print(queries)
+                correct_query_key = int(query_keys)
+                query = queries[correct_query_key]
+                # print(correct_query_key)
+                print(f"Query {correct_query_key}: {queries[correct_query_key]}")
+                # for item in model_to_query_to_chunks[m].items():
+                #     print(item)
+                chunks = model_to_query_to_chunks[m][correct_query_key]
+                retrieved_seg_ids = [c[2] for c in chunks]
+                if rr == None:
+                    reranked = [{"text": t, "id": cid, "cross_score": len(chunks)-n} for n,(t,_,cid) in enumerate(chunks)]
+                else:
+                    reranked = rerank_candidates2(reranker, query, chunks, return_n)
+
+                texts = [r['text'].lower() for r in reranked]
+                reranked_seg_ids_2 = [r['id'] for r in reranked][1:]
+                reranked_scores = [r['cross_score'] for r in reranked][1:]
+                print(reranked_scores)
+
+                relevancy_bm25_scores = relevancy_score_bm25(texts, query)
+                relevancy_bm25 = np.where(relevancy_bm25_scores >= np.average(relevancy_bm25_scores), 1.0, 0.0)[1:]
+                # print(relevant_seg_ids)
+                print(f"Query seg id: {relevant_seg_ids[correct_query_key][0]}")
+                print(f"Same page seg ids: {relevant_seg_ids[correct_query_key]}")
+                # print(chunks)
+                print(f"Retrieved seg ids: {retrieved_seg_ids}")
+                print(f"Reranked seg ids: {reranked_seg_ids_2}")
+
+                relevancy_same_page = np.array([1.0 if c in relevant_seg_ids[correct_query_key] else 0.0 for c in reranked_seg_ids_2])
+                relevancy_score_ideal = relevancy_bm25 * 0.5 + relevancy_same_page * 0.5
+                print(relevancy_score_ideal)
+                final_scores = []
+                for top_k in range(1, return_n):
+                    score = ndcg_score(np.array([relevancy_score_ideal]), np.array([reranked_scores]), k=top_k)
+                    final_scores.append(score)
+                final_scores = np.array(final_scores)
+                print(final_scores)
+                if m not in cumsums_per_model:
+                    cumsums_per_model[m] = dict()
+                if rr_nickname not in cumsums_per_model[m]:
+                    cumsums_per_model[m][rr_nickname] = final_scores
+                else:
+                    cumsums_per_model[m][rr_nickname] += final_scores
+
+
+    for j,m in enumerate(cumsums_per_model.keys()):
+        for i,rr in enumerate(cumsums_per_model[m].keys()):
+
+            cumsum = cumsums_per_model[m][rr] / len(queries)
+            plt.plot(xs, cumsum+0.005, patterns[i], color=colors[1+i], label=f"{rr}", alpha=0.7, zorder=50)
+
+    plt.xlabel("k")
+    plt.ylabel("NDCG")
     plt.legend()
     plt.show()
     # rerank results
-    result_embeddings = np.array([np.fromstring(c[0] [c[0].index("["):c[0].index("]")+1] [1:-1], dtype=float, sep=",") for c in chunks])
 
 if __name__ == '__main__':
     settings = load_settings()
     engine = create_engine(settings.database_url, pool_pre_ping=True)
-    
+
+    dim = 1024
+    res = get_page_segments(engine, dim, n=50)
+    queries: list[str] = []
+    query_ids: list[int] = []
+    relevant_seg_ids: list[list[int]] = []
+    res = sorted(res, key=lambda x: x[2])
+    print(res)
+    for p in res:
+        sorted_relevant_ids = list(sorted(p[2]))
+        query_seg_id = sorted_relevant_ids[0]
+        query_ids.append(query_seg_id)
+        relevant_seg_ids.append(sorted_relevant_ids)
+
+
+    query_results = get_segments_by_id(engine, query_ids, dim)
+    queries_with_ids = sorted([(q[0], q[1][:128]) for q in query_results])
+    queries = [q[1] for q in queries_with_ids]
+    print(queries)
+    # print(queries)
 
     # visualize_embeddings(engine, 1, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=384, queries=["Vladimir Putin noče prenehati z vojno kljub pozivom"])
     # visualize_embeddings(engine, 8, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768, queries=["Vladimir Putin noče prenehati z vojno kljub pozivom"])
     # visualize_embeddings(engine, 10, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 13, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 9, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=1024)
+    reranking_models = [None, "cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"]
+    reranking_models_nicknames = ["No rerank", "ms-marco-MiniLM-L6-v2", "bge-reranker-v2-m3"]
+    # "mixedbread-ai/mxbai-rerank-large-v2" is a bit too large
+    # visualize_precision_recall([1], ["cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ukrajin", "raket"])
+    # queries = [
+    #     "Vladimir Putin, raketni napad na ukrajino, zelenski odziv",
+    #     "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.",
+    #     "Vladimir Putin noče prenehati z vojno kljub pozivom",
+    #     "Madžari so upravičili vlogo favoritov in zasluženo prišli do zmage. Minimalni poraz malce celo laska naši izbrani vrsti, ki jo je nekajkrat rešil odlični Igor Vekić v vratih. Cesar slabši drugi polčas pripisuje",
+    #     "To je bil eden največjih napadov podnevi",
+    #     "Prav tako je ponovil, da Evropa potrebuje Ukrajino, saj da ima slednja najmočnejšo vojsko v Evropi, poroča britanski BBC.Trump Zelenskega pozval k večjim naporom za dogovor z Rusijo Rusija želi skleniti dogovor in Zelenski bo moral ukrepati, sicer bo zamudil veliko priložnost, je v petek povedal ameriški predsednik Donald Trump.Zelenski je namreč na dogodku v okviru Münchenske varnostne konference ponovno zavrnil ruske zahteve po prevzemu ukrajinskega Donbasa",
+    #     "Deripaskin tiskovni predstavnik je za Bloomberg povedal, da Epsteina osebno ne pozna.Druga Rusinja v Epsteinovem krogu je bila Maša Drokova Bucher, 37-letna podjetnica, ki je bila leta 2017 Epsteinova publicistka in mu pomagala po obsodbi leta 2008 zaradi nagovarjanja k prostituciji. Bucherjeva je bila v Rusiji znana kot članica Naših, proputinovske mladinske skupine",
+    #     "Takšnih je bilo več kot 4000 ljudi in njim se godi precej slabše, kot se je meni",
+    #     "Putin je na začetku vojne računal na to, da bo Zelenski pobegnil iz države. Že ob prvih udarcih je ruska propaganda sporočala, da je Zelenski že na Poljskem. Mislim, da je bilo to za Putina veliko presenečenje. Nekdanji igralec, komedijant, se je izkazal za dovolj pogumnega, da postane vodja države, ki je v vojni. ",
+    #     "Katere države so še posebej ranljive?V vseh državah Kremelj uporablja iste narative, to so problemi migracij, socialni problemi, LGBT in homofobija in tako naprej. Putin povsod deluje na isti princip.",
+    #     "Putinov hvalospev vojaškemu izvozu, ki naj bi presegel 15 milijard. Po besedah ruskega predsednika Vladimirja Putina je bila Rusija v lanskem letu na področju vojaške industrije uspešna.",
+    # ]
+    visualize_precision_recall([9], reranking_models, queries, reranking_models_nicknames, relevant_seg_ids)
 
-    # visualize_precision_recall([1, 8, 10, 13, 9], "Vladimir Putin, raketni napad na urajino, zelenski odziv", ["putin", "zelensk", "ukrajin", "raket"])
-    visualize_precision_recall([1, 8, 10, 13, 9], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ujetni"])
-    # visualize_precision_recall([1, 8, 9, 13], "Putin, Zelenski in Trump pogovor.", ["putin", "zelenski", "trump"])
+    # visualize_precision_recall([1, 8, 10, 13, 9], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ujetni"])
+    # visualize_precision_recall([9], reranking_models, "Putin, Zelenski in Trump pogovor.", ["putin", "zelenski", "trump"])
     # visualize_precision_recall([1, 8, 10, 13, 9], "Ali bo iran ostal v nogometni ligi?", ["iran", "nogomet", "liga"])
 

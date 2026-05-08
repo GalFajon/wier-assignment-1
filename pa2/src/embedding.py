@@ -90,6 +90,20 @@ def load_reranking_model(settings):
         
     return model
 
+def load_reranking_model2(settings, model_name):
+    devic_str = settings.model_run_device
+    device = devic_str if torch.cuda.is_available() and devic_str == 'cuda' else "cpu"
+    
+    model_dir = Path("./models") / model_name.replace("/", "_")
+
+    if model_dir.exists():
+        model = CrossEncoder(str(model_dir), device=device)
+    else:
+        model = CrossEncoder(model_name, device=device)
+        model.save(str(model_dir))
+        
+    return model
+
 
 def embed_chunks(model, chunk_list_raw, settings):
     embeddings = model.encode(
@@ -215,11 +229,11 @@ def embed_string2(model, string, embedding_dimension):
 def rerank_candidates(reranker, query_string, candidates, settings):
     return_n = settings.rerank_return_n
     
-    cross_inputs = [[query_string, raw_text] for raw_text, _ in candidates]
+    cross_inputs = [[query_string, raw_text] for raw_text, _, _ in candidates]
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (text, dist), cross in zip(candidates, cross_scores):
+    for (text, _, dist), cross in zip(candidates, cross_scores):
         enriched.append({
             "text": text,
             "dist": float(dist),
@@ -233,17 +247,23 @@ def rerank_candidates(reranker, query_string, candidates, settings):
 def rerank_candidates2(reranker, query_string, candidates, rerank_return_n):
     return_n = rerank_return_n
     
-    cross_inputs = [[query_string, raw_text] for raw_text, _ in candidates]
+    cross_inputs = [[query_string, raw_text] for raw_text, _, _ in candidates]
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (text, dist), cross in zip(candidates, cross_scores):
+    for (text, dist, i), cross in zip(candidates, cross_scores):
+        # print((text, dist, i))
         enriched.append({
             "text": text,
+            "id": i,
             "dist": float(dist),
             "cross_score": float(cross)
         })
 
     enriched.sort(key=lambda x: x["cross_score"], reverse=True)
-
+    min_val = min(enriched, key=lambda x: x["cross_score"])["cross_score"]
+    max_val = max(enriched, key=lambda x: x["cross_score"])["cross_score"]
+    print(min_val)
+    for i in range(len(enriched)):
+        enriched[i]["cross_score"] = (enriched[i]["cross_score"] - min_val) / (max_val - min_val)
     return enriched[:min(len(enriched), return_n)]
