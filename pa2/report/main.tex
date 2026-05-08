@@ -152,8 +152,16 @@ Table~\ref{tab:reranker_models} summarizes the reranking models used in the expe
 
 To evaluate the retrieval quality of our setups, we employ the Normalized Discounted Cumulative Gain metric at \(k\) retrieved chunks (NDCG@\(k\)). This metric is well suited for retrieval pipelines, as it measures not only the number of relevant chunks among the top \(k\) retrieved results, but also whether the most relevant chunks appear near the top of the ranking. For evaluation, we compute the mean NDCG@\(k\) across multiple queries, providing a more representative measure of average retrieval performance.
 
+Queries used when computing mean NDCG@k scores, were obtained by randomly picking some number of pages from the database and taking the first segment of each page, where only the first 128 characters were used. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated by summing scores of two strategies:
 
-We first evaluated the quality of the embedding models by retrieving only the \(k\) chunks most similar to each query. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
+\begin{enumerate}
+    \item Okapi BM25 contributes to the first 50\% of the score. This ranking function was chosen due to its popularity among search engines.
+    \item The other 50\% is 1 if a segment appears on the same page as the query, 0 otherwise. 
+\end{enumerate}
+
+The 50\% weights for both strategies were chosen arbitrarily.
+
+First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the M query embeddings according to the used distance metric. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
 
 The embedding model performance is shown in Figure~\ref{fig:model_comparison}. The results indicate that the model \texttt{some-model} consistently outperforms the other evaluated models. Cosine similarity was used for all similarity-based retrieval experiments.
 
@@ -237,6 +245,9 @@ The final selected parameters of our pipeline are noted in Table~\ref{tab:final_
 
 
 \section{Disscussion}
+
+Experiments clearly show reranking significantly improves the relevancy of top results, but due to the harder interpretability of the NDCG@k metric concrete relative improvements between models are harder to determine.
+
 - what can be done better, what we could expand on
 
 
