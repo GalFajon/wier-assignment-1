@@ -17,6 +17,7 @@ class ParserSettings:
 	model_name: str
 	embedding_dimension: int
 	batch_size: int
+	normalize_embedding: bool
  
 	#QUERYING AND RERANKING
 	query_return_n: int
@@ -35,6 +36,7 @@ class ParserSettings:
 			f"	model_run_device='{self.model_run_device}',\n"
    			f"	model_name='{self.model_name}',\n"
 			f"	embedding_dimension={self.embedding_dimension},\n"
+			f"	normalize_embedding={self.normalize_embedding},\n"
 			f"	batch_size={self.batch_size},\n"
 			f"	query_return_n={self.query_return_n},\n"
 			f"	distance_metric={self.distance_metric},\n"
@@ -58,7 +60,8 @@ def load_settings() -> ParserSettings:
 	distance_metric = os.getenv("DISTANCE_METRIC", "cos_similarity")
 	reranking_model_name = os.getenv("RERANKING_MODEL_NAME", "no-model-found-error-in-env")
 	rerank_return_n = int(os.getenv("RERANK_RETURN_N", "10"))
-
+	normalize_embedding = os.getenv("NORMALIZE_EMBEDDING", "True").lower() == "true"
+ 
 	return ParserSettings(
 		database_url=database_url,
 		parse_limit=parse_limit,
@@ -72,6 +75,7 @@ def load_settings() -> ParserSettings:
 		query_return_n=query_return_n,
 		distance_metric=distance_metric,
 		reranking_model_name=reranking_model_name,
-		rerank_return_n=rerank_return_n
+		rerank_return_n=rerank_return_n,
+		normalize_embedding=normalize_embedding
 	)
 
