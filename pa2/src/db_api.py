@@ -199,8 +199,65 @@ def get_segments_by_id(
 
     return result
 
+def get_page_segment_ids(
+    engine: Engine,
+    page_ids: list[int],
+    model_id: int,
+    dim: int
+):
 
-def get_page_segments(
+    table_map = {
+        384: "page_segment_vec384",
+        768: "page_segment_vec768",
+        1024: "page_segment_vec1024",
+    }
+
+    if dim not in table_map:
+        raise ValueError(f"Unsupported vector length: {dim}")
+
+    table = table_map[dim]
+
+
+    sql = f"""
+    select page_id, array_agg(id) from public.{table}
+    group by page_id, model_id
+    having page_id in {tuple(page_ids)} and model_id={model_id}
+    """
+
+    with engine.connect() as connection:
+        result = connection.execute(
+            text(sql),
+            {
+                
+            }
+        ).fetchall()
+
+    return result   
+
+def get_random_page_ids(
+    engine: Engine,
+    n: int
+):
+
+    sql = f"""
+    select page_id from public.page_segment_vec1024
+    group by page_id
+    having COUNT(*) > 6
+    order by random()
+    LIMIT {n};
+    """
+
+    with engine.connect() as connection:
+        result = connection.execute(
+            text(sql),
+            {
+                
+            }
+        ).fetchall()
+
+    return result
+
+def get_random_page_segments(
     engine,
     dimension=384,
     n=50
@@ -223,7 +280,8 @@ def get_page_segments(
     sql = f"""
     select page_id, COUNT(*), array_agg(id) from public.{table}
     group by page_id
-    having COUNT(*) > 6
+    having COUNT(*) > 12
+    order by random()
     LIMIT {n};
     """
 

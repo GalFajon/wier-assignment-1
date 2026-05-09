@@ -235,11 +235,11 @@ def embed_string_pooling(model, tokenizer, string, settings):
 def rerank_candidates(reranker, query_string, candidates, settings):
     return_n = settings.rerank_return_n
     
-    cross_inputs = [[query_string, raw_text] for raw_text, _, _ in candidates]
+    cross_inputs = [[query_string, raw_text] for _, raw_text, _, _ in candidates]
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (text, _, dist), cross in zip(candidates, cross_scores):
+    for (_, text, _, dist), cross in zip(candidates, cross_scores):
         enriched.append({
             "text": text,
             "dist": float(dist),
@@ -256,11 +256,11 @@ def rerank_candidates(reranker, query_string, candidates, settings):
 def rerank_candidates2(reranker, query_string, candidates, rerank_return_n):
     return_n = rerank_return_n
     
-    cross_inputs = [[query_string, raw_text] for raw_text, _, _ in candidates]
+    cross_inputs = [[query_string, raw_text] for _, raw_text, _, _ in candidates]
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (text, dist, i), cross in zip(candidates, cross_scores):
+    for (_, text, dist, i), cross in zip(candidates, cross_scores):
         # print((text, dist, i))
         enriched.append({
             "text": text,
@@ -269,10 +269,10 @@ def rerank_candidates2(reranker, query_string, candidates, rerank_return_n):
             "cross_score": float(cross)
         })
 
-    enriched.sort(key=lambda x: x["cross_score"], reverse=True)
+    # enriched.sort(key=lambda x: x["cross_score"], reverse=True)
     min_val = min(enriched, key=lambda x: x["cross_score"])["cross_score"]
     max_val = max(enriched, key=lambda x: x["cross_score"])["cross_score"]
-    print(min_val)
+    # print(min_val)
     for i in range(len(enriched)):
         enriched[i]["cross_score"] = (enriched[i]["cross_score"] - min_val) / (max_val - min_val)
     return enriched[:min(len(enriched), return_n)]

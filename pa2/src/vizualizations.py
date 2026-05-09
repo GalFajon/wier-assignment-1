@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from sqlalchemy import Engine, create_engine
 import mplcursors
 import string
+import tqdm
 from umap import UMAP
 from embedding import embed_string_resize_vector, load_embedding_model2, load_reranking_model, load_reranking_model2, rerank_candidates, rerank_candidates2, load_embedding_model_hf2
 from run_query import query_database, query_database2
@@ -35,7 +36,7 @@ model_dims = {
     }
 
 from ParserSettings import load_settings
-from db_api import get_page_segments, get_segments_by_model, get_segments_by_id
+from db_api import get_random_page_segments, get_segments_by_model, get_segments_by_id, get_random_page_ids, get_page_segment_ids
 
 def get_embedding_pca(embeddings, dim=2):
     pca = PCA(n_components=dim)
@@ -50,21 +51,21 @@ def get_embedding_umap(embeddings, dim=2):
     return u.fit_transform(embeddings), u
 
 
-def plot_embeddings_2d(embeddings_2d, segments, clusters, colors, query_embedding_2d, result_embeddings_2d):
-    fig = plt.figure(figsize=(9, 9))
-    plt.title("Document positions in projected embedding space")
+def plot_embeddings_2d(ax, embeddings_2d, segments, clusters, colors, query_embedding_2d, result_embeddings_2d):
+
+    
 
     if len(colors) == 0:
         mapped_colors = cmap(clusters)
     else:
         mapped_colors = np.array(colors).take(clusters)
 
-    scat = plt.scatter(embeddings_2d[:,0], embeddings_2d[:,1], color=mapped_colors, alpha=0.2)
+    scat = ax.scatter(embeddings_2d[:,0], embeddings_2d[:,1], color=mapped_colors, alpha=0.2)
 
     # query embedding
     # if query_embedding_2d != None:
-    plt.scatter(result_embeddings_2d[:,0], result_embeddings_2d[:,1], color="black", alpha=1, marker="X", s=10)
-    plt.scatter(query_embedding_2d[0], query_embedding_2d[1], color="red", alpha=1, marker="X")
+    ax.scatter(result_embeddings_2d[:,0], result_embeddings_2d[:,1], color="black", alpha=1, marker="X", s=10)
+    ax.scatter(query_embedding_2d[0], query_embedding_2d[1], color="red", alpha=1, marker="X")
     
     cursor = mplcursors.cursor(scat, hover=mplcursors.HoverMode.Transient)
 
@@ -73,7 +74,20 @@ def plot_embeddings_2d(embeddings_2d, segments, clusters, colors, query_embeddin
         i = sel.index
         sel.annotation.set_text(f"{segments[i][:200]} \nx={embeddings_2d[i,0]:.2f}\ny={embeddings_2d[i,1]:.2f}")
     
-    plt.show()
+
+def plot_embeddings_2d_queries(ax, embeddings_2d, query_to_query_embeddings_2d, query_to_result_embeddings_2d):
+
+    # ax.hist2d(embeddings_2d[:,0], embeddings_2d[:,1], bins=30, density=True)
+    ax.scatter(embeddings_2d[:,0], embeddings_2d[:,1], color="black", edgecolor="black", alpha=0.06)
+    
+    for i,q in enumerate(query_to_result_embeddings_2d):
+        color = cmap(i)
+        ax.scatter(query_to_result_embeddings_2d[q][:,0], query_to_result_embeddings_2d[q][:,1], color=color, s=14)
+    for i,q in enumerate(query_to_result_embeddings_2d):
+        color = cmap(i)
+        ax.scatter(query_to_query_embeddings_2d[q][0], query_to_query_embeddings_2d[q][1], color=color, marker="X", edgecolors="black", s=70)
+
+    
 
 def plot_embeddings_3d(embeddings_3d, segments, cluster_indices, colors):
     fig = plt.figure(figsize=(16, 16))
@@ -95,101 +109,129 @@ def find_nearest(array, value):
     idx = (cosine_similarity(array, np.array([value]))).argmax()
     return array[idx], idx
 
-def visualize_embeddings(engine: Engine, model_id: int, reduction_fun=get_embedding_pca, vector_size=384, queries=[]):
+def visualize_embeddings(engine: Engine, model_ids: list[int], reduction_fun=get_embedding_pca, model_to_queries=dict()):
 
     print("Fetching data")
-    segments = get_segments_by_model(engine, model_id=model_id, max_segments=100000, vector_size=vector_size)
-    segment_texts, embs = zip(*segments)
-    segment_texts = np.array(segment_texts)
-    embeddings = np.array([np.fromstring(e[1:-1], dtype=float, sep=",") for e in embs])
-
-    # project to lower dimension
-    embeddings_xd, reduction_model = reduction_fun(embeddings)
-    print(embeddings.shape)
-
-    # get query embedding
-    settings = load_settings()
-    model = load_embedding_model2(model_names[model_id], settings.model_run_device)
-    embedding_array = embed_string_resize_vector(model, queries[0], vector_size, settings)
-    query_embedding = embedding_array
-    query_embedding_xd = reduction_model.transform(np.array([query_embedding]))[0]
-    print(query_embedding[:10])
-
-
-    # get query results
-    reranker = load_reranking_model(settings)
-    chunks = query_database(model, queries[0], settings)
     
-    # reranked = rerank_candidates(reranker, queries[0], chunks, settings)
-    result_embeddings = np.array([np.fromstring(c[0] [c[0].index("["):c[0].index("]")+1] [1:-1], dtype=float, sep=",") for c in chunks])
-    result_embeddings_xd = np.array(reduction_model.transform(result_embeddings))
-    print(result_embeddings_xd)
-    # for i, final_chunk_data in enumerate(reranked):
-    #     text = final_chunk_data['text']
-    #     dist = final_chunk_data['dist']
-    #     cross_score = final_chunk_data['cross_score']
-    #     print(f'{i+1}: Text={text[:300]}... Cross_score={cross_score}, Distance={dist}')
+    fig, ax = plt.subplots(len(model_ids), 1, constrained_layout=True)
+    fig.suptitle(f"Document positions in projected embedding space ({len(model_to_queries[model_ids[0]])} queries)")
+    fig.set_figheight(30)
+    fig.set_figwidth(8)
+    fig.set_dpi(40)
 
-    # remove outliers with kmeans
+    for m_idx, m in enumerate(model_ids):
+        segments = get_segments_by_model(engine, model_id=m, max_segments=100000, vector_size=model_dims[m])
+        segment_texts, embs = zip(*segments)
+        segment_texts = np.array(segment_texts)
+        embeddings = np.array([np.fromstring(e[1:-1], dtype=float, sep=",") for e in embs])
 
-    # kmeans = KMeans(n_clusters=2)
-    # cluster_labels = kmeans.fit_predict(embeddings_xd)
-    # print(f"Data shape: {cluster_labels.shape}")
-    # total_sum = np.sum(cluster_labels)
-    # if total_sum < len(embeddings):
-    #     outlier_mask = cluster_labels==0
-    # else:
-    #     outlier_mask = cluster_labels==1
-    # filtered_embeddings = embeddings[outlier_mask]
-    # filtered_embeddings_xd = embeddings_xd[outlier_mask]
-    # filtered_segment_texts = segment_texts[outlier_mask]
-    # print(f"Removed segments: ${(segment_texts[outlier_mask==False])[:20]}")
 
-    # remove outliers if they are too far from the average position
-    avg_embedding_xd = np.average(embeddings_xd, axis=0)
-    std_embedding_xd = np.std(embeddings_xd, axis=0)
-    print(f"Average: {avg_embedding_xd}")
-    print(f"Standard deviation: {std_embedding_xd}")
-    outlier_mask = np.all((np.abs(embeddings_xd - avg_embedding_xd) < std_embedding_xd*2.2), axis=1)
-    filtered_embeddings = embeddings[outlier_mask]
-    filtered_embeddings_xd = embeddings_xd[outlier_mask]
-    filtered_segment_texts = segment_texts[outlier_mask]
-    print(f"Removed segments: ${(segment_texts[outlier_mask==False])[:20]}")
+        # project to lower dimension
+        embeddings_xd, reduction_model = reduction_fun(embeddings)
+        print(embeddings.shape)
 
-    for i in range(len(filtered_segment_texts)):
-        filtered_segment_texts[i] = filtered_segment_texts[i].translate(str.maketrans('', '', string.punctuation)).lower()
+        
+        # get query embedding
+        query_to_query_embeddings_xd = dict()
+        query_to_result_embeddings_xd = dict()
+        settings = load_settings()
+        model = load_embedding_model2(model_names[m], settings.model_run_device)
+        for q_idx, q in tqdm.tqdm(enumerate(model_to_queries[m])):
+            query = model_to_queries[m][q_idx]
+            if type(model) == tuple:
+                query_vector = embed_string_pooling(model[0], model[1], query, settings)
+            else:
+                query_vector = embed_string_resize_vector(model, query, model_dims[m], settings)
+            query_embedding = query_vector
+            query_embedding_xd = reduction_model.transform(np.array([query_embedding]))[0]
+            query_to_query_embeddings_xd[q] = query_embedding_xd
+            print(query_embedding[:10])
 
-    # split_filtered_segments = [seg.split(" ") for seg in filtered_segment_texts]
-    # find clusters with kmeans
-    # svd_clusters = TruncatedSVD(n_components=200)
-    # kmeans_clusters = KMeans(n_clusters=20)
-    # cluster_indices = kmeans_clusters.fit_predict(filtered_embeddings)
+            # get query results
+            # reranker = load_reranking_model(settings)
+            chunks = query_database2(model, query, settings, model_dims[m], 40, distance_metric="cosine", model_name=model_names[m])
+            
+            # reranked = rerank_candidates(reranker, queries[0], chunks, settings)
+            # print(chunks)
+            result_embeddings = np.array([np.fromstring(c[0] [c[0].index("["):c[0].index("]")+1] [1:-1], dtype=float, sep=",") for c in chunks])
+            # print(result_embeddings)
+            query_to_result_embeddings_xd[q] = np.array(reduction_model.transform(result_embeddings))
+        # for i, final_chunk_data in enumerate(reranked):
+        #     text = final_chunk_data['text']
+        #     dist = final_chunk_data['dist']
+        #     cross_score = final_chunk_data['cross_score']
+        #     print(f'{i+1}: Text={text[:300]}... Cross_score={cross_score}, Distance={dist}')
 
-    # # find closest segments to each cluster
-    # for i, center in enumerate(kmeans_clusters.cluster_centers_):
-    #     print(center[:3])
-    #     nearest_emb, nearest_idx = find_nearest(filtered_embeddings, center)
-    #     print(nearest_idx)
-    #     print(f"Cluster {i}: {filtered_segment_texts[nearest_idx][:400]}")
+        # remove outliers with kmeans
 
-    colors=["lightgrey", "tab:red", "tab:green", "tab:orange", "tab:blue", "tab:purple"]
+        # kmeans = KMeans(n_clusters=2)
+        # cluster_labels = kmeans.fit_predict(embeddings_xd)
+        # print(f"Data shape: {cluster_labels.shape}")
+        # total_sum = np.sum(cluster_labels)
+        # if total_sum < len(embeddings):
+        #     outlier_mask = cluster_labels==0
+        # else:
+        #     outlier_mask = cluster_labels==1
+        # filtered_embeddings = embeddings[outlier_mask]
+        # filtered_embeddings_xd = embeddings_xd[outlier_mask]
+        # filtered_segment_texts = segment_texts[outlier_mask]
+        # print(f"Removed segments: ${(segment_texts[outlier_mask==False])[:20]}")
 
-    # find cluster by most common word from chosen words
-    trump_counts = np.array([seg.count("trump") for seg in filtered_segment_texts])
-    ukrajin_counts = np.array([seg.count("ukrajin") for seg in filtered_segment_texts])
-    nogomet_counts = np.array([seg.count("nogomet") for seg in filtered_segment_texts])
-    rusija_counts = np.array([seg.count("rusija") + seg.count("rusk") for seg in filtered_segment_texts])
-    iran_counts = np.array([seg.count("iran") for seg in filtered_segment_texts])
+        # remove outliers if they are too far from the average position
+        avg_embedding_xd = np.average(embeddings_xd, axis=0)
+        std_embedding_xd = np.std(embeddings_xd, axis=0)
+        print(f"Average: {avg_embedding_xd}")
+        print(f"Standard deviation: {std_embedding_xd}")
+        outlier_mask = np.all((np.abs(embeddings_xd - avg_embedding_xd) < std_embedding_xd*2.2), axis=1)
+        filtered_embeddings = embeddings[outlier_mask]
+        filtered_embeddings_xd = embeddings_xd[outlier_mask]
+        filtered_segment_texts = segment_texts[outlier_mask]
+        print(f"Removed segments: ${(segment_texts[outlier_mask==False])[:20]}")
 
-    cluster_indices = np.argmax([trump_counts, ukrajin_counts, nogomet_counts, rusija_counts, iran_counts], axis=0) + 1
-    sums = trump_counts + ukrajin_counts + nogomet_counts + rusija_counts + iran_counts
-    print(sums)
-    cluster_indices[sums == 0] = 0
+        for q in query_to_result_embeddings_xd:
+            result_outlier_mask = np.all((np.abs(query_to_result_embeddings_xd[q] - avg_embedding_xd) < std_embedding_xd*2.2), axis=1)
+            query_to_result_embeddings_xd[q] = query_to_result_embeddings_xd[q][result_outlier_mask]
 
-    if embeddings_xd.shape[1]==2:
-        plot_embeddings_2d(filtered_embeddings_xd, filtered_segment_texts, cluster_indices, colors, query_embedding_xd, result_embeddings_xd)
-    else:
-        plot_embeddings_3d(filtered_embeddings_xd, filtered_segment_texts, cluster_indices, colors=colors)
+        for i in range(len(filtered_segment_texts)):
+            filtered_segment_texts[i] = filtered_segment_texts[i].translate(str.maketrans('', '', string.punctuation)).lower()
+
+        # split_filtered_segments = [seg.split(" ") for seg in filtered_segment_texts]
+        # find clusters with kmeans
+        # svd_clusters = TruncatedSVD(n_components=200)
+        # kmeans_clusters = KMeans(n_clusters=20)
+        # cluster_indices = kmeans_clusters.fit_predict(filtered_embeddings)
+
+        # # find closest segments to each cluster
+        # for i, center in enumerate(kmeans_clusters.cluster_centers_):
+        #     print(center[:3])
+        #     nearest_emb, nearest_idx = find_nearest(filtered_embeddings, center)
+        #     print(nearest_idx)
+        #     print(f"Cluster {i}: {filtered_segment_texts[nearest_idx][:400]}")
+
+        colors=["lightgrey", "tab:red", "tab:green", "tab:orange", "tab:blue", "tab:purple"]
+
+        # find cluster by most common word from chosen words
+        trump_counts = np.array([seg.count("trump") for seg in filtered_segment_texts])
+        ukrajin_counts = np.array([seg.count("ukrajin") for seg in filtered_segment_texts])
+        nogomet_counts = np.array([seg.count("nogomet") for seg in filtered_segment_texts])
+        rusija_counts = np.array([seg.count("rusija") + seg.count("rusk") for seg in filtered_segment_texts])
+        iran_counts = np.array([seg.count("iran") for seg in filtered_segment_texts])
+
+        cluster_indices = np.argmax([trump_counts, ukrajin_counts, nogomet_counts, rusija_counts, iran_counts], axis=0) + 1
+        sums = trump_counts + ukrajin_counts + nogomet_counts + rusija_counts + iran_counts
+
+        cluster_indices[sums == 0] = 0
+
+        if embeddings_xd.shape[1]==2:
+            axis = ax if len(model_ids) == 1 else ax[m_idx]
+            axis.set_title(model_names[m])
+            plot_embeddings_2d_queries(axis, filtered_embeddings_xd, query_to_query_embeddings_xd, query_to_result_embeddings_xd)
+        else:
+            plot_embeddings_3d(filtered_embeddings_xd, filtered_segment_texts, cluster_indices, colors=colors)
+
+    plt.savefig("report/Figures/Clusters.png")
+    plt.show()
+
 
 def relevancy_score_keywords(texts: np.ndarray, keywords):
     scores = np.zeros_like(texts, dtype=int)
@@ -205,7 +247,7 @@ def relevancy_score_bm25(texts: list[str], query: str):
     corpus_tokens = bm25s.tokenize(texts, stopwords=stopwords.stopwords("sl"))
 
     # Create the BM25 model and index the corpus
-    retriever = bm25s.BM25(method="bm25+")
+    retriever = bm25s.BM25(method="lucene")
     retriever.index(corpus_tokens)
 
     # Query the corpus
@@ -221,10 +263,10 @@ def relevancy_score_bm25(texts: list[str], query: str):
     return scores[0, :]
 
 
-def visualize_precision_recall(models, reranking_models, queries, reranking_model_nicknames, relevant_seg_ids):
+def visualize_precision_recall(models, reranking_models, model_to_queries, reranking_model_nicknames, model_to_relevant_seg_ids):
     plt.figure()
     return_n = 40
-    plt.title(f"NDCG @ k ({len(queries)} queries)")
+    plt.title(f"NDCG @ k ({len(model_to_queries[models[0]])} queries, bm25)")
     settings = load_settings()
     # rerankers = [load_reranking_model2(settings, rr) for rr in reranking_models]
     xs = np.arange(1, return_n)
@@ -232,7 +274,7 @@ def visualize_precision_recall(models, reranking_models, queries, reranking_mode
     patterns = ["--", ":", "-.", "-"]
     # query the database
     # model_to_chunk_dict = dict()
-    cumsums_per_model = dict()
+    cumsums_per_model_per_metric = dict()
     colors=["tab:blue", "tab:red", "tab:green", "tab:orange", "tab:purple"]
 
     model_to_query_to_chunks = dict()
@@ -245,10 +287,10 @@ def visualize_precision_recall(models, reranking_models, queries, reranking_mode
             model = load_embedding_model2(model_names[m], settings.model_run_device)
         else:
             model = load_embedding_model_hf2(settings, model_names[m])
-        for q,query in enumerate(queries):
+        for q,query in enumerate(model_to_queries[m]):
             print(f"Query {q}: {query}")
             chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
-            print([(c[0][:100], c[1], c[2]) for c in chunks])
+            # print([(c[0][:100], c[1], c[2]) for c in chunks])
             if m not in model_to_query_to_chunks:
                 model_to_query_to_chunks[m] = dict()
             if q not in model_to_query_to_chunks[m]:
@@ -269,54 +311,66 @@ def visualize_precision_recall(models, reranking_models, queries, reranking_mode
             for query_keys in model_to_query_to_chunks[m].keys():
                 # print(queries)
                 correct_query_key = int(query_keys)
-                query = queries[correct_query_key]
+                query = model_to_queries[m][correct_query_key]
                 # print(correct_query_key)
-                print(f"Query {correct_query_key}: {queries[correct_query_key]}")
+                print(f"Query {correct_query_key}: {model_to_queries[m][correct_query_key]}")
                 # for item in model_to_query_to_chunks[m].items():
                 #     print(item)
                 chunks = model_to_query_to_chunks[m][correct_query_key]
                 retrieved_seg_ids = [c[2] for c in chunks]
-                if rr == None:
-                    reranked = [{"text": t, "id": cid, "cross_score": len(chunks)-n} for n,(t,_,cid) in enumerate(chunks)]
-                else:
-                    reranked = rerank_candidates2(reranker, query, chunks, return_n)
+                not_reranked = [{"text": t, "id": cid, "cross_score": (len(chunks)-n)/(len(chunks))} for n,(e,t,_,cid) in enumerate(chunks)]
+                reranked = rerank_candidates2(reranker, query, chunks, return_n)
 
                 texts = [r['text'].lower() for r in reranked]
-                reranked_seg_ids_2 = [r['id'] for r in reranked][1:]
+                not_reranked_texts = [r['text'].lower() for r in not_reranked]
+                reranked_seg_ids_2 = [r['id'] for r in reranked]
                 reranked_scores = [r['cross_score'] for r in reranked][1:]
+                not_reranked_scores = [r['cross_score'] for r in not_reranked][1:]
+                print(not_reranked_scores)
                 print(reranked_scores)
 
-                relevancy_bm25_scores = relevancy_score_bm25(texts, query)
-                relevancy_bm25 = np.where(relevancy_bm25_scores >= np.average(relevancy_bm25_scores), 1.0, 0.0)[1:]
+                relevancy_bm25_scores = relevancy_score_bm25(not_reranked_texts, query)/20
+                cutoff_score = np.sort(relevancy_bm25_scores.flatten())[-10]
+                print(cutoff_score)
+                relevancy_bm25 = (np.where(relevancy_bm25_scores >= cutoff_score, 1.0, 0.0) * relevancy_bm25_scores)[1:]
+                print(relevancy_bm25)
                 # print(relevant_seg_ids)
-                print(f"Query seg id: {relevant_seg_ids[correct_query_key][0]}")
-                print(f"Same page seg ids: {relevant_seg_ids[correct_query_key]}")
+                #print(model_to_relevant_seg_ids[m])
+                #print(f"Query seg id: {model_to_relevant_seg_ids[m][correct_query_key][0]}")
+                #print(f"Same page seg ids: {model_to_relevant_seg_ids[m][correct_query_key]}")
                 # print(chunks)
-                print(f"Retrieved seg ids: {retrieved_seg_ids}")
-                print(f"Reranked seg ids: {reranked_seg_ids_2}")
+                #print(f"Retrieved seg ids: {retrieved_seg_ids}")
+                #print(f"Reranked seg ids: {reranked_seg_ids_2}")
 
-                relevancy_same_page = np.array([1.0 if c in relevant_seg_ids[correct_query_key] else 0.0 for c in reranked_seg_ids_2])
-                relevancy_score_ideal = relevancy_bm25 * 0.5 + relevancy_same_page * 0.5
-                print(relevancy_score_ideal)
+                relevancy_same_page = np.array([1.0 if c in model_to_relevant_seg_ids[m][correct_query_key] else 0.0 for c in reranked_seg_ids_2])
+                # print(relevancy_same_page)
+                relevancy_score_ideal = relevancy_bm25
+                #print(relevancy_score_ideal)
                 final_scores = []
                 for top_k in range(1, return_n):
-                    score = ndcg_score(np.array([relevancy_score_ideal]), np.array([reranked_scores]), k=top_k)
+                    score = ndcg_score(np.array([relevancy_score_ideal]), np.array([not_reranked_scores]), k=top_k)
                     final_scores.append(score)
                 final_scores = np.array(final_scores)
                 print(final_scores)
-                if m not in cumsums_per_model:
-                    cumsums_per_model[m] = dict()
-                if rr_nickname not in cumsums_per_model[m]:
-                    cumsums_per_model[m][rr_nickname] = final_scores
+                if m not in cumsums_per_model_per_metric:
+                    cumsums_per_model_per_metric[m] = dict()
+                if rr_nickname not in cumsums_per_model_per_metric[m]:
+                    cumsums_per_model_per_metric[m][rr_nickname] = final_scores
                 else:
-                    cumsums_per_model[m][rr_nickname] += final_scores
+                    cumsums_per_model_per_metric[m][rr_nickname] += final_scores
 
 
-    for j,m in enumerate(cumsums_per_model.keys()):
-        for i,rr in enumerate(cumsums_per_model[m].keys()):
-
-            cumsum = cumsums_per_model[m][rr] / len(queries)
-            plt.plot(xs, cumsum+0.005, patterns[i], color=colors[1+i], label=f"{rr}", alpha=0.7, zorder=50)
+    for j,m in enumerate(cumsums_per_model_per_metric.keys()):
+        for i,rr in enumerate(cumsums_per_model_per_metric[m].keys()):
+            cumsum = cumsums_per_model_per_metric[m][rr] / len(model_to_queries[m])
+            if len(models) == 1 and len(reranking_models) > 1:
+                label = f"{rr}"
+                color = colors[1+i]
+            if len(models) > 1 and len(reranking_models) == 1:
+                label = f"{model_names[m]}"
+                color = colors[j]
+            plt.plot(xs, cumsum+0.005, patterns[i], color=color, label=label, alpha=0.7, zorder=50)
+            
 
     plt.xlabel("k")
     plt.ylabel("NDCG")
@@ -328,33 +382,60 @@ if __name__ == '__main__':
     settings = load_settings()
     engine = create_engine(settings.database_url, pool_pre_ping=True)
 
-    dim = 1024
-    res = get_page_segments(engine, dim, n=50)
-    queries: list[str] = []
-    query_ids: list[int] = []
-    relevant_seg_ids: list[list[int]] = []
-    res = sorted(res, key=lambda x: x[2])
-    print(res)
-    for p in res:
-        sorted_relevant_ids = list(sorted(p[2]))
-        query_seg_id = sorted_relevant_ids[0]
-        query_ids.append(query_seg_id)
-        relevant_seg_ids.append(sorted_relevant_ids)
+    n = 8
+    model_ids = [1, 8, 10, 13, 9]
+    model_to_page_segment_ids = dict()
 
+    # pick a few random pages
+    random_pages = [p[0] for p in get_random_page_ids(engine, n=n)]
 
-    query_results = get_segments_by_id(engine, query_ids, dim)
-    queries_with_ids = sorted([(q[0], q[1][:128]) for q in query_results])
-    queries = [q[1] for q in queries_with_ids]
-    print(queries)
-    # print(queries)
+    # for each model retrieve segments of those random pages
+    for m in model_ids:
+        model_to_page_segment_ids[m] = sorted(get_page_segment_ids(engine, random_pages, m, model_dims[m]))
+        model_to_page_segment_ids[m] = [(page_id, sorted(seg_ids)) for (page_id, seg_ids) in model_to_page_segment_ids[m]]
+
+    print()
+    print(model_to_page_segment_ids)
+    print()
+    # take any model and get query texts from the first segment of each page
+    model_to_query_ids: dict = {m: [seg_ids[0] for (page_id, seg_ids) in model_to_page_segment_ids[m]] for m in model_ids}
+    print()
+    print(model_to_query_ids)
+    print()
+    model_to_query_results = {m: get_segments_by_id(engine, model_to_query_ids[m], model_dims[m]) for m in model_ids}
+    print()
+    print(model_to_query_results)
+    print()
+    model_to_queries_with_ids = {m: [(q[0], q[1][:128]) for q in model_to_query_results[m]] for m in model_ids}
+    print()
+    print(model_to_queries_with_ids)
+    print()
+    model_to_queries = {m: [q[1] for q in model_to_queries_with_ids[m]] for m in model_ids}
+    print()
+    print(model_to_queries)
+    print()
+    print()
+    for q in range(n):
+        for m in model_ids:
+            print(model_to_queries[m][q])
+    print()
+    model_to_relevant_seg_ids = {m: [m2[1] for m2 in model_to_page_segment_ids[m]] for m in model_ids}
+    print()
+    print(model_to_relevant_seg_ids)
+    print()
 
     # visualize_embeddings(engine, 1, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=384, queries=["Vladimir Putin noče prenehati z vojno kljub pozivom"])
     # visualize_embeddings(engine, 8, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768, queries=["Vladimir Putin noče prenehati z vojno kljub pozivom"])
     # visualize_embeddings(engine, 10, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 13, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 9, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=1024)
-    reranking_models = [None, "cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"]
-    reranking_models_nicknames = ["No rerank", "ms-marco-MiniLM-L6-v2", "bge-reranker-v2-m3"]
+
+    visualize_embeddings(engine, model_ids, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), model_to_queries=model_to_queries)
+
+    # reranking_models = [None, "cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"]
+    # reranking_models_nicknames = ["No rerank", "ms-marco-MiniLM-L6-v2", "bge-reranker-v2-m3"]
+    reranking_models = ["cross-encoder/ms-marco-MiniLM-L6-v2"]
+    reranking_models_nicknames = ["ms-marco-MiniLM-L6-v2"]
     # "mixedbread-ai/mxbai-rerank-large-v2" is a bit too large
     # visualize_precision_recall([1], ["cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ukrajin", "raket"])
     # queries = [
@@ -370,7 +451,7 @@ if __name__ == '__main__':
     #     "Katere države so še posebej ranljive?V vseh državah Kremelj uporablja iste narative, to so problemi migracij, socialni problemi, LGBT in homofobija in tako naprej. Putin povsod deluje na isti princip.",
     #     "Putinov hvalospev vojaškemu izvozu, ki naj bi presegel 15 milijard. Po besedah ruskega predsednika Vladimirja Putina je bila Rusija v lanskem letu na področju vojaške industrije uspešna.",
     # ]
-    visualize_precision_recall([9], reranking_models, queries, reranking_models_nicknames, relevant_seg_ids)
+    # visualize_precision_recall(model_ids, reranking_models, model_to_queries, reranking_models_nicknames, model_to_relevant_seg_ids)
 
     # visualize_precision_recall([1, 8, 10, 13, 9], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ujetni"])
     # visualize_precision_recall([9], reranking_models, "Putin, Zelenski in Trump pogovor.", ["putin", "zelenski", "trump"])
