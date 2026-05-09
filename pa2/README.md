@@ -17,7 +17,7 @@
 3. Run the retrieval demo
 
    **Option A - Run with Docker**  
-   Runs the demo container interactively and installs all required dependencies automatically.
+   Runs the demo container interactively and installs all required dependencies automatically. Models are still downloaded to pa2/models.
 
    ```powershell
    docker compose -f docker-compose.yml -f docker-compose.restored.yml run --rm demo
@@ -30,7 +30,7 @@
    pip install -r requirements.txt
    ```
 
-   Run the demo client:
+   Run the demo client with Powershell to pass .env variables:
 
    ```powershell
    .\run_demo_client.ps1
@@ -91,7 +91,7 @@
    pip install -r requirements.txt
    ```
 
-   Run locally:
+   Run locally with Powershell to pass .env variables:
 
    ```powershell
     .\run_parser_locally.ps1
