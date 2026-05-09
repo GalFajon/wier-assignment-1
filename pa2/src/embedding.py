@@ -235,11 +235,11 @@ def embed_string_pooling(model, tokenizer, string, settings):
 def rerank_candidates(reranker, query_string, candidates, settings):
     return_n = settings.rerank_return_n
     
-    cross_inputs = [[query_string, raw_text] for raw_text, _, _ in candidates]
+    cross_inputs = [[query_string, raw_text] for _, raw_text, _, _ in candidates]
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (text, _, dist), cross in zip(candidates, cross_scores):
+    for (_, text, _, dist), cross in zip(candidates, cross_scores):
         enriched.append({
             "text": text,
             "dist": float(dist),
@@ -256,11 +256,11 @@ def rerank_candidates(reranker, query_string, candidates, settings):
 def rerank_candidates2(reranker, query_string, candidates, rerank_return_n):
     return_n = rerank_return_n
     
-    cross_inputs = [[query_string, raw_text] for raw_text, _, _ in candidates]
+    cross_inputs = [[query_string, raw_text] for _, raw_text, _, _ in candidates]
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (text, dist, i), cross in zip(candidates, cross_scores):
+    for (_, text, dist, i), cross in zip(candidates, cross_scores):
         # print((text, dist, i))
         enriched.append({
             "text": text,

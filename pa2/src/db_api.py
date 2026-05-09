@@ -328,7 +328,7 @@ def query_page_segments(
     op = op_map[metric]
 
     sql = f"""
-    SELECT page_segment, embedding {op} (:query_vec)::vector AS distance, id
+    SELECT embedding, page_segment, embedding {op} (:query_vec)::vector AS distance, id
     FROM public.{table}
     WHERE model_id = :model_id
     ORDER BY embedding {op} (:query_vec)::vector
