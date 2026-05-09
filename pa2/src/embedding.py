@@ -260,10 +260,10 @@ def rerank_candidates2(reranker, query_string, candidates, rerank_return_n):
             "cross_score": float(cross)
         })
 
-    enriched.sort(key=lambda x: x["cross_score"], reverse=True)
+    # enriched.sort(key=lambda x: x["cross_score"], reverse=True)
     min_val = min(enriched, key=lambda x: x["cross_score"])["cross_score"]
     max_val = max(enriched, key=lambda x: x["cross_score"])["cross_score"]
-    print(min_val)
+    # print(min_val)
     for i in range(len(enriched)):
         enriched[i]["cross_score"] = (enriched[i]["cross_score"] - min_val) / (max_val - min_val)
     return enriched[:min(len(enriched), return_n)]

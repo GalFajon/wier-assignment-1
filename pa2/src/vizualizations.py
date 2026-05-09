@@ -35,7 +35,7 @@ model_dims = {
     }
 
 from ParserSettings import load_settings
-from db_api import get_page_segments, get_segments_by_model, get_segments_by_id
+from db_api import get_random_page_segments, get_segments_by_model, get_segments_by_id, get_random_page_ids, get_page_segment_ids
 
 def get_embedding_pca(embeddings, dim=2):
     pca = PCA(n_components=dim)
@@ -221,18 +221,18 @@ def relevancy_score_bm25(texts: list[str], query: str):
     return scores[0, :]
 
 
-def visualize_precision_recall(models, reranking_models, queries, reranking_model_nicknames, relevant_seg_ids):
+def visualize_precision_recall(models, reranking_models, model_to_queries, reranking_model_nicknames, model_to_relevant_seg_ids):
     plt.figure()
     return_n = 40
-    plt.title(f"NDCG @ k ({len(queries)} queries)")
+    plt.title(f"NDCG @ k ({len(model_to_queries[models[0]])} queries, same page relevancy)")
     settings = load_settings()
     # rerankers = [load_reranking_model2(settings, rr) for rr in reranking_models]
-    xs = np.arange(1, return_n)
+    xs = np.arange(1, return_n+1)
 
     patterns = ["--", ":", "-.", "-"]
     # query the database
     # model_to_chunk_dict = dict()
-    cumsums_per_model = dict()
+    cumsums_per_model_per_metric = dict()
     colors=["tab:blue", "tab:red", "tab:green", "tab:orange", "tab:purple"]
 
     model_to_query_to_chunks = dict()
@@ -245,10 +245,10 @@ def visualize_precision_recall(models, reranking_models, queries, reranking_mode
             model = load_embedding_model2(model_names[m], settings.model_run_device)
         else:
             model = load_embedding_model_hf2(settings, model_names[m])
-        for q,query in enumerate(queries):
+        for q,query in enumerate(model_to_queries[m]):
             print(f"Query {q}: {query}")
             chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
-            print([(c[0][:100], c[1], c[2]) for c in chunks])
+            # print([(c[0][:100], c[1], c[2]) for c in chunks])
             if m not in model_to_query_to_chunks:
                 model_to_query_to_chunks[m] = dict()
             if q not in model_to_query_to_chunks[m]:
@@ -269,54 +269,62 @@ def visualize_precision_recall(models, reranking_models, queries, reranking_mode
             for query_keys in model_to_query_to_chunks[m].keys():
                 # print(queries)
                 correct_query_key = int(query_keys)
-                query = queries[correct_query_key]
+                query = model_to_queries[m][correct_query_key]
                 # print(correct_query_key)
-                print(f"Query {correct_query_key}: {queries[correct_query_key]}")
+                print(f"Query {correct_query_key}: {model_to_queries[m][correct_query_key]}")
                 # for item in model_to_query_to_chunks[m].items():
                 #     print(item)
                 chunks = model_to_query_to_chunks[m][correct_query_key]
                 retrieved_seg_ids = [c[2] for c in chunks]
-                if rr == None:
-                    reranked = [{"text": t, "id": cid, "cross_score": len(chunks)-n} for n,(t,_,cid) in enumerate(chunks)]
-                else:
-                    reranked = rerank_candidates2(reranker, query, chunks, return_n)
+                not_reranked = [{"text": t, "id": cid, "cross_score": (len(chunks)-n)/(len(chunks))} for n,(t,_,cid) in enumerate(chunks)]
+                reranked = rerank_candidates2(reranker, query, chunks, return_n)
 
                 texts = [r['text'].lower() for r in reranked]
-                reranked_seg_ids_2 = [r['id'] for r in reranked][1:]
+                reranked_seg_ids_2 = [r['id'] for r in reranked]
                 reranked_scores = [r['cross_score'] for r in reranked][1:]
+                not_reranked_scores = [r['cross_score'] for r in not_reranked]
+                print(not_reranked_scores)
                 print(reranked_scores)
 
                 relevancy_bm25_scores = relevancy_score_bm25(texts, query)
-                relevancy_bm25 = np.where(relevancy_bm25_scores >= np.average(relevancy_bm25_scores), 1.0, 0.0)[1:]
+                relevancy_bm25 = np.where(relevancy_bm25_scores >= np.average(relevancy_bm25_scores)*1.3, 1.0, 0.0)[1:]
                 # print(relevant_seg_ids)
-                print(f"Query seg id: {relevant_seg_ids[correct_query_key][0]}")
-                print(f"Same page seg ids: {relevant_seg_ids[correct_query_key]}")
+                #print(model_to_relevant_seg_ids[m])
+                #print(f"Query seg id: {model_to_relevant_seg_ids[m][correct_query_key][0]}")
+                #print(f"Same page seg ids: {model_to_relevant_seg_ids[m][correct_query_key]}")
                 # print(chunks)
-                print(f"Retrieved seg ids: {retrieved_seg_ids}")
-                print(f"Reranked seg ids: {reranked_seg_ids_2}")
+                #print(f"Retrieved seg ids: {retrieved_seg_ids}")
+                #print(f"Reranked seg ids: {reranked_seg_ids_2}")
 
-                relevancy_same_page = np.array([1.0 if c in relevant_seg_ids[correct_query_key] else 0.0 for c in reranked_seg_ids_2])
-                relevancy_score_ideal = relevancy_bm25 * 0.5 + relevancy_same_page * 0.5
-                print(relevancy_score_ideal)
+                relevancy_same_page = np.array([1.0 if c in model_to_relevant_seg_ids[m][correct_query_key] else 0.0 for c in reranked_seg_ids_2])
+                print(relevancy_same_page)
+                relevancy_score_ideal = relevancy_same_page
+                #print(relevancy_score_ideal)
                 final_scores = []
-                for top_k in range(1, return_n):
-                    score = ndcg_score(np.array([relevancy_score_ideal]), np.array([reranked_scores]), k=top_k)
+                for top_k in range(1, return_n+1):
+                    score = ndcg_score(np.array([relevancy_score_ideal]), np.array([not_reranked_scores]), k=top_k)
                     final_scores.append(score)
                 final_scores = np.array(final_scores)
                 print(final_scores)
-                if m not in cumsums_per_model:
-                    cumsums_per_model[m] = dict()
-                if rr_nickname not in cumsums_per_model[m]:
-                    cumsums_per_model[m][rr_nickname] = final_scores
+                if m not in cumsums_per_model_per_metric:
+                    cumsums_per_model_per_metric[m] = dict()
+                if rr_nickname not in cumsums_per_model_per_metric[m]:
+                    cumsums_per_model_per_metric[m][rr_nickname] = final_scores
                 else:
-                    cumsums_per_model[m][rr_nickname] += final_scores
+                    cumsums_per_model_per_metric[m][rr_nickname] += final_scores
 
 
-    for j,m in enumerate(cumsums_per_model.keys()):
-        for i,rr in enumerate(cumsums_per_model[m].keys()):
-
-            cumsum = cumsums_per_model[m][rr] / len(queries)
-            plt.plot(xs, cumsum+0.005, patterns[i], color=colors[1+i], label=f"{rr}", alpha=0.7, zorder=50)
+    for j,m in enumerate(cumsums_per_model_per_metric.keys()):
+        for i,rr in enumerate(cumsums_per_model_per_metric[m].keys()):
+            cumsum = cumsums_per_model_per_metric[m][rr] / len(model_to_queries[m])
+            if len(models) == 1 and len(reranking_models) > 1:
+                label = f"{rr}"
+                color = colors[1+i]
+            if len(models) > 1 and len(reranking_models) == 1:
+                label = f"{model_names[m]}"
+                color = colors[j]
+            plt.plot(xs, cumsum+0.005, patterns[i], color=color, label=label, alpha=0.7, zorder=50)
+            
 
     plt.xlabel("k")
     plt.ylabel("NDCG")
@@ -328,33 +336,57 @@ if __name__ == '__main__':
     settings = load_settings()
     engine = create_engine(settings.database_url, pool_pre_ping=True)
 
-    dim = 1024
-    res = get_page_segments(engine, dim, n=50)
-    queries: list[str] = []
-    query_ids: list[int] = []
-    relevant_seg_ids: list[list[int]] = []
-    res = sorted(res, key=lambda x: x[2])
-    print(res)
-    for p in res:
-        sorted_relevant_ids = list(sorted(p[2]))
-        query_seg_id = sorted_relevant_ids[0]
-        query_ids.append(query_seg_id)
-        relevant_seg_ids.append(sorted_relevant_ids)
+    n = 50
+    model_ids = [1, 8, 10, 13, 9]
+    model_to_page_segment_ids = dict()
 
+    # pick a few random pages
+    random_pages = [p[0] for p in get_random_page_ids(engine, n=n)]
 
-    query_results = get_segments_by_id(engine, query_ids, dim)
-    queries_with_ids = sorted([(q[0], q[1][:128]) for q in query_results])
-    queries = [q[1] for q in queries_with_ids]
-    print(queries)
-    # print(queries)
+    # for each model retrieve segments of those random pages
+    for m in model_ids:
+        model_to_page_segment_ids[m] = sorted(get_page_segment_ids(engine, random_pages, m, model_dims[m]))
+        model_to_page_segment_ids[m] = [(page_id, sorted(seg_ids)) for (page_id, seg_ids) in model_to_page_segment_ids[m]]
+
+    print()
+    print(model_to_page_segment_ids)
+    print()
+    # take any model and get query texts from the first segment of each page
+    model_to_query_ids: dict = {m: [seg_ids[0] for (page_id, seg_ids) in model_to_page_segment_ids[m]] for m in model_ids}
+    print()
+    print(model_to_query_ids)
+    print()
+    model_to_query_results = {m: get_segments_by_id(engine, model_to_query_ids[m], model_dims[m]) for m in model_ids}
+    print()
+    print(model_to_query_results)
+    print()
+    model_to_queries_with_ids = {m: [(q[0], q[1][:128]) for q in model_to_query_results[m]] for m in model_ids}
+    print()
+    print(model_to_queries_with_ids)
+    print()
+    model_to_queries = {m: [q[1] for q in model_to_queries_with_ids[m]] for m in model_ids}
+    print()
+    print(model_to_queries)
+    print()
+    print()
+    for q in range(n):
+        for m in model_ids:
+            print(model_to_queries[m][q])
+    print()
+    model_to_relevant_seg_ids = {m: [m2[1] for m2 in model_to_page_segment_ids[m]] for m in model_ids}
+    print()
+    print(model_to_relevant_seg_ids)
+    print()
 
     # visualize_embeddings(engine, 1, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=384, queries=["Vladimir Putin noče prenehati z vojno kljub pozivom"])
     # visualize_embeddings(engine, 8, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768, queries=["Vladimir Putin noče prenehati z vojno kljub pozivom"])
     # visualize_embeddings(engine, 10, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 13, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 9, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=1024)
-    reranking_models = [None, "cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"]
-    reranking_models_nicknames = ["No rerank", "ms-marco-MiniLM-L6-v2", "bge-reranker-v2-m3"]
+    # reranking_models = [None, "cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"]
+    # reranking_models_nicknames = ["No rerank", "ms-marco-MiniLM-L6-v2", "bge-reranker-v2-m3"]
+    reranking_models = ["cross-encoder/ms-marco-MiniLM-L6-v2"]
+    reranking_models_nicknames = ["ms-marco-MiniLM-L6-v2"]
     # "mixedbread-ai/mxbai-rerank-large-v2" is a bit too large
     # visualize_precision_recall([1], ["cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ukrajin", "raket"])
     # queries = [
@@ -370,7 +402,7 @@ if __name__ == '__main__':
     #     "Katere države so še posebej ranljive?V vseh državah Kremelj uporablja iste narative, to so problemi migracij, socialni problemi, LGBT in homofobija in tako naprej. Putin povsod deluje na isti princip.",
     #     "Putinov hvalospev vojaškemu izvozu, ki naj bi presegel 15 milijard. Po besedah ruskega predsednika Vladimirja Putina je bila Rusija v lanskem letu na področju vojaške industrije uspešna.",
     # ]
-    visualize_precision_recall([9], reranking_models, queries, reranking_models_nicknames, relevant_seg_ids)
+    visualize_precision_recall(model_ids, reranking_models, model_to_queries, reranking_models_nicknames, model_to_relevant_seg_ids)
 
     # visualize_precision_recall([1, 8, 10, 13, 9], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ujetni"])
     # visualize_precision_recall([9], reranking_models, "Putin, Zelenski in Trump pogovor.", ["putin", "zelenski", "trump"])
