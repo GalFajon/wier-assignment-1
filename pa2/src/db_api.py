@@ -245,6 +245,7 @@ def query_page_segments(
     dimension=384,
     top_n: int = 5
 ):
+    ann_candidate_mult = 50
     dim = len(query_vector)
 
     table_map = {
@@ -269,21 +270,68 @@ def query_page_segments(
 
     op = op_map[metric]
 
+    ann_limit = max(
+        top_n * ann_candidate_mult,
+        1000
+    )
+
     sql = f"""
-    SELECT page_segment, embedding {op} (:query_vec)::vector AS distance, id
-    FROM public.{table}
-    WHERE model_id = :model_id
-    ORDER BY embedding {op} (:query_vec)::vector
+    WITH ann_candidates AS (
+
+        SELECT id
+        FROM public.{table}
+        ORDER BY embedding {op} (:query_vec)::vector
+        LIMIT :ann_limit
+
+    )
+
+    SELECT
+        p.page_segment,
+        p.embedding {op} (:query_vec)::vector AS distance,
+        p.id
+
+    FROM public.{table} p
+
+    INNER JOIN ann_candidates a
+        ON p.id = a.id
+
+    WHERE p.model_id = :model_id
+
+    ORDER BY p.embedding {op} (:query_vec)::vector
+
     LIMIT :top_n;
     """
 
     with engine.connect() as connection:
+
+        connection.execute(
+            text("SET enable_seqscan = on;")
+        )
+
+        connection.execute(
+            text("SET enable_indexscan = on;")
+        )
+
+        connection.execute(
+            text("SET enable_bitmapscan = on;")
+        )
+
+        ef_search = max(
+            ann_limit,
+            200
+        )
+
+        connection.execute(
+            text(f"SET hnsw.ef_search = {ef_search};")
+        )
+
         result = connection.execute(
             text(sql),
             {
                 "query_vec": query_vector,
                 "model_id": model_id,
-                "top_n": top_n
+                "top_n": top_n,
+                "ann_limit": ann_limit
             }
         ).fetchall()
 
