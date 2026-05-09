@@ -12,7 +12,8 @@
 \usepackage{caption}
 \usepackage{float}
 \usepackage{graphicx}
-
+\usepackage{svg}
+\svgpath{{images/}{./images/}}
 
 \begin{document}
 
@@ -149,22 +150,30 @@ Table~\ref{tab:reranker_models} summarizes the reranking models used in the expe
 
 \section{Embedding Analysis}
 
-To evaluate the retrieval quality of our setups, we employ the Normalized Discounted Cumulative Gain metric at \(k\) retrieved segments (NDCG@\(k\)). This metric is well suited for retrieval pipelines, as it measures not only the number of relevant segments among the top \(k\) retrieved results, but also whether the most relevant segments appear near the top of the ranking. For evaluation, we compute the mean NDCG@\(k\) across multiple queries, providing a more representative measure of average retrieval performance.
-
-Queries used when computing mean NDCG@k scores, were obtained by randomly picking some number of pages from the database and taking the first segment of each page, where only the first 128 characters were used. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated by summing scores of two strategies:
-
-\begin{enumerate}
-    \item Okapi BM25 contributes to the first 50\% of the score. This ranking function was chosen due to its popularity among search engines.
-    \item The other 50\% is 1 if a segment appears on the same page as the query, 0 otherwise. 
-\end{enumerate}
-
-The 50\% weights for both strategies were chosen arbitrarily.
-
 First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the M query embeddings according to the used distance metric. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
+
+To evaluate the retrieval quality of our embedding models, we employ the Normalized Discounted Cumulative Gain metric at \(k\) retrieved segments (NDCG@\(k\)). This metric is well suited for retrieval pipelines, as it measures not only the number of relevant segments among the top \(k\) retrieved results, but also whether the most relevant segments appear near the top of the ranking. For evaluation, we compute the mean NDCG@\(k\) across multiple queries, providing a more representative measure of average retrieval performance.
+
+Queries used when computing mean NDCG@k scores were obtained by randomly picking some number of pages from the database and taking the first segment of each page. Only the first 128 characters of the chosen segments were used to extract a portion of the title. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated with different strategies: BM25 score, higher score for same page segments, and comparing to a reranked order using one of the reranking models.
+
+For the BM25 strategy, we used ''Lucene'' version of the BM25 algorithm and computed scores for each result. The top 10 highest scoring results kept their scores, while others were set to 0 to emphasise the difference between relevant and irrelevant results. Measurements using this strategy are shown in Figure \ref{fig:model_comparison_bm25}.
+
+\begin{figure}
+    \centering
+    \includesvg[width=\columnwidth]{NDCG_models_bm25}
+    \caption{Comparison of embedding models using the mean NDCG@\(k\) metric with the BM25 strategy.}
+    \label{fig:model_comparison_bm25}
+\end{figure}
+
+The second strategy focused on giving higher scores to segments that were taken from the same page as the query. If so, that segment is given a score of 1, otherwise a score of 0.
+
+The final strategy simply compares the ordering of results from the embedding model with the reranked ordering using the \verb|ms-marco-MiniLM-L6-v2| model. An embedding model that produced an ordering closer to its reranked ordering is considered as better.
 
 The embedding model performance is shown in Figure~\ref{fig:model_comparison}. The results indicate that the model \texttt{some-model} consistently outperforms the other evaluated models. Cosine similarity was used for all similarity-based retrieval experiments.
 
-\begin{figure}[H]
+
+
+\begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{images/NDCG_models_TMP.png}
     \caption{Comparison of embedding models using the mean NDCG@\(k\) metric over 50 queries.}
@@ -186,7 +195,7 @@ Finally, we measured the impact of the used distance metric when calculating emb
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\columnwidth]{images/NDCG_distance_metrics_TMP.png}
+    \includegraphics[width=0.5\textwidth]{images/NDCG_distance_metrics_TMP.png}
     \caption{Comparison of distance metric retrieval quality scored by the NDCG metric averaged over 50 different queries.}
     \label{fig:metric_comparison}
 \end{figure}
@@ -195,9 +204,9 @@ Finally, we measured the impact of the used distance metric when calculating emb
 
 To evaluate how effectively the models group embedded segments, we visualized embeddings using UMAP. The embeddings were first reduced with SVD, retaining \(40\%\) of the variance, and then projected into a two-dimensional space using UMAP. Each point in the scatter plot represents a single segment embedding.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{images/clustering_TMP.png}
+    \includegraphics[width=0.75\columnwidth]{images/Clusters.png}
     \caption{UMAP visualization of segment embedding clusters.}
     \label{fig:chunk_clustering}
 \end{figure}
