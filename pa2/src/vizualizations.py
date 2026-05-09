@@ -8,7 +8,7 @@ from sqlalchemy import Engine, create_engine
 import mplcursors
 import string
 from umap import UMAP
-from embedding import embed_string2, load_embedding_model2, load_reranking_model, load_reranking_model2, rerank_candidates, rerank_candidates2, load_embedding_model_hf2
+from embedding import embed_string_resize_vector, load_embedding_model2, load_reranking_model, load_reranking_model2, rerank_candidates, rerank_candidates2, load_embedding_model_hf2
 from run_query import query_database, query_database2
 import Stemmer
 import stopwordsiso as stopwords
@@ -110,7 +110,7 @@ def visualize_embeddings(engine: Engine, model_id: int, reduction_fun=get_embedd
     # get query embedding
     settings = load_settings()
     model = load_embedding_model2(model_names[model_id], settings.model_run_device)
-    embedding_array = embed_string2(model, queries[0], vector_size)
+    embedding_array = embed_string_resize_vector(model, queries[0], vector_size, settings)
     query_embedding = embedding_array
     query_embedding_xd = reduction_model.transform(np.array([query_embedding]))[0]
     print(query_embedding[:10])

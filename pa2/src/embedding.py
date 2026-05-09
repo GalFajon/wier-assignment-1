@@ -105,19 +105,28 @@ def load_reranking_model2(settings, model_name):
     return model
 
 
+
+
+
+
+
+
+
 def embed_chunks(model, chunk_list_raw, settings):
     embeddings = model.encode(
         chunk_list_raw,
         batch_size=settings.batch_size,
         convert_to_numpy=True,
         show_progress_bar=False,
-        normalize_embeddings=True,
+        normalize_embeddings=settings.normalize_embedding,
     )
 
     return [emb.tolist() for emb in embeddings]
 
+
+
 def embed_chunks_pooling(model, tokenizer, chunk_list_raw, settings):
-    device = next(model.parameters()).device 
+    device = next(model.parameters()).device
     embeddings = []
 
     for i in range(0, len(chunk_list_raw), settings.batch_size):
@@ -144,11 +153,18 @@ def embed_chunks_pooling(model, tokenizer, chunk_list_raw, settings):
 
         mean_pooled = summed / counts
 
-        mean_pooled = torch.nn.functional.normalize(mean_pooled, p=2, dim=1)
+        if settings.normalize_embedding:
+            mean_pooled = torch.nn.functional.normalize(
+                mean_pooled,
+                p=2,
+                dim=1
+            )
 
         embeddings.extend(mean_pooled.cpu().numpy())
 
     return [emb.tolist() for emb in embeddings]
+
+
 
 
 def embed_string(model, string, settings):
@@ -156,17 +172,18 @@ def embed_string(model, string, settings):
         string,
         convert_to_numpy=True,
         show_progress_bar=False,
-        normalize_embeddings=True,
+        normalize_embeddings=settings.normalize_embedding,
     )
 
     return emb.tolist()
 
-def embed_string2(model, string, embedding_dimension):
+
+def embed_string_resize_vector(model, string, embedding_dimension, settings):
     emb = model.encode(
         string,
         convert_to_numpy=True,
         show_progress_bar=False,
-        normalize_embeddings=True,
+        normalize_embeddings=settings.normalize_embedding,
     )
 
     target_dim = embedding_dimension
@@ -179,6 +196,7 @@ def embed_string2(model, string, embedding_dimension):
         emb_list = emb_list[:target_dim]
 
     return emb_list
+
 
 def embed_string_pooling(model, tokenizer, string, settings):
     device = next(model.parameters()).device
@@ -203,28 +221,16 @@ def embed_string_pooling(model, tokenizer, string, settings):
     counts = torch.clamp(mask.sum(dim=1), min=1e-9)
 
     mean_pooled = summed / counts
-    mean_pooled = torch.nn.functional.normalize(mean_pooled, p=2, dim=1)
+
+    if settings.normalize_embedding:
+        mean_pooled = torch.nn.functional.normalize(
+            mean_pooled,
+            p=2,
+            dim=1
+        )
 
     return mean_pooled[0].cpu().numpy().tolist()
 
-def embed_string2(model, string, embedding_dimension):
-    emb = model.encode(
-        string,
-        convert_to_numpy=True,
-        show_progress_bar=False,
-        normalize_embeddings=True,
-    )
-
-    target_dim = embedding_dimension
-
-    emb_list = emb.tolist()
-
-    if len(emb_list) < target_dim:
-        emb_list = emb_list + [0.0] * (target_dim - len(emb_list))
-    elif len(emb_list) > target_dim:
-        emb_list = emb_list[:target_dim]
-
-    return emb_list
 
 def rerank_candidates(reranker, query_string, candidates, settings):
     return_n = settings.rerank_return_n
@@ -243,6 +249,9 @@ def rerank_candidates(reranker, query_string, candidates, settings):
     enriched.sort(key=lambda x: x["cross_score"], reverse=True)
 
     return enriched[:min(len(enriched), return_n)]
+
+
+
 
 def rerank_candidates2(reranker, query_string, candidates, rerank_return_n):
     return_n = rerank_return_n

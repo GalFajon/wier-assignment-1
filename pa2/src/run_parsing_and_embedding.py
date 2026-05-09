@@ -15,7 +15,8 @@ def parse_and_embed() -> None:
 	print(settings)
  
 	engine = create_engine(settings.database_url, pool_pre_ping=True)
-	model, tokenizer = load_embedding_model_hf(settings)
+	#model, tokenizer = load_embedding_model_hf(settings)
+	model = load_embedding_model(settings)
  
 	emb_vec_len = settings.embedding_dimension
 	table_map = {
@@ -44,11 +45,11 @@ def parse_and_embed() -> None:
 		model_table = get_source_table(engine, source_schema, "model")
 		model_id = register_model(engine, model_table, settings.model_name)
 		print(f"Inserted model '{settings.model_name}' with id={model_id}")
-
+  
 		rows = fetch_html_content_rows(
 			engine=engine,
 			source_table=source_table,
-			limit=2000,
+			limit=settings.parse_limit,
 		)
 		
 		print(f"Fetched rows with html_content: {len(rows)}")
@@ -57,7 +58,9 @@ def parse_and_embed() -> None:
 			parsed = parse_html(row["html_content"])
 			
 			chunks = chunk_segments(parsed.get("title") + ". " + parsed.get("article-content", ""), max_words=settings.chunk_length)
-			embeddings = embed_chunks_pooling(model, tokenizer, chunks, settings=settings)
+   
+			#embeddings = embed_chunks_pooling(model, tokenizer, chunks, settings=settings)
+			embeddings = embed_chunks(model, chunks, settings=settings)
 
 			for (chunk, embedding) in zip(chunks, embeddings):
 				all_segments.append({

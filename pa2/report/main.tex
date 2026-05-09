@@ -16,7 +16,7 @@
 
 \begin{document}
 
-\title{WEIR - Assignment 1 - Preferential web crawling}
+\title{WEIR - Assignment 2 - Document Retrieval}
 
 
 
@@ -28,15 +28,16 @@
 \maketitle
 
 \begin{abstract}
-In this assignment, we created a pipeline for extracting and indexing textual content from
-previously crawled web pages to support domain-specific information retrieval.
-The pipeline parses raw HTML and retrieves semantically coherent chunks of data (article headings, body, etc.), 
-which are then encoded into dense vector representations using a pre-trained language model.
-The resulting embeddings are persisted in a PostgreSQL database extended with the
-pgvector module, enabling efficient similarity search over the document collection.
+This assignment builds on the PA1 crawl by extracting meaningful content from HTML pages, segmenting it into coherent text segments, encoding them with a sentence embedding model, and storing them in a pgvector-enabled PostgreSQL database for semantic retrieval.
+
+We implement parsing tailored to 24ur.com articles, apply sentence-aware chunking, index embeddings with HNSW, and provide a query and reranking pipeline based on vector similarity and a cross-encoder reranker.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
+
+
+
+
 
 \section{Introduction}
 This report describes the design and implementation of a parsing and semantic embedding
@@ -44,29 +45,220 @@ pipeline that processes the HTML pages collected by the preferential web crawler
 in the previous assignment. The goal is to extract clean article text from the crawled
 pages and represent it in a form that supports efficient domain-specific information retrieval.
 
-The pipeline consists of three main stages: an HTML parser that targets the article
-structure of 24ur.com pages, a text chunker that splits the extracted content into
-semantically coherent segments, and an embedding module that encodes each segment into
-a dense vector representation.
+The pipeline consists of two main stages: preprocessing and retrieval. During preprocessing, crawled HTML pages from 24ur.com are parsed, and the extracted text is divided into sentence-based segments. The resulting segments are then embedded using a transformer-based sentence embedding model and stored in a vector database.
 
-Parsing is implemented with the \texttt{lxml} library and targets the article body of each page by
-locating known structural elements such as the \texttt{\#article-body} block. Article titles
-are recovered from OpenGraph metadata where available. The chunker uses NLTK's Slovene
-sentence tokenizer to split text into sentence-boundary-aware chunks with a configurable
-maximum word count.
+During retrieval, a user query is embedded using the same embedding model and used to retrieve the most similar segments from the database. Query--segment pairs are subsequently evaluated by a reranking model, which refines the initial ranking based on semantic relevance. The final output of the pipeline is a ranked list of text segments that are most semantically relevant to the query.
 
-% Tlele predpostavljam da bomo še več modelov ponucal pa opisal
-Embeddings are produced by the \texttt{all-MiniLM-L6-v2} SentenceTransformer model and
-stored together with the corresponding text segments and a reference to the model record
-in a PostgreSQL database extended with the pgvector module.
+
+
+
 
 \section{Methodology}
 
+
+\subsection{Website filtering and data source}
+We reuse the PA1 crawl database from the previous assignment and restrict processing to HTML pages with non-empty \texttt{html\_content}. In our pipeline this filtering is performed in a database query that fetches page IDs and HTML bodies.
+
+
+
+\subsection{HTML parsing with XPath and regural expressions}
+HTML parsing is implemented with \texttt{lxml}. We extract the article title by first reading the OpenGraph metadata (\texttt{//meta[@property='og:title']/@content}); if missing, we fall back to \texttt{//title}. A regex post-process removes the site suffix ``\texttt{| 24ur.com}'' and normalizes whitespace. The main article body is extracted from the \texttt{\#article-body} node using XPath, and non-content elements (\texttt{script}, \texttt{style}, \texttt{noscript}, \texttt{img}, \texttt{figure}, \texttt{svg}, \texttt{picture}) are removed to keep only the textual content.
+
+We additionally capture the lead summary by locating the main article picture and the adjacent summary paragraph via XPath, then prepend it to the article body. A regex is used for lightweight text normalization (whitespace collapsing) and title cleanup.
+
+This hybrid approach keeps extraction robust while remaining lightweight and transparent.
+
+
+
+
+
+
+
+
+\subsection{Chunking}
+
+After parsing the crawled web pages, the extracted text is divided into smaller sentence-based segments. Sentence boundaries are detected using the NLTK sentence tokenizer configured for the Slovene language. Segments are constructed incrementally by appending consecutive sentences until a predefined maximum word limit is reached. Once the limit is exceeded, a new segment is created. This approach preserves local semantic context while ensuring that segment sizes remain suitable for transformer-based embedding models.
+
+
+
+
+
+
+
+\subsection{Segment Embedding}
+
+Document segments were transformed into dense vector representations using transformer-based sentence embedding models. Each segment was embedded independently, and the resulting vectors were stored in dedicated database tables grouped by embedding dimensionality. We extend the PA1 database with a \texttt{cleaned\_content} column and three segment tables for different embedding sizes: \texttt{page\_segment\_vec384}, \texttt{page\_segment\_vec768}, and \texttt{page\_segment\_vec1024}. Each segment row stores the page ID, the model ID, the text segment, and the vector embedding. A separate \texttt{model} table records the embedding model name, enabling multiple models to coexist.
+
+
+To ensure consistent similarity computation during retrieval, embeddings generated by all evaluated models were normalized to unit length prior to storage, despite the embedding models already producing nearly unit-length vectors.
+
+The embedding computation included both multilingual and Slovenian-specialized embedding models. Table~\ref{tab:embedding_models} summarizes the embedding models used in the experiments together with their output vector dimensionalities.
+
+\begin{table}[h]
+\centering
+\caption{Embedding models used for vectorization}
+\label{tab:embedding_models}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Model} & \textbf{Vec. Length} \\
+\hline
+\texttt{sentence-transformers/all-MiniLM-L6-v2} & 384 \\
+\texttt{sentence-transformers/all-mpnet-base-v2} & 768 \\
+\texttt{EMBEDDIA/sloberta} & 768 \\
+\texttt{cjvt/crosloengual-bert-si-nli} & 768 \\
+\texttt{BAAI/bge-m3} & 1024 \\
+\hline
+\end{tabular}
+\end{table}
+
+To support efficient similarity-based retrieval, vector indexes were created for each embedding table using the \texttt{pgvector} PostgreSQL extension. Separate HNSW indexes were generated for cosine similarity and Euclidean (L2) distance metrics, enabling experimentation with different retrieval strategies. Additionally, standard indexes were created for embedding model identifiers to enable efficient filtering by model. Since \texttt{pgvector} does not provide indexing support for L1 distance, L1 retrieval is performed without vector indexing.
+
+
+
+
+
+
+
+\subsection{Segment Retrieval and Reranking}
+
+During retrieval, the user query is embedded using the same embedding model as the stored segment embeddings. The generated query vector is then used to query the vector database and retrieve the top 100 most similar segments according to the selected distance metric. 
+
+The retrieved segments are subsequently reranked using a cross-encoder model. For reranking, query--segment text pairs are constructed and processed jointly by the reranker model to produce relevance scores. The final retrieval output consists of the 10 highest-ranked segments according to the reranker scores.
+
+Table~\ref{tab:reranker_models} summarizes the reranking models used in the experiments.
+
+\begin{table}[h]
+\centering
+\caption{Reranking model names}
+\label{tab:reranker_models}
+\begin{tabular}{|l|}
+\hline
+\textbf{Reranker Model} \\
+\hline
+\texttt{cross-encoder/ms-marco-MiniLM-L6-v2} \\
+\texttt{BAAI/bge-reranker-v2-m3} \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
 \section{Embedding Analysis}
+
+To evaluate the retrieval quality of our setups, we employ the Normalized Discounted Cumulative Gain metric at \(k\) retrieved segments (NDCG@\(k\)). This metric is well suited for retrieval pipelines, as it measures not only the number of relevant segments among the top \(k\) retrieved results, but also whether the most relevant segments appear near the top of the ranking. For evaluation, we compute the mean NDCG@\(k\) across multiple queries, providing a more representative measure of average retrieval performance.
+
+Queries used when computing mean NDCG@k scores, were obtained by randomly picking some number of pages from the database and taking the first segment of each page, where only the first 128 characters were used. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated by summing scores of two strategies:
+
+\begin{enumerate}
+    \item Okapi BM25 contributes to the first 50\% of the score. This ranking function was chosen due to its popularity among search engines.
+    \item The other 50\% is 1 if a segment appears on the same page as the query, 0 otherwise. 
+\end{enumerate}
+
+The 50\% weights for both strategies were chosen arbitrarily.
+
+First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the M query embeddings according to the used distance metric. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
+
+The embedding model performance is shown in Figure~\ref{fig:model_comparison}. The results indicate that the model \texttt{some-model} consistently outperforms the other evaluated models. Cosine similarity was used for all similarity-based retrieval experiments.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/NDCG_models_TMP.png}
+    \caption{Comparison of embedding models using the mean NDCG@\(k\) metric over 50 queries.}
+    \label{fig:model_comparison}
+\end{figure}
+
+
+Similarly, we evaluated the performance of the reranking models by first retrieving the \(N\) most similar embeddings and then selecting the top \(k\) segments using the reranker model. For this evaluation, the performance of the embedding model \texttt{some-model} was used as the quality baseline. As shown in Figure~\ref{fig:reranker_comparison}, reranking significantly improves retrieval quality, with the model \texttt{some-retriever} achieving the best performance.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/NDCG_rerankers_TMP.png}
+    \caption{Comparison of reranking models using the mean NDCG@\(k\) metric over 50 queries.}
+    \label{fig:reranker_comparison}
+\end{figure}
+
+
+Finally, we measured the impact of the used distance metric when calculating embedding similarity. We compared cosine, L1 and L2 distance metrics on the embeddings of the best performing embedding model.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/NDCG_distance_metrics_TMP.png}
+    \caption{Comparison of distance metric retrieval quality scored by the NDCG metric averaged over 50 different queries.}
+    \label{fig:metric_comparison}
+\end{figure}
+
+
+
+To evaluate how effectively the models group embedded segments, we visualized embeddings using UMAP. The embeddings were first reduced with SVD, retaining \(40\%\) of the variance, and then projected into a two-dimensional space using UMAP. Each point in the scatter plot represents a single segment embedding.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{images/clustering_TMP.png}
+    \caption{UMAP visualization of segment embedding clusters.}
+    \label{fig:chunk_clustering}
+\end{figure}
+
+
+
+
+
+
+
+\section{Results}
+
+The final selected parameters of our pipeline are noted in Table~\ref{tab:final_params}. \cite{bgem3}
+
+\begin{table}[h]
+\centering
+\caption{Final pipeline parameters}
+\label{tab:final_params}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parameter} & \textbf{Chosen Value} \\
+\hline
+\texttt{Embedding Model} & BAAI/bge-m3 \\
+\texttt{Reranking Model} & bge-reranker-v2-m3 \\
+\texttt{Segment Max Length} & 128 words \\
+\texttt{Retrieval Dist. Metric} & cosine \\ 
+\texttt{Similarity Return n} & 100 \\
+\texttt{Reranking Return k} & 10 \\
+\hline
+\end{tabular}
+\end{table}
+
+- NDCG @ k metric for final params
+- examples of parsed html
+- examples of segments
+
+
+
+\subsection{Retrieval Examples}
+
+- examples of successful queries
+- examples of unsuccessful queries
+
+
+
 
 \section{Disscussion}
 
+Experiments clearly show reranking significantly improves the relevancy of top results, but due to the harder interpretability of the NDCG@k metric concrete relative improvements between models are harder to determine.
+
+- what can be done better, what we could expand on
+- TODO EXPAND LATER
+The parser is tailored to 24ur.com and relies on stable HTML structure. Pages that deviate from the \texttt{\#article-body} template or heavily script-rendered content can yield empty or partial text. Chunking relies on sentence tokenization quality and may produce uneven segment sizes. Reranking improves accuracy but adds latency, which may be problematic for interactive settings.
+
+
+
+
 \section{Conclusion}
+We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl of 24ur.com. The system parses raw HTML, chunks text using sentence boundaries, stores embeddings in a pgvector database with HNSW indexing, and retrieves and reranks results for user queries. The approach is modular, supports multiple embedding models, and can be easily configured using an \texttt{.env} file.
+
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref}

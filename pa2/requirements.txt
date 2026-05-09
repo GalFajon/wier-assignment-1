@@ -6,3 +6,4 @@ nltk
 pgvector
 sentence_transformers
 tqdm
+gdown
