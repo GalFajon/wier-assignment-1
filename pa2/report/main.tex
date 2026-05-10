@@ -267,7 +267,7 @@ The analysis results indicate that the model \texttt{bge-m3}~\cite{bgem3} consis
 
 Figure~\ref{fig:metric_comparison} shows the relationship between the evaluated metrics. Since all embeddings were normalized, cosine similarity and L2 distance produced identical retrieval rankings and therefore nearly identical NDCG@k scores. In contrast, the L1 distance consistently underperformed, likely due to the curse of dimensionality in high-dimensional embedding spaces and the lost magnitude in embeddings due to normalization. Based on these results, cosine similarity was selected for the final retrieval pipeline.
 
-Figure~\ref{fig:reranker_comparison} presents the performance of all evaluated combinations. The \texttt{mmarco-mMiniLMv2-L12-H384-v1} reranker consistently provided the largest performance improvements across embedding models. In contrast, \texttt{bge-reranker-v2-m3} achieved lower performance despite being the largest evaluated reranker model. We attribute this to weaker Slovene language representation during training, despite the model being advertised as multilingual.
+Figure~\ref{fig:reranker_comparison} presents the performance of all evaluated reranker combinations. The \texttt{mmarco-mMiniLMv2-L12-H384-v1} reranker consistently provided the largest performance improvements across embedding models. In contrast, \texttt{bge-reranker-v2-m3} achieved lower performance despite being the largest evaluated reranker model. We attribute this to weaker Slovene language representation during training, despite the model being advertised as multilingual.
 
 The best overall performance was achieved by combining the \texttt{bge-m3} embedding model with the \texttt{mmarco-mMiniLMv2-L12-H384-v1} cross-encoder reranker. Due to their consistently strong retrieval performance, this combination was selected for the final retrieval pipeline.
 
@@ -310,7 +310,7 @@ UMAP visualizations helped us somewhat validate our measurements and we did keep
 
 In the Appendix you can find an example of a short query, the retrieved results and how different rerankers also treat such results (Tables~\ref{tab:short_query}, \ref{tab:short_query_reranked_low_end}, \ref{tab:short_query_reranked_high_end}). 
 
-Other examples include a longer query that was taken as a title from a random 24ur.com article. In tables \ref{tab:long_query} and \ref{tab:long_query_reranked} are retrieved and reranked results, where it is noticable that reranking put into the top ranks more relevant results that the retriever alone. The reranker successfully found the original article from where the query was taken.
+Other examples include a longer query that was taken as a title from a random 24ur.com article. In tables \ref{tab:long_query} and \ref{tab:long_query_reranked} are retrieved and reranked results, where it is noticable that reranking put into the top ranks more relevant results than the retriever alone. The reranker successfully found the original article from where the query was taken.
 
 Finally, an off-topic query (about opening times of a zoo in Slovenia) was used to see how both an embedding and a reranking model deal with such queries (Tables~\ref{tab:unusual_query}, \ref{tab:unusual_query_reranked}). Reranked results have much lower cross scores and larger distances, which is as expected. While the top retrieved segment is the most relevant (a keyword ''zoo''), it surprisingly doesn't appear in the reranked results. Other results also don't seem too relevant to us authors, so not even the reranker could improve this situation. 
 

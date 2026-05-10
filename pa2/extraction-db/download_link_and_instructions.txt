@@ -8,3 +8,5 @@ Importing only the saved embedding DB:
 docker compose up -d db
 docker cp .\DB_with_embeddings.sql crawler-postgres:/tmp/DB_with_embeddings.dump
 docker exec -it crawler-postgres pg_restore -U crawler -d crawler --no-owner /tmp/DB_with_embeddings.dump
+
+This assumes you have left the settings the same as the example, if not configure these commands.
