@@ -51,10 +51,9 @@ if __name__ == '__main__':
     reranker = load_reranking_model(settings)
 
     queries = [
-        "Vladimir Putin bombardiral Ukrajino",
-        "Kdaj bodo volitve v Sloveniji",
-        "Gospodarska rast v Evropski uniji",
-        "Poplave v Sloveniji",
+        "Vladimir Putin",
+        "Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.",
+        "Ob katerih dneh je živalski vrt Zoo odprt."
     ]
 
     for query_idx, query_string in enumerate(queries, start=1):
