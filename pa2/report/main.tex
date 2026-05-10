@@ -248,7 +248,8 @@ Finally, we evaluated the performance of all embedding model and reranker combin
 
 \subsection{Embedding Visualization}
 
-To evaluate how effectively the models group embedded segments, we visualized embeddings using UMAP. The embeddings were first reduced with SVD, retaining \(40\%\) of the variance, and then projected into a two-dimensional space using UMAP. Each point in the scatter plot represents a single segment embedding. Points of the same colors represent results of the same query, where the query point is marked as ''X''. 
+
+To evaluate how effectively the models group embedded segments, we visualized embeddings using UMAP. The original embeddings are simply projected onto a two-dimensional space using UMAP (PCA and tSNE were tried, but UMAP showed best clustering). Each point in the scatter plot represents a single segment embedding. Points of the same colors represent results of the same query, where the query point is marked as ''X''. In almost all plots there was one more cluster with fewer segments far away from others, which was filtered out to retain sensible plot proportions. More about the excluded cluster in the Discussion section. 
 
 \begin{figure}
     \centering
@@ -256,9 +257,6 @@ To evaluate how effectively the models group embedded segments, we visualized em
     \caption{UMAP visualization of segment embedding clusters.}
     \label{fig:chunk_clustering}
 \end{figure}
-
-
-
 
 
 
@@ -302,22 +300,18 @@ Unsurprisingly, query results of the \texttt{bge-m3} model are also better group
 
 \section{Disscussion} \label{discussion}
 
+The parser is tailored to 24ur.com and relies on stable HTML structure. Pages that deviate from the \texttt{\#article-body} template or heavily script-rendered content can yield empty or partial text. Chunking relies on sentence tokenization quality and may produce uneven segment sizes. Reranking improves accuracy but adds latency, which may be problematic for interactive settings.
+
 For measuring retrieval quality of embedding and reranking models we would ideally have a manually annotated dataset of queries, their results, and relevance scores. Since we couldn't afford to make one, we opt to employ diferent algorithms and strategies to calculate ground truth relevance scores and measured models on each one. We think that the least reliable strategy was the BM25 one since embedding models are expected to encode meanings of the tet other that just simple term frequencies.
 
 Experiments clearly show reranking significantly improves the relevancy of top results, but due to the harder interpretability of the NDCG@k metric concrete relative improvements between models are harder to determine.
 
+UMAP visualizations helped us somewhat validate our measurements and we did keep in mind that the visualization inaccurately represents the real embedding space. We hoped however that if a model was able to extract many useful features and group segments around them, we would see more groups in the UMAP visualization as well. For each model there is also a hidden cluster of segments that wasn't plotted to prevent unusual plot proportions, but that always seems to be a cluster of article keywords, possibly because they don't contain enough information on their own to be put among longer segments. This becomes problematic when using short, keyword-like queries, which get embedded into that cluster, causing the retrieval to contain mostly keyword results that were found near the query. 
 
+In the Appendix you can find an example of a short query, the retrieved results and how different rerankers also treat such results (Tables~\ref{tab:short_query}, \ref{tab:short_query_reranked_low_end}, \ref{tab:short_query_reranked_high_end}). Other examples include a longer query with and without reranking (Tables~\ref{tab:long_query}, \ref{tab:long_query_reranked}), and an off-topic query to see how both an embedding model and a reranker manage in such situations (Tables~\ref{tab:unusual_query}, \ref{tab:unusual_query_reranked}).
 
-UMAP visualizations helped us somewhat validate our measurements and we did keep in mind that the visualization inaccurately represents the real embedding space. We hoped however that if a model was able to extract many useful features and group segments around them, we would see more groups in the UMAP visualization as well.
-
-
-
-- what can be done better, what we could expand on
-- TODO EXPAND LATER
-The parser is tailored to 24ur.com and relies on stable HTML structure. Pages that deviate from the \texttt{\#article-body} template or heavily script-rendered content can yield empty or partial text. Chunking relies on sentence tokenization quality and may produce uneven segment sizes. Reranking improves accuracy but adds latency, which may be problematic for interactive settings.
-
-
-
+% - what can be done better, what we could expand on
+% - TODO EXPAND LATER
 
 \section{Conclusion}
 We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl of 24ur.com. The system parses raw HTML, chunks text using sentence boundaries, stores embeddings in a pgvector database with HNSW indexing, and retrieves and reranks results for user queries. The approach is modular, supports multiple embedding models, and can be easily configured using an \texttt{.env} file.
@@ -326,7 +320,6 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \bibliographystyle{IEEEtran}
 \bibliography{ref}
 
-
 \onecolumn
 \appendix
 
@@ -334,8 +327,8 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \centering
 \small
 \begin{tabular}{|c|p{13cm}|c|}
-\hline
-\textbf{Rank} & \textbf{Retrieved Text} & \textbf{Distance} \\
+    \hline
+    \textbf{Rank} & \textbf{Retrieved Text} & \textbf{Distance} \\
 \hline
 1 & Vladimir putin. & 0.0432 \\
 \hline
@@ -359,7 +352,7 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 % \hline
 \end{tabular}
 \caption{Top 7 retrieval results using the \texttt{all-MiniLM} model before reranking for query=''Vladimir Putin''.}
-\label{tab:retrieval_results}
+\label{tab:short_query}
 \end{table}
 
 
@@ -392,7 +385,7 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 % \hline
 \end{tabular}
 \caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{ms-marco-MiniLM} model for query=''Vladimir Putin''.}
-\label{tab:reranked_results}
+\label{tab:short_query_reranked_low_end}
 \end{table}
 
 \begin{table}[h]
@@ -423,8 +416,8 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 % 10 & vladimir pustin. & 0.9979 & 0.3915 \\
 \hline
 \end{tabular}
-\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{bge-reranker} model for query=''Vladimir Putin''.}
-\label{tab:reranked_results}
+\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the better \texttt{bge-reranker} model for query=''Vladimir Putin''.}
+\label{tab:short_query_reranked_high_end}
 \end{table}
 
 \begin{table}
@@ -456,7 +449,7 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \hline
 \end{tabular}
 \caption{Top 7 retrieval results using the \texttt{all-MiniLM} model before reranking for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.''.}
-\label{tab:retrieval_results_2}
+\label{tab:long_query}
 \end{table}
 
 
@@ -521,7 +514,7 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \hline
 \end{tabular}
 \caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{bge-reranker} model for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.'' (model \texttt{all-MiniLM} was used here to demonstrate the difference between retrieved and reranked results more clearly).}
-\label{tab:reranked_results_3}
+\label{tab:long_query_reranked}
 \end{table}
 
 \begin{table}
@@ -543,7 +536,7 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \hline
 \end{tabular}
 \caption{Top 10 retrieval results using the \texttt{all-MiniLM} model before reranking for an unusual query=''Ob katerih dneh je živalski vrt Zoo odprt.''.}
-\label{tab:retrieval_results_5}
+\label{tab:unusual_query}
 \end{table}
 
 
@@ -566,7 +559,7 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \hline
 \end{tabular}
 \caption{Top 10 retrieval results using the \texttt{all-MiniLM} model before reranking with the \texttt{mmarco-mMiniLMv2} model for an unusual query=''Ob katerih dneh je živalski vrt Zoo odprt.''.}
-\label{tab:reranked_results_5}
+\label{tab:unusual_query_reranked}
 \end{table}
 
 \end{document}
