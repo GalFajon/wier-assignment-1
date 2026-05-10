@@ -11,4 +11,4 @@ Get-Content .env | ForEach-Object {
     }
 }
 
-python .\src\run_query.py
+python .\implementation-extraction\run_query.py

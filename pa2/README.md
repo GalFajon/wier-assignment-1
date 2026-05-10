@@ -1,6 +1,6 @@
 # PA2
 
-## Retrieval demo setup - local environment
+## Retrieval demo setup - automatic setup
 
 1. Create and edit the environment file (recommended to leave same as example file):
 
@@ -13,6 +13,8 @@
    ```powershell
    docker compose -f docker-compose.yml -f docker-compose.restored.yml up --build --force-recreate db
    ```
+
+   Wait until database system is ready to accept connections, then detach.
 
 3. Run the retrieval demo
 
@@ -30,7 +32,11 @@
    pip install -r requirements.txt
    ```
 
-   Run the demo client with Powershell to pass .env variables:
+   ```powershell
+   python .\implementation-extraction\demo.py
+   ```
+   
+   or run the demo client with powershell:
 
    ```powershell
    .\run_demo_client.ps1

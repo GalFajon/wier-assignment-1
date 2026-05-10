@@ -11,4 +11,4 @@ Get-Content .env | ForEach-Object {
     }
 }
 
-python .\src\run_demo.py
+python .\implementation-extraction\demo.py
