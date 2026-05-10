@@ -137,6 +137,7 @@ Table~\ref{tab:reranker_models} summarizes the reranking models used in the expe
 \textbf{Reranker Model} \\
 \hline
 \texttt{cross-encoder/ms-marco-MiniLM-L6-v2} \\
+\texttt{cross-encoder/mmarco-mMiniLMv2-L12-H384-v1} \\
 \texttt{BAAI/bge-reranker-v2-m3} \\
 \hline
 \end{tabular}
@@ -150,11 +151,20 @@ Table~\ref{tab:reranker_models} summarizes the reranking models used in the expe
 
 \section{Embedding Analysis}
 
-First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the M query embeddings according to the used distance metric. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
-
 To evaluate the retrieval quality of our embedding models, we employ the Normalized Discounted Cumulative Gain metric at \(k\) retrieved segments (NDCG@\(k\)). This metric is well suited for retrieval pipelines, as it measures not only the number of relevant segments among the top \(k\) retrieved results, but also whether the most relevant segments appear near the top of the ranking. For evaluation, we compute the mean NDCG@\(k\) across multiple queries, providing a more representative measure of average retrieval performance.
 
-Queries used when computing mean NDCG@k scores were obtained by randomly picking some number of pages from the database and taking the first segment of each page. Only the first 128 characters of the chosen segments were used to extract a portion of the title. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated with different strategies: BM25 score, higher score for same page segments, and comparing to a reranked order using one of the reranking models. We present measurement for each strategy separately and don't combine them because the final performance measurements would be greatly influenced by how all three strategies were weighted. More about the reasons for choosing such strategies is told in the Section \ref{discussion}.
+
+
+
+
+
+
+
+\subsection{Baseline Embedding Model Retrieval Performance}
+
+First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the query embeddings according to the cosine distance metric. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
+
+Queries used when computing mean NDCG@k scores were obtained by randomly sampling pages from the database and taking the first segment of each page. Only the first 128 characters of the chosen segments were used to extract a portion of the title. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated with different strategies: BM25 score, higher score for same page segments, and comparing to a reranked order using one of the reranking models. We present measurement for each strategy separately and don't combine them because the final performance measurements would be greatly influenced by how all three strategies were weighted. More about the reasons for choosing such strategies is told in the Section \ref{discussion}.
 
 For the BM25 strategy, we used the ''Lucene'' version of the BM25 algorithm and computed scores for each result. The top 10 highest scoring results kept their scores, while others were set to 0 to emphasize the difference between relevant and irrelevant results. Measurements using this strategy are shown in Figure \ref{fig:model_comparison_bm25}.
 
@@ -174,7 +184,7 @@ The second strategy focused on giving higher scores to segments that were taken 
     \label{fig:model_comparison_same_page}
 \end{figure}
 
-The final strategy simply compares orderings of each embedding model with their reranked orderings using the \texttt{ms-marco-MiniLM-L6-v2} model. An embedding model that produced an ordering closer to its reranked ordering is considered better. Measurements using this strategy are shown in Figure~\ref{fig:model_comparison_same_page}.
+The third strategy simply compares orderings of each embedding model with their reranked orderings using the \texttt{ms-marco-MiniLM-L6-v2} model. An embedding model that produced an ordering closer to its reranked ordering is considered better. Measurements using this strategy are shown in Figure~\ref{fig:model_comparison_same_page}.
 
 \begin{figure}
     \centering
@@ -184,27 +194,67 @@ The final strategy simply compares orderings of each embedding model with their 
 \end{figure}
 
 
+Our final evaluation strategy used an LLM to semantically assess the relevance of retrieved segments to a query. Each segment was assigned a relevance score from 0 (irrelevant) to 4 (highly relevant and directly related to the query). To emphasize highly relevant results in the ranking metric, the scores were transformed using an exponential function before computing NDCG@k.
 
-Similarly, we evaluated the performance of the reranking models by first retrieving the \(N\) most similar embeddings and then selecting the top \(k\) segments using the reranker model. For this evaluation, the performance of the embedding model \texttt{some-model} was used as the quality baseline. As shown in Figure~\ref{fig:reranker_comparison}, reranking significantly improves retrieval quality, with the model \texttt{some-retriever} achieving the best performance.
+For evaluation, \texttt{gpt-4.1-mini} was used to score all 50 retrieved segments for each query in a single pass. NDCG@k was then computed for values of \(k\) ranging from 2 to 50. Figure~\ref{fig:llm_scored_models} presents the mean retrieval performance of the evaluated embedding models using cosine similarity over 20 queries.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=\columnwidth]{images/NDCG_rerankers_TMP.png}
-    \caption{Comparison of reranking models using the mean NDCG@\(k\) metric over 50 queries.}
-    \label{fig:reranker_comparison}
+    \includesvg[width=\linewidth]{images/all_models_llm_scored}
+    \caption{LLM-based NDCG@k evaluation of embedding models using cosine similarity.}
+    \label{fig:llm_scored_models}
 \end{figure}
 
 
-Finally, we measured the impact of the used distance metric when calculating embedding similarity. We compared cosine, L1 and L2 distance metrics on the embeddings of the best performing embedding model.
 
-\begin{figure}
+For the final retrieval pipeline, we selected the \texttt{bge-m3} embedding model due to its consistently strong performance across all evaluations.
+
+
+
+
+
+
+
+\subsection{Distance Metric Performance}
+
+We evaluated the impact of different distance metrics for measuring embedding similarity. Cosine, L1, and L2 distances were compared using the \texttt{bge-m3} embedding model. The evaluation followed the same LLM-based scoring procedure described previously, with NDCG@k averaged over 50 queries.
+
+Figure~\ref{fig:metric_comparison} shows the relationship between the evaluated metrics. Since all embeddings were normalized, cosine similarity and L2 distance produced identical retrieval rankings and therefore nearly identical NDCG@k scores. In contrast, the L1 distance consistently underperformed, likely due to the curse of dimensionality in high-dimensional embedding spaces and the lost magnitude in embeddings due to normalization. Based on these results, cosine similarity was selected for the final retrieval pipeline.
+
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/NDCG_distance_metrics_TMP.png}
-    \caption{Comparison of distance metric retrieval quality scored by the NDCG metric averaged over 50 different queries.}
+    \includesvg[width=\linewidth]{images/metrics}
+    \caption{Comparison of distance metrics using LLM-based NDCG@k evaluation.}
     \label{fig:metric_comparison}
 \end{figure}
 
 
+
+
+
+
+\subsection{Reranker Performance}
+
+Finally, we evaluated the performance of all embedding model and reranker combinations by computing the mean NDCG@k over 20 queries. Ground-truth relevance scores were obtained using the same LLM-based evaluation procedure described previously. For each query, the top 200 segments were first retrieved using cosine similarity on the embedding vectors, after which the reranker models reordered the results and returned the top 50 segments.
+
+Figure~\ref{fig:reranker_comparison} presents the performance of all evaluated combinations. The \texttt{mmarco-mMiniLMv2-L12-H384-v1} reranker consistently provided the largest performance improvements across embedding models. In contrast, \texttt{bge-reranker-v2-m3} achieved lower performance despite being the largest evaluated reranker model. We attribute this to weaker Slovene language representation during training, despite the model being advertised as multilingual.
+
+\begin{figure}[ht]
+    \centering
+    \includesvg[width=\linewidth]{images/model_reranker_llm_scored}
+    \caption{LLM-based NDCG@k evaluation of embedding model and reranker combinations.}
+    \label{fig:reranker_comparison}
+\end{figure}
+
+
+The best overall performance was achieved by combining the \texttt{bge-m3} embedding model with the \texttt{mmarco-mMiniLMv2-L12-H384-v1} cross-encoder reranker. Due to their consistently strong retrieval performance, this combination was selected for the final retrieval pipeline.
+
+Additionally, we observed that the NDCG@k scores plateaued for nearly all evaluated models after \(k=10\). This suggests that retrieving additional segments beyond the top 10 provides little improvement in retrieval quality. Based on this observation, we selected 10 as the final number of retrieved segments in the final pipeline.
+
+
+
+
+\subsection{Embedding Visualization}
 
 To evaluate how effectively the models group embedded segments, we visualized embeddings using UMAP. The embeddings were first reduced with SVD, retaining \(40\%\) of the variance, and then projected into a two-dimensional space using UMAP. Each point in the scatter plot represents a single segment embedding. Points of the same colors represent results of the same query, where the query point is marked as ''X''. 
 
@@ -223,9 +273,9 @@ To evaluate how effectively the models group embedded segments, we visualized em
 
 \section{Results}
 
-The final selected parameters of our pipeline are noted in Table~\ref{tab:final_params}. \cite{bgem3}
+The final selected parameters of our pipeline are noted in Table~\ref{tab:final_params}. 
 
-The results indicate that the model \texttt{bge-m3} consistently outperforms the other evaluated models, although much less convincingly according to the BM25 strategy. Cosine similarity was used for all similarity-based retrieval experiments. Among all models, \texttt{sloberta} was the worst. Surprisingly, \texttt{all-MiniLM} was as good or better that all 768-dimensional embedding models while having twice less embedding dimensions.
+The results indicate that the model \texttt{bge-m3}~\cite{bgem3} consistently outperforms the other evaluated models, although much less convincingly according to the BM25 strategy. Cosine similarity was used for all similarity-based retrieval experiments. Among all models, \texttt{sloberta} was the worst. Surprisingly, \texttt{all-MiniLM} was as good or better that all 768-dimensional embedding models while having twice less embedding dimensions.
 
 Unsurprisingly, query results of the \texttt{bge-m3} model are also better grouped than other models. The worst grouping comes from the \texttt{sloberta} model, where many queries are always put on the same island, indicating the model is having a hard time separating them.
 
@@ -238,7 +288,7 @@ Unsurprisingly, query results of the \texttt{bge-m3} model are also better group
 \textbf{Parameter} & \textbf{Chosen Value} \\
 \hline
 \texttt{Embedding Model} & BAAI/bge-m3 \\
-\texttt{Reranking Model} & bge-reranker-v2-m3 \\
+\texttt{Reranking Model} & mmarco-mMiniLMv2-L12-H384-v1 \\
 \texttt{Segment Max Length} & 128 words \\
 \texttt{Retrieval Dist. Metric} & cosine \\ 
 \texttt{Similarity Return n} & 100 \\
