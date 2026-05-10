@@ -36,31 +36,40 @@ def retrieve_chunks(model, reranker, query_string, settings):
     reranked = rerank_candidates(reranker, query_string, chunks, settings)
     return reranked
     
-
-if __name__ == '__main__':
     
+    
+    
+    
+if __name__ == '__main__':
+
     load_dotenv()
     settings = load_settings()
-    print(settings)
 
-    print("=" * 80)
-    print("Document retrieval using distance metrics and reranking")
-    print("=" * 80)
+    print("\n" + "=" * 100)
+    print("DOCUMENT RETRIEVAL DEMO")
+    print("=" * 100)
 
     model = load_embedding_model(settings)
     reranker = load_reranking_model(settings)
 
+    MAX_LEN = 250
+    
     queries = [
+        "Vladimir Putin odziv na Ameriko",
+        "Trump glede Ukrajine",
+        "Rusija in Ukrajina vojna"
+        
+        # slabo
         "Vladimir Putin",
-        "Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.",
-        "Ob katerih dneh je živalski vrt Zoo odprt."
+        "Ob katerih dneh je živalski vrt Zoo odprt",
+        "Vojno stanje v Ukrajini v Aprilu leta 2024",
+
     ]
 
     for query_idx, query_string in enumerate(queries, start=1):
 
-        print("\n" + "═" * 80)
-        print(f"QUERY {query_idx}: {query_string}")
-        print("═" * 80)
+        print(f"\n[{query_idx}] QUERY: {query_string}")
+        print("-" * 100)
 
         retrieved_chunks = retrieve_chunks(
             model,
@@ -75,16 +84,17 @@ if __name__ == '__main__':
             dist = chunk_data["dist"]
             cross_score = chunk_data["cross_score"]
 
-            preview = text[:250]
-            if len(text) > 250:
+            preview = text[:MAX_LEN]
+            if len(text) > MAX_LEN:
                 preview += "..."
 
-            print(f"\n[{chunk_idx:02d}]")
-            print(f"Cross-Encoder Score : {cross_score:.4f}")
-            print(f"Embedding Distance  : {dist:.4f}")
-            print("-" * 80)
-            print(preview)
+            print(
+                f"{chunk_idx:02d} | "
+                f"Cross={cross_score:7.4f} | "
+                f"Dist={dist:7.4f} | "
+                f"{preview}"
+            )
 
-        print("\n" + "─" * 80)
-
-    print("\nDone.")
+    print("\n" + "=" * 100)
+    print("DONE")
+    print("=" * 100)
