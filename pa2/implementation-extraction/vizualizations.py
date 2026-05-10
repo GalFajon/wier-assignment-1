@@ -289,7 +289,7 @@ def visualize_precision_recall(models, reranking_models, model_to_queries, reran
             model = load_embedding_model_hf2(settings, model_names[m])
         for q,query in enumerate(model_to_queries[m]):
             print(f"Query {q}: {query}")
-            chunks = query_database2(model, query, settings, model_dims[m], return_n, settings.distance_metric, model_names[m])
+            chunks = query_database2(model, query, settings, model_dims[m], return_n, "cosine", model_names[m])
             # print([(c[0][:100], c[1], c[2]) for c in chunks])
             if m not in model_to_query_to_chunks:
                 model_to_query_to_chunks[m] = dict()
@@ -326,13 +326,14 @@ def visualize_precision_recall(models, reranking_models, model_to_queries, reran
                 reranked_seg_ids_2 = [r['id'] for r in reranked]
                 reranked_scores = [r['cross_score'] for r in reranked][1:]
                 not_reranked_scores = [r['cross_score'] for r in not_reranked][1:]
-                print(not_reranked_scores)
-                print(reranked_scores)
+                # print(not_reranked_scores)
+                # print(reranked_scores)
 
                 relevancy_bm25_scores = relevancy_score_bm25(not_reranked_texts, query)/20
+                print(relevancy_bm25_scores)
                 cutoff_score = np.sort(relevancy_bm25_scores.flatten())[-10]
                 print(cutoff_score)
-                relevancy_bm25 = (np.where(relevancy_bm25_scores >= cutoff_score, 1.0, 0.0) * relevancy_bm25_scores)[1:]
+                relevancy_bm25 = (np.where(relevancy_bm25_scores >= 0.09, 1.0, 0.0) * relevancy_bm25_scores)[1:]
                 print(relevancy_bm25)
                 # print(relevant_seg_ids)
                 #print(model_to_relevant_seg_ids[m])
@@ -382,7 +383,7 @@ if __name__ == '__main__':
     settings = load_settings()
     engine = create_engine(settings.database_url, pool_pre_ping=True)
 
-    n = 8
+    n = 3
     model_ids = [1, 8, 10, 13, 9]
     model_to_page_segment_ids = dict()
 
@@ -430,7 +431,7 @@ if __name__ == '__main__':
     # visualize_embeddings(engine, 13, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=768)
     # visualize_embeddings(engine, 9, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), vector_size=1024)
 
-    visualize_embeddings(engine, model_ids, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), model_to_queries=model_to_queries)
+    # visualize_embeddings(engine, model_ids, reduction_fun=(lambda x: get_embedding_umap(x, dim=2)), model_to_queries=model_to_queries)
 
     # reranking_models = [None, "cross-encoder/ms-marco-MiniLM-L6-v2", "BAAI/bge-reranker-v2-m3"]
     # reranking_models_nicknames = ["No rerank", "ms-marco-MiniLM-L6-v2", "bge-reranker-v2-m3"]
@@ -451,7 +452,7 @@ if __name__ == '__main__':
     #     "Katere države so še posebej ranljive?V vseh državah Kremelj uporablja iste narative, to so problemi migracij, socialni problemi, LGBT in homofobija in tako naprej. Putin povsod deluje na isti princip.",
     #     "Putinov hvalospev vojaškemu izvozu, ki naj bi presegel 15 milijard. Po besedah ruskega predsednika Vladimirja Putina je bila Rusija v lanskem letu na področju vojaške industrije uspešna.",
     # ]
-    # visualize_precision_recall(model_ids, reranking_models, model_to_queries, reranking_models_nicknames, model_to_relevant_seg_ids)
+    visualize_precision_recall(model_ids, reranking_models, model_to_queries, reranking_models_nicknames, model_to_relevant_seg_ids)
 
     # visualize_precision_recall([1, 8, 10, 13, 9], "ruski predsednik vladimir putin in njegov ukrajinski kolega volodimir zelenski sta sicer med prvim telefonskim pogovorom v začetku meseca govorila o možnosti zamenjave ujetnikov.", ["putin", "zelensk", "ujetni"])
     # visualize_precision_recall([9], reranking_models, "Putin, Zelenski in Trump pogovor.", ["putin", "zelenski", "trump"])

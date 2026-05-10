@@ -239,7 +239,7 @@ def rerank_candidates(reranker, query_string, candidates, settings):
     cross_scores = reranker.predict(cross_inputs)
     
     enriched = []
-    for (_, text, _, dist), cross in zip(candidates, cross_scores):
+    for (_, text, dist, _), cross in zip(candidates, cross_scores):
         enriched.append({
             "text": text,
             "dist": float(dist),

@@ -11,4 +11,4 @@ Get-Content .env | ForEach-Object {
     }
 }
 
-python .\src\llm_supervised_scoring.py
+python .\implementation-extraction\llm_supervised_scoring.py

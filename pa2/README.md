@@ -1,8 +1,8 @@
 # PA2
 
-## Retrieval demo setup - local environment
+## Retrieval demo setup - automatic
 
-1. Create and edit the environment file (recommended to leave same as example file):
+1. Create and edit the environment file (recommended to leave same as example file - just add your HUGGINGFACE_HUB_TOKEN):
 
    ```powershell
    Copy-Item .env.example .env
@@ -14,9 +14,12 @@
    docker compose -f docker-compose.yml -f docker-compose.restored.yml up --build --force-recreate db
    ```
 
+   Wait until database system is ready to accept connections, then detach.
+   If this fails please import the DB manually by following instructions in `extraction-db`
+
 3. Run the retrieval demo
 
-   **Option A - Run with Docker**  
+   **Option A - Run with Docker (recommended)**  
    Runs the demo container interactively and installs all required dependencies automatically. Models are still downloaded to pa2/models.
 
    ```powershell
@@ -30,7 +33,11 @@
    pip install -r requirements.txt
    ```
 
-   Run the demo client with Powershell to pass .env variables:
+   ```powershell
+   python .\implementation-extraction\demo.py
+   ```
+   
+   or run the demo client with powershell:
 
    ```powershell
    .\run_demo_client.ps1

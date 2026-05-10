@@ -344,6 +344,7 @@ def query_page_segments(
     )
 
     SELECT
+        p.embedding,
         p.page_segment,
         p.embedding {op} (:query_vec)::vector AS distance,
         p.id
