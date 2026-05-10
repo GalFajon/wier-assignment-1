@@ -383,7 +383,7 @@ if __name__ == '__main__':
     settings = load_settings()
     engine = create_engine(settings.database_url, pool_pre_ping=True)
 
-    n = 50
+    n = 3
     model_ids = [1, 8, 10, 13, 9]
     model_to_page_segment_ids = dict()
 
