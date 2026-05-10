@@ -224,10 +224,41 @@ if __name__ == "__main__":
         "Mednarodne reakcije na rusko agresijo",
         "Humanitarna kriza v Ukrajini",
         "Ukrajinski predsednik Zelenski o vojni",
-        "Posledice vojne med Rusijo in Ukrajino"
+        "Posledice vojne med Rusijo in Ukrajino",
+
+        "Ruska invazija na Ukrajino",
+        "Boji v Mariupolu",
+        "Ukrajinski odpor proti ruskim silam",
+        "Rusko obstreljevanje ukrajinskih mest",
+        "Zahodne sankcije proti Moskvi",
+        "Ukrajinska vojska osvobodila ozemlja",
+        "Napadi na energetsko infrastrukturo Ukrajine",
+        "Evakuacija civilistov iz Ukrajine",
+        "Spopadi v regiji Donbas",
+        "Ruski vojaki na vzhodu Ukrajine",
+        "Ukrajinski protizračni sistemi",
+        "Dobava orožja Ukrajini",
+        "Ruski tanki v Ukrajini",
+        "Ukrajinski napadi na ruske položaje",
+        "Rusija grozi Zahodu",
+        "Jedrske grožnje Rusije",
+        "Ukrajinski droni nad Rusijo",
+        "Ukrajinska vojska v Bahmutu",
+        "Ruski napadi na Odeso",
+        "Ukrajinski vojni zločini in preiskave",
+        "Civilne žrtve vojne v Ukrajini",
+        "Ruska mobilizacija vojakov",
+        "Ukrajinska protiofenziva na jugu države",
+        "Finančna pomoč Evropske unije Ukrajini",
+        "Begunska kriza zaradi ruske invazije",
+        "Boji za nadzor nad Krimom",
+        "Ruske izgube v vojni",
+        "Ukrajinski vojaki na fronti",
+        "Diplomatski odnosi med Rusijo in Zahodom",
+        "Obnova ukrajinskih mest po napadih"
     ]
 
-    NO_RERANKER = False
+    NO_RERANKER = True
 
     DB_N = 200
     K_RANGE = range(2, 51)
