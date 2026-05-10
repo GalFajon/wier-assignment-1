@@ -11,4 +11,4 @@ Get-Content .env | ForEach-Object {
     }
 }
 
-python .\src\run_parsing_and_embedding.py
+python .\implementation-extraction\run_parsing_and_embedding.py

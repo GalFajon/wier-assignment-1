@@ -7,3 +7,4 @@ pgvector
 sentence_transformers
 tqdm
 gdown
+python-dotenv

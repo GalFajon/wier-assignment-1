@@ -1,0 +1,10 @@
+
+Download the database manually and place it in pa2 folder:
+
+https://drive.google.com/file/d/1ecdRDZfovBy1ImHaQOKT6i7MkgZ5rpZs/view?usp=drive_link
+
+Importing only the saved embedding DB:
+
+docker compose up -d db
+docker cp .\DB_with_embeddings.sql crawler-postgres:/tmp/DB_with_embeddings.dump
+docker exec -it crawler-postgres pg_restore -U crawler -d crawler --no-owner /tmp/DB_with_embeddings.dump

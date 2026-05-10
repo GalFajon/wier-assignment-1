@@ -46,7 +46,7 @@ services:
       RERANKING_MODEL_NAME: ${RERANKING_MODEL_NAME}
       RERANK_RETURN_N: ${RERANK_RETURN_N}
 
-    command: ["python", "-m", "run_demo"]
+    command: ["python", "-m", "demo"]
 
     volumes:
       - ./:/app
