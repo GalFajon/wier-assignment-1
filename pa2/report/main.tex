@@ -48,7 +48,7 @@ pages and represent it in a form that supports efficient domain-specific informa
 
 The pipeline consists of two main stages: preprocessing and retrieval. During preprocessing, crawled HTML pages from 24ur.com are parsed, and the extracted text is divided into sentence-based segments. The resulting segments are then embedded using a transformer-based sentence embedding model and stored in a vector database.
 
-During retrieval, a user query is embedded using the same embedding model and used to retrieve the most similar segments from the database. Query--segment pairs are subsequently evaluated by a reranking model, which refines the initial ranking based on semantic relevance. The final output of the pipeline is a ranked list of text segments that are most semantically relevant to the query.
+During retrieval, a user query is embedded using the same embedding model as for the segments and used to retrieve the most similar segments from the database. Query--segment pairs are subsequently evaluated by a reranking model, which refines the initial ranking based on semantic relevance. The final output of the pipeline is a ranked list of text segments that are most semantically relevant to the query.
 
 
 
@@ -124,7 +124,7 @@ To support efficient similarity-based retrieval, vector indexes were created for
 
 During retrieval, the user query is embedded using the same embedding model as the stored segment embeddings. The generated query vector is then used to query the vector database and retrieve the top 100 most similar segments according to the selected distance metric. 
 
-The retrieved segments are subsequently reranked using a cross-encoder model. For reranking, query--segment text pairs are constructed and processed jointly by the reranker model to produce relevance scores. The final retrieval output consists of the 10 highest-ranked segments according to the reranker scores.
+The retrieved segments are subsequently reranked using a cross-encoder model (also ''reranking'' model from now on). For reranking, query--segment text pairs are constructed and processed jointly by the reranker model to produce relevance scores. The final retrieval output consists of the 10 highest-ranked segments according to the reranker scores.
 
 Table~\ref{tab:reranker_models} summarizes the reranking models used in the experiments.
 
@@ -162,11 +162,11 @@ To evaluate the retrieval quality of our embedding models, we employ the Normali
 
 \subsection{Baseline Embedding Model Retrieval Performance}
 
-First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the query embeddings according to the cosine distance metric. This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
+First, we evaluated the quality of the embedding models by retrieving N closest segment embeddings to each of the query embeddings according to the cosine distance metric (other metrics were tested as well). This provides a baseline performance measure for selecting the best-performing embedding model without introducing bias from reranking models.
 
 Queries used when computing mean NDCG@k scores were obtained by randomly sampling pages from the database and taking the first segment of each page. Only the first 128 characters of the chosen segments were used to extract a portion of the title. After we retrieved N closest segments to each query (for each model), ground truth relevancy score was calculated with different strategies: BM25 score, higher score for same page segments, and comparing to a reranked order using one of the reranking models. We present measurement for each strategy separately and don't combine them because the final performance measurements would be greatly influenced by how all three strategies were weighted. More about the reasons for choosing such strategies is told in the Section \ref{discussion}.
 
-For the BM25 strategy, we used the ''Lucene'' version of the BM25 algorithm and computed scores for each result. The top 10 highest scoring results kept their scores, while others were set to 0 to emphasize the difference between relevant and irrelevant results. Measurements using this strategy are shown in Figure \ref{fig:model_comparison_bm25}.
+For the BM25 strategy, we used the ''Lucene'' version of the BM25 algorithm and computed scores for each retrieved result. The top 10 highest scoring results kept their original scores, while others were set to 0 to emphasize the difference between relevant and irrelevant results. Measurements using this strategy are shown in Figure \ref{fig:model_comparison_bm25}.
 
 \begin{figure}
     \centering
@@ -175,7 +175,7 @@ For the BM25 strategy, we used the ''Lucene'' version of the BM25 algorithm and 
     \label{fig:model_comparison_bm25}
 \end{figure}
 
-The second strategy focused on giving higher scores to segments that were taken from the same page as the query since it makes sense that segments on the same page talk about the same thing. Therefore segments on the same page as the query are given a score 1, otherwise 0. Measurements using this strategy are shown in Figure \ref{fig:model_comparison_same_page}.
+The second strategy focused on giving higher scores to segments that were taken from the same page as the query since it makes sense that segments on the same page talk about the article story. Therefore segments on the same page as the query are given a score 1, otherwise 0. Measurements using this strategy are shown in Figure \ref{fig:model_comparison_same_page}.
 
 \begin{figure}
     \centering
@@ -249,7 +249,7 @@ Finally, we evaluated the performance of all embedding model and reranker combin
 \subsection{Embedding Visualization}
 
 
-To evaluate how effectively the models group embedded segments, we visualized embeddings using UMAP. The original embeddings are simply projected onto a two-dimensional space using UMAP (PCA and tSNE were tried, but UMAP showed best clustering). Each point in the scatter plot represents a single segment embedding. Points of the same colors represent results of the same query, where the query point is marked as ''X''. In almost all plots there was one more cluster with fewer segments far away from others, which was filtered out to retain sensible plot proportions. More about the excluded cluster in the Discussion section. 
+To evaluate how effectively the models group embedded segments, we visualized embeddings using dimensionality reduction techniques. The original embeddings are simply projected onto a two-dimensional space using UMAP (PCA and tSNE were tried, but UMAP showed best clustering). Each point in the scatter plot represents a single segment embedding. Points of the same colors represent results of the same query, where the query point is marked as ''X''. In almost all plots there was one more cluster with fewer segments far away from others, which was filtered out to retain sensible plot proportions. More about the excluded cluster is said in the Section \ref{discussion}. 
 
 \begin{figure}
     \centering
@@ -267,7 +267,7 @@ The analysis results indicate that the model \texttt{bge-m3}~\cite{bgem3} consis
 
 Figure~\ref{fig:metric_comparison} shows the relationship between the evaluated metrics. Since all embeddings were normalized, cosine similarity and L2 distance produced identical retrieval rankings and therefore nearly identical NDCG@k scores. In contrast, the L1 distance consistently underperformed, likely due to the curse of dimensionality in high-dimensional embedding spaces and the lost magnitude in embeddings due to normalization. Based on these results, cosine similarity was selected for the final retrieval pipeline.
 
-Figure~\ref{fig:reranker_comparison} presents the performance of all evaluated combinations. The \texttt{mmarco-mMiniLMv2-L12-H384-v1} reranker consistently provided the largest performance improvements across embedding models. In contrast, \texttt{bge-reranker-v2-m3} achieved lower performance despite being the largest evaluated reranker model. We attribute this to weaker Slovene language representation during training, despite the model being advertised as multilingual.
+Figure~\ref{fig:reranker_comparison} presents the performance of all evaluated combinations. The \texttt{mmarco-mMiniLMv2-L12-H384-v1} \cite{mmarco} reranker consistently provided the largest performance improvements across embedding models. In contrast, \texttt{bge-reranker-v2-m3} achieved lower performance despite being the largest evaluated reranker model. We attribute this to weaker Slovene language representation during training, despite the model being advertised as multilingual.
 
 The best overall performance was achieved by combining the \texttt{bge-m3} embedding model with the \texttt{mmarco-mMiniLMv2-L12-H384-v1} cross-encoder reranker. Due to their consistently strong retrieval performance, this combination was selected for the final retrieval pipeline.
 
@@ -294,7 +294,7 @@ The final selected parameters of our pipeline are noted in Table~\ref{tab:final_
 \end{tabular}
 \end{table}
 
-Unsurprisingly, query results of the \texttt{bge-m3} model are also better grouped than other models. The worst grouping comes from the \texttt{sloberta} model, where many queries are always put on the same island, indicating the model is having a hard time separating them.
+Unsurprisingly, query results of the \texttt{bge-m3} model are also better grouped in the projected embedding plots than other models. The worst grouping comes from the \texttt{sloberta} model, where many queries are always put on the same island, possibly suggesting the model is having a harder time separating them.
 
 
 
@@ -302,9 +302,11 @@ Unsurprisingly, query results of the \texttt{bge-m3} model are also better group
 
 The parser is tailored to 24ur.com and relies on stable HTML structure. Pages that deviate from the \texttt{\#article-body} template or heavily script-rendered content can yield empty or partial text. Chunking relies on sentence tokenization quality and may produce uneven segment sizes. Reranking improves accuracy but adds latency, which may be problematic for interactive settings.
 
-For measuring retrieval quality of embedding and reranking models we would ideally have a manually annotated dataset of queries, their results, and relevance scores. Since we couldn't afford to make one, we opt to employ diferent algorithms and strategies to calculate ground truth relevance scores and measured models on each one. We think that the least reliable strategy was the BM25 one since embedding models are expected to encode meanings of the tet other that just simple term frequencies.
+For measuring retrieval quality of embedding and reranking models we would ideally have a manually annotated dataset of queries, their results, and relevance scores. Since we couldn't afford to make one, we opt to employ diferent algorithms and strategies to calculate ground truth relevance scores and measured models on each one. We think that the least reliable strategy was the BM25 one since embedding models are expected to encode meanings of the tet other that just simple term frequencies. 
 
-Experiments clearly show reranking significantly improves the relevancy of top results, but due to the harder interpretability of the NDCG@k metric concrete relative improvements between models are harder to determine.
+For the NDCG@k metric we were expecting to see the plot starting high (with many relevant results in the first positions), then dipping to the lowest point at around k=10 (less relevant results in the top ranks) and the slowly growing back up (gathering the rest of the relevant results). The original 3 strategies don't have a pronounced high start, but the strategy using the \texttt{gpt-4.1-mini} model did. Because it was discovered towards the end of experimentation, we used it on the last few plots only.
+
+Experiments however clearly show reranking significantly improves the relevancy of top results, but due to the harder interpretability of the NDCG@k metric concrete relative improvements between models are harder to determine.
 
 UMAP visualizations helped us somewhat validate our measurements and we did keep in mind that the visualization inaccurately represents the real embedding space. We hoped however that if a model was able to extract many useful features and group segments around them, we would see more groups in the UMAP visualization as well. For each model there is also a hidden cluster of segments that wasn't plotted to prevent unusual plot proportions, but that always seems to be a cluster of article keywords, possibly because they don't contain enough information on their own to be put among longer segments. This becomes problematic when using short, keyword-like queries, which get embedded into that cluster, causing the retrieval to contain mostly keyword results that were found near the query. 
 
