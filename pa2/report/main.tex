@@ -340,9 +340,8 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 
 \onecolumn
 \appendix
-\section{Queries}
 
-\begin{table}[ht]
+\begin{table}[h]
 \centering
 \small
 \begin{tabular}{|c|p{13cm}|c|}
@@ -363,19 +362,19 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \hline
 7 & vladmir putin. & 0.1539 \\
 \hline
-8 & Vladimir. & 0.2432 \\
-\hline
-9 & vladimir. & 0.2432 \\
-\hline
-10 & Litvinenko. & 0.3473 \\
-\hline
+% 8 & Vladimir. & 0.2432 \\
+% \hline
+% 9 & vladimir. & 0.2432 \\
+% \hline
+% 10 & Litvinenko. & 0.3473 \\
+% \hline
 \end{tabular}
-\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model before reranking for query=''Vladimir Putin''.}
+\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model before reranking for query=''Vladimir Putin''.}
 \label{tab:retrieval_results}
 \end{table}
 
 
-\begin{table}[ht]
+\begin{table}[h]
 \centering
 \small
 \begin{tabular}{|c|p{13cm}|c|c|}
@@ -396,18 +395,18 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 \hline
 7 & 1 7 Vladimir Putin in venezuelski predsednik Nicolas Maduro APVladimir Putin in kitajski predsednik Ši Džinping ProfimediaVladimir Putin in brazilski predsednik... & 6.268 & 0.4156 \\
 \hline
-8 & Putin: Nobena država nima česa takšnega, raketa je neranljiva za zračno obrambo. ZDA: Smo povsem pripravljeni. Vladimir Putin je v letnem nagovoru poslancem spo... & 6.061 & 0.4377 \\
-\hline
-9 & vladimi putin. & 5.999 & 0.1500 \\
-\hline
-10 & Zakaj je Putin med obiskom v Moskvi Stevu Witkoffu predal red Lenina?. Ruski predsednik Vladimir Putin je med obiskom v Moskvi ameriškemu posebnemu odposlancu p... & 5.731 & 0.4451 \\
-\hline
+% 8 & Putin: Nobena država nima česa takšnega, raketa je neranljiva za zračno obrambo. ZDA: Smo povsem pripravljeni. Vladimir Putin je v letnem nagovoru poslancem spo... & 6.061 & 0.4377 \\
+% \hline
+% 9 & vladimi putin. & 5.999 & 0.1500 \\
+% \hline
+% 10 & Zakaj je Putin med obiskom v Moskvi Stevu Witkoffu predal red Lenina?. Ruski predsednik Vladimir Putin je med obiskom v Moskvi ameriškemu posebnemu odposlancu p... & 5.731 & 0.4451 \\
+% \hline
 \end{tabular}
-\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{ms-marco-MiniLM} model for query=''Vladimir Putin''.}
+\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{ms-marco-MiniLM} model for query=''Vladimir Putin''.}
 \label{tab:reranked_results}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}[h]
 \centering
 \small
 \begin{tabular}{|c|p{13cm}|c|c|}
@@ -427,19 +426,19 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 6 & Putin. & 0.9996 & 0.1489 \\
 \hline
 7 & Vladimir. & 0.9987 & 0.2432 \\
-\hline
-8 & vladimir. & 0.9984 & 0.2432 \\
-\hline
-9 & Vladislav. & 0.9982 & 0.4304 \\
-\hline
-10 & vladimir pustin. & 0.9979 & 0.3915 \\
+% \hline
+% 8 & vladimir. & 0.9984 & 0.2432 \\
+% \hline
+% 9 & Vladislav. & 0.9982 & 0.4304 \\
+% \hline
+% 10 & vladimir pustin. & 0.9979 & 0.3915 \\
 \hline
 \end{tabular}
-\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{bge-reranker} model for query=''Vladimir Putin''.}
+\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{bge-reranker} model for query=''Vladimir Putin''.}
 \label{tab:reranked_results}
 \end{table}
 
-\begin{table}[ht]
+\begin{table}
 \centering
 \small
 \begin{tabular}{|c|p{13cm}|c|}
@@ -459,52 +458,52 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 6 & Rusija je obtožbe zavrnila in poudarila, da je odločitev Ovseja znak naraščajočih napetosti med Rusijo in Zahodom. Putin je tako izjavil, da za bojkotom zahodni... & 0.2625 \\
 \hline
 7 & EU je v obrazložitvi, zakaj je 69-letni milijarder pristal na seznamu sankcioniranih, navedla, da je Usmanov "prokremeljski oligarh s posebno tesnimi povezavami... & 0.2636 \\
-\hline
-8 & "Putin tukaj ustvarja določeno vzdušje, katerega cilj je spodkopavanje zaupanja javnosti v vlado, v ključne strukture, kot so oborožene sile in policija, ter us... & 0.2642 \\
-\hline
-9 & Ukrajinska vlada je vztrajala pri prisotnosti poveljnika upornikov v Donecku Aleksandra Zaharčenka in voditelja separatistov v Lugansku Igorja Plonickija. O dana... & 0.2643 \\
-\hline
-10 & Zelenski Rusom namenil sporočilo: Putin vas uničuje. Iz več ukrajinskih regij poročajo o raketnih napadih. V Kijevu je odjeknilo deset eksplozij. Za približno p... & 0.2647 \\
+% \hline
+% 8 & "Putin tukaj ustvarja določeno vzdušje, katerega cilj je spodkopavanje zaupanja javnosti v vlado, v ključne strukture, kot so oborožene sile in policija, ter us... & 0.2642 \\
+% \hline
+% 9 & Ukrajinska vlada je vztrajala pri prisotnosti poveljnika upornikov v Donecku Aleksandra Zaharčenka in voditelja separatistov v Lugansku Igorja Plonickija. O dana... & 0.2643 \\
+% \hline
+% 10 & Zelenski Rusom namenil sporočilo: Putin vas uničuje. Iz več ukrajinskih regij poročajo o raketnih napadih. V Kijevu je odjeknilo deset eksplozij. Za približno p... & 0.2647 \\
 \hline
 \end{tabular}
-\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model before reranking for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.''.}
+\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model before reranking for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.''.}
 \label{tab:retrieval_results_2}
 \end{table}
 
 
-\begin{table}[ht]
-\centering
-\small
-\begin{tabular}{|c|p{13cm}|c|c|}
-\hline
-\textbf{Rank} & \textbf{Reranked Text} & \textbf{Cross Score} & \textbf{Distance} \\
-\hline
-1 & Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo. Ruski predsednik Vladimir Putin je sporočil, da bo nadaljeval s testiranjem balistični... & 9.227 & 0.2823 \\
-\hline
-2 & Zelenski Rusom namenil sporočilo: Putin vas uničuje. Iz več ukrajinskih regij poročajo o raketnih napadih. V Kijevu je odjeknilo deset eksplozij. Za približno p... & 6.814 & 0.2647 \\
-\hline
-3 & Rusi demonstrirali 'povratni jedrski napad': uporabili balistične rakete. Ruski predsednik Vladimir Putin je prek digitalne platforme spremljal vojaške vaje rus... & 6.441 & 0.2464 \\
-\hline
-4 & Dodal je, da so se z ZDA pripravljeni srečati na ravni voditeljev držav, da bi obravnavali občutljiva vprašanja. "O zadevah, kot so ozemeljska vprašanja, se je ... & 5.991 & 0.2833 \\
-\hline
-5 & Na 1000. dan vojne v Ukrajini Putin podpisal odlok za širšo rabo jedrskega orožja. Ruski predsednik Vladimir Putin je podpisal odlok, ki Moskvi omogoča uporabo ... & 5.791 & 0.2684 \\
-\hline
-6 & "Predsednik Putin je v nagovoru narodu dejal, da je regionalni konflikt v Ukrajini, kot ga je poimenoval, po napadih na rusko regijo Brjansk in Kursk z ameriški... & 5.408 & 0.2744 \\
-\hline
-7 & "Ne vidimo nobenih znakov, da se Rusija pripravlja na uporabo jedrskega orožja," je po Putinovih pripombah dejal ameriški državni sekretar Antony Blinken. Za ogl... & 5.368 & 0.2784 \\
-\hline
-8 & Prav tako naj bi šlo šele za prvi val raketnih napadov. Guverner ukrajinske regije Mikolajev Vitalij Kim je že predhodno opozoril na možnost raketnih napadov. Uk... & 5.177 & 0.2764 \\
-\hline
-9 & Prigožinov upor je predstavljal enega največjih izzivov za dolgoletno vladavino Vladimirja Putina. Vodja Wagnerjeve skupine je imel pomembno vlogo pri invaziji ... & 5.081 & 0.2496 \\
-\hline
-10 & Generalni sekretar Nata Jens Stoltenberg je medtem zaradi Putinove odločitve izrazil zaskrbljenost. Sile za odvračanje so enote, katerih namen je odvrniti napad ... & 4.513 & 0.2818 \\
-\hline
-\end{tabular}
-\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{ms-marco-MiniLM} model for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.''.}
-\label{tab:reranked_results_2}
-\end{table}
+% \begin{table}[ht]
+% \centering
+% \small
+% \begin{tabular}{|c|p{13cm}|c|c|}
+% \hline
+% \textbf{Rank} & \textbf{Reranked Text} & \textbf{Cross Score} & \textbf{Distance} \\
+% \hline
+% 1 & Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo. Ruski predsednik Vladimir Putin je sporočil, da bo nadaljeval s testiranjem balistični... & 9.227 & 0.2823 \\
+% \hline
+% 2 & Zelenski Rusom namenil sporočilo: Putin vas uničuje. Iz več ukrajinskih regij poročajo o raketnih napadih. V Kijevu je odjeknilo deset eksplozij. Za približno p... & 6.814 & 0.2647 \\
+% \hline
+% 3 & Rusi demonstrirali 'povratni jedrski napad': uporabili balistične rakete. Ruski predsednik Vladimir Putin je prek digitalne platforme spremljal vojaške vaje rus... & 6.441 & 0.2464 \\
+% \hline
+% 4 & Dodal je, da so se z ZDA pripravljeni srečati na ravni voditeljev držav, da bi obravnavali občutljiva vprašanja. "O zadevah, kot so ozemeljska vprašanja, se je ... & 5.991 & 0.2833 \\
+% \hline
+% 5 & Na 1000. dan vojne v Ukrajini Putin podpisal odlok za širšo rabo jedrskega orožja. Ruski predsednik Vladimir Putin je podpisal odlok, ki Moskvi omogoča uporabo ... & 5.791 & 0.2684 \\
+% \hline
+% 6 & "Predsednik Putin je v nagovoru narodu dejal, da je regionalni konflikt v Ukrajini, kot ga je poimenoval, po napadih na rusko regijo Brjansk in Kursk z ameriški... & 5.408 & 0.2744 \\
+% \hline
+% 7 & "Ne vidimo nobenih znakov, da se Rusija pripravlja na uporabo jedrskega orožja," je po Putinovih pripombah dejal ameriški državni sekretar Antony Blinken. Za ogl... & 5.368 & 0.2784 \\
+% \hline
+% 8 & Prav tako naj bi šlo šele za prvi val raketnih napadov. Guverner ukrajinske regije Mikolajev Vitalij Kim je že predhodno opozoril na možnost raketnih napadov. Uk... & 5.177 & 0.2764 \\
+% \hline
+% 9 & Prigožinov upor je predstavljal enega največjih izzivov za dolgoletno vladavino Vladimirja Putina. Vodja Wagnerjeve skupine je imel pomembno vlogo pri invaziji ... & 5.081 & 0.2496 \\
+% \hline
+% 10 & Generalni sekretar Nata Jens Stoltenberg je medtem zaradi Putinove odločitve izrazil zaskrbljenost. Sile za odvračanje so enote, katerih namen je odvrniti napad ... & 4.513 & 0.2818 \\
+% \hline
+% \end{tabular}
+% \caption{Top 10 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{ms-marco-MiniLM} model for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.''.}
+% \label{tab:reranked_results_2}
+% \end{table}
 
-\begin{table}[ht]
+\begin{table}
 \centering
 \small
 \begin{tabular}{|c|p{13cm}|c|c|}
@@ -524,16 +523,61 @@ We implemented an end-to-end extraction and retrieval pipeline for the PA1 crawl
 6 & "Predsednik Putin je v nagovoru narodu dejal, da je regionalni konflikt v Ukrajini, kot ga je poimenoval, po napadih na rusko regijo Brjansk in Kursk z ameriški... & 0.3710 & 0.2744 \\
 \hline
 7 & Zelenski Rusom namenil sporočilo: Putin vas uničuje. Iz več ukrajinskih regij poročajo o raketnih napadih. V Kijevu je odjeknilo deset eksplozij. Za približno p... & 0.2555 & 0.2647 \\
-\hline
-8 & Ruski predsednik Vladimir Putin je v ponedeljek obljubil "primeren odgovor" na napad, katerega motivacijo je predstavil kot pretežno politično. "Naša glavna nal... & 0.2171 & 0.2744 \\
-\hline
-9 & Putin: Rusija bo jedrsko orožje uporabila le, če bo napadena. Ruski predsednik Vladimir Putin je v nagovoru na letnem zasedanju kremeljskega sveta za človekove ... & 0.1816 & 0.2832 \\
-\hline
-10 & Generalni sekretar Nata Jens Stoltenberg je medtem zaradi Putinove odločitve izrazil zaskrbljenost. Sile za odvračanje so enote, katerih namen je odvrniti napad ... & 0.1690 & 0.2818 \\
+% \hline
+% 8 & Ruski predsednik Vladimir Putin je v ponedeljek obljubil "primeren odgovor" na napad, katerega motivacijo je predstavil kot pretežno politično. "Naša glavna nal... & 0.2171 & 0.2744 \\
+% \hline
+% 9 & Putin: Rusija bo jedrsko orožje uporabila le, če bo napadena. Ruski predsednik Vladimir Putin je v nagovoru na letnem zasedanju kremeljskega sveta za človekove ... & 0.1816 & 0.2832 \\
+% \hline
+% 10 & Generalni sekretar Nata Jens Stoltenberg je medtem zaradi Putinove odločitve izrazil zaskrbljenost. Sile za odvračanje so enote, katerih namen je odvrniti napad ... & 0.1690 & 0.2818 \\
 \hline
 \end{tabular}
-\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{bge-reranker} model for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.''.}
+\caption{Top 7 retrieval results using the \texttt{all-MiniLM} model after reranking with the \texttt{bge-reranker} model for query=''Zelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo.'' (model \texttt{all-MiniLM} was used here to demonstrate the difference between retrieved and reranked results more clearly).}
 \label{tab:reranked_results_3}
+\end{table}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{|c|p{12cm}|c|}
+\hline
+\textbf{Rank} & \textbf{Retrieved Text} & \textbf{Distance} \\
+\hline
+1 & živalski vrt. & 0.3488 \\
+\hline
+2 & Jevgenij Ziničev. & 0.3836 \\
+\hline
+3 & Več držav je že napovedalo njihovo dobavo. & 0.4197 \\
+\hline
+4 & Napovedal je, da bo danes govoril na zasedanju Varnostnega sveta ZN o Ukrajini. & 0.4291 \\
+\hline
+5 & Gre za območje, na katerem živijo predvsem armenski kristjani, a leži globoko na območju Azerbajdžana, katerega prebivalstvo je večinoma muslimansko. & 0.4344 \\
+\hline
+\end{tabular}
+\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model before reranking for an unusual query=''Ob katerih dneh je živalski vrt Zoo odprt.''.}
+\label{tab:retrieval_results_5}
+\end{table}
+
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{|c|p{12cm}|c|c|}
+\hline
+\textbf{Rank} & \textbf{Reranked Text} & \textbf{Cross Score} & \textbf{Distance} \\
+\hline
+1 & Voditelja sta se na kratko srečala le ob junijski slovesnosti ob dnevu D v Normandiji. & -2.582 & 0.4708 \\
+\hline
+2 & Dogovor naj bi vodil v končanje konflikta, v katerem je od aprila umrlo že skoraj 2900 ljudi. & -3.745 & 0.4594 \\
+\hline
+3 & Kljub temu je dogodek s prvega dne vojne postal del sodobne ukrajinske folklore, njihova pošta pa je celo izdala znamke, ki ilustrirajo famozni dogodek. & -4.047 & 0.4423 \\
+\hline
+4 & Obema so odpravili pripor, sodba je pravnomočna, je sporočilo okrožno sodišče v Ljubljani. & -4.690 & 0.4826 \\
+\hline
+5 & obletnica invazije. & -4.769 & 0.4658 \\
+\hline
+\end{tabular}
+\caption{Top 10 retrieval results using the \texttt{all-MiniLM} model before reranking with the \texttt{mmarco-mMiniLMv2} model for an unusual query=''Ob katerih dneh je živalski vrt Zoo odprt.''.}
+\label{tab:reranked_results_5}
 \end{table}
 
 \end{document}
