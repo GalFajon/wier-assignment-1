@@ -57,7 +57,7 @@ def query_database2(model, query_string, settings, dimensions, query_return_n, d
 
 if __name__ == '__main__':
 
-    QUERY_STRING = 'Vladimir Putin'
+    QUERY_STRING = 'Ob katerih dneh je živalski vrt Zoo odprt.'
     print(f"Querying with: {QUERY_STRING}")
         
     settings = load_settings()
@@ -66,11 +66,20 @@ if __name__ == '__main__':
     reranker = load_reranking_model(settings)
 
     chunks = query_database(model, QUERY_STRING, settings)
+    print(chunks)
+    for i, chunk in enumerate(chunks):
+        
+        text = chunk[1]
+        dist = chunk[2]
+        print(f'{i+1:<2}: Text={text[:160]:<160}{'...' if len(text) > 160 else ''}, Distance={dist:.4}')
+        if i+1 >= settings.rerank_return_n:
+            break
+    # reranked = chunks
     reranked = rerank_candidates(reranker, QUERY_STRING, chunks, settings)
 
     for i, final_chunk_data in enumerate(reranked):
         text = final_chunk_data['text']
         dist = final_chunk_data['dist']
         cross_score = final_chunk_data['cross_score']
-        print(f'{i+1}: Text={text[:300]}... Cross_score={cross_score}, Distance={dist}')
+        print(f'{i+1:<2}: Text={text[:160]:<160}{'...' if len(text) > 160 else ''}, Cross_score={cross_score:.4}, Distance={dist:.4}')
     
