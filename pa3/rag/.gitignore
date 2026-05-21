@@ -1,4 +1,7 @@
 ollama_data
+db_data
+models
+.env
 .venv
 
 # Byte-compiled / optimized / DLL files

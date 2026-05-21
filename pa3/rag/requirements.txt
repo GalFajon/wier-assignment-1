@@ -1,0 +1,7 @@
+dspy-ai
+sentence-transformers
+torch
+sqlalchemy
+psycopg2-binary
+pgvector
+python-dotenv

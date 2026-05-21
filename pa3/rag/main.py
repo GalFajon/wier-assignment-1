@@ -1,30 +1,85 @@
 import dspy
+import os
 import sys
+import threading
+from dotenv import load_dotenv
+from rag_context import retrieve_context
+
+load_dotenv()
 
 lm = dspy.LM('ollama_chat/llama3.2:1b', api_base='http://localhost:11434', api_key='')
+
 dspy.configure(lm=lm)
 
+
 class SimpleRAG(dspy.Signature):
-    """Answer the user's question based on the context."""
-    context:str = dspy.InputField(desc="Text context")
-    question:str = dspy.InputField(desc="Question")
-    answer:str = dspy.OutputField()
+    context: str = dspy.InputField(desc="Retrieved text context")
+    question: str = dspy.InputField(desc="User question")
+    answer: str = dspy.OutputField(desc="Answer based on context")
 
-rag_module = dspy.Predict(SimpleRAG)
+class SimpleQuery(dspy.Signature):
+    question: str = dspy.InputField(desc="User question")
+    answer: str = dspy.OutputField(desc="Direct answer to question")
 
-default_context = "Vladimir Putin is the president of Russia."
-default_question = "Who is the president of Russia?"
+
+default_num_candidates = int(os.getenv("NUM_CANDIDATES", "3"))
+default_num_final = int(os.getenv("NUM_FINAL", "3"))
 
 if len(sys.argv) > 2:
-    context = sys.argv[1]
-    question = sys.argv[2]
+    question = sys.argv[1]
+    num_candidates = int(sys.argv[2])
+    num_final = default_num_final
+elif len(sys.argv) > 1:
+    question = sys.argv[1]
+    num_candidates = default_num_candidates
+    num_final = default_num_final
 else:
-    context = default_context
-    question = default_question
+    question = "Kdo je predsednik ukrajine?"
+    num_candidates = default_num_candidates
+    num_final = default_num_final
 
-print(f"Context: {context}")
-print(f"Question: {question}")
+# Storage for parallel results
+results = {
+    'with_context': None,
+    'without_context': None
+}
+
+def run_with_context():
+    try:
+        context = retrieve_context(question, num_candidates=num_candidates, num_final=num_final)
+        rag_module = dspy.Predict(SimpleRAG)
+        print(context)
+        response = rag_module(context=context, question=question)
+        results['with_context'] = response.answer
+    except Exception as e:
+        results['with_context'] = f"Error: {e}"
+
+def run_without_context():
+    try:
+        query_module = dspy.Predict(SimpleQuery)
+        response = query_module(question=question)
+        results['without_context'] = response.answer
+    except Exception as e:
+        results['without_context'] = f"Error: {e}"
+
+print(f"Query: {question}")
+print("-" * 80)
+
+t1 = threading.Thread(target=run_with_context)
+t2 = threading.Thread(target=run_without_context)
+
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+
+print("WITH CONTEXT (RAG):")
+print("-" * 80)
+print(f"{results['with_context']}")
 print()
 
-response = rag_module(context=context, question=question)
-print(f"Answer: {response.answer}")
+print("WITHOUT CONTEXT (Direct Query):")
+print("-" * 80)
+print(f"{results['without_context']}")
+print()
