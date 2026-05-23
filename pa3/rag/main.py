@@ -11,7 +11,6 @@ lm = dspy.LM('ollama_chat/llama3.2:1b', api_base='http://localhost:11434', api_k
 
 dspy.configure(lm=lm)
 
-
 class SimpleRAG(dspy.Signature):
     context: str = dspy.InputField(desc="Retrieved text context")
     question: str = dspy.InputField(desc="User question")
