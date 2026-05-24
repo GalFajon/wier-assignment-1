@@ -1,0 +1,16 @@
+
+randomly sample 50 pages from datset with a lengths in an inverval (to guarantee the eval dataset is rich in text)
+window chunks for each to create query candidates (combining multiple chunks prevent semmantic meaning being cut off by chunk border)
+save per page data along with windowed chunks
+
+LLM supervised evaluation dataset generation:
+- Loaded sampled pages with metadata, chunks, and preselected source windows.
+- For each source window, generated one Slovenian factual question.
+- Generated a concise Slovenian expected answer to query grounded only in the selected chunks.
+- Extracted atomic key facts and linked each fact to supporting chunk IDs.
+- Proposed additional candidate supporting chunks from the same page.
+- Verified answerability with a separate LLM check.
+- Verified candidate chunks as support / contradiction / insufficient / unrelated.
+- Algorithmically checked that all returned chunk IDs exist on the page.
+- Rejected vague, unsupported, invalid, or malformed examples.
+- Saved valid examples with query, answer, required chunks, acceptable chunks, hard negatives, key facts, and source-window metadata.

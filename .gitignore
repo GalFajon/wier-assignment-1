@@ -12,6 +12,10 @@ pa2/models
 models
 pa2/report/main.pdf
 
+
+*requirements_local.txt
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
