@@ -45,6 +45,25 @@ def rerank_chunks(reranker, query, chunks, top_k = 3):
     return results[:top_k]
 
 
+def rerank_chunks_with_ids(reranker, query, chunks, top_k = 3):
+    if not chunks:
+        return []
+    
+    # 0: id   1: page_id   2: text   3: similarity metric score
+    texts = [chunk[2] for chunk in chunks]
+    query_text_pairs = [[query, text] for text in texts]
+    cross_encoder_scores = reranker.predict(query_text_pairs)
+    
+    results = []
+    for (chunk_id, page_id, text, vector_score), cross_score in zip(chunks, cross_encoder_scores):
+        results.append((chunk_id, page_id, text, float(vector_score), float(cross_score)))
+    
+    results.sort(key=lambda x: x[4], reverse=True)
+    
+    return results[:top_k]
+
+
+
 def format_context_from_chunks(chunks):
     context_parts = []
 
@@ -52,3 +71,5 @@ def format_context_from_chunks(chunks):
         context_parts.append(f"\n{text}")
     
     return "\n\n".join(context_parts)
+
+
