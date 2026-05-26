@@ -71,10 +71,13 @@ class RAG_OneShot_Signature(dspy.Signature):
     )
     references_json: str = dspy.OutputField(
         desc=(
-            "OBVEZNO: veljaven JSON seznam kot niz. "
-            "Vsebovati mora natanko vse ChunkID-je, citirane v answer, skupaj z njihovimi URL-ji iz konteksta. "
-            "Primer: [{\"chunk_id\": \"21105\", \"url\": \"https://...\"}]. "
-            "Če answer nima citatov, mora biti: []"
+            "Vrni IZKLJUČNO surov veljaven JSON seznam kot niz. "
+            "Ne dodaj oznake 'references_json:', ne dodaj narekovajev okoli celotnega izpisa, "
+            "ne dodaj Markdowna, kode, pojasnil ali dodatnega besedila. "
+            "Prvi znak mora biti '[' in zadnji znak mora biti ']'. "
+            "Če answer vsebuje citat [ChunkID: 123], mora seznam vsebovati natanko objekt "
+            "{\"chunk_id\": \"123\", \"url\": \"URL_IZ_ISTEGA_CHUNKA\"}. "
+            "Če answer nima citatov ali odgovor ni mogoč, vrni natanko: []"
         )
     )
     

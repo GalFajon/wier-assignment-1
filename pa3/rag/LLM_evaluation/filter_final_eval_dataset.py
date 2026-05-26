@@ -9,6 +9,8 @@ OUTPUT_JSONL = "evaluation_dataset.jsonl"
 
 KEEP_CHUNK_TEXT = True
 KEEP_HARD_NEGATIVES = True
+KEEP_PARTIAL_SUPPORTS = True
+
 
 def normalize_chunk_id(chunk_id: Any) -> str:
     return str(chunk_id)
@@ -89,6 +91,11 @@ def clean_example(example: dict, idx: int) -> dict | None:
         for cid in example.get("acceptable_chunk_ids", [])
     ]
 
+    partial_support_chunk_ids = [
+        normalize_chunk_id(cid)
+        for cid in example.get("partial_support_chunk_ids", [])
+    ]
+
     hard_negative_chunk_ids = [
         normalize_chunk_id(cid)
         for cid in example.get("hard_negative_chunk_ids", [])
@@ -105,11 +112,18 @@ def clean_example(example: dict, idx: int) -> dict | None:
         required_chunk_ids + acceptable_chunk_ids
     )
 
-    # Hard negatives should not overlap with positives.
+    # Partial supports should not overlap with positives.
     positive_ids = set(acceptable_chunk_ids)
+    partial_support_chunk_ids = [
+        cid for cid in partial_support_chunk_ids
+        if cid not in positive_ids
+    ]
+
+    # Hard negatives should not overlap with positives or partial supports.
+    non_negative_ids = set(acceptable_chunk_ids) | set(partial_support_chunk_ids)
     hard_negative_chunk_ids = [
         cid for cid in hard_negative_chunk_ids
-        if cid not in positive_ids
+        if cid not in non_negative_ids
     ]
 
     cleaned = {
@@ -148,6 +162,16 @@ def clean_example(example: dict, idx: int) -> dict | None:
             if normalize_chunk_id(chunk.get("chunk_id")) in set(acceptable_chunk_ids)
         ]
 
+    if KEEP_PARTIAL_SUPPORTS:
+        cleaned["partial_support_chunk_ids"] = partial_support_chunk_ids
+
+        if KEEP_CHUNK_TEXT:
+            cleaned["partial_support_chunks"] = [
+                clean_chunk(chunk)
+                for chunk in example.get("partial_support_chunks", [])
+                if normalize_chunk_id(chunk.get("chunk_id")) in set(partial_support_chunk_ids)
+            ]
+
     if KEEP_HARD_NEGATIVES:
         cleaned["hard_negative_chunk_ids"] = hard_negative_chunk_ids
 
@@ -182,6 +206,7 @@ def main() -> None:
             "num_clean_examples": len(cleaned_examples),
             "keep_chunk_text": KEEP_CHUNK_TEXT,
             "keep_hard_negatives": KEEP_HARD_NEGATIVES,
+            "keep_partial_supports": KEEP_PARTIAL_SUPPORTS,
         },
         "examples": cleaned_examples,
     }

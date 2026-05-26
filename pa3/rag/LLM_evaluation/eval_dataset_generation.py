@@ -129,7 +129,7 @@ Vrni:
 """
 
 
-SUPPORT_VERIFIER_PROMPT = """Si preverjevalec podpornih oznak.
+SUPPORT_VERIFIER_PROMPT = """Si preverjevalec podpornih oznak za RAG evalvacijski nabor.
 
 Dobil boš:
 - vprašanje
@@ -138,28 +138,30 @@ Dobil boš:
 - en kandidatni odsek
 
 Tvoja naloga:
-Določi, ali kandidatni odsek neposredno podpira vsaj eno ključno dejstvo ali pričakovani odgovor.
+Določi, kakšno vrsto podpore kandidatni odsek nudi za vprašanje, pričakovani odgovor ali morebiten pravilen odgovor.
 
 Oznake:
-- supports: kandidatni odsek neposredno podpira vsaj eno ključno dejstvo
-- contradicts: kandidatni odsek nasprotuje vsaj enemu ključnemu dejstvu
-- insufficient: kandidatni odsek je povezan, vendar ne podpira v celoti nobenega ključnega dejstva
-- unrelated: kandidatni odsek ni relevanten
+- supports_expected_answer: odsek neposredno podpira pričakovani odgovor ali vsaj eno ključno dejstvo
+- partial_support: odsek vsebuje relevantno informacijo za odgovor na vprašanje, vendar ne podpira dovolj pričakovanega odgovora ali ključnih dejstev
+- contradicts: odsek nasprotuje pričakovanemu odgovoru ali ključnim dejstvom
+- related_but_not_answering: odsek je tematsko povezan, vendar ne pomaga odgovoriti na vprašanje
+- unrelated: odsek ni relevanten za vprašanje
 
-Pravila:
-- Polje "supported_facts" naj vsebuje natančne kopije podprtih ključnih dejstev v slovenščini.
-- Polje "reason" mora biti v slovenščini.
-- Imena JSON ključev in dovoljene oznake morajo ostati točno takšne, kot so navedene spodaj.
+Pomembno:
+- Če odsek vsebuje dodatno dejstvo, ki bi lahko bilo del pravilnega odgovora na vprašanje, uporabi partial_support, ne hard negative.
+- Če odsek podpira katero koli ključno dejstvo, uporabi supports_expected_answer.
+- Če je odsek samo o isti splošni temi, vendar ne pomaga odgovoriti na vprašanje, uporabi related_but_not_answering.
+- Razlog mora biti v slovenščini.
 - Vrni IZKLJUČNO veljaven JSON objekt.
 
 Vrni:
 {
-  "verdict": "supports | contradicts | insufficient | unrelated",
+  "verdict": "supports_expected_answer | partial_support | contradicts | related_but_not_answering | unrelated",
   "supported_facts": ["sem kopiraj natančna podprta ključna dejstva"],
+  "additional_relevant_information": ["sem napiši dodatne relevantne informacije, če obstajajo"],
   "reason": "kratek razlog v slovenščini"
 }
 """
-
 
 
 
@@ -465,10 +467,11 @@ def verify_candidate_supports(
     page: dict,
     generated: dict,
     candidate_ids: list[Any],
-) -> tuple[list[str], list[str], list[dict]]:
+) -> tuple[list[str], list[str], list[str], list[dict]]:
     """
     Returns:
     - acceptable_support_ids
+    - partial_support_ids
     - hard_negative_ids
     - detailed judgments
     """
@@ -487,6 +490,7 @@ def verify_candidate_supports(
     valid_candidate_ids = validate_chunk_ids(candidate_ids, chunk_map)
 
     acceptable = []
+    partial_supports = []
     hard_negatives = []
     judgments = []
 
@@ -515,15 +519,23 @@ def verify_candidate_supports(
             "chunk_id": cid,
             "verdict": verdict,
             "supported_facts": judgment.get("supported_facts", []),
+            "additional_relevant_information": judgment.get("additional_relevant_information", []),
             "reason": judgment.get("reason", ""),
         })
 
-        if verdict == "supports":
+        if verdict == "supports_expected_answer":
             acceptable.append(cid)
-        elif verdict in {"insufficient", "unrelated", "contradicts"}:
+
+        elif verdict == "partial_support":
+            partial_supports.append(cid)
+
+        elif verdict in {"contradicts", "unrelated"}:
             hard_negatives.append(cid)
 
-    return acceptable, hard_negatives, judgments
+        elif verdict == "related_but_not_answering":
+            partial_supports.append(cid)
+
+    return acceptable, partial_supports, hard_negatives, judgments
 
 
 def generate_query_for_source_window(page: dict, source_window: dict) -> dict | None:
@@ -681,17 +693,22 @@ def generate_query_for_source_window(page: dict, source_window: dict) -> dict | 
         if cid not in set(verified_required)
     ]
 
-    acceptable_extra_ids, hard_negative_ids, support_judgments = verify_candidate_supports(
+    acceptable_extra_ids, partial_support_ids, hard_negative_ids, support_judgments = verify_candidate_supports(
         page=page,
         generated=generated,
         candidate_ids=generated_candidate_ids,
     )
-
+    
     acceptable_chunk_ids = sorted(
         set(verified_required) | set(acceptable_extra_ids),
         key=lambda x: int(x) if x.isdigit() else x,
     )
-
+    
+    partial_support_chunk_ids = sorted(
+        set(partial_support_ids),
+        key=lambda x: int(x) if x.isdigit() else x,
+    )
+    
     required_chunks = [
         {
             "chunk_id": cid,
@@ -708,6 +725,15 @@ def generate_query_for_source_window(page: dict, source_window: dict) -> dict | 
             "text": chunk_map[cid]["text"],
         }
         for cid in acceptable_chunk_ids
+    ]
+
+    partial_support_chunks = [
+        {
+            "chunk_id": cid,
+            "chunk_index": chunk_map[cid].get("chunk_index"),
+            "text": chunk_map[cid]["text"],
+        }
+        for cid in partial_support_chunk_ids
     ]
 
     hard_negative_chunks = [
@@ -744,9 +770,11 @@ def generate_query_for_source_window(page: dict, source_window: dict) -> dict | 
         "acceptable_chunk_ids": acceptable_chunk_ids,
         "candidate_supporting_chunk_ids": generated_candidate_ids,
         "hard_negative_chunk_ids": hard_negative_ids,
+        "partial_support_chunk_ids": partial_support_chunk_ids,
 
         "required_chunks": required_chunks,
         "acceptable_chunks": acceptable_chunks,
+        "partial_support_chunks": partial_support_chunks,
         "hard_negative_chunks": hard_negative_chunks,
 
         "key_facts": generated.get("key_facts", []),

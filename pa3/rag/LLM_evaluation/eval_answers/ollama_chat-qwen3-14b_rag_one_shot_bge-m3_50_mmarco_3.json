@@ -1,0 +1,1045 @@
+[
+  {
+    "question": "Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical današnji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?",
+    "answer": "Rusko ministrstvo za izredne razmere je že napotilo več sto tisoč gasilcev in približno 2000 pripadnikov vojske. Današnji odlok Medvedjeva pa pomeni vpoklic še dodatnih vojakov (število ni navedeno). Požari so povzročili 40 smrtnih žrtev in uničili 128.500 hektarov ozemlja. Glavni vzrok za požare je vroče in suho vreme, ki je izsušilo ozemlje in zanetilo podrastje [ChunkID: 21105].",
+    "references": [
+      {
+        "chunk_id": "21105",
+        "url": "https://24ur.com/novice/svet/oblasti-situacija-je-pod-nadzorom.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"21105\", \"url\": \"https://24ur.com/novice/svet/oblasti-situacija-je-pod-nadzorom.html\"}]",
+    "cited_chunk_ids": [
+      "21105"
+    ],
+    "referenced_chunk_ids": [
+      "21105"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 21105\nURL: https://24ur.com/novice/svet/oblasti-situacija-je-pod-nadzorom.html\nBesedilo:\nRusko ministrstvo za izredne razmere je v boj proti požarom sicer že napotilo več sto tisoč gasilcev in približno 2000 pripadnikov vojske, današnji odlok Medvedjeva pa pomeni vpoklic še dodatnih vojakov.Najhujši požari, ki so prizadeli zahodno Rusijo, so za sabo pustili že 40 smrtnih žrtev, na tisoče ljudi pa je ostalo brez strehe nad glavo. Med žrtvami so tudi gasilci. Po zadnjih podatkih je ogenj uničil 128.500 hektarov ozemlja.Največji vzrok za številne požare je sicer vroče in suho vreme, ki je izsušilo velike dele ozemlja in zanetilo podrastje, ki prekriva celo osrednjo Rusijo.\n\n---------------\n\n### ODSEK 2\nChunkID: 21104\nURL: https://24ur.com/novice/svet/oblasti-situacija-je-pod-nadzorom.html\nBesedilo:\nFOTO: V Rusiji razglasili izredne razmere. Ruski predsednik je zaradi številnih požarov za 14 regij razglasil izredne razmere. Rdeč petelin je uničil skoraj 130.000 hektarov ozemlja, več tisoč ljudi pa je ostalo brez strehe nad glavo. Ruski gasilci se še vedno borijo z ognjenimi zublji, ki se širijo po zahodnem delu Rusije in zaradi katerih je svoje domove moralo zapustiti skoraj 86.000 ljudi. Predsednik Dmitrij Medvedjev je zaradi številnih požarov v naravi danes razglasil izredne razmere za 14 od 83 regij v državi.Dostop do območij, kjer divja ogenj in kjer bi lahko prisotnost nepooblaščenih oseb povzročila izbruh novih požarov, bodo imeli tako zaenkrat le gasilci in drugi, ki jim pomagajo pri gašenju požarov, ter reševalci.Poleg tega bodo lahko pristojne oblasti v boju proti požarom uporabile pomoč oboroženih sil.\n\n---------------\n\n### ODSEK 3\nChunkID: 379\nURL: https://24ur.com/novice/tujina/ukrajina/ukrajina-naj-bi-globoko-v-rusiji-napadla-naftno-rafinerijo-umrla-ena-oseba.html\nBesedilo:\nŠe večji vpoklic vojakov je bil spomladi, takrat jih je bilo vpoklicanih kar 160.000, kar je bilo največ po letu 2011.Prav prejšnji mesec so v Rusiji sicer potrdili zakon, ki omogoča celoletni vojaški vpoklic in ne le spomladi in jeseni, medtem ko bo napotitev še vedno potekala le dvakrat letno. V Rusiji morajo vsi moški, stari od 18 do 30 let, eno leto služiti v vojski, vendar se je vpoklicu z različnimi razlogi lahko izogniti. Medtem ko je Putin lani dejal, da se v Ukrajini bori več kot 700.000 vojakov, Ukrajina trdi, da so jih ubili več kot milijon.Rusija je po poročanju The Independenta sporočila, da njene sile znotraj Pokrovska napredujejo proti severu ter da se trudijo prevzeti popoln nadzor nad ukrajinskim mestom.",
+    "eval_id": "eval_000001"
+  },
+  {
+    "question": "Kaj je ruski predsednik Vladimir Putin povedal o uporabi nove rakete Orešnik in o vplivu zahodnih raket na rusko posebno operacijo v Ukrajini?",
+    "answer": "Ruski predsednik Vladimir Putin je potrdil, da Rusija nadaljuje testiranje balističnih raket srednjega dosega Orešnik, ki so bile \"uspešno testirane\" [ChunkID: 970]. Poudaril je, da zahodne rakete dolgega dosega ne bodo vplivale na izid ruske posebne operacije v Ukrajini [ChunkID: 977].",
+    "references": [
+      {
+        "chunk_id": "970",
+        "url": "https://24ur.com/novice/tujina/ukrajinski-parlament-prekinil-sejo-zaradi-ruske-raketne-groznje.html"
+      },
+      {
+        "chunk_id": "977",
+        "url": "https://24ur.com/novice/tujina/rusija-nad-dinpropetrovsk-z-interkontinentalno-balisticno-raketo.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"970\", \"url\": \"https://24ur.com/novice/tujina/ukrajinski-parlament-prekinil-sejo-zaradi-ruske-raketne-groznje.html\"}, {\"chunk_id\": \"977\", \"url\": \"https://24ur.com/novice/tujina/rusija-nad-dinpropetrovsk-z-interkontinentalno-balisticno-raketo.html\"}]",
+    "cited_chunk_ids": [
+      "970",
+      "977"
+    ],
+    "referenced_chunk_ids": [
+      "970",
+      "977"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 977\nURL: https://24ur.com/novice/tujina/rusija-nad-dinpropetrovsk-z-interkontinentalno-balisticno-raketo.html\nBesedilo:\n\"Predsednik Putin je v nagovoru narodu dejal, da je regionalni konflikt v Ukrajini, kot ga je poimenoval, po napadih na rusko regijo Brjansk in Kursk z ameriškimi in britanskimi raketami dolgega dosega dobil elemente globalne narave.Zahodne rakete pa po njegovih besedah ne bodo vplivale na izid ruske posebne operacije – izraz, ki ga še vedno uporablja za rusko vojno v Ukrajini.Ameriko je obtožil uničenja sistema globalne varnosti.Združeni medtem pravijo, da je potrditev Vladimirja Putina, da je Rusija v jutranjem napadu na Dnipro uporabila raketo srednjega dosega, \"zaskrbljujoča\". \"To je še en zaskrbljujoč razvoj dogodkov.\n\n---------------\n\n### ODSEK 2\nChunkID: 970\nURL: https://24ur.com/novice/tujina/ukrajinski-parlament-prekinil-sejo-zaradi-ruske-raketne-groznje.html\nBesedilo:\nZelenski Zahod poziva k odzivu, Putin: Rakete so pripravljene za uporabo. Ruski predsednik Vladimir Putin je sporočil, da bo nadaljeval s testiranjem balističnih raket srednjega dosega Orešnik, ki so jih \"uspešno testirali\" v četrtek. Ukrajinski predsednik Volodimir Zelenski je medtem Zahod pozval, naj se odločno odzove na Putinovo ustrahovanje. Ukrajinski parlament je meedtem dopoldan odpovedal sejo, so sporočili poslanci in kot razlog navedli nevarnost ruskega raketnega napada na okrožje Kijeva, kjer se nahajajo vladni objekti. Ruska vojska je medtem nadaljevala napade na Ukrajino, od koder poročajo o najmanj treh smrtnih žrtvah. Ukrajinski predsednik Volodimir Zelenski je v videonagovoru dejal, da bo ruski predsednik Vladimir Putin še naprej poskušal ustrahovati Ukrajino ter da bi se moral Zahod odločno odzvati na rusko uporabo nove hiperzvočne rakete.\n\n---------------\n\n### ODSEK 3\nChunkID: 2833\nURL: https://24ur.com/novice/tujina/ukrajina/po-smrtonosnem-napadu-v-makijevki-uporabljali-so-telefone-in-to-jih-je-ubilo.html\nBesedilo:\nPutin odredil uporabo novih hipersoničnih raket. Ruski predsednik Vladimir Putin je v luči nenehnih zapletov med invazijo na Ukrajino odredil uporabo nove hipersonične manevrirne rakete cirkon. S tovrstnimi raketami je bila opremljena ruska fregata Admiral Gorškov, ki se je že odpravila na usposabljanje v Atlantski in Indijski ocean ter Sredozemsko morje. Medtem je Rusija odgovorila na bes, ki se je po smrtonosnem napadu v Makijevki začel širiti po državi. Ruska vojska je dejala, da se je raketni napad zgodil, ker so vojaki uporabljali telefone. 1 6 Vladimir Putin se je slovesnosti ob odplutju fregate na usposabljanje udeležil preko videopovezave. APVladimir Putin se je slovesnosti ob odplutju fregate na usposabljanje udeležil preko videopovezave. APVladimir Putin se je slovesnosti ob odplutju fregate na usposabljanje udeležil preko videopovezave.",
+    "eval_id": "eval_000002"
+  },
+  {
+    "question": "Katere obtožbe je Gruzija izpostavila proti Rusiji pred Meddržavnim sodiščem v Haagu in kako je Rusija odgovorila na te obtožbe?",
+    "answer": "Gruzija je pred Meddržavnim sodiščem v Haagu Rusijo obtožila dolgotrajnega in nepretrganega \"etničnega čiščenja\" na gruzijskem ozemlju ter sodišče pozvala, naj izda odredbo o uvedbi začasnih varnostnih ukrepov [ChunkID: 19244]. Rusija je vse očitke odločno zanikala in zavračala obtožbe, da krši dogovor o prekinitvi ognja [ChunkID: 19194].",
+    "references": [
+      {
+        "chunk_id": "19244",
+        "url": "https://24ur.com/novice/svet/ruski-vojaki-vendarle-iz-gruzije.html"
+      },
+      {
+        "chunk_id": "19194",
+        "url": "https://24ur.com/novice/svet/gruzija-se-ne-bo-pogajala-o-ozemeljski-celovitosti.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"19244\", \"url\": \"https://24ur.com/novice/svet/ruski-vojaki-vendarle-iz-gruzije.html\"}, {\"chunk_id\": \"19194\", \"url\": \"https://24ur.com/novice/svet/gruzija-se-ne-bo-pogajala-o-ozemeljski-celovitosti.html\"}]",
+    "cited_chunk_ids": [
+      "19194",
+      "19244"
+    ],
+    "referenced_chunk_ids": [
+      "19194",
+      "19244"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 19244\nURL: https://24ur.com/novice/svet/ruski-vojaki-vendarle-iz-gruzije.html\nBesedilo:\nGruzija obtožuje RusijoGruzija je pred Meddržavnim sodiščem (ICJ) v Haagu Rusijo obtožila dolgotrajnega in nepretrganega \"etničnega čiščenja\" na gruzijskem ozemlju ter sodišče pozvala, naj izda odredbo o uvedbi začasnih varnostnih ukrepov, ki bodo zagotovili takojšnje končanje domnevnih zlorab nad Gruzijci. Rusija je vse očitke odločno zanikala.Odvetnik James Crawford, ki zastopa Gruzijo, je Rusijo med drugim obtožil, da je s pomočjo separatističnih skupin iz Južne Osetije in Abhazije nasilno preganjala etnično gruzijsko prebivalstvo. \"Etnični Gruzijci so bili napadeni in nasilno pregnani iz teh regij... in za več kot desetletje jim je bila odvzeta pravica do vrnitve... Prihajalo je do požiganja hiš, umorov civilistov, plenjenja lastnine,\" je poudarjal in dodal, da je bilo od začetka ruske invazije v Gruziji pred mesecem dni notranje razseljenih več kot 150.000 Gruzijcev.\n\n---------------\n\n### ODSEK 2\nChunkID: 15788\nURL: https://24ur.com/novice/svet/rusija-se-upira.html\nBesedilo:\nBo podpis prinesel mir?. Le nekaj ur potem, ko je Medvedjev podpisal sporazum o prekinitvi sovražnega ognja, so se ruske sile umaknile iz gruzijskega mesta Igoeti. Med 8. in 10. septembrom bodo na sodišču v Haagu potekala javna zaslišanja glede tožbe, ki jo je Gruzija v sredo na sodišče vložila proti Rusiji zaradi domnevnega etničnega čiščenja.Pogajanja o resoluciji Varnostnega sveta Združenih narodov z zahtevo po prekinitvi ognja v Gruziji niso bila uspešna. Rusija, ki ima pravico veta, namreč vztraja, da v resoluciji ne sme biti omembe spoštovanja ozemeljske celovitosti Gruzije. \"O resoluciji smo želeli glasovati že ta konec tedna, vendar si bomo vzeli toliko časa, kolikor bo potrebno.\n\n---------------\n\n### ODSEK 3\nChunkID: 19194\nURL: https://24ur.com/novice/svet/gruzija-se-ne-bo-pogajala-o-ozemeljski-celovitosti.html\nBesedilo:\nRusija obtožbe zavrača, Lavrov pa je tudi dejal, da ne bodo trpeli nikakršnega plenjenja.Sakašvili je Rusijo tudi obtožil, da krši dogovor o prekinitvi ognja. Gruzijska zunanja ministrica Ekaterine Tkešelašvili, ki poskuša v Bruslju svoji državi zagotoviti pomoč Evropske unije in Nata, pa je dejala, da se napadi na Gori še niso ustavili. Rusi tudi re obtožbe zavračajo.Jasno ni niti, kaj se dogaja v Južni Osetiji. Ameriški odposlanec v regiji je sporočil, da ima \"verodostojne informacije\", da se nasilje nadaljuje. Rusijo je pozval, naj se vzdrži prekomerne sile in naj ne napada civilistov, za njim je poziv ponovil tudi ameriški predsednik Bush.",
+    "eval_id": "eval_000003"
+  },
+  {
+    "question": "Kaj so sporočili kijevska mestna uprava, kijevska vojaška uprava in Sergij Popko o jutranjem ruskem zračnem napadu na Kijev, vključno z uporabo orožja, učinkovitostjo protizračne obrambe in posledicami napada?",
+    "answer": "Kijevska mestna uprava je sporočila, da je bil napad \"brez primere v smislu moči, intenzivnosti in raznolikosti uporabljenega orožja\" [ChunkID: 14135]. Kijevska vojaška uprava je poročala, da je obramba uspela uničiti vse prihajajoče rakete [ChunkID: 14135]. Sergij Popko je omenjal \"srdit raketni napad\" z raketami iz strateških bombnikov nad Kaspijskim jezerom [ChunkID: 14135]. Požar je izbruhnil v soseski Darnica in v okrožju Desnyansky, vendar ni bilo poškodovanih oseb [ChunkID: 14135].",
+    "references": [
+      {
+        "chunk_id": "14135",
+        "url": "https://24ur.com/novice/tujina/rusija-z-ze-devetim-napadom-na-kijev-v-temu-mesecu.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"14135\", \"url\": \"https://24ur.com/novice/tujina/rusija-z-ze-devetim-napadom-na-kijev-v-temu-mesecu.html\"}]",
+    "cited_chunk_ids": [
+      "14135"
+    ],
+    "referenced_chunk_ids": [
+      "14135"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 14135\nURL: https://24ur.com/novice/tujina/rusija-z-ze-devetim-napadom-na-kijev-v-temu-mesecu.html\nBesedilo:\nKijevska mestna uprava je medtem prek Telegrama sporočila, da je bil jutranji ruski zračni napad na Kijev \"brez primere v smislu moči, intenzivnosti in raznolikosti uporabljenega orožja\". Zračni alarm medtem še vedno velja.Glede na podatke kijevske vojaške uprave je obramba uspela uničiti vse prihajajoče rakete, poroča BBC. Kličko je prek Telegrama sporočil, da je zaradi padajočih delcev požar izbruhnil v soseski Darnica v Kijevu in dodal, da ni bil nihče poškodovan. Kmalu zatem je izbruhnil še drugi požar, tokrat v okrožju Desnyansky vzhodno od mesta. Če je bil v tem požaru kdo ranjen, ni znano.Vodja kijevske vojaške uprave je dejal, da so Rusi izvedli \"srdit raketni napad\" z raketami, izstreljenimi iz strateških bombnikov nad Kaspijskim jezerom.\n\n---------------\n\n### ODSEK 2\nChunkID: 4308\nURL: https://24ur.com/novice/tujina/v-ruskem-napadu-na-dnipro-ranjenih-20-ljudi-tudi-pet-otrok.html\nBesedilo:\nNjegovo ponudbo so zavrnili.Obmejna regija Belgorod je bila od začetka ruske invazije na Ukrajino že večkrat tarča napadov, ki so terjali mrtve in ranjene. V zadnjem času so se zračni napadi okrepili, prišlo pa je tudi do več vdorov domnevnih sabotažnih skupin proukrajinskih borcev.Kijev: Rusija je napadla letališče v osrednji UkrajiniO eksplozijah in napadih z brezpilotnimi letalniki poročajo tudi iz drugih delov države. Te so donele še nad prestolnico Kijev, kjer so se oglasile sirene za opozarjanje pred zračnimi napadi. Kijevska vojaška uprava je sporočila, da je njihova zračna obramba odbila več raket in brezpilotnih letal, ki po navedbah vodje vojaške uprave Sergija Popka niso dosegla mesta. Iz Kijeva so sporočili tudi, da so ruske rakete zadele letališče v bližini mesta Kropivnicki v osrednji Ukrajini.\n\n---------------\n\n### ODSEK 3\nChunkID: 5507\nURL: https://24ur.com/novice/tujina/obsezen-napad-ruskih-sil-na-odeso-na-krimu-evakuirali-2000-ljudi-zaradi-pozara.html\nBesedilo:\nDodali so, da so napadli tudi ukrajinska skladišča goriva v bližini obeh mest.Ruska vojska je med vojno občasno napadala Odeso in sosednjo regijo, vendar je bil torkov napad eden največjih na tem območju.Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov. Omogoči piškotke Napadi tudi na KijevV Kijevu in okolici prestolnice pa je bilo danes slišati eksplozije, saj je protiletalska obramba delovala proti ciljem nad mestom. To je po poročanju lokalnih medijev sporočil župan Vitalij Kličko. \"Težka noč zračnih napadov za vso Ukrajino, še posebej za Odeso. Toda sovražnik ni pozabil niti na Kijev,\" je dejal vodja vojaške uprave mesta Kijev Sergej Popko na Telegramu.",
+    "eval_id": "eval_000004"
+  },
+  {
+    "question": "Kaj je bil po mnenju anonimnega predstavnika ukrajinskih specialnih enot namen avtomobila z eksplozivom na jezu Kahovka in kakšno vlogo je imela eksplozija iz strojnice?",
+    "answer": "Po mnenju anonimnega predstavnika ukrajinskih specialnih enot je bil namen avtomobila z eksplozivom dvojben: ustaviti vsako ukrajinsko napredovanje na jezu in okrepiti načrtovano eksplozijo iz strojnice, ter uničiti vrh jezu [ChunkID: 4268]. Eksplozija iz strojnice je bila namenjena dodatnemu uničenju vrha jezu, kar bi sicer avtobomba sama ne bi lahko dosegla.",
+    "references": [
+      {
+        "chunk_id": "4268",
+        "url": "https://24ur.com/novice/tujina/ukrajina/dober-teden-pred-unicenjem-na-jezu-fotografirali-avto-z-eksplozivom.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"4268\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/dober-teden-pred-unicenjem-na-jezu-fotografirali-avto-z-eksplozivom.html\"}]",
+    "cited_chunk_ids": [
+      "4268"
+    ],
+    "referenced_chunk_ids": [
+      "4268"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 4268\nURL: https://24ur.com/novice/tujina/ukrajina/dober-teden-pred-unicenjem-na-jezu-fotografirali-avto-z-eksplozivom.html\nBesedilo:\nNi sicer jasno, kako dolgo naj bi avto ostal na območju.Anonimni predstavnik ukrajinskih specialnih enot za komunikacije meni, da je bil namen avta dvojen: ustaviti vsako ukrajinsko napredovanje na jezu in okrepiti načrtovano eksplozijo, ki izvira iz strojnice, ter uničiti vrh jezu. Avtobomba sama za popolno uničenje sicer ne bi bila dovolj. Eksplozija, ki je uničila Kahovko, pa naj bi, kot je dejal ukrajinski uradnik, prišla prav z območja strojnice na jezu. Z uradnikom Združenih držav sta povedala, da so bile ruske sile tam že nekaj časa.Druge fotografije prikazujejo na desetine ruskih vojakov, utaborjenih na bregu Dnipra. Vojaki naj bi se sproščeno sprehajali ob jezu. \"Miniranje krajev pred umikom je redna praksa,\" je za AP pojasnil poveljnik Bugskij Garda Ilia Zelinski.\n\n---------------\n\n### ODSEK 2\nChunkID: 4234\nURL: https://24ur.com/novice/tujina/zelenski-napad-na-jez-ne-bo-zadrzal-ukrajinske-protiofenzive.html\nBesedilo:\n\"Eksplozija na Kahovki je dejanje ekološkega in tehnološkega terorista,\" je zatrdil.MZEZ uničenje jezu v Ukrajini označil za kršitev mednarodnega pravaUničenje jezu Kahovka v Ukrajini je kršitev mednarodnega prava, ki ne sme ostati nekaznovana, je v odzivu na poškodbe jezu poudarilo slovensko zunanje ministrstvo (MZEZ). Kot je v torek zvečer še zapisalo na družbenem omrežju Twitter, poplave v spodnjem toku reke Dneper ogrožajo življenja več sto tisoč civilistov.Jez hidroelektrarne na reki Dneper v kraju Nova Kahovka leži v delu regije Herson na jugu Ukrajine, ki ga je zasedla Rusija. Delno uničen je bil v eksploziji v noči na torek in voda iz njega je že zalila več kot 20 krajev. Ukrajina je evakuirala najmanj 17.000 ljudi, skupno naj bi jih bilo na desnem bregu Dnepra ogroženih več kot 40.000.\n\n---------------\n\n### ODSEK 3\nChunkID: 4266\nURL: https://24ur.com/novice/tujina/ukrajina/dober-teden-pred-unicenjem-na-jezu-fotografirali-avto-z-eksplozivom.html\nBesedilo:\nDober teden pred uničenjem na jezu fotografirali avto z eksplozivom?. Ukrajina je za uničenje Kahovke obtožila Rusijo, fotografije, ki jih je posnelo brezpilotno letalo, in informacije AP Newsa pa namigujejo, da bi to lahko bilo res. Kot poroča medij, naj bi imela namreč Rusija \"sredstva, motiv in priložnost\" za zrušitev ukrajinskega jezu. Ena od fotografij medtem razkriva domnevno avtobombo, ki naj bi bila na jezu prisotna le dober teden pred eksplozijo. \"Rusija je imela sredstva, motiv in priložnost, da uniči jez Kahovka,\" poroča tiskovna agencija AP News, pri čemer se sklicuje na fotografije, ki so jih posnela brezpilotna letala, in informacije iz vojaških in političnih virov na tem območju.",
+    "eval_id": "eval_000005"
+  },
+  {
+    "question": "Kakšne so bile značilnosti brezpilotnikov, ki jih je uporabila ukrajinska varnostna služba pri napadu na Krimski most, in kako so opisali njihov razvoj ter povezavo z zahodnimi partnerji?",
+    "answer": "Ukrajinska varnostna služba je pri napadu uporabila eksperimentalni morski brezpilotnik Sea Baby [ChunkID: 5494]. Razvoj opreme so izvajali sami, brez sodelovanja z zasebnimi podjetji [ChunkID: 5496], in so poudarili, da so zahodni partnerji izražali zanimanje, vendar ni bilo povezave z Zahodom [ChunkID: 5496].",
+    "references": [
+      {
+        "chunk_id": "5494",
+        "url": "https://24ur.com/novice/tujina/napad_na_krimski_most.html"
+      },
+      {
+        "chunk_id": "5496",
+        "url": "https://24ur.com/novice/tujina/napad_na_krimski_most.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"5494\", \"url\": \"https://24ur.com/novice/tujina/napad_na_krimski_most.html\"}, {\"chunk_id\": \"5496\", \"url\": \"https://24ur.com/novice/tujina/napad_na_krimski_most.html\"}]",
+    "cited_chunk_ids": [
+      "5494",
+      "5496"
+    ],
+    "referenced_chunk_ids": [
+      "5494",
+      "5496"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 5496\nURL: https://24ur.com/novice/tujina/napad_na_krimski_most.html\nBesedilo:\n\"Brezpilotniki v morju so edinstveni izum ukrajinske varnostne službe,\" se je pohvalil in dodal, da pri razvoju niso sodelovali z nobenim zasebnim podjetjem, ter pohvalil podzemni proizvodni obrat na ozemlju Ukrajine. \"Zanimanje so pokazali tudi naši zahodni parterji, vendar poudarjam, da oprema ali kaj drugega nista povezana z Zahodom,\" je dejal in s tem zavrnil očitke o nelegitimnosti ciljev in neupoštevanja mednarodne zakonodaje. 1 3 Most, ki povezuje Krim z regijo Krasnodar APNapad na most, ki polotok Krim povezuje z rusko regijo Krasnodar APNapad na most, ki polotok Krim povezuje z rusko regijo Krasnodar AP'Ko je do eksplozije prišlo, smo čestitali drug drugemu'\"Bili smo popolnoma osredotočeni na operacijo. In ko je do eksplozije prišlo, smo čestitali drug drugemu.\n\n---------------\n\n### ODSEK 2\nChunkID: 5494\nURL: https://24ur.com/novice/tujina/napad_na_krimski_most.html\nBesedilo:\nUkrajina priznala odgovornost za napad na Krimski most in delila posnetek. Ukrajinske varnostne službe so objavile prve posnetke julijskega napada na Krimski most, ki so ga izvedle z eksperimentalnim morskim brezpilotnim letalnikom Sea Baby. Ukrajina je s tem tudi prvič javno priznala odgovornost za napad in Rusijo opozorila, da bo takih napadov v prihodnje še več. 17. julija je eksplozija na Krimskem mostu uničila vozne pasove, po ruskih navedbah sta bila pri tem ubita dva civilista. Most so slovesno odprli leta 2018, trak pa je prerezal Vladimir Putin. Infrastrukturni projekt je bil simbol Putinove želje, da bi prevzel Ukrajino in jo povezal z Rusijo. Most je sicer tudi glavna oskrbovalna pot za rusko vojsko na Krimu.\n\n---------------\n\n### ODSEK 3\nChunkID: 11096\nURL: https://24ur.com/novice/tujina/ukrajina/iranske-kosilnice-ki-terorizirajo-ukrajino.html\nBesedilo:\nOd sredine septembra pa je bilo vzdolž celotne frontne črte zabeleženih več napadov z omenjenimi droni. Predvsem so se napadi zgodili na jugu, predvidoma zato, ker izstrelitvene sisteme teh brezpilotnih letal hranijo na Krimu. Droni naj bi imeli sicer doseg med 1000 in celo 2500 kilometri, kar pomeni, da bi lahko z njimi ciljali tarče po vsej Ukrajini. Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov. Omogoči piškotke Točne lastnosti dronov niso znane, vendar je nekaj informacij možno razbrati z razbitin in videoposnetkov. Uporabljali naj bi inercialni sistem vodenja in glasne kitajske motorje Mado MD550, ki ga je mogoče slišati več kilometrov stran, Ukrajinci pa so jim dali prav zaradi glasnega hrupa vzdevek \"mopedi\", nekateri jim pravijo tudi \"kosilnice\".",
+    "eval_id": "eval_000006"
+  },
+  {
+    "question": "Kdaj in kje naj bi potekal shod v podporo Ukrajini v Ljubljani ter kakšne posledice je Janez Janša napovedal, če Rusija uspe s svojo invazijo na Ukrajino?",
+    "answer": "Shod v podporo Ukrajini naj bi potekal sredo ob 17. uri v Ljubljani, natančnejšo lokacijo pa namerava sporočiti danes [ChunkID: 17690]. Janez Janša je napovedal, da bo uspehu Rusije v Ukrajini sledil \"domino učinek\", saj bi se težave razširile na Moldavijo, Gruzijo, Zahodni Balkan in baltske države [ChunkID: 17690].",
+    "references": [
+      {
+        "chunk_id": "17690",
+        "url": "https://24ur.com/novice/slovenija/tudi-v-prestolnici-na-ulice-v-podporo-ukrajini-ce-bo-rusija-uspela-s-svojo-invazijo-bo-sledil-domino-ucinek.html"
+      },
+      {
+        "chunk_id": "17689",
+        "url": "https://24ur.com/novice/slovenija/tudi-v-prestolnici-na-ulice-v-podporo-ukrajini-ce-bo-rusija-uspela-s-svojo-invazijo-bo-sledil-domino-ucinek.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"17690\", \"url\": \"https://24ur.com/novice/slovenija/tudi-v-prestolnici-na-ulice-v-podporo-ukrajini-ce-bo-rusija-uspela-s-svojo-invazijo-bo-sledil-domino-ucinek.html\"}, {\"chunk_id\": \"17689\", \"url\": \"https://24ur.com/novice/slovenija/tudi-v-prestolnici-na-ulice-v-podporo-ukrajini-ce-bo-rusija-uspela-s-svojo-invazijo-bo-sledil-domino-ucinek.html\"}]",
+    "cited_chunk_ids": [
+      "17690"
+    ],
+    "referenced_chunk_ids": [
+      "17689",
+      "17690"
+    ],
+    "citation_reference_match": false,
+    "context": "### ODSEK 1\nChunkID: 17690\nURL: https://24ur.com/novice/slovenija/tudi-v-prestolnici-na-ulice-v-podporo-ukrajini-ce-bo-rusija-uspela-s-svojo-invazijo-bo-sledil-domino-ucinek.html\nBesedilo:\nShod naj bi potekal v sredo ob 17. uri v Ljubljani, natančnejšo lokacijo pa namerava sporočiti danes.Janša je sicer medtem spregovoril za vseevropsko medijsko mrežo Euractiv in opozoril, da Zahod mora ustaviti ruskega predsednika Vladimirja Putina zdaj, saj če bo padel Kijev, bo to imelo posledice za celoten vzhod Evrope. \"Sem stoodstotno prepričan, da če Rusija v Ukrajini ne bo ustavljena in če Kijev pade, potem bosta naslednja cilja Moldavija, Gruzija, nato se bodo težave razširile na Zahodnem Balkanu, zatem bodo naslednja tarča baltske države,\" je dejal Janša.Če bo Rusija uspela s svojo invazijo, bo sledil \"domino učinek\", je prepričan slovenski premier. Dejal je tudi, da bi se morala \"Evropa naučiti kaj iz svoje zgodovine\" in namignil na politiko pomirjanja pred drugo svetovno vojno in vojnami v Jugoslaviji.\n\n---------------\n\n### ODSEK 2\nChunkID: 17689\nURL: https://24ur.com/novice/slovenija/tudi-v-prestolnici-na-ulice-v-podporo-ukrajini-ce-bo-rusija-uspela-s-svojo-invazijo-bo-sledil-domino-ucinek.html\nBesedilo:\nV Ljubljani na ulice v podporo Ukrajini: 'Če bo Rusija uspela s svojo invazijo, bo sledil domino učinek'. Shod v znak solidarnosti z Ukrajino se bo v sredo odvil tudi v Ljubljani. Protesti so v preteklem tednu potekali v številnih mestih po svetu, skupna točka vseh je bila obsodba ruske invazije. Proteste je spremljalo skandiranje in številni transparenti – \"Putin morilec\" ali \"Ustavite pošast\". Premier Janez Janša je napovedal shod v podporo Ukrajini, ki se sooča z rusko agresijo.\n\n---------------\n\n### ODSEK 3\nChunkID: 1488\nURL: https://24ur.com/novice/slovenija/ukrajina_2.html\nBesedilo:\nSekretar Volk: Putinu je treba sporočiti, da se ne bomo nikoli vdali. Ukrajinska skupnost v Sloveniji in veleposlaništvo Ukrajine sta v Ljubljani organizirala shod ob drugi obletnici začetka ruske invazije. Dogodka sta se udeležila tudi slovenska državna sekretarja, ki sta pozvala h koncu vojne. Zbrani so se Sloveniji zahvalili za vso dosedanjo pomoč in prosili za nadaljnjo vojaško podporo ter dodatne sankcije proti Rusiji v prihodnje.",
+    "eval_id": "eval_000007"
+  },
+  {
+    "question": "Kdo so ruski vidni obrazi, ki so izginili iz javnosti po začetku ruske invazije na Ukrajino, in kakšne so okoliščine izginotja Sergeja Šojguja in Viktorja Zolotova?",
+    "answer": "Ruski vidni obrazi, ki so izginili iz javnosti po začetku invazije, vključujejo obrambnega ministra Sergeja Šojguja in vodje nacionalne garde Viktorja Zolotova. Šojgu je izginil 11. marca, pojavil se je na zaslonih le kratko, kar nekateri povezujejo s montažo, medtem ko Ukrajina trdi, da je imel infarkt in je v okrevališču, morda po nestrinjanju z Putinom [ChunkID: 15099]. Zolotov pa je izginil 13. marca po obisku katedrale in sprejemu ikone iz rok patriarha, nato pa se je pritožil, da vojna \"ne gre vse tako hitro, kot bi si želeli\" [ChunkID: 15100].",
+    "references": [
+      {
+        "chunk_id": "15099",
+        "url": "https://24ur.com/novice/tujina/misterij-putinovih-sodelavcev-ki-so-izginili-iz-javnosti-stres-ali-posledice-nestrinjanja.html"
+      },
+      {
+        "chunk_id": "15100",
+        "url": "https://24ur.com/novice/tujina/misterij-putinovih-sodelavcev-ki-so-izginili-iz-javnosti-stres-ali-posledice-nestrinjanja.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"15099\", \"url\": \"https://24ur.com/novice/tujina/misterij-putinovih-sodelavcev-ki-so-izginili-iz-javnosti-stres-ali-posledice-nestrinjanja.html\"}, {\"chunk_id\": \"15100\", \"url\": \"https://24ur.com/novice/tujina/misterij-putinovih-sodelavcev-ki-so-izginili-iz-javnosti-stres-ali-posledice-nestrinjanja.html\"}]",
+    "cited_chunk_ids": [
+      "15099",
+      "15100"
+    ],
+    "referenced_chunk_ids": [
+      "15099",
+      "15100"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 15099\nURL: https://24ur.com/novice/tujina/misterij-putinovih-sodelavcev-ki-so-izginili-iz-javnosti-stres-ali-posledice-nestrinjanja.html\nBesedilo:\nMisterij Putinovih sodelavcev, ki so izginili iz javnosti. Stres ali posledice nestrinjanja?. Ni jih malo, ki so opazili, da je iz javnosti izginil ruski obrambni minister Sergej Šojgu. \"Pogrešan\" je že vse od 11. marca, čeprav se je vmes na kratko pojavil na zaslonih, pa številni menijo, da so ga v posnetek \"dodali\" z montažo. Njegovo ministrstvo je zato zdaj objavilo posnetek, ki naj bi bil pristen. Ukrajinska stran sicer meni, da je doživel infarkt in naj bi bil v okrevališču – vse skupaj pa naj bi se zgodilo potem, ko naj bi izrazil nestrinjanje z Vladimirjem Putinom. Ni pa edini ruski vidni obraz, ki se v javnosti ne pojavlja več po začetku ruske invazije na Ukrajino.\n\n---------------\n\n### ODSEK 2\nChunkID: 15100\nURL: https://24ur.com/novice/tujina/misterij-putinovih-sodelavcev-ki-so-izginili-iz-javnosti-stres-ali-posledice-nestrinjanja.html\nBesedilo:\nUmaknili naj bi se skoraj vsi glavni \"varnostni uradniki\" iz časov pred invazijo. Tako ocenjujejo tuji mediji po analizi ruskih poročil. Pogrešajo pa Viktorja Zolotova, Igorja Kostjukova, Valerija Gerasimova in Aleksandra Bortnikva. Vodja nacionalne garde Viktor Zolotov je izginil 13. marca – takoj po tem, ko je odšel v katedralo Kristusa Odrešenika in sprejel ikono iz rok samega patriarha. Nato se je Zolotov pritožil predstavniku ruske pravoslavne cerkve, da v vojni z Ukrajino \"ne gre vse tako hitro, kot bi si želeli\". Pred tem je Zolotov 11. marca podelil priznanja ruskim gardistom, ki so se izkazali v bojnih operacijah. Od takrat se na posnetkih ne pojavlja več. Zadnja fotografija z Zolotovim na spletni strani ruske garde pa se pojavi v objavi 22. marca.\n\n---------------\n\n### ODSEK 3\nChunkID: 6723\nURL: https://24ur.com/novice/tujina/putin-in-parkinsonova-bolezen-kaj-o-tem-pravijo-strokovnjaki.html\nBesedilo:\nToda v navalu člankov in diskurzov, v katerih ugibajo, ali ima Putin, ki vodi rusko invazijo na Ukrajino, parkinsonovo bolezen ali raka ščitnice, vedno manjka pomemben glas – mnenje medicinskih strokovnjakov. Pred kratkim je Kremelj objavil 12-minutni videoposnetek Putinovega srečanja z ruskim obrambnim ministrom Sergejem Šojgujem. Ruski predsednik je bil ves čas zgrbljen, z desno roko je trdno držal rob mize in z nogo nestrpno tapkal po tleh. Njegov obraz je bil vidno otekel. Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov. Omogoči piškotke Na družbenih omrežjih so se razplamtela številna mnenja o tem. Marsikdo – vključno z nekdanjo poslanko britanske konservativne stranke Louise Mensch na Twitterju – je sklepal, da je vzrok za to parkinsonova bolezen.",
+    "eval_id": "eval_000008"
+  },
+  {
+    "question": "Kdo je Leonid Volkov, kje in kako je bil napaden ter kakšne poškodbe je utrpel?",
+    "answer": "Leonid Volkov je tesen zaveznik pokojnega ruskega opozicijskega voditelja Alekseja Navalnega [ChunkID: 10068]. Bil je napaden pred svojim domom v Vilniusu, Litva, kjer mu je napadalec razbil okno avtomobila, uporabil solzivec in ga udarjal s kladivom, kar je povzročilo zlom leve roke in poškodbo noge [ChunkID: 10067, 10055].",
+    "references": [
+      {
+        "chunk_id": "10068",
+        "url": "https://24ur.com/novice/tujina/zaveznika-navalnega-v-litvi-napadli-s-kladivom-in-solzivcem.html"
+      },
+      {
+        "chunk_id": "10067",
+        "url": "https://24ur.com/novice/tujina/zaveznika-navalnega-v-litvi-napadli-s-kladivom-in-solzivcem.html"
+      },
+      {
+        "chunk_id": "10055",
+        "url": "https://24ur.com/novice/tujina/se-na-evropska-tla-vracajo-ruski-obvescevalni-agenti.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"10068\", \"url\": \"https://24ur.com/novice/tujina/zaveznika-navalnega-v-litvi-napadli-s-kladivom-in-solzivcem.html\"}, {\"chunk_id\": \"10067\", \"url\": \"https://24ur.com/novice/tujina/zaveznika-navalnega-v-litvi-napadli-s-kladivom-in-solzivcem.html\"}, {\"chunk_id\": \"10055\", \"url\": \"https://24ur.com/novice/tujina/se-na-evropska-tla-vracajo-ruski-obvescevalni-agenti.html\"}]",
+    "cited_chunk_ids": [
+      "10067, 10055",
+      "10068"
+    ],
+    "referenced_chunk_ids": [
+      "10055",
+      "10067",
+      "10068"
+    ],
+    "citation_reference_match": false,
+    "context": "### ODSEK 1\nChunkID: 10067\nURL: https://24ur.com/novice/tujina/zaveznika-navalnega-v-litvi-napadli-s-kladivom-in-solzivcem.html\nBesedilo:\nZaveznika Navalnega v Litvi napadli s kladivom in solzivcem. Tesni zaveznik pokojnega ruskega opozicijskega voditelja Alekseja Navalnega, Leonid Volkov, je bil pred svojim domom v Litvi tarča napada. Napadalec se je nanj spravil s kladivom in solzivcem in mu med drugim zlomil roko. Volkov je danes zjutraj po odpustu iz bolnišnice že napovedal nadaljevanje boja proti vladavini ruskega predsednika Vladimirja Putina. Volkov je bil po lastnih navedbah deležen 15 udarcev v nogo, roko pa ima zlomljeno. Tiskovna predstavnica Navalnega Kira Jarmiš je pred tem sporočila, da je napadalec Volkova napadel, ko je bil v avtomobilu. Razbil je okno in uporabil solzivec, nato pa ga začel udarjati s kladivom, je dejala.Na družbenih omrežjih je fotografije poškodovanega Volkova delila tudi njegova soproga Ana Birjukova.\n\n---------------\n\n### ODSEK 2\nChunkID: 10055\nURL: https://24ur.com/novice/tujina/se-na-evropska-tla-vracajo-ruski-obvescevalni-agenti.html\nBesedilo:\nNapad na Volkova: 'Šlo je za očiten, tipičen, gangsterski Putinov pozdrav'. Grob, nasilen napad, vendar pa z izjemno učinkovitim sporočilom. Leonid Volkov, tesen sodelavec pokojnega ruskega opozicijskega voditelja Alekseja Navalnega, je bil napaden pred svojim domom malo po tem, ko je na družbenih omrežjih objavil svoj videoposnetek, v katerem kritizira ruskega predsednika. \"Šlo je za očiten, značilen, tipičen, gangsterski Putinov pozdrav,\" je napad komentiral Volkov. Kaj pa ta napad pomeni? Leonid Volkov je prišel domov v večernih urah, napadalec pa je čakal pred hišo. Najprej mu je razbil okno avtomobila, na Volkova sprožil solzivec, nato pa ga večkrat udaril s kladivom. Zlomil mu je levo roko, poškodoval še nogo, nato pa pobegnil s kraja dogodka.\n\n---------------\n\n### ODSEK 3\nChunkID: 10068\nURL: https://24ur.com/novice/tujina/zaveznika-navalnega-v-litvi-napadli-s-kladivom-in-solzivcem.html\nBesedilo:\nVideti je modrico okrog njegovega očesa, rdečino na čelu in kri na nogi.Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov. Omogoči piškotke Tiskovni predstavnik litovske policije je potrdil, da je bil okoli 22. ure po tamkajšnjem času v bližini svojega doma v Vilniusu napaden ruski državljan. Osumljencev še niso prepoznali, več podrobnosti naj bi bilo znanih danes.43-letni Volkov je ena vidnejših osebnosti ruske opozicije in je bil tudi tesen sodelavec Navalnega. Z več drugimi njegovimi zavezniki se je v izgnanstvo zatekel leta 2019, ko so ruske oblasti sprožile kazensko preiskavo organizacije Navalnega za boj proti korupciji.",
+    "eval_id": "eval_000009"
+  },
+  {
+    "question": "Kaj je Volodimir Zelenski povedal voditeljem držav G7 o nedavnih zračnih napadih na Ukrajino in kakšne ukrepe je predlagal?",
+    "answer": "Volodimir Zelenski je voditeljem držav G7 pozval, naj nad Rusijo uvedejo strožje sankcije in Ukrajini pošljejo več sistemov za zračno obrambo, saj je zaradi napadov nekaj mest brez vode in elektrike [ChunkID: 5410]. Dodatno je poudaril pomembnost protiletalskih sistemov, kot so Patriot, za zmanjšanje škode pri raketnih napadih [ChunkID: 5398].",
+    "references": [
+      {
+        "chunk_id": "5410",
+        "url": "https://24ur.com/novice/tujina/voditelji-drzav-g7-z-zelenskim-o-ruskih-napadih-na-ukrajino.html"
+      },
+      {
+        "chunk_id": "5398",
+        "url": "https://24ur.com/novice/tujina/biden-putin-se-je-ustel-glede-sposobnosti-rusije-da-zavzame-ukrajino.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"5410\", \"url\": \"https://24ur.com/novice/tujina/voditelji-drzav-g7-z-zelenskim-o-ruskih-napadih-na-ukrajino.html\"}, {\"chunk_id\": \"5398\", \"url\": \"https://24ur.com/novice/tujina/biden-putin-se-je-ustel-glede-sposobnosti-rusije-da-zavzame-ukrajino.html\"}]",
+    "cited_chunk_ids": [
+      "5398",
+      "5410"
+    ],
+    "referenced_chunk_ids": [
+      "5398",
+      "5410"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 5410\nURL: https://24ur.com/novice/tujina/voditelji-drzav-g7-z-zelenskim-o-ruskih-napadih-na-ukrajino.html\nBesedilo:\nZelenski voditeljem G7: Uvedite strožje sankcije. Voditelji držav G7 so na virtualnem vrhu z ukrajinskim predsednikom Volodimirjem Zelenskim razpravljali o nedavnih zračnih napadih na Ukrajino, v katerih je bilo na državo izstreljenih več kot 100 raket. Zelenski je medtem voditelje držav še pozval, naj nad Rusijo uvedejo še strožje sankcije, izpostavil pa tudi, da \"mir onemogoča ena sama oseba\". Voditelji so se strinjali in Ukrajini obljubili nadaljnjo podporo. Med drugim je Volodimir Zelenski voditelje gospodarsko najbolj razvitih držav pozval, naj napadeni Ukrajini pošljejo več sistemov za zračno obrambo. \"Zračna obramba je naša glavna prednost in naloga, saj je zaradi nedavnih napadov nekaj naših velikih mest ostalo brez vode in elektrike,\" je povedal.\n\n---------------\n\n### ODSEK 2\nChunkID: 5398\nURL: https://24ur.com/novice/tujina/biden-putin-se-je-ustel-glede-sposobnosti-rusije-da-zavzame-ukrajino.html\nBesedilo:\nBiden je dejal, da je Putinova ideja, da bo združil vsa ozemlja, kjer ljudje govorijo rusko, iracionalna.To početje, ki ga je ukrajinski veleposlanik v ZN Sergij Kislica označil za državni terorizem, se ne obrestuje. Voditelji držav G7 obljubili dodatno pomočZelenski je medtem voditelje držav skupine G7 pozval, naj nad Rusijo uvedejo še strožje sankcije ter prosil, da Ukrajini pošljejo več sistemov za zračno obrambo. \"Zračna obramba je naša glavna prednost in naloga, saj je zaradi nedavnih napadov nekaj naših velikih mest ostalo brez vode in elektrike,\" je povedal. Ob tem je posebej izpostavil, da bi se škoda lahko v primeru zadostnega števila sistemov za obrambo pred raketnimi napadi še zmanjšala.\n\n---------------\n\n### ODSEK 3\nChunkID: 875\nURL: https://24ur.com/novice/tujina/v-ruskih-napadih-na-ukrajino-vec-mrtvih-in-ranjenih.html\nBesedilo:\nVeliko časa so Ukrajini v razpravah ta teden namenili evropski voditelji na vrhu EU v Bruslju, podporo so ji v petek obljubile tudi države, ki sodelujejo v t. i. koaliciji voljnih za pomoč Ukrajini.Ukrajinski predsednik Volodimir Zelenski je v današnjem zapisu na omrežju X pozval partnerske države, naj uvedejo ukrepe, o katerih so govorili, pri čemer je posebej izpostavil pomen protiletalskih sistemov patriot. \"Zadnje čase je skoraj vsak napad na Ukrajino kombiniran napad z balističnimi izstrelki,\" je še zapisal Zelenski in dodal, da je od začetka leta Rusija izstrelila okoli 770 balističnih izstrelkov in več kot 50 raket kinžal.",
+    "eval_id": "eval_000010"
+  },
+  {
+    "question": "Kdo je bil Ivan Safronov, kako je umrl in zakaj njegovi kolegi ne verjamejo uradni razlagi o njegovi smrti?",
+    "answer": "Ivan Safronov je bil ruski novinar, ki je preiskoval ruske orožarske posle s Sirijo in Iranom. Umrl je v sumljivih okoliščinah, ko je skočil skozi okno iz petega nadstropja, a njegovi kolegi ne verjamejo uradni razlagi samomora, saj je po njihovih navedbah ljubil življenje in imel uspešno kariero ter srečno družinsko življenje [ChunkID: 14103]. Njegovi kolegi tudi menijo, da ni imel razloga za smrt, saj je bil zadnji v dolgi vrsti sumljivih smrti ruskih novinarjev [ChunkID: 14104].",
+    "references": [
+      {
+        "chunk_id": "14103",
+        "url": "https://24ur.com/novice/svet/skozi-okno-v-smrt.html"
+      },
+      {
+        "chunk_id": "14104",
+        "url": "https://24ur.com/novice/svet/skozi-okno-v-smrt.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"14103\", \"url\": \"https://24ur.com/novice/svet/skozi-okno-v-smrt.html\"}, {\"chunk_id\": \"14104\", \"url\": \"https://24ur.com/novice/svet/skozi-okno-v-smrt.html\"}]",
+    "cited_chunk_ids": [
+      "14103",
+      "14104"
+    ],
+    "referenced_chunk_ids": [
+      "14103",
+      "14104"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 14103\nURL: https://24ur.com/novice/svet/skozi-okno-v-smrt.html\nBesedilo:\nSkozi okno v smrt. Ruski novinar Safronov, ki je preiskoval ruske orožarske posle s Sirijo in Iranom, je umrl v sumljivih okoliščinah. V petek je v sumljivih okoliščinah umrl kritičen ruski novinar Ivan Safronov, ki je preiskoval ruske orožarske posle s Sirijo in Iranom. Po ocenah preiskovalcev je 51-letni novinar napravil samomor, zato preiskujejo le morebitno spodbujanje k samomoru. Vendar Safronovi kolegi in znanci zgodbi o samomoru ne verjamejo.Safronov naj bi skočil skozi okno iz petega nadstropja, a njegovi kolegi tega ne verjamejo, saj je po njihovih navedbah ljubil življenje. Safronov je imel uspešno kariero ter srečno družinsko življenje, bil je poročen in imel dva otroka, kar je še bolj čudno, navajajo kolegi.\n\n---------------\n\n### ODSEK 2\nChunkID: 14104\nURL: https://24ur.com/novice/svet/skozi-okno-v-smrt.html\nBesedilo:\nZadnja zgodba, ki jo je preiskoval, pa je bila občutljive narave - po prepričanju mnogih dovolj občutljive, da bi novinar zaradi nje lahko izgubil življenje.Safronov je kolegom povedal, da članka o svojih izsledkih še ne bo napisal, saj so ga - ni povedal kdo - posvarili, da bi objava sprožila mednarodni škandal. Strokovnjaka za orožje, vojsko in vesolje je v preteklosti tudi že večkrat zasliševala ruska obveščevalna služba FSB, ki naj bi ga sumila razkrivanja državnih skrivnosti.Novinarski kolegi pravijo, da Safronov ni imel razloga za smrt, bil pa je zadnji v dolgi vrsti sumljivih smrti ruskih novinarjev.Safronov je nazadnje preiskoval ruske orožarske posle z Iranom in Sirijo, katerima naj bi Rusija orožje prodajala preko Belorusije, da bi se s tem izognila mednarodni obsodbi.\n\n---------------\n\n### ODSEK 3\nChunkID: 809\nURL: https://24ur.com/novice/tujina/v-eksploziji-avtomobila-v-moskvi-umrl-ruski-general.html\nBesedilo:\nIz Kremlja so medtem sporočili, da je bil ruski predsednik Vladimir Putin o incidentu že obveščen.56-letni Sarvarov se je kot vojak boril v kampanjah ruske vojske v severnem Kavkazu, vključno v Čečeniji v devetdesetih letih prejšnjega stoletja. V letih 2015 in 2016 je poveljeval ruskim silam v Siriji.Odkar je Rusija februarja 2022 začela obsežno invazijo na Ukrajino, je bilo v ruski prestolnici tarča napadov več vojaških uradnikov in visokih predstavnikov.Aprila letos je v eksploziji avtomobila v bližini Moskve umrl namestnik generalštaba Jaroslav Moskalik. Decembra 2024 je bil v eksploziji električnega skiroja v Moskvi ubit vodja ruskih sil za radiološko, kemično in biološko obrambo Igor Kirilov.",
+    "eval_id": "eval_000011"
+  },
+  {
+    "question": "Kaj je Vladimir Putin povedal o možnostih doseganja ciljev v Ukrajini, pogovorih z Zahodom in uporabi jedrskega orožja?",
+    "answer": "Vladimir Putin je izrazil prepričanje, da bo Moskva dosegla svoje cilje v Ukrajini, pri čemer je poudaril, da so vrata za pogovore odprta, vendar za vsak dogovor potrebna trdna jamstva Zahoda. Poleg tega je omenil možnost uporabe jedrskega orožja, če bi se situacija zaostrila [ChunkID: 15518].",
+    "references": [
+      {
+        "chunk_id": "15518",
+        "url": "https://24ur.com/novice/tujina/rusija-je-pripravljena-na-jedrski-spopad.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"15518\", \"url\": \"https://24ur.com/novice/tujina/rusija-je-pripravljena-na-jedrski-spopad.html\"}]",
+    "cited_chunk_ids": [
+      "15518"
+    ],
+    "referenced_chunk_ids": [
+      "15518"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 15518\nURL: https://24ur.com/novice/tujina/rusija-je-pripravljena-na-jedrski-spopad.html\nBesedilo:\nVladimir Putin je sicer izrazil prepričanje, da bo Moskva dosegla svoje cilje v Ukrajini in da so vrata za pogovore odprta, pri čemer je poudaril, da bodo za vsak dogovor potrebna trdna jamstva Zahoda. A vendar je ob tem omenil tudi možnost uporabe jedrskega orožja, če bi se situacija zaostrila, piše AP.Dodal je, da ZDA razvijajo jedrsko orožje, vendar to ne pomeni, da so pripravljene \"jutri začeti jedrsko vojno\". \"Imajo ustrezne načrte, za katere tudi mi vemo. Razvijajo vse, tako kot mi,\" je dejal. ZDA imajo primerljivo jedrsko triado, t.j.\n\n---------------\n\n### ODSEK 2\nChunkID: 6852\nURL: https://24ur.com/novice/tujina/ukrajina/odzivi-na-putinov-govor-na-dan-zmage-putin-izgublja-vojno-v-ukrajini.html\nBesedilo:\nVladimir Putin je v današnjem nagovoru v Moskvi dejal, da se je Zahod konec preteklega leta odkrito pripravljal na napad na Donbas in Krim, v Kijevu pa so se slišali pozivi k uporabi jedrskega orožja, kar je ustvarilo \"nesprejemljivo grožnjo\". ZDA in njihove privržence je obtožil ogrožanja Rusije. \"V Kijevu so govorili, da bi lahko dobili jedrsko orožje, Nato pa je začel raziskovati dežele blizu nas in to je postala očitna grožnja naši državi in našim mejam. Očitno je bilo, da se je treba boriti. \"Preberi še Putin: Posebna vojaška operacija je bila potrebna in pravočasnaNa njegove besede se je že odzval svetovalec ukrajinskega predsednika Mihail Podoljak. \"Države Nata niso nameravale napasti Rusije. Ukrajina ni načrtovala napada na Krim.\n\n---------------\n\n### ODSEK 3\nChunkID: 5217\nURL: https://24ur.com/novice/tujina/ukrajina/putin-naj-bo-jasno-za-zaostrovanje-konflikta-v-ukrajini-je-kriv-zahod.html\nBesedilo:\n\"Seveda pa smo se z Rusijo še naprej pripravljeni kadar koli pogovarjati o nadzoru strateškega orožja, ne glede na to, kaj se dogaja v svetu ali v naših odnosih,\" je dodal. 'Naj bo jasno, za zaostrovanje konflikta je kriv Zahod'Ob tem se je pretežen del Putinovega govora vrtel okoli Zahoda, ki ga je obtožil za zaostrovanje konflikta v Ukrajini: \"Naj bo jasno, za zaostrovanje konflikta v Ukrajini je kriv Zahod, silo uporabljamo, da to ustavimo.\" To so bile besede, ki so med zbranimi požele glasen aplavz. Dejal je, da se je zavezanost Zahoda k miru izkazala za prevaro in kruto laž ter da je skušal Kijev zbrati biološko in jedrsko orožje.",
+    "eval_id": "eval_000012"
+  },
+  {
+    "question": "Koliko ljudi je umrlo pri sestrelitvi letala MH17, iz katerih držav so bili največji delež žrtev in kakšni so bili odzivi mednarodnih organov glede iskanja odgovornih?",
+    "answer": "Pri sestrelitvi letala MH17 je umrlo 298 ljudi, med katerimi je bilo največ Nizozemcev (193), nato 27 Avstralcov in 43 Malezijcev [ChunkID: 14144]. Mednarodni organi, kot je Združeni narodi, so ugotovili, da je Rusija odgovorna za sestrelitev po mednarodnem pravu, kar so pozdravile Ukrajina, Avstralija in Nizozemska [ChunkID: 14144]. Vendar je v enem od odsekov omenjeno, da je še vedno neznano, kdo je odgovoren [ChunkID: 14782].",
+    "references": [
+      {
+        "chunk_id": "14144",
+        "url": "https://24ur.com/novice/tujina/zdruzeni-narodi-malezijsko-letalo-nad-ukrajino-sestrelila-rusija.html"
+      },
+      {
+        "chunk_id": "14782",
+        "url": "https://24ur.com/novice/svet/tragedija-mh17-leto-kasneje-svojci-brez-odgovorov-rusija-proti-iskanju-odgovornih.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"14144\", \"url\": \"https://24ur.com/novice/tujina/zdruzeni-narodi-malezijsko-letalo-nad-ukrajino-sestrelila-rusija.html\"}, {\"chunk_id\": \"14782\", \"url\": \"https://24ur.com/novice/svet/tragedija-mh17-leto-kasneje-svojci-brez-odgovorov-rusija-proti-iskanju-odgovornih.html\"}]",
+    "cited_chunk_ids": [
+      "14144",
+      "14782"
+    ],
+    "referenced_chunk_ids": [
+      "14144",
+      "14782"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 14144\nURL: https://24ur.com/novice/tujina/zdruzeni-narodi-malezijsko-letalo-nad-ukrajino-sestrelila-rusija.html\nBesedilo:\nZdruženi narodi: Malezijsko letalo nad Ukrajino sestrelila Rusija. Agencija ZN za letalstvo je odločila, da je Rusija po mednarodnem pravu odgovorna za sestrelitev letala družbe Malaysia Airlines nad Ukrajino leta 2014. Odločitev so pozdravile Ukrajina ter Avstralija in Nizozemska, državi z največ smrtnimi žrtvami v tragediji, poročajo tuje tiskovne agencije. Letalo Boeing 777 družbe Malaysia Airlines, znan pod številko leta MH17, je bil 17. julija 2014 na poti iz Amsterdama v Kuala Lumpur, ko je bil sestreljen na vzhodu Ukrajine. Umrlo je vseh 283 potnikov in 15 članov posadke na krovu. Med žrtvami je bilo 193 Nizozemcev, 27 avstralskih državljanov in 43 Malezijcev.Letalo je glede na ugotovitve preiskovalcev sestrelila raketa buk ruske izdelave, ki so jo na območje v Ukrajini pod nadzorom proruskih upornikov pripeljali iz Rusije.\n\n---------------\n\n### ODSEK 2\nChunkID: 14782\nURL: https://24ur.com/novice/svet/tragedija-mh17-leto-kasneje-svojci-brez-odgovorov-rusija-proti-iskanju-odgovornih.html\nBesedilo:\n\"Morilci bi morali vedeti, da je kazen neizogibna,\" je še izpostavil v sporočilu v angleškem jeziku.Izrazil je še prepričanje, da se tragedija ne bi zgodila, če pri tem ne bi sodelovalo \"najvišje politično in vojaško vodstvo sosednje države\", pri čemer je imel v mislih Rusijo.Rusi proti iskanju krivcevNa območju spopadov na vzhodu Ukrajine je pred letom dni strmoglavilo letalo družbe Malaysia Airlines, pri čemer je umrlo vseh 298 ljudi na krovu. Kdo je odgovoren za sestrelitev, še ni znano. Na Nizozemskem, od koder je bilo največ žrtev, bo ob obletnici spominska slovesnost, na kateri pričakujejo okoli 2000 svojcev žrtev in državni vrh.Boeing 777 malezijske letalske družbe je strmoglavil med letom MH17 iz Amsterdama v Kuala Lumpur.\n\n---------------\n\n### ODSEK 3\nChunkID: 19119\nURL: https://24ur.com/novice/tujina/borili-se-bomo-za-pravico-ceprav-nihce-ne-more-vrniti-tistih-ki-so-umrli.html\nBesedilo:\n\"Danes je prvi dan, ko nam bodo povedali, kaj se je zgodilo, kdo je odgovoren in zakaj je bilo letalo sestreljeno,\" je povedal Ploeg, ki je v strmoglavljenju izgubil več sorodnikov. Dobili bodo tudi odgovore na vprašanja o vlogi Rusije v sestrelitvi, je še poudaril.Malezijsko potniško letalo, ki je 17. julija 2014 z 298 ljudmi na krovu strmoglavilo na vzhodu Ukrajine, je po ugotovitvah mednarodne ekipe preiskovalcev zadela raketa vrste buk, ki so jo na območje pripeljali iz Rusije. Med žrtvami sestreljenega letala na letu MH17 je bilo tudi 193 Nizozemcev, 27 avstralskih državljanov in 43 Malezijcev.V obeh državah so pozdravili začetek sojenja osumljenim.",
+    "eval_id": "eval_000013"
+  },
+  {
+    "question": "Kaj je Aleksej Navalni avgusta lani storil, zaradi česar je bil obsojen na dodatnih 19 let zapora, in kako je med prestajanjem kazni vplival na Kremlj?",
+    "answer": "Aleksej Navalni je avgusta lani bil obsojen na dodatnih 19 let zapora zaradi ustvarjanja ekstremistične organizacije in financiranja ekstremističnih dejanj [ChunkID: 16746][ChunkID: 18728][ChunkID: 18733]. Med prestajanjem kazni je bil velik trn v peti Kremlju, saj je pogosto kritiziral Putina in njegovo politiko, zlasti invazijo na Ukrajino, kar je izrazil v izjavah na sodnih posnetkih [ChunkID: 16746].",
+    "references": [
+      {
+        "chunk_id": "16746",
+        "url": "https://24ur.com/novice/tujina/neustrasen-putinov-kritik-prezivel-zastrupitev-zdaj-umrl-za-resetkami.html"
+      },
+      {
+        "chunk_id": "18728",
+        "url": "https://24ur.com/novice/tujina/kje-se-nahaja-aleksej-navalni-v-dveh-ruskih-kazenskih-kolonijah-ga-ni.html"
+      },
+      {
+        "chunk_id": "18733",
+        "url": "https://24ur.com/novice/tujina/aleksej-navalni-je-pogresan-ze-vec-kot-tri-dni.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"16746\", \"url\": \"https://24ur.com/novice/tujina/neustrasen-putinov-kritik-prezivel-zastrupitev-zdaj-umrl-za-resetkami.html\"}, {\"chunk_id\": \"18728\", \"url\": \"https://24ur.com/novice/tujina/kje-se-nahaja-aleksej-navalni-v-dveh-ruskih-kazenskih-kolonijah-ga-ni.html\"}, {\"chunk_id\": \"18733\", \"url\": \"https://24ur.com/novice/tujina/aleksej-navalni-je-pogresan-ze-vec-kot-tri-dni.html\"}]",
+    "cited_chunk_ids": [
+      "16746",
+      "18728",
+      "18733"
+    ],
+    "referenced_chunk_ids": [
+      "16746",
+      "18728",
+      "18733"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 16746\nURL: https://24ur.com/novice/tujina/neustrasen-putinov-kritik-prezivel-zastrupitev-zdaj-umrl-za-resetkami.html\nBesedilo:\nAvgusta lani pa je bil spoznan še za krivega ustanovitve in financiranja ekstremistične organizacije in obsojen na dodatnih 19 let zapora.Tudi v zaporu velik trn v peti KremljuMed prebivanjem za rešetkami se je 47-letnik večkrat pojavil na posnetkih s sodnih obravnav, na katerih je pogosto kritiziral Putina in njegovo politiko, zlasti invazijo na Ukrajino. \"Rusija drsi v luži bodisi blata bodisi krvi, s polomljenimi kostmi, z revnim in oropanim prebivalstvom, okoli nje pa leži na deset tisoče ljudi, ubitih v najbolj neumni in nesmiselni vojni 21. stoletja,\" je v eni od svojih izjav povedal Navalni.Tudi v zaporu je bil velik trn v peti Kremlju. Ta je njegovo protikorupcijsko skupino ukinil, številni podporniki Navalnega pa so bili prisiljeni v izgnanstvo ali pa bili obsojeni na zaporne kazni.\n\n---------------\n\n### ODSEK 2\nChunkID: 18728\nURL: https://24ur.com/novice/tujina/kje-se-nahaja-aleksej-navalni-v-dveh-ruskih-kazenskih-kolonijah-ga-ni.html\nBesedilo:\nKje se nahaja Aleksej Navalni? V dveh ruskih kazenskih kolonijah ga ni. Za Aleksejem Navalnim, zaprtim ruskim opozicijskim voditeljem, ki je sicer v zaporu, se je izgubila vsaka sled. Njegovi odvetniki so sporočili, da so za Navalnim, zaprtim v kazenski koloniji približno 150 kilometrov vzhodno od Moskve, izgubili stik in niso prepričani, ali je še vedno v tej kazenski koloniji. Navalni je bil avgusta obsojen na 19 let zapora, potem ko je bil spoznan za krivega ustvarjanja ekstremistične skupnosti, financiranja ekstremističnih dejanj in številnih drugih prekrškov. Že prej je prestajal 11 let in pol zaporne kazni v strogo varovanem zavodu zaradi goljufije in drugih obtožb, ki jih vztrajno zanika, poroča CNN.\n\n---------------\n\n### ODSEK 3\nChunkID: 18733\nURL: https://24ur.com/novice/tujina/aleksej-navalni-je-pogresan-ze-vec-kot-tri-dni.html\nBesedilo:\nV objavi na Instagramu 8. decembra je Ruslan Shaveddinov iz Fundacije za boj proti korupciji zapisal, da je zadnja informacija o Navalnem ta, da je zbolel v svoji celici, potem ko je bil izpostavljen težkim razmeram, vključno s pomanjkanjem hrane, slabim prezračevanjem in minimalnim dovoljenim časom za gibanje. Kot je opozoril, je edina zaščita Navalnega javnost. 47-letni Navalni, ki so mu prostost odvzeli pred dvema letoma, v kazenski koloniji vzhodno od Moskve prestaja devetletno zaporno kazen zaradi poneverbe, kar njegovi podporniki vidijo kot kazen za njegovo politično delo. Rusko sodišče ga je 4. avgusta obsodilo na še 19 let zapora zaradi spodbujanja ekstremizma.",
+    "eval_id": "eval_000014"
+  },
+  {
+    "question": "Kaj je po mnenju Andreja Benedejčiča pomenila smrt Jevgenija Prigožina za položaj Vladimirja Putina in kako je bilo organizirano letalsko potovanje Prigožina v času nesreče?",
+    "answer": "Po mnenju Andreja Benedejčiča smrt Jevgenija Prigožina krepi položaj Vladimira Putina in posluša, da je \"poveljnik in gospodar samo eden – Putin v Kremlju\" [ChunkID: 6506]. V času nesreče so bila dva letala povezana s Prigožinom: eno letelo proti Sankt Peterburgu, drugo pa vzletelo iz Sankt Peterburga proti Moskvi, kar je bilo Prigožinov način operiranja, ki je bil vedno previden [ChunkID: 6506].",
+    "references": [
+      {
+        "chunk_id": "6506",
+        "url": "https://24ur.com/novice/tujina/benedejcic-to-je-sporocilo-vsem-da-je-poveljnik-in-gospodar-samo-en-putin-v-kremlju.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"6506\", \"url\": \"https://24ur.com/novice/tujina/benedejcic-to-je-sporocilo-vsem-da-je-poveljnik-in-gospodar-samo-en-putin-v-kremlju.html\"}]",
+    "cited_chunk_ids": [
+      "6506"
+    ],
+    "referenced_chunk_ids": [
+      "6506"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 6506\nURL: https://24ur.com/novice/tujina/benedejcic-to-je-sporocilo-vsem-da-je-poveljnik-in-gospodar-samo-en-putin-v-kremlju.html\nBesedilo:\nBenedejčič: To je sporočilo vsem, da je poveljnik in gospodar samo eden – Putin v Kremlju. Vodja najemniške skupine Wagner Jevgenij Prigožin je bil eden od potnikov zasebnega letala, ki je strmoglavilo na poti iz Moskve v Sankt Peterburg. Nesreča se je zgodila dva meseca po Prigožinovem uporu. Slovenski državni sekretar za nacionalno varnost Andrej Benedejčič ocenjuje, da smrt Prigožina še krepi položaj ruskega predsednika, hkrati pa je tudi sporočilo vsem, da je \"poveljnik in gospodar samo eden, to je Putin v Kremlju\". V času nesreče sta bili sicer v zraku dve letali, povezani s Prigožinom. Letalo, ki je strmoglavilo, je letelo proti Sankt Peterburgu, drugo pa je vzletelo iz Sankt Peterburga proti Moskvi. \"To naj bi bil način operiranja Prigožina, ki je bil vedno previden.\n\n---------------\n\n### ODSEK 2\nChunkID: 10819\nURL: https://24ur.com/novice/tujina/zelenski-prigozina-je-ubil-putin.html\nBesedilo:\nZelenski: Prigožina je ubil Putin. Ukrajinski predsednik Volodimir Zelenski je ruskega predsednika Vladimirja Putina obtožil, da je on ubil vodjo ruske najemniške vojske Wagner Jevgenija Prigožina, ki je konec avgusta umrl v strmoglavljenju letala med Moskvo in Sankt Peterburgom. Ob tem je dejal, da je ta dogodek pokazal, da je Putin \"politično šibak\". \"On je ubil Prigožina, vsi imamo to informacijo,\" je dejal Zelenski in dodal, da je ta dogodek pokazal na politično šibkost ruskega predsednika.Prigožin je konec avgusta umrl v strmoglavljenju letala na poti iz Moskve v Sankt Peterburg, pri čemer je umrlo vseh sedem potnikov ter trije člani posadke na krovu. Da je bil med njimi tudi Prigožin, so potrdili ruski preiskovalci s pomočjo genske analize.\n\n---------------\n\n### ODSEK 3\nChunkID: 6509\nURL: https://24ur.com/novice/tujina/benedejcic-to-je-sporocilo-vsem-da-je-poveljnik-in-gospodar-samo-en-putin-v-kremlju.html\nBesedilo:\nRuska oblast torej ne odstopa od tistega, kar je Putin najavil lansko leto. V tem smislu je bil Prigožin za Kremelj, s tem kar je naredil in izjavil, zelo moteč,\" je pojasnil Benedejčič. Preberi še Jevgenij Prigožin: od prodajalca hrenovk do šefa WagnerjaKaj pa domnevna Prigožinova smrt pomeni za Putina? \"Putin je na dan, ko je prišlo do poskusa upora, v izjavi opozoril na leto 1917, ko je prišlo do boljševiške revolucije. Njegovo sporočilo je bilo, da se ne sme ponoviti tisto, kar Rusi vidijo kot napako iz prve svetovne vojne, ko so po uspešni ofenzivi leta 1916 potem leto dni kasneje imeli revolucijo in je razpadlo cesarstvo.",
+    "eval_id": "eval_000015"
+  },
+  {
+    "question": "Zakaj je bil moskovski župan Jurij Lužkov odstavljen in kdo je odločitev podpiral?",
+    "answer": "Moskovskega župana Jurija Lužkova je uradni Kremelj odpustil, ker ne uživa več zaupanja ruskega predsednika Dmitrija Medvedjeva [ChunkID: 21314]. Odločitev je podpiral tudi Vladimir Putin [ChunkID: 21315].",
+    "references": [
+      {
+        "chunk_id": "21314",
+        "url": "https://24ur.com/novice/svet/odstavili-najvplivnejsega-zupana.html"
+      },
+      {
+        "chunk_id": "21315",
+        "url": "https://24ur.com/novice/svet/odstavili-najvplivnejsega-zupana.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"21314\", \"url\": \"https://24ur.com/novice/svet/odstavili-najvplivnejsega-zupana.html\"}, {\"chunk_id\": \"21315\", \"url\": \"https://24ur.com/novice/svet/odstavili-najvplivnejsega-zupana.html\"}]",
+    "cited_chunk_ids": [
+      "21314",
+      "21315"
+    ],
+    "referenced_chunk_ids": [
+      "21314",
+      "21315"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 21314\nURL: https://24ur.com/novice/svet/odstavili-najvplivnejsega-zupana.html\nBesedilo:\nPutin: Drugače ni šlo. Uradni Kremelj je odpustil moskovskega župana Lužkova. Čeprav mu je uspelo zatreti vsakršno opozicijo zoper Putina, ta odstavitev podpira. Odločitev je bilo treba sprejeti zaradi slabega odnosa med njim in Medvedjevim, pravi. Moskovskega župana Jurija Lužkova, ki je v ruskem glavnem mestu vladal kar 18 let, je uradni Kremelj odpustil. Ruska prestolnica se je pod njegovim vodstvom spremenila iz sivega sovjetskega mesta v ruski prikaz razvijajoče se ekonomije.Lužkov, ki je znan po svoji milijonarski ženi in neotesanem vedenju, je bil najmočnejši regionalni vodja v Rusiji s 320 milijardami finančnih sredstev. Predstavnik Kremlja je poudaril, da so ga odpustili, ker ne uživa več zaupanja ruskega predsednika Dmitrija Medvedjeva. To je potrdil tudi sam.\n\n---------------\n\n### ODSEK 2\nChunkID: 20281\nURL: https://24ur.com/novice/svet/luzkov-se-ne-da.html\nBesedilo:\nLužkov se ne da. Razrešeni moskovski župan Lužkov je napovedal tožbo. Kot je znano, ga je uradni Kremelj odpustil, ker ne uživa več zaupanja ruskega predsednika. Ruski preiskovalci pa preiskujejo namigovanja o korupciji v mestni hiši. Potem ko je včeraj odjeknila novica, da je uradni Kremelj odpustil moskovskega župana Jurija Lužkova, je slednji danes napovedal tožbo, poroča agencija Reuters, ki se sklicuje na izjave njegovega prijatelja. \"Dejal sem mu, da je to nepotrebno, a on je načelen in stoji za svojimi besedami,\" je dejal prijatelj.Predstavnik Kremlja je Lužkovo razrešitev pojasnil z besedami, da ne uživa več zaupanja ruskega predsednika Dmitrija Medvedjeva.\n\n---------------\n\n### ODSEK 3\nChunkID: 21315\nURL: https://24ur.com/novice/svet/odstavili-najvplivnejsega-zupana.html\nBesedilo:\n\"Težko si je predstavljati položaj, ko Lužkov in ruski predsednik sodelujeta, če je slednji izgubil zaupanje v regionalnega voditelja,\" je dejal med obiskom v Šanghaju. Ob tem ni izključil možnosti, da enaka usoda doleti še kakšnega lokalnega voditelja.Predhodnik Medvedjeva in zdajšnji premier Vladimir Putin, ki je z Lužkovim politično zelo tesno povezan, odločitev podpira. Kot je pojasnil, mora župan oditi, ker se ne razume s predsednikom in nastale situacije drugače ni bilo mogoče razrešiti. Odhod Lužkova najverjetneje pomeni, da bo njegovo mesto zasedel mlajši in ubogljiv kandidat, ki bo po volji Kremlja. Putin je že povedal, da želi imeti besedo pri njegovi izbiri.Lužkov odstavitve ni komentiral, je pa v pismu stranki Enotna Rusija premierja Vladimirja Putina dal vedeti, da proti njemu poteka orkestrirana kampanja.",
+    "eval_id": "eval_000016"
+  },
+  {
+    "question": "Kaj je ruski obrambni minister Sergej Šojgu povedal o pogajanjih o Ukrajini in kakšne informacije je izrazil glede napada na koncertno dvorano v Moskvi?",
+    "answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+    "references": [],
+    "references_raw": "[]",
+    "cited_chunk_ids": [],
+    "referenced_chunk_ids": [],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 3941\nURL: https://24ur.com/novice/tujina/ukrajina/sojgu-ukrajinska-protiofenziva-neuspesna-poskus-izkrcanja-na-krimu.html\nBesedilo:\nSergej Šojgu je na srečanju vojaškega vodstva v Moskvi dejal, da so ruske sile \"znatno oslabile\" bojni potencial ukrajinske protiofenzive in \"sovražniku povzročile resno škodo\".Ruska vojska je po poročanju ministrstva za obrambo uspešno odbila ukrajinske napade na območju Bahmuta in Soledarja v regiji Doneck, neuspešni so bili tudi ukrajinski poskusi, da bi prebili rusko obrambno linijo v Rabotinu in Verbovu v Zaporožju, je dejal Šojgu.Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov. Omogoči piškotke Ruski obrambni minister je tudi dejal, da vpoklic novih ruskih nabornikov za vojno v Ukrajini ni potreben. Poudaril je, da ima Rusija dovolj prostovoljcev in pogodbenih vojakov za izvedbo nalog, potrebnih v vojni proti Ukrajini.\n\n---------------\n\n### ODSEK 2\nChunkID: 10568\nURL: https://24ur.com/novice/tujina/ruske-sile-nad-moskvo-sestrelile-dva-drona-v-harkovu-napadli-solo.html\nBesedilo:\nPoudaril je, da Ukrajina postaja vse močnejša.Preberi še Zelenski po sestrelitvi dronov nad Moskvo: V Rusijo prihaja vojnaRuski obrambni minister Sergej Šojgu in tiskovni predstavnik Kremlja Dmitrij Peskov sta dejala, da so ukrajinski poskusi napadov z brezpilotnimi letali na Moskvo namenjeni odvračanju pozornosti od neuspehov na bojišču v Ukrajini. \"Ob neuspešni tako imenovani protiofenzivi se je režim v Kijevu – ob podpori zahodnih sponzorjev – osredotočil na izvajanje terorističnih napadov na civilno infrastrukturo v mestih in krajih Ruske federacije,\" je dejal Šojgu.Ruske oblasti so danes še sporočile, da jim je uspelo odbiti napad z droni na patruljne ladje v Črnem morju.\n\n---------------\n\n### ODSEK 3\nChunkID: 20450\nURL: https://24ur.com/novice/svet/rusi-provocirajo-americani-obsojajo.html\nBesedilo:\nVarnost misiji CRC je treba brezpogojno zagotoviti, zahtevajo v Moskvi.Ruski obrambni minister Sergej Šojgu je v telefonskem pogovoru ameriškemu kolegu Chucku Haglu zagotovil, da v ruskem humanitarnem konvoju s pomočjo za prebivalce vzhoda Ukrajine, ki je obstal na ukrajinsko-ruski meji, ni ruskega vojaškega osebja. Pomoč na vozilih v Ukrajini bo nato razdelila nevtralna organizacija oziroma Mednarodni odbor Rdečega križa (ICRC). Moskva tako vztraja, da je upoštevala ukrajinske pogoje. Šojgu je ob tem še izrazil skrbi o krepitvi ameriške vojaške aktivnosti blizu ruske meje.Separatisti naj bi beležili uspehe v bojih na vzhodu UkrajineRazmere za prebivalce obleganih mest Lugansk in Doneck se poslabšujejo. Iz več predelov Donecka so danes poročali o silovitem obstreljevanju, prav tako je več kot 40.000 prebivalcev brez elektrike.",
+    "eval_id": "eval_000017"
+  },
+  {
+    "question": "Kaj je uradnik iz rafinerije povedal o naboju ukrajinskih dronov v primerjavi s prejšnjimi napadi in kako je ruski predsednik Vladimir Putin komentiral čezmejno obstreljevanje?",
+    "answer": "Uradnik iz rafinerije je dejal, da so naboji, ki jih so nosili ukrajinski droni, bili večji kot v prejšnjih napadih [ChunkID: 1882]. Ruski predsednik Vladimir Putin je tovrstno čezmejno obstreljevanje navedel kot razlog za ruske vojaške operacije v harkovski regiji [ChunkID: 384].",
+    "references": [
+      {
+        "chunk_id": "1882",
+        "url": "https://24ur.com/novice/tujina/ukrajinci-z-brezpilotniki-nad-krim-delo-v-rafineriji-ustavili.html"
+      },
+      {
+        "chunk_id": "384",
+        "url": "https://24ur.com/novice/tujina/ukrajina/ukrajina-naj-bi-globoko-v-rusiji-napadla-naftno-rafinerijo-umrla-ena-oseba.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"1882\", \"url\": \"https://24ur.com/novice/tujina/ukrajinci-z-brezpilotniki-nad-krim-delo-v-rafineriji-ustavili.html\"}, {\"chunk_id\": \"384\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/ukrajina-naj-bi-globoko-v-rusiji-napadla-naftno-rafinerijo-umrla-ena-oseba.html\"}]",
+    "cited_chunk_ids": [
+      "1882",
+      "384"
+    ],
+    "referenced_chunk_ids": [
+      "1882",
+      "384"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 1882\nURL: https://24ur.com/novice/tujina/ukrajinci-z-brezpilotniki-nad-krim-delo-v-rafineriji-ustavili.html\nBesedilo:\nZa ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov. Omogoči piškotke Ruska tiskovna agencija je navajala tudi enega od uradnikov iz rafinerije, ki je dejal, da so naboji, ki so jih tokrat nosili ukrajinski droni, bili večji kot v prejšnjih napadih. Ukrajina tako kljub pritisku na fronti nadaljuje napade na polotok Krim, ki ga od leta 2014 zaseda Rusija, in na ruske obmejne regije. Ruski predsednik Vladimir Putin je v petek tovrstno čezmejno obstreljevanje navedel kot razlog za ruske vojaške operacije v harkovski regiji. Tam so ruske sile vzpostavile varovalni pas, ki jih bo po besedah ruske strani ščitil pred napadi.\n\n---------------\n\n### ODSEK 2\nChunkID: 384\nURL: https://24ur.com/novice/tujina/ukrajina/ukrajina-naj-bi-globoko-v-rusiji-napadla-naftno-rafinerijo-umrla-ena-oseba.html\nBesedilo:\nSpomnimo sicer, da tudi po Evropi že več tednov nad letališči in vojaškimi objekti opažajo neznane drone, za katere domnevajo, da pripadajo prav Rusiji. Kremelj sicer slednje zanika.Ruski predsednik Vladimir Putin je medtem zaradi vse pogostejših napadov na ruske naftne rafinerije v novem zakonu, podpisanem v torek, odredil okrepljeno obrambo infrastrukture pred napadi ukrajinskih dronov. Približno dva milijona rezervistov je namreč pozval, naj zaščitijo ruske naftne objekte.Ukrajina je sicer v preteklosti že večkrat ciljala na proizvodne obrate, naftne rafinerije in vojaška logistična središča, da bi spodkopala rusko gospodarstvo. V torek so na primer ukrajinski droni napadli industrijski obrat približno 1300 kilometrov znotraj Rusije, so sporočili lokalni uradniki.\n\n---------------\n\n### ODSEK 3\nChunkID: 4978\nURL: https://24ur.com/novice/tujina/le-nekaj-ur-po-dogovoru-med-putinom-in-trumpom-novi-napadi.html\nBesedilo:\nOmogoči piškotke Rusija je prav tako izvedla napad v regiji Dinpropetrovsk, kjer je del železniškega omrežja ostal brez elektrike, vendar promet ni bil ustavljen, so sporočili iz državnega podjetja Ukrzaliznica.Zelenski se je dotaknil še pogovora med Trumpom in Putinom in dejal, da je Putin \"danes v osnovi zavrnil predloge za celovito prekinitev ognja. Svet bi moral zavrniti vsakršne poskuse Putina za podaljševanje vojne.\" Zaveznike je pozval h krepitvi pomoči Ukrajini in novim sankcijam proti Rusiji. Zelenski je sicer podprl dogovor o nenapadanju energetske infrastrukture. Toda napadi so potekali tudi na drugi strani meje. Rusko obrambno ministrstvo je sporočilo, da je protizračna obramba sestrelila 57 ukrajinskih dronov. Uradniki iz južne ruske regije Krasnodar so sporočili, da je napad z dronom povzročil manjši požar v skladišču nafte.",
+    "eval_id": "eval_000018"
+  },
+  {
+    "question": "Kaj je generalni sekretar zveze Nato Anders Fogh Rasmussen povedal o ratifikaciji novega sporazuma Start med ZDA in Rusijo ter kakšna so njegova pričakovanja glede vpliva tega sporazuma na strateško partnerstvo med zavezništvom in Rusijo?",
+    "answer": "Generalni sekretar zveze Nato Anders Fogh Rasmussen je pozdravil ratifikacijo novega sporazuma Start med ZDA in Rusijo kot pomemben dosežek za mednarodno varnost in stabilnost, ki bo okrepil transparentnost, predvidljivost ter sodelovanje med državama [ChunkID: 13470]. Pričakovanje glede vpliva je, da bo sporazum značil za večje zaupanje in sodelovanje med Nato in Rusijo, kar je Rasmussen označil kot \"svež začetek na poti k večjemu zaupanju\" [ChunkID: 6096].",
+    "references": [
+      {
+        "chunk_id": "13470",
+        "url": "https://24ur.com/novice/svet/rusi-potrdili-novi-start.html"
+      },
+      {
+        "chunk_id": "6096",
+        "url": "https://24ur.com/novice/svet/obeta-se-nov-zacetek-z-rusijo.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"13470\", \"url\": \"https://24ur.com/novice/svet/rusi-potrdili-novi-start.html\"}, {\"chunk_id\": \"6096\", \"url\": \"https://24ur.com/novice/svet/obeta-se-nov-zacetek-z-rusijo.html\"}]",
+    "cited_chunk_ids": [
+      "13470",
+      "6096"
+    ],
+    "referenced_chunk_ids": [
+      "13470",
+      "6096"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 13470\nURL: https://24ur.com/novice/svet/rusi-potrdili-novi-start.html\nBesedilo:\nNovi Start velja za pomemben dosežek v zunanji politiki za Obamo, pomemben pa je tudi za zagon odnosov med ZDA in Rusijo.Nato pozdravlja ratifikacijo\"Toplo pozdravljam ratifikacijo novega sporazuma Start med ZDA in Rusijo,\" je v izjavi za javnost dejal generalni sekretar zveze Nato Anders Fogh Rasmussen. Poleg tega je poudaril, da je ratifikacija v ruskem zgornjem domu po predhodni ratifikaciji decembra lani v ameriškem senatu dobra novica za mednarodno varnost in stabilnost.Po Rasmussenovih besedah bo prvi sporazum v zadnjih dvajsetih letih na področju jedrskega orožja med ZDA in Rusijo pomemben prispevek k okrepitvi transparentnosti, predvidljivosti in sodelovanja.\n\n---------------\n\n### ODSEK 2\nChunkID: 6096\nURL: https://24ur.com/novice/svet/obeta-se-nov-zacetek-z-rusijo.html\nBesedilo:\nTemeljil naj bi na ameriških prestreznih raketah in radarjih ter evropskih protiraketnih sistemih, zveza Nato pa naj bi poskrbela za povezljivost teh sistemov. Zdaj bo pri vzpostavljanju tega sistema sodelovala tudi Rusija. Rusija in Nato bosta tako prvič sodelovala pri skupnih obrambnih prizadevanjih, je izpostavil Rasmussen. \"Gre za dosežek brez primere,\" je poudaril.Generalni sekretar Nata je tudi zaradi dogovora z Rusijo označil vrh Nata v Lizboni za enega najbolj vsebinskih v zgodovini zavezništva do zdaj. \"Lizbona je svež začetek na poti k večjemu zaupanju in sodelovanju (...) Je prava prelomnica,\" je še poudaril generalni sekretar Nata in dodal, da bo naslednji vrh zavezništva leta 2012 v ZDA.Medvedjev vrh označil za zgodovinskegaMedvedjev je pozdravil dosežke vrha, še posebej dogovor o protiraketni obrambi, in jih označil za \"zgodovinske\".\n\n---------------\n\n### ODSEK 3\nChunkID: 14098\nURL: https://24ur.com/novice/svet/medvedjev-eu-grozi-z-raketami.html\nBesedilo:\nKot je ponovil, so predstavnikom Moskve po različnih kanalih večkrat pojasnili, da ščit ni in ne more predstavljati grožnje Rusiji. ZDA so, kot je dejal, še naprej zavezane sodelovanju z Rusijo, a svojih načrtov v Evropi ne bodo spreminjale.Generalni sekretar zveze Nato Anders Fogh Rasmussen je medtem izjavil, da je ob grožnji iz Moskve \"zelo razočaran\" ter da gre za \"neustrezen odziv\". \"Tovrstne namestitve bi bile ostanek preteklosti in niso skladne s strateškimi odnosi, za katere sta se dogovorila Nato in Rusija, kot tudi ne z duhom dialoga ... ki ga trenutno vodita,\" je dejal.",
+    "eval_id": "eval_000019"
+  },
+  {
+    "question": "Kje je bil Aleksej Navalni premesten in kakšne so značilnosti tega zapora po navedbah njegovih zaveznikov in tiskovne predstavnice?",
+    "answer": "Aleksej Navalni je bil premestjen v kazensko kolonijo UK-6 \"Melekhovo\", ki se nahaja blizu mesta Vladimir, približno 250 kilometrov vzhodno od Moskve. Njegovi zavezniki so to opisali kot \"enega najgrozljivejših zaporov v Rusiji\" [ChunkID: 20033]. Tiskovna predstavnica Kira Jarmiš je dodala, da gre za kazensko kolonijo strogega režima [ChunkID: 18229].",
+    "references": [
+      {
+        "chunk_id": "20033",
+        "url": "https://24ur.com/novice/tujina/navalnega-premestili-v-enega-najgrozljivejsih-zaporov-v-rusiji.html"
+      },
+      {
+        "chunk_id": "18229",
+        "url": "https://24ur.com/novice/tujina/so-navalnega-premestili-v-kazensko-kolonijo-z-najstrozjim-rezimom.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"20033\", \"url\": \"https://24ur.com/novice/tujina/navalnega-premestili-v-enega-najgrozljivejsih-zaporov-v-rusiji.html\"}, {\"chunk_id\": \"18229\", \"url\": \"https://24ur.com/novice/tujina/so-navalnega-premestili-v-kazensko-kolonijo-z-najstrozjim-rezimom.html\"}]",
+    "cited_chunk_ids": [
+      "18229",
+      "20033"
+    ],
+    "referenced_chunk_ids": [
+      "18229",
+      "20033"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 18724\nURL: https://24ur.com/novice/tujina/nasli-navalnega.html\nBesedilo:\nNašli Navalnega. Ruski opozicijski voditelj Aleksej Navalni, za katerim se je pred skoraj tremi tedni izgubila vsaka sled, je bil po navedbah svoje tiskovne predstavnice Kire Jarmiš premeščen v zaporniško kolonijo blizu odročne vasi Harp, ki se nahaja približno 2000 kilometrov severovzhodno od Moskve. \"Našli smo Navalnega. Je v zaporniški koloniji številka tri v Harpu,\" je danes v objavi na omrežju X sporočila Jarmiševa. Dodala je, da je ruski opozicijski voditelj zdrav, še danes pa naj bi ga obiskal tudi njegov odvetnik.\n\n---------------\n\n### ODSEK 2\nChunkID: 18229\nURL: https://24ur.com/novice/tujina/so-navalnega-premestili-v-kazensko-kolonijo-z-najstrozjim-rezimom.html\nBesedilo:\nSo Navalnega premestili v kazensko kolonijo z najstrožjim režimom?. Ruskega opozicijskega voditelja Alekseja Navalnega so premestili v zapor v drugem delu Rusije, kam, pa bodo v skladu z zakonodajo sporočili, ko bo tja prispel, poročajo ruski mediji, ki navajajo odločitev sodišča. Zavezniki Navalnega, ki ga niso videli od 6. decembra, pričakujejo, da ga bodo premestili v najstrožjo kazensko kolonijo. Tiskovna predstavnica Alekseja Navalnega Kira Jarmiš je danes na omrežju X sporočila, da je sodišče njegovega odvetnika obvestilo, da ni več v Vladimirski regiji, kjer je bil doslej zaprt v kazenski koloniji Melehovo 235 kilometrov vzhodno od Moskve.\n\n---------------\n\n### ODSEK 3\nChunkID: 20033\nURL: https://24ur.com/novice/tujina/navalnega-premestili-v-enega-najgrozljivejsih-zaporov-v-rusiji.html\nBesedilo:\nNavalnega premestili v 'enega najgrozljivejših zaporov v Rusiji'. V Rusiji zaprt kritik Kremlja Aleksej Navalni je v sredo potrdil premestitev na drugo lokacijo. Premestili so ga v kazensko kolonijo strogega režima, njegovi zavezniki pa so dejali, da gre za \"enega najgrozljivejših zaporov v Rusiji\". Gre za kazensko kolonijo UK-6 'Melekhovo', ki je bila zaradi domnevnih zlorab zapornikov že večkrat tarča medijskih preiskav. Maja je eden največjih nasprotnikov ruskega predsednika Vladimirja Putina dejal, da ruske oblasti zanj pripravljajo poseben zapor znotraj zapora. Ob tem se je skliceval na svoje sojetnike, poroča France 24. \"Pozdravljeni vsi z območja strogega režima. Včeraj so me premestili v UK-6 Melekhovo,\" je Navalni zapisal na družbenem omrežju.Kazenska kolonija je v bližini mesta Vladimir, ki je od Moskve oddaljeno približno 250 kilometrov proti vzhodu.",
+    "eval_id": "eval_000020"
+  },
+  {
+    "question": "Koliko denarja Danska načrtuje vložiti v ukrajinsko obrambno industrijo letos in kakšne načrte imajo glede proizvodnih linij?",
+    "answer": "Danska načrtuje vložiti okoli 1,4 milijarde evrov v ukrajinsko obrambno industrijo letos in možnost vzpostavitve proizvodnih linij ukrajinskih obrambnih podjetij na Danskem [ChunkID: 2616].",
+    "references": [
+      {
+        "chunk_id": "2616",
+        "url": "https://24ur.com/novice/tujina/eu-za-urjenje-ukrajinskih-vojakov-v-domovini-po-premirju.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"2616\", \"url\": \"https://24ur.com/novice/tujina/eu-za-urjenje-ukrajinskih-vojakov-v-domovini-po-premirju.html\"}]",
+    "cited_chunk_ids": [
+      "2616"
+    ],
+    "referenced_chunk_ids": [
+      "2616"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 2616\nURL: https://24ur.com/novice/tujina/eu-za-urjenje-ukrajinskih-vojakov-v-domovini-po-premirju.html\nBesedilo:\nČlanice je pozvala k povečanju naložb v ukrajinsko obrambno industrijo, pri čemer bi lahko ta svoje proizvodne linije odprla tudi v državah unije. Za zgled je postavila Dansko, ki trenutno predseduje Svetu EU.Danski obrambni minister Troels Lund Poulsen je na skupni novinarski konferenci s Kallas pojasnil, da bodo letos v ukrajinsko obrambno industrijo po pričakovanjih vložili okoli 1,4 milijarde evrov, potem ko so lani okoli 600 milijonov. Obenem načrtujejo možnost vzpostavitve proizvodnih linij ukrajinskih obrambnih podjetij na Danskem. Orožje bi lahko začela proizvajati še letos, je napovedal.O možnostih sodelovanja z Ukrajino na področju obrambne industrije je na zasedanju v Koebenhavnu spregovoril tudi slovenski obrambni minister Borut Sajovic.\n\n---------------\n\n### ODSEK 2\nChunkID: 2442\nURL: https://24ur.com/novice/tujina/nadaljevanje-zracnih-napadov-zda-odobrile-prodajo-patriotov.html\nBesedilo:\nNakup bo izvedla Danska, ki namerava sisteme za zračno obrambo dobaviti Ukrajini za potrebe boja proti ruski agresiji.Ameriški State Department je odobril prodajo sistemov za zračno obrambo patriot v vrednosti 8,5 milijarde dolarjev, paket pa vključuje šest izstrelitvenih naprav, pripadajoče izstrelke ter radarje in navigacijske sisteme.Danske oborožene sile sicer same ne uporabljajo omenjenih sistemov za zračno obrambo, temveč jih bo Danska od ZDA kupila za Ukrajino.S tem sledi več drugim zaveznicam v zvezi Nato, kot sta denimo Nizozemska in Norveška, ki so v okviru dogovora med zavezništvom in ZDA v zadnjem času napovedale nakupe ameriških sistemov zračne obrambe za Ukrajino.Nizozemska je v začetku avgusta napovedala, da bo Ukrajini dobavila ameriške oborožitvene sisteme v vrednosti 500 milijonov evrov.\n\n---------------\n\n### ODSEK 3\nChunkID: 10287\nURL: https://24ur.com/novice/tujina/ukrajina/nov-val-ruskih-napadov-z-droni-stoltenberg-prvic-v-kijevu.html\nBesedilo:\n\"Nizozemska in Danska danes sporočata, da nameravata skupaj kupiti, obnoviti in podariti 14 tankov leopard 2A4 Ukrajini,\" je v izjavi zapisalo dansko obrambno ministrstvo.Dodalo je, da bodo z dobavo tankov začeli v začetku prihodnjega leta, po ocenah pa bodo stroški znašali 165 milijonov evrov in bodo enakomerno razdeljeni med obe državi. Nizozemska obrambna ministrica Kajsa Ollongren je v ločeni izjavi sporočila, da sta ukrajinska in evropska varnost neločljivo povezani.Nemčija in Velika Britanija sta prejšnji mesec Ukrajini dobavili 18 naprednih tankov leopard in 14 tankov challenger 2. Za dobavo bojnih tankov so pred tem v Kijevu dolgo prosili, vse dokler ni Nemčija konec januarja kot država proizvajalka sprejela odločitve, da bo Ukrajini dobavila dolgo želene leoparde in da to dovoljuje tudi drugim zaveznicam, ki te tanke imajo.",
+    "eval_id": "eval_000021"
+  },
+  {
+    "question": "Kaj določa spremenjena jedrska doktrina Rusije glede konvencionalnih napadov in kakšne grožnje so navedene kot razlogi za jedrski napad?",
+    "answer": "Spremenjena jedrska doktrina Rusije določa, da bo konvencionalni napad na Rusijo s strani države, ki jo podpira jedrska sila, obravnavan kot skupni napad na Rusijo in njene zaveznice, kot je Belorusija [ChunkID: 2693]. Grožnje, zaradi katerih bi Rusija lahko razmislila o jedrskem napadu, vključujejo napade z konvencionalnimi raketami, brezpilotnimi letali ali drugimi zrakoplovi [ChunkID: 2693]. Poleg tega bi napad s strani države brez jedrskega orožja ob podpori jedrske sile bil obravnavan kot njihov skupni napad na Rusijo [ChunkID: 947].",
+    "references": [
+      {
+        "chunk_id": "2693",
+        "url": "https://24ur.com/novice/tujina/na-1000-dan-vojne-v-ukrajini-putin-podpisal-odlok-za-sirso-rabo-jedrskega-orozja.html"
+      },
+      {
+        "chunk_id": "947",
+        "url": "https://24ur.com/novice/tujina/putin-padec-asadovega-rezima-za-rusijo-ne-pomeni-poraza.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"2693\", \"url\": \"https://24ur.com/novice/tujina/na-1000-dan-vojne-v-ukrajini-putin-podpisal-odlok-za-sirso-rabo-jedrskega-orozja.html\"}, {\"chunk_id\": \"947\", \"url\": \"https://24ur.com/novice/tujina/putin-padec-asadovega-rezima-za-rusijo-ne-pomeni-poraza.html\"}]",
+    "cited_chunk_ids": [
+      "2693",
+      "947"
+    ],
+    "referenced_chunk_ids": [
+      "2693",
+      "947"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 2693\nURL: https://24ur.com/novice/tujina/na-1000-dan-vojne-v-ukrajini-putin-podpisal-odlok-za-sirso-rabo-jedrskega-orozja.html\nBesedilo:\nSpremenjena jedrska doktrina po novem določa, da bo konvencionalni napad na Rusijo s strani katere koli države, ki jo podpira jedrska sila, obravnavan kot skupni napad na Rusijo in njene zaveznice, med katerimi izpostavljajo Belorusijo. Agresija \"vojaškega bloka\" je jasna referenca na NATO. V posodobljeni doktrini, v kateri so opisane grožnje, zaradi katerih bi Rusija razmišljala o jedrskem napadu, je navedeno tudi, da grožnje predstavljajo napadi z konvencionalnimi raketami, brezpilotnimi letali ali drugimi zrakoplovi. To pomeni, da bi lahko vsak obsežen zračni napad na Rusijo sproži jedrski odgovor.Nejasna formulacija doktrine sicer dopušča veliko prostora za razlago, saj ne določa točno, ali vsak napad na Rusijo nujno pomeni jedrski odziv, navaja AP.\n\n---------------\n\n### ODSEK 2\nChunkID: 947\nURL: https://24ur.com/novice/tujina/putin-padec-asadovega-rezima-za-rusijo-ne-pomeni-poraza.html\nBesedilo:\nDotaknil se je tudi upadanja rodnosti v Rusiji, pri čemer je regionalnim guvernerjem naročil, naj se njihovi delovni dnevi \"začnejo in končajo z reševanjem demografskih vprašanj\", poroča britanski BBC.Na vprašanje, povezano s posodobljeno rusko jedrsko doktrino, je pojasnil, da ta obravnava nove vojaške grožnje. Če države ustvarijo grožnjo Rusiji, se ima ta pravico odzvati tudi z jedrskim orožjem, je dejal. V skladu z doktrino bi Moskva v primeru napada s strani države brez jedrskega orožja ob podpori jedrske sile napad obravnavala kot njihov skupni napad na Rusijo.Spregovoril je tudi o novi ruski balistični raketi orešnik, ki jo je Moskva novembra izstrelila na ukrajinsko mesto Dnipro. Prepričan je, da je zahodna tehnologija ne more prestreči.\n\n---------------\n\n### ODSEK 3\nChunkID: 12512\nURL: https://24ur.com/novice/tujina/zibajoci-putin-ja-obstreljujemo-civilno-infrastrukturo-ampak-kdo-je-zacel.html\nBesedilo:\n\"Padec sovražnih raket na ozemlje Ruske federacije bi bil neizogiben\". V ruski doktrini piše, da naj vojska po jedrskem orožju poseže le v skrajni sili in samo, če je bila država že napadena s slednjim. Kasneje je izpostavil, da so spremembi sicer \"le razmišlja\", a da jim razlika v doktrinah predstavlja grožnjo. Preberi še Putin: Rusija bo jedrsko orožje uporabila le, če bo napadenaV četrtek pa je na letnem zasedanju kremeljskega sveta za človekove pravice še trdil, da bo Rusija jedrsko orožje uporabila le v primeru, če bo napadena. Ob tem je zahodne medije in organizacije obtožil protiruske nastrojenosti ter ocenil, da se bo vojna v Ukrajini verjetno zavlekla.",
+    "eval_id": "eval_000022"
+  },
+  {
+    "question": "Kje in kdaj se bosta srečala ameriški predsednik Trump in ruski predsednik Putin, kakšen je simbolni pomen lokacije in kakšne teme bodo obravnavali na srečanju?",
+    "answer": "Ameriški predsednik Donald Trump in ruski predsednik Vladimir Putin se bosta srečala v petek na vojaški bazi Elmendorf-Richardson v Anchorageu na Aljaski [ChunkID: 6235]. Lokacija ima simbolni pomen za obe državi, saj je Aljaska bila odkupljena ZDA od Ruskega imperija pred 158 leti [ChunkID: 12548]. Tema srečanja ni navedena v kontekstu.",
+    "references": [
+      {
+        "chunk_id": "6235",
+        "url": "https://24ur.com/novice/tujina/rusko-vladno-letalo-ze-leti-proti-aljaski-je-na-njem-tudi-putin.html"
+      },
+      {
+        "chunk_id": "12548",
+        "url": "https://24ur.com/novice/tujina/trump-in-putin-na-zgodovinskem-srecanju-v-odrocni-aljaski.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"6235\", \"url\": \"https://24ur.com/novice/tujina/rusko-vladno-letalo-ze-leti-proti-aljaski-je-na-njem-tudi-putin.html\"}, {\"chunk_id\": \"12548\", \"url\": \"https://24ur.com/novice/tujina/trump-in-putin-na-zgodovinskem-srecanju-v-odrocni-aljaski.html\"}]",
+    "cited_chunk_ids": [
+      "12548",
+      "6235"
+    ],
+    "referenced_chunk_ids": [
+      "12548",
+      "6235"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 6235\nURL: https://24ur.com/novice/tujina/rusko-vladno-letalo-ze-leti-proti-aljaski-je-na-njem-tudi-putin.html\nBesedilo:\nPreberi še Diplomacija med ledeniki: Trump in Putin iz oči v očiAmeriški in ruski predsednik se bosta v petek srečala v vojaški bazi Elmendorf-Richardson v Anchorageu na Aljaski. Medtem ko je Anchorage obiskalo že veliko ameriških predsednikov, bo to prvi uradni obisk ruskega predsednika. Dogodek se bo odvijal na kraju s simbolnim pomenom za obe državi.\n\n---------------\n\n### ODSEK 2\nChunkID: 12548\nURL: https://24ur.com/novice/tujina/trump-in-putin-na-zgodovinskem-srecanju-v-odrocni-aljaski.html\nBesedilo:\nDiplomacija med ledeniki: Trump in Putin iz oči v oči. Ameriški in ruski predsednik se bosta v petek srečala na vojaški bazi Elmendorf-Richardson v Anchorageu na Aljaski. Medtem ko je Anchorage obiskalo že veliko ameriških predsednikov, bo to prvi uradni obisk ruskega predsednika. Dogodek se bo odvijal na kraju s simbolnim pomenom za obe državi. Elmendorf-Richardson, največja vojaška baza na Aljaski, združuje letalsko bazo Elmendorf in vojaški kompleks Fort Richardson. Na območju živi več kot 32.000 ljudi, kar predstavlja približno 10 % prebivalstva Anchoragea. Zgodovinsko gledano ima območje poseben pomen tudi za Rusijo, saj so ZDA Aljasko odkupile od Ruskega imperija pred 158 leti, piše Sky News.Preberi še Merz Trumpu zaželel vse najboljše, Zelenski prepričan, da Putin blefiraMarsikoga bi presenetilo dejstvo, kako blizu sta pravzaprav državi.\n\n---------------\n\n### ODSEK 3\nChunkID: 17464\nURL: https://24ur.com/novice/svet/se-zacenja-nova-oborozevalna-tekma-med-zda-in-rusijo.html\nBesedilo:\nTrump in Putin sta se pripravljena srečati novembra v Parizu. Svetovalec ameriškega predsednika za nacionalno varnost John Bolton je v Moskvi dejal, da se želi Trump srečati z ruskim predsednikom Putinom ob robu slovesnosti ob 100. obletnici konca prve svetovne vojne 11. novembra v Parizu. Tudi Putin je izrazil pripravljenost na nadaljevanje dialoga z ameriškim predsednikom. \"Mislim, da se predsednik Donald Trump veseli, da vas bo videl v Parizu ob robu praznovanj ob 100. obletnici premirja,\" je dejal svetovalec ameriškega predsednika Donalda Trumpa za nacionalno varnost John Bolton na srečanju z ruskim predsednikom Vladimirjem Putinom v Moskvi.Ruski predsednik mu je odgovoril, da \"bi bilo koristno nadaljevati neposredni dialog s predsednikom ZDA (...) na primer v Parizu, če je ameriška stran zainteresirana\".",
+    "eval_id": "eval_000023"
+  },
+  {
+    "question": "Koliko civilnih žrtev je zabeležila misija ZN za spremljanje stanja človekovih pravic v Ukrajini do 11. februarja letos in kakšna je bila višina humanitarne in razvojne pomoči Slovenije Ukrajini od začetka ruske agresije?",
+    "answer": "Do 11. februarja letos je misija ZN za spremljanje stanja človekovih pravic v Ukrajini zabeležila 41.783 civilnih žrtev [ChunkID: 9966]. Višina humanitarne in razvojne pomoči Slovenije Ukrajini od začetka ruske agresije ni navedena v kontekstu.",
+    "references": [
+      {
+        "chunk_id": "9966",
+        "url": "https://24ur.com/novice/slovenija/fajonova-ruska-agresija-se-mora-koncati-doseci-moramo-premirje.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"9966\", \"url\": \"https://24ur.com/novice/slovenija/fajonova-ruska-agresija-se-mora-koncati-doseci-moramo-premirje.html\"}]",
+    "cited_chunk_ids": [
+      "9966"
+    ],
+    "referenced_chunk_ids": [
+      "9966"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 9966\nURL: https://24ur.com/novice/slovenija/fajonova-ruska-agresija-se-mora-koncati-doseci-moramo-premirje.html\nBesedilo:\nPo treh letih neznosnega trpljenja in nepopisnega uničenja je napočil čas, da orožje utihne in da Ukrajina zaživi v miru in varnosti. Obžalujem tragično izgubo številnih življenj,\" je navedla.Na zunanjem ministrstvu ob tem izpostavljajo, da je misija ZN za spremljanje stanja človekovih pravic v Ukrajini (HRMMU) do 11. februarja letos zabeležila 41.783 civilnih žrtev, od tega 12.605 smrtnih žrtev. Več kot 60 otrok je ubitih, ranjenih pa najmanj 1700.Humanitarno pomoč v Ukrajini potrebuje 12,7 milijona ljudi.\n\n---------------\n\n### ODSEK 2\nChunkID: 15190\nURL: https://24ur.com/novice/tujina/ukrajina/navidezna-varnost-zivljenja-dalec-od-fronte-vec-kot-polovica-ubitih-drugje.html\nBesedilo:\nV preteklem mesecu je bilo ubitih 232 civilistov, ranjenih pa 1343, kar je po navedbah misije ZN za spremljanje človekovih pravic v Ukrajini skupno največje število od aprila 2022.Število smrtnih žrtev med civilisti je bilo obenem junija najvišje v skoraj letu dni, so dodali.Več kot polovico vseh ubitih ali ranjenih civilistov so zabeležili na območjih daleč od frontne črte, čemur botrujejo zlasti napadi z raketami in droni v notranjosti Ukrajine, izhaja iz ugotovitev ZN.Porast števila žrtev sovpada z desetkratnim povečanjem števila ruskih zračnih napadov na Ukrajino.\n\n---------------\n\n### ODSEK 3\nChunkID: 15191\nURL: https://24ur.com/novice/tujina/ukrajina/navidezna-varnost-zivljenja-dalec-od-fronte-vec-kot-polovica-ubitih-drugje.html\nBesedilo:\nLe približno dva odstotka vseh žrtev so zabeležili na območjih pod nadzorom Rusije.Preberi še Vojaški rekruterji z železnimi palicami pretepli Madžara, ki ni hotel v vojnoOd začetka ruske agresije na Ukrajino februarja 2022 so Združeni narodi zabeležili več kot 13.500 smrtnih žrtev med civilisti in prek 34.000 ranjenih. Dejanske številke naj bi bile še višje.Sklad ZN za otroke (Unicef) je medtem danes opozoril, da v Ukrajini močno narašča materialno pomanjkanje, zato so, kot so poudarili, nujno potrebne takojšnje naložbe v ključne storitve in sisteme za otroke.",
+    "eval_id": "eval_000024"
+  },
+  {
+    "question": "Kaj je ruski plinski gigant Gazprom napovedal glede dobave plina Ukrajini in kakšne so posledice nasilja v Ukrajini po navedbah izbranega izvora?",
+    "answer": "Gazprom je napovedal ustavitev tranzita ruskega plina prek Ukrajine v Evropo, saj je območje pod nadzorom ruske vojske in tehnično ni mogoče preusmeriti dobave [ChunkID: 9633]. Posledice nasilja v Ukrajini so vključevale konec sporazuma o tranzitu, zaradi česar je Gazprom ustavil dobavo plina prek Ukrajine [ChunkID: 15680].",
+    "references": [
+      {
+        "chunk_id": "9633",
+        "url": "https://24ur.com/novice/tujina/ukrajina/ukrajina-napovedala-ustavitev-tranzita-tretjine-ruskega-plina-v-evropo.html"
+      },
+      {
+        "chunk_id": "15680",
+        "url": "https://24ur.com/novice/gospodarstvo/obdobje-poceni-ruskega-plina-za-evropo-je-koncano.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"9633\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/ukrajina-napovedala-ustavitev-tranzita-tretjine-ruskega-plina-v-evropo.html\"}, {\"chunk_id\": \"15680\", \"url\": \"https://24ur.com/novice/gospodarstvo/obdobje-poceni-ruskega-plina-za-evropo-je-koncano.html\"}]",
+    "cited_chunk_ids": [
+      "15680",
+      "9633"
+    ],
+    "referenced_chunk_ids": [
+      "15680",
+      "9633"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 9633\nURL: https://24ur.com/novice/tujina/ukrajina/ukrajina-napovedala-ustavitev-tranzita-tretjine-ruskega-plina-v-evropo.html\nBesedilo:\nTako ne bo mogoče nadaljevati s transportom plina prek te točke na meji z Rusijo in prek kompresorske postaje Novopskov.Obe ležita v regiji Lugansk na vzhodu Ukrajine, na območju, ki je pod nadzorom ruske vojske, navaja izjava.Doslej je prek te točke iz Rusije v Evropo dnevno prišlo 32,6 milijona kubičnih metrov plina. Gazprom je doslej v Evropo pošiljal skupno okoli 100 milijonov kubičnih metrov plina dnevno, poroča nemška tiskovna agencija dpa.Gazprom \"za zdaj nima potrditve obstoja višje sile\", je po navedbah dpa za rusko tiskovno agencijo Interfax dejal tiskovni predstavnik Gazproma Sergej Kuprijanov. Da bi ustavljeno dobavo preusmerili na druge plinovode, tehnično ni mogoče, poroča dpa.Po pogodbah je največja dnevna dobava ruskega plina prek Ukrajine v Evropo 109 milijonov kubičnih metrov.\n\n---------------\n\n### ODSEK 2\nChunkID: 20432\nURL: https://24ur.com/novice/tujina/ukrajinski-naftogaz-zahteva-arbitrazo-gazprom-zazugal-s-sankcijami.html\nBesedilo:\nUkrajinski Naftogaz zahteva arbitražo, Gazprom zažugal s sankcijami. Potem ko je ukrajinska energetska družba Naftogaz zaradi spora z ruskim energetskim velikanom Gazprom na sodišču vložila zahtevo za arbitražo, je Gazprom zažugal s sankcijami. Če bi do teh prišlo, bi mu bilo prepovedano izpolnjevati obveznosti do Naftogaza. Ali to pomeni, da bi Evropa ostala brez ruskega plina, dobavljenega prek Ukrajine, ni jasno. Naftogaz se je na arbitražno sodišče Mednarodne trgovinske zbornice (ICC) obrnil, ker mu Gazprom ni izplačal opravljene storitve organizacije transporta zemeljskega plina po ozemlju Ukrajine v Evropo. Kot trdi v objavi z 9. septembra, rusko podjetje storitve ni izplačalo \"ne pravočasno ne v celoti\". \"Gazprom bomo prisilili k plačilu. Preučujemo tudi možnost dodatnih zahtevkov.\n\n---------------\n\n### ODSEK 3\nChunkID: 15680\nURL: https://24ur.com/novice/gospodarstvo/obdobje-poceni-ruskega-plina-za-evropo-je-koncano.html\nBesedilo:\nZ novim letom se je iztekel sporazum med Moskvo in Kijevom o tranzitu plina, ki ga Ukrajina zaradi nadaljevanja ruske invazije na državo noče podaljšati. Ruski energetski velikan Gazprom je bil zaradi tega davi prisiljen prekiniti dobavo plina prek Ukrajine v Evropo.Ukrajina je sicer že dlje časa poudarjala, da pogodbe zaradi ruske invazije ne namerava podaljšati, zaradi česar so se lahko evropske države na ta scenarij pripravile. Da je EU pripravljena na takšen razvoj dogodkov, so danes za francosko tiskovno agencijo AFP potrdili tudi v Evropski komisiji.Gazprom je danes po poročanju ruske tiskovne agencije Tass res sporočil, da je zaradi ukrajinske nepripravljenosti za podaljšanje dogovora ustavil tranzit plina ob 6. uri po srednjeevropskem času.",
+    "eval_id": "eval_000025"
+  },
+  {
+    "question": "Kaj je Liz Wahl povedala o razlogih za svoj odstop v etru na ruski televiziji in kako je opisala svojo izkušnjo z delom tam?",
+    "answer": "Liz Wahl je povedala, da je odstopila, ker se je Ruska televizija (RT) postala Putinovo \"trobilo\" in je poročala nepošteno o ukrajinski krizi ter Krimu, kar je vključevalo veliko cenzure in uporabo voditeljev kot orodja za promocijo ruskega predsednika [ChunkID: 18736]. Poudarila je, da ni mogla biti del televizijske mreže, ki jo financira ruska vlada in opravičuje Putinova dejanja [ChunkID: 18737]. Izkušnjo z delom je opisala kot težko, saj je bila prisiljena promovirati stališča, ki jih ne podpira, in je poudarila, da je odstop bil spontan, a resen [ChunkID: 18736].",
+    "references": [
+      {
+        "chunk_id": "18736",
+        "url": "https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html"
+      },
+      {
+        "chunk_id": "18737",
+        "url": "https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"18736\", \"url\": \"https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html\"}, {\"chunk_id\": \"18737\", \"url\": \"https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html\"}]",
+    "cited_chunk_ids": [
+      "18736",
+      "18737"
+    ],
+    "referenced_chunk_ids": [
+      "18736",
+      "18737"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 18735\nURL: https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html\nBesedilo:\nVoditeljica pojasnila svoj odstop v etru: Nisem mogla biti več Putinovo 'trobilo'. \"Ko so mi ponudili službo, mi je niso predstavili kot dejstvo, da bom Putinovo trobilo. A bolj, kot je kriza eskalirala, bolj sem to postajala,\" pravi ameriška sodelavka ruske televizije Russia Today, ki je svojemu delodajalcu podala odpoved kar v etru. \"Sčasoma moraš potegniti črto,\" še pravi. Ameriška sodelavka ruske televizije Russia Today Liz Wahl, ki je svojemu delodajalcu podala odpoved kar v etru, je za Sky News pojasnila svojo določitev. \"Ko sem začela delati tam, se mi je to zdela velika priložnost. Nikoli pa si nisem mislila, da bodo gledalcem vsiljevali Putinova pravila. Ko so mi ponudili službo, mi je niso predstavili kot dejstvo, da bom njegovo trobilo.\n\n---------------\n\n### ODSEK 2\nChunkID: 18737\nURL: https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html\nBesedilo:\n'Ponosna sem, da sem Američanka in verjamem v širjenje resnice'\"Moji stari straši so prišli sem kot begunci v času madžarske revolucije, ironično zato, da bi zbežali pred sovjetskimi silami,\" je med svojim odstopom v etru v četrtek dejala Wahlova in dodala, da je lahko zelo srečna, ker je odraščala v ZDA.Njen oče je bil vojni veteran, njen partner pa je zdravnik v vojaški bazi, kjer \"vsakodnevno gleda končno ceno, ki jo ljudje plačujejo za to državo\". \"Zato sama osebno ne morem biti del televizijske mreže, ki jo plačuje ruska vlada in opravičuje Putinova dejanja,\" je povedala.\n\n---------------\n\n### ODSEK 3\nChunkID: 18736\nURL: https://24ur.com/novice/svet/voditeljica-pojasnila-svoj-odstop-v-etru-nisem-mogla-biti-vec-putinovo-trobilo.html\nBesedilo:\nA bolj, kot je kriza eskalirala, bolj sem to postajala,\" je povedala Wahlova.Televizijo, ki jo financira ruska vlada, je označila za nepošteno pri poročanju o ukrajinski krizi in razmerah na Krimu, češ da je bilo ogromno cenzure, voditelje pa se je uporabljalo kot orodje za promocijo stališč ruskega predsednika. \"Moj odstop je bil nekoliko spontan. Tistega dne sem se odločila, da imam vsega dovolj,\" je dejala, čeprav je iz posnetka razvidno, da je imela besedilo vnaprej napisano.Ker je odpoved dala v živo v etru, je bila nervozna, priznava. \"A vedela sem, da moram to storiti. Sčasoma moraš potegniti črto,\" je še zaključila.",
+    "eval_id": "eval_000026"
+  },
+  {
+    "question": "Kaj je Mihail Gorbačov povedal o trenutnem stanju jedrskega orožja in odnosih med ZDA in Rusijo ter kakšen zgodovinski dogodek je izpostavil v intervjuju za Time magazine?",
+    "answer": "Mihail Gorbačov je opozoril, da se svet spet pripravlja na vojno [ChunkID: 17473], in pozval ruskega in ameriškega predsednika, naj zmanjšata svoja jedrska orožja [ChunkID: 17473]. V intervjuju je izpostavil svojo vlogo v 80. letih prejšnjega stoletja, ko je sodeloval z ZDA pri uničenju 80 odstotkov jedrskega orožja, ki se je nabralo med hladno vojno [ChunkID: 17473].",
+    "references": [
+      {
+        "chunk_id": "17473",
+        "url": "https://24ur.com/novice/svet/a-2.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"17473\", \"url\": \"https://24ur.com/novice/svet/a-2.html\"}]",
+    "cited_chunk_ids": [
+      "17473"
+    ],
+    "referenced_chunk_ids": [
+      "17473"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 17473\nURL: https://24ur.com/novice/svet/a-2.html\nBesedilo:\nDan po tem, ko so znanstveniki tako imenovano \"uro sodnega dne\", ki označuje trenutno grožnjo svetovnega uničenja, premaknili za 30 sekund bližje polnoči (za to potezo so se odločili glede na agresivno retoriko in napovedi ameriškega predsednika Donalda Trumpa), je podobno sporočilo svetu posredoval še zadnji sovjetski predsednik Mihail Sergejevič Gorbačov.Nova jedrska tekma med Rusijo in Združenimi državami Amerike kaže, kot da se svet spet pripravlja na vojno, je prepričan Gorbačov. Predsednika obeh velesil Vladimirja Putina in Donalda Trumpa je že pozval k zmanjšanju jedrskega arzenala. \"Politiki in vojaški voditelji zvenijo vedno bolj napadalno, obrambne doktrine pa vedno bolj nevarne. Vse kaže, kot da bi se svet pripravljal na vojno,\" je dejal v intervjuju za Time magazine. \"Odnosi med velesilami gredo že nekaj let iz slabega na slabše.\n\n---------------\n\n### ODSEK 2\nChunkID: 17474\nURL: https://24ur.com/novice/svet/a-2.html\nBesedilo:\nZagovorniki oboroževanja in vojaško-industrijski kompleks si že manejo roke. \"Gorbačov opozarja, da se moramo \"spraviti iz te situacije\". ZDA in Rusiji predlaga, da najdeta skupno resolucijo o obrambi pred jedrskim konfliktom. \"Mislim, da bi pobuda za tako resolucijo morala priti s strani Donalda Trumpa in Vladimirja Putina – predsednikov, katerih državi si lastita več kot 90 odstotkov svetovnega jedrskega arzenala in tako nosita posebno odgovornost. \"\"Jedrske vojne ni mogoče zmagati in se ne sme nikoli bojevati\"86-letni Gorbačov se je v intervjuju spomnil tudi svoje vloge v osemdesetih letih prejšnjega stoletja, ko je v sodelovanju z ZDA botroval uničenju 80 odstotkov jedrskega orožja, ki se je nabralo med hladno vojno.\n\n---------------\n\n### ODSEK 3\nChunkID: 17472\nURL: https://24ur.com/novice/svet/a-2.html\nBesedilo:\nGorbačov: Vse kaže, da se svet spet pripravlja na vojno. Mihail Gorbačov, ki je znan kot zadnji predsednik Sovjetske zveze in je v 80. letih prejšnjega stoletja sodeloval pri uničenju 80 odstotkov jedrskega orožja, poziva ruskega in amerišega predsednika, naj umirita svojo retoriko: \"Odnosi med velesilami gredo že nekaj let iz slabega na slabše. Vse kaže, kot da bi se svet spet pripravljal na vojno.\"",
+    "eval_id": "eval_000027"
+  },
+  {
+    "question": "Kolikokrat so ruski droni v dveh tednih napadli Kijev in kakšen je bil izid teh napadov po navedbah ukrajinske vojske in vodje vojaške uprave Kijeva Sergija Popka?",
+    "answer": "Ruska drona so napadla Kijev petič v dveh tednih, vendar je ukrajinski sistem protizračne obrambe uničil vse izstrelke preden so dosegli glavno mesto [ChunkID: 5099].",
+    "references": [
+      {
+        "chunk_id": "5099",
+        "url": "https://24ur.com/novice/tujina/ruski-droni-zopet-nad-kijev-vendar-prestolnice-niso-dosegli.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"5099\", \"url\": \"https://24ur.com/novice/tujina/ruski-droni-zopet-nad-kijev-vendar-prestolnice-niso-dosegli.html\"}]",
+    "cited_chunk_ids": [
+      "5099"
+    ],
+    "referenced_chunk_ids": [
+      "5099"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 5099\nURL: https://24ur.com/novice/tujina/ruski-droni-zopet-nad-kijev-vendar-prestolnice-niso-dosegli.html\nBesedilo:\nRuski droni znova nad Kijev, vendar prestolnice niso dosegli. Rusija je petič v dveh tednih z droni napadla Kijev, vendar je ukrajinski sistem protizračne obrambe uničil vse izstrelke, preden so ti dosegli ukrajinsko glavno mesto, je sporočila ukrajinska vojska. Žrtev ni bilo in ni poročil o morebitni večji škodi, je po navedbah agencije Reuters na Telegramu zapisal vodja vojaške uprave Kijeva Sergij Popko. \"Ti sistematični napadi ... z brezpilotnimi letali znova dokazujejo, da napadalec aktivno išče priložnost za napad na Kijev,\" je navedel. \"Preizkušajo nove taktike, iščejo nove pristopne poti do prestolnice in poskušajo razkriti lokacijo naše zračne obrambe,\" je dodal.Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov.\n\n---------------\n\n### ODSEK 2\nChunkID: 10283\nURL: https://24ur.com/novice/tujina/ukrajina/nov-val-ruskih-napadov-z-droni-stoltenberg-prvic-v-kijevu.html\nBesedilo:\nNov val ruskih napadov z droni, Stoltenberg prvič v Kijevu. Rusija je v zadnjih 24 urah Ukrajino napadla z več kot dvema ducatoma dronov iranske izdelave, je sporočil generalštab ukrajinske vojske. Dodali so, da je ukrajinska zračna obramba sestrelila 21 od 26 dronov tipa šahed-136, ki so zasnovani tako, da ob trku eksplodirajo. Na nenapovedan in svoj prvi obisk v Kijevu je medtem prispel generalni sekretar Nata Jens Stoltenberg. Obenem naj bi ukrajinske sile na vzhodu regije Doneck uspešno prestale 55 ruskih kopenskih napadov.\n\n---------------\n\n### ODSEK 3\nChunkID: 1287\nURL: https://24ur.com/novice/tujina/ukrajina/250-dronov-14-balisticnih-raket-nad-kijev-znova-smo-tarca-napadov-sovraznika.html\nBesedilo:\nV Kijevu in njegovih predmestjih nenehno delujejo sistemi zračne obrambe,\" je zapisal na Telegramu.Vodja kijevske vojaške uprave Timur Tkačenko pa je sporočil, da so razbitine dronov povzročile požare v stanovanjskih stavbah v dveh okrožjih prestolnice.Po poročanju Sky Newsa, je Rusija Kijev napadla z 250 droni in 14 balističnimi raketami.Rusija prestregla napade nad svojimi regijamiIz Moskve so medtem sporočili, da so ruski sistemi protizračne obrambe ponoči nad različnimi deli Rusije uničili 94 ukrajinskih dronov, od tega skoraj tretjino na regijo Belgorod.Ruska vojska je sporočila, da je Ukrajina od torka Rusijo napadla s 788 brezpilotnimi letali in raketami, od katerih jih je ruska zračna obramba sestrelila 776.Po navedbah ruskega obrambnega ministrstva so medtem ruske enote zavzele še tri naselja na vzhodu Ukrajine - Stupočki, Otradne in Loknia, ki se nahajajo v Donecku in Sumiju.",
+    "eval_id": "eval_000028"
+  },
+  {
+    "question": "Kako se je spremenila proizvodnja v majhni tovarni na levem bregu reke Dneper v Kijevu in kako zaposleni opisujejo pomen svojega dela?",
+    "answer": "Proizvodnja v tovarni je spremenila svoj usmeritev s proizvodnje hotelskih uniform v izdelavo ukrajinskih zastav. Zaposleni opisujejo svoje delo kot koristno in pozitivno, saj jih te barve v zastavah vnetijo užitek in veselje [ChunkID: 7093].",
+    "references": [
+      {
+        "chunk_id": "7093",
+        "url": "https://24ur.com/novice/tujina/ukrajina/sest-mesecev-kasneje-bliza-se-mrzla-zima-status-quo-pa-je-drag.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"7093\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/sest-mesecev-kasneje-bliza-se-mrzla-zima-status-quo-pa-je-drag.html\"}]",
+    "cited_chunk_ids": [
+      "7093"
+    ],
+    "referenced_chunk_ids": [
+      "7093"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 7093\nURL: https://24ur.com/novice/tujina/ukrajina/sest-mesecev-kasneje-bliza-se-mrzla-zima-status-quo-pa-je-drag.html\nBesedilo:\nPrepričan je, da lahko Ukrajina zmaga v tej vojni, kajti bolj ko si Rusija prizadeva Ukrajino potegniti v svojo orbito, močnejši postaja občutek nacionalne identitete njenih ljudi.Tako novinarji ugotavljajo tudi na terenu. V majhni tovarni na levem bregu reke Dneper v Kijevu je podjetje nekoč izdelovalo hotelske uniforme, zdaj pa proizvaja ukrajinske zastave. \"Vsak Ukrajinec čuti te barve in vidimo jih v vsem – na nebu, v pšenici. To nam daje užitek, veselje in pozitivna čustva, ker je naše delo koristno,\" pravijo zaposleni.\n\n---------------\n\n### ODSEK 2\nChunkID: 5000\nURL: https://24ur.com/novice/tujina/razstrelili-velik-jez-v-blizini-hersona.html\nBesedilo:\nOmogoči piškotke Jez blizu frontne črte na jugu Ukrajine je bil močno poškodovan minulo noč, ruska in ukrajinska stran pa krivdo za incident zvračata druga na drugo. 3,2 kilometra in 30 metrov dolg jez so na Dnepru zgradili leta 1956 v sklopu hidroelektrarne.Prokudin je dodal, da se je začela evakuacija na levem bregu reke Dneper, kjer je tudi mesto Herson, ki so ga osvobodile ukrajinske sile. \"Ugotavljamo obseg uničenja, hitrost in količino vode ter verjetna poplavljena območja,\" je pojasnil. Nekdanji minister in svetovalec ukrajinskega notranjega ministrstva Anton Geraščenko je na družbenih omrežjih zapisal, da bi morebitne poplave lahko prizadele najmanj 16.000 ljudi. Prebivalce iz ogroženih regij z avtobusi evakuirajo v Herson, nato pa jih bodo premestili v različna mesta po državi, tudi prestolnico Kijev.\n\n---------------\n\n### ODSEK 3\nChunkID: 9066\nURL: https://24ur.com/novice/tujina/ukrajina/ukrajina-analiza.html\nBesedilo:\nRezultati tega so bili vidni, ko so Ukrajinci na Črnem morju zdesetkali rusko floto in sprožili vrsto eksplozij v rafinerijah in skladiščih na ruskem ozemlju. Čeprav Kijev redko komentira te napade, se domneva, da so jih povzročila brezpilotna letala ukrajinske izdelave.Takšni ukrajinski uspehi so pomembni, vendar bo preobrat na fronti zahteval veliko prednost na bojišču, predvsem s topniškim strelivom in droni. To pa pomeni znatno povečanje vojaške proizvodnje ne samo v Evropi in ZDA, pač pa tudi znotraj Ukrajine. Preberi še Ukrajinsko nebo bo varovala nova pošiljka slovenskih dronovIn medtem ko se Ukrajina trudi razširiti orožarsko industrijo v vojnih razmerah, ji pomagajo zahodne države, obrambna industrija in zasebniki. Nemški Rheinmetall, na primer, namerava letos začeti proizvajati oklepna vozila v Ukrajini.",
+    "eval_id": "eval_000029"
+  },
+  {
+    "question": "Kdo vodi ekipo IAEA, koliko članov šteje, kakšne naloge bodo opravili v nuklearki v Zaporožju in kakšna so varnostna zagotovila za pot do tja?",
+    "answer": "Ekipa IAEA vodi Rafael Grossi [ChunkID: 7167], sestavljena je iz 13 strokovnjakov [ChunkID: 7169]. Naloge vključujejo ocenjevanje fizične škode, stanja osebja, funkcionalnosti varnostnih sistemov in izvedbo nujnih nadzornih dejavnosti [ChunkID: 7169]. Varnostna zagotovila so bile pridobljena od obeh strani [ChunkID: 7167].",
+    "references": [
+      {
+        "chunk_id": "7167",
+        "url": "https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html"
+      },
+      {
+        "chunk_id": "7169",
+        "url": "https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"7167\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html\"}, {\"chunk_id\": \"7169\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html\"}]",
+    "cited_chunk_ids": [
+      "7167",
+      "7169"
+    ],
+    "referenced_chunk_ids": [
+      "7167",
+      "7169"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 7167\nURL: https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html\nBesedilo:\nEkipa IAEA odšla na pot proti nuklearki v Zaporožju. Inšpekcijska ekipa Mednarodne agencije za jedrsko energijo (IAEA) se je zgodaj zjutraj odpravila v jedrsko elektrarno Zaporožje, ki je trenutno pod ruskim nadzorom, je sporočil vodja agencije Rafael Grossi. Ob tem je poudaril, da je ekipa od obeh sprtih strani dobila vsa potrebna varnostna zagotovila. EU je medtem Ukrajini kot preventivni varnostni ukrep za zvišanje ravni zaščite pred radioaktivnim sevanjem darovala 5,5 milijona tablet kalijevega jodida. Popoldne so sporočili, da je ekipa že prispela v mesto Zaporožje, ki je sicer pod ukrajinskim nadzorom, od elektrarne pa je oddaljeno približno 120 kilometrov. Pot do elektrarne bo ekipa nadaljevala v četrtek. \"Res se zelo zavedam pomembnosti tega trenutka, vendar smo pripravljeni. IAEA je pripravljena. Po končani misiji bomo poročali.\n\n---------------\n\n### ODSEK 2\nChunkID: 7169\nURL: https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html\nBesedilo:\nOb tem je še enkrat izpostavil potrebo po demilitarizaciji območja v okolici elektrarne.Ekipa 13 strokovnjakov IAEA pod vodstvom Grossija naj bi v oblegani nuklearki v Zaporožju ostala predvidoma do sobote. Sprti strani sta obisk pozdravili, v Kijevu pa so ob tem misijo označili za najtežjo v zgodovini agencije. Strokovnjaki naj bi sicer ocenili fizično škodo v elektrarni in stanje osebja, ugotovili funkcionalnost njenih varnostnih in zaščitnih sistemov in izvedli nujne nadzorne dejavnosti.Ruske sile so jedrsko elektrarno s šestimi reaktorji, ki velja za največjo v Evropi, zasedle kmalu po začetku invazije na Ukrajino. Strah pred jedrsko katastrofo se je povečal po tem, ko so se v začetku tega meseca okrepili spopadi v njeni okolici.\n\n---------------\n\n### ODSEK 3\nChunkID: 7168\nURL: https://24ur.com/novice/tujina/ukrajina/ekipa-iaea-odsla-na-pot-proti-nuklearki-v-zaporozju.html\nBesedilo:\nTam bomo preživeli nekaj dni,\" je ob odhodu dejal Grossi. Dodal je, da se misija po šestih mesecih prizadevanj končno premika naprej.Vodja IAEA je poudaril tudi, da je njegova ekipa dobila vsa potrebna zagotovila za varno pot do vojnega območja, ki je od Kijeva oddaljeno približno 450 kilometrov. \"Gremo na okupirano ozemlje in za to so potrebna izrecna zagotovila ne samo ruske strani, ampak tudi ukrajinske,\" je poudaril, preden se je v konvoju desetih belih terenskih vozil z oznakami ZN odpravil proti Zaporožju.V Kijevu misijo označili za najtežjo v zgodovini agencijeV torek je ekipo sprejel ukrajinski predsednik Volodimir Zelenski, ki se je strokovnjakom zahvalil za obisk in jih opozoril na nevarne razmere na območju nuklearke.",
+    "eval_id": "eval_000030"
+  },
+  {
+    "question": "Kakšen je namen sredstev, ki bodo namenjena v obrambni proračun, in kakšna podjetja se lahko prijavijo za sodelovanje pri proizvodnji streliva?",
+    "answer": "Sredstva iz obrambnega proračuna so namenjena podpori gospodarstvu, saj se večji del sredstev vrača v ekonomijo [ChunkID: 5703]. Za sodelovanje pri proizvodnji streliva se lahko prijavijo tudi podjetja brez orožarske proizvodnje, ki bi lahko izdelovala del streliva ali granate, na primer tulce ali kovinsko ohišje mine [ChunkID: 5703]. Slovenija išče podjetja, ki bi lahko proizvajala pehotno in topniško strelivo, vključno z granati kalibra 155 mm in 120 mm [ChunkID: 5700].",
+    "references": [
+      {
+        "chunk_id": "5703",
+        "url": "https://24ur.com/novice/svet/mors-isce-podjetja-ki-bi-sodelovala-pri-proizvodnji-streliva.html"
+      },
+      {
+        "chunk_id": "5700",
+        "url": "https://24ur.com/novice/svet/mors-isce-podjetja-ki-bi-sodelovala-pri-proizvodnji-streliva.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"5703\", \"url\": \"https://24ur.com/novice/svet/mors-isce-podjetja-ki-bi-sodelovala-pri-proizvodnji-streliva.html\"}, {\"chunk_id\": \"5700\", \"url\": \"https://24ur.com/novice/svet/mors-isce-podjetja-ki-bi-sodelovala-pri-proizvodnji-streliva.html\"}]",
+    "cited_chunk_ids": [
+      "5700",
+      "5703"
+    ],
+    "referenced_chunk_ids": [
+      "5700",
+      "5703"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 5703\nURL: https://24ur.com/novice/svet/mors-isce-podjetja-ki-bi-sodelovala-pri-proizvodnji-streliva.html\nBesedilo:\nSredstva, ki se bodo namenjala v obrambni proračun, bodo v zelo veliki meri šla nazaj v gospodarstvo. \"Prijavijo se lahko tudi podjetja, ki nimajo orožarske proizvodnje, a bi lahko proizvajala le del streliva ali granate. Če bi lahko livarne izdelovale tulce ali kovinsko ohišje mine, bi jih lahko drugo podjetje na primer polnilo. Koliko slovenskih podjetji bi lahko sodelovalo, bo znano čez teden dni, ko se poziv izteče.\n\n---------------\n\n### ODSEK 2\nChunkID: 20690\nURL: https://24ur.com/novice/tujina/ukrajina/zunanji-ministri-eu-na-zgodovinskem-zasedanju-v-kijevu.html\nBesedilo:\nPodrobnosti na skupni novinarski konferenci s Kulebo ni pojasnil, poudaril je zgolj, da je treba do konca leta doseči dogovor o petih milijardah za leto 2024.Sredstva iz EPF so med drugim namenjena sofinanciranju dobave topniških izstrelkov Ukrajini. Do njih bo tako upravičenih tudi sedem članic EU, ki so prek Evropske obrambne agencije (EDA) pri evropskih obrambnih podjetjih skupaj naročile izstrelke kalibra 155 milimetrov, so danes sporočili z agencije.Po besedah zunanjepolitičnega predstavnika Unije so na današnjem zasedanju govorili tudi o iskanju miru v Ukrajini. Poudaril je, da je mirovni načrt ukrajinskega predsednika Volodimirja Zelenskega edina mirovna pobuda, o kateri trenutno razpravlja mednarodna skupnost.\n\n---------------\n\n### ODSEK 3\nChunkID: 5700\nURL: https://24ur.com/novice/svet/mors-isce-podjetja-ki-bi-sodelovala-pri-proizvodnji-streliva.html\nBesedilo:\nMors išče podjetja, ki bi sodelovala pri proizvodnji streliva. Iz Moskve je prišla napoved, da bo Rusija letos izdelala več kot 1500 tankov. Evropska unija pa bo v letu dni v Ukrajino poslala milijon kosov topniškega streliva. Ta količina naj bi po nekaterih ocenah zadostovala za pol leta vojne. A strelivo bo treba proizvesti, saj so številna skladišča že prazna. Tudi slovensko ministrstvo za obrambo s pozivom išče slovenska podjetja, ki bi bila pripravljena sodelovati pri proizvodnji streliva. \"Govorimo o pehotnem strelivu, o topniškem strelivu, torej večinoma granate 155 milimetrov, in govorimo o minometnem strelivu, granate 120 milimetrov, 60 ali 80, odvisno od kalibra.",
+    "eval_id": "eval_000031"
+  },
+  {
+    "question": "Kaj je Julija Navalna povedala o učinkovitosti resolucij in sankcij proti Vladimirju Putinu ter kakšen pristop je predlagala v boju proti ruskemu režimu?",
+    "answer": "Julija Navalna je povedala, da resolucije in sankcije proti Putinu ne delujejo, saj se ne razlikujejo od prejšnjih, in da je potreben nov pristop, kot so metode boja proti organiziranemu kriminalu [ChunkID: 16753]. Predlagala je, da se mora boriti proti \"kriminalni združbi\", ki jo vodi Putin, s politično inovacijo [ChunkID: 16753]. Poleg tega je poudarila, da Putin \"zmožen vsega\" in da se z njim ne more pogajati [ChunkID: 11645].",
+    "references": [
+      {
+        "chunk_id": "16753",
+        "url": "https://24ur.com/novice/tujina/navalna-resolucije-in-sankcije-putina-ne-ganejo-potreben-je-nov-pristop.html"
+      },
+      {
+        "chunk_id": "11645",
+        "url": "https://24ur.com/novice/tujina/evropski-parlament-putin-mora-odgovarjati-za-smrt-navalnega.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"16753\", \"url\": \"https://24ur.com/novice/tujina/navalna-resolucije-in-sankcije-putina-ne-ganejo-potreben-je-nov-pristop.html\"}, {\"chunk_id\": \"11645\", \"url\": \"https://24ur.com/novice/tujina/evropski-parlament-putin-mora-odgovarjati-za-smrt-navalnega.html\"}]",
+    "cited_chunk_ids": [
+      "11645",
+      "16753"
+    ],
+    "referenced_chunk_ids": [
+      "11645",
+      "16753"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 16753\nURL: https://24ur.com/novice/tujina/navalna-resolucije-in-sankcije-putina-ne-ganejo-potreben-je-nov-pristop.html\nBesedilo:\nNavalna: Resolucije in sankcije Putina ne ganejo, potreben je nov pristop. Žena umrlega ruskega opozicijskega voditelja Alekseja Navalnega Julija Navalna je v Evropskem parlamentu pozvala k inovativnemu pristopu v boju proti ruskemu režimu in predsedniku Vladimirju Putinu, ki mora iti prek resolucij. Izrazila pa je tudi prepričanje, da bo Rusija nekoč svobodna in demokratična. Navalna je Putina označila za vodjo skupine organiziranega kriminala. \"Vi in vsi mi se moramo boriti proti tej kriminalni združbi. In politična inovacija tu je, da pri tem uporabimo metode boja proti organiziranemu kriminalu,\" je pozvala.Kot je pojasnila, Putina nikakor ne bosta prizadela še ena resolucija ali sklop sankcij, ki se ne razlikuje od prejšnjega.\n\n---------------\n\n### ODSEK 2\nChunkID: 11645\nURL: https://24ur.com/novice/tujina/evropski-parlament-putin-mora-odgovarjati-za-smrt-navalnega.html\nBesedilo:\nPoleg tega morajo nadaljevati politično, gospodarsko, finančno in vojaško podporo Ukrajini, saj je to najboljši odgovor na nasilne prakse kremeljskega režima, so sporočili iz Evropskega parlamenta.Preberi še Navalna: Resolucije in sankcije Putina ne ganejo, potreben je nov pristopVdova Navalnega Julija Navalna, ki je v sredo nagovorila poslance Evropskega parlamenta v Strasbourgu, je v svojem govoru pozvala EU k okrepljenemu boju proti Putinu in njegovemu režimu. Ruske oblasti na čelu s Putinom je obtožila, da so odgovorne za moževo smrt. To je znova pokazalo, da je \"Putin zmožen vsega in da se z njim ne moreš pogajati\", je dejala Navalna.\n\n---------------\n\n### ODSEK 3\nChunkID: 15302\nURL: https://24ur.com/novice/tujina/zda-z-obtoznicami-proti-ruskim-oligarhom-biden-se-je-srecal-z-julijo-navalno.html\nBesedilo:\n\"Danes napovedujem več kot 500 novih sankcij proti Rusiji zaradi njene še vedno trajajoče vojne v Ukrajini in smrti Alekseja Navalnega, pogumnega borca proti korupciji in največjega nasprotnika ruskega predsednika Vladimirja Putina,\" je dejal predsednik ZDA.Glede novih sankcij je dejal še, da bodo \"usmerjene proti posameznikom, povezanim s kaznijo, ki jo je prestajal Navalni, pa tudi proti ruskemu finančnemu sektorju, obrambni industriji in kršiteljem obstoječih sankcij na več celinah\".Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov.",
+    "eval_id": "eval_000032"
+  },
+  {
+    "question": "Kaj se je zgodilo v zaklonišču v Kijevu v treh dneh, ki jih je nekdo preživel tam, in kdo pripoveduje o razdeljevanju osnovnih življenjskih potrebščin v mestu Černigov?",
+    "answer": "V treh dneh v zaklonišču v Kijevu se je rodila dva dojenčka [ChunkID: 8266, 8268]. O razdeljevanju osnovnih potrebščin v Černigovu pripoveduje prostovoljka Julija Karazova [ChunkID: 8266].",
+    "references": [
+      {
+        "chunk_id": "8266",
+        "url": "https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html"
+      },
+      {
+        "chunk_id": "8268",
+        "url": "https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"8266\", \"url\": \"https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html\"}, {\"chunk_id\": \"8268\", \"url\": \"https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html\"}]",
+    "cited_chunk_ids": [
+      "8266",
+      "8266, 8268"
+    ],
+    "referenced_chunk_ids": [
+      "8266",
+      "8268"
+    ],
+    "citation_reference_match": false,
+    "context": "### ODSEK 1\nChunkID: 8266\nURL: https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html\nBesedilo:\nV treh dneh, ki jih je preživel v improviziranem zaklonišču, pa sta se rodila tudi dva dojenčka. 1 5 Bolnišnica v kleti v Kijevu APBolnišnica v kleti v Kijevu APBolnišnica v kleti v Kijevu APBolnišnica v kleti v Kijevu APljudje v zaklonišču APTudi to noč prebivalci Černigova, mesta na severu Ukrajine, zaradi obstreljevanja in bombardiranja niso zatisnili niti očesa. Zjutraj je imelo mesto popolnoma drugačno podobo. \"To se je zgodilo kraju, kjer živim. Tukaj imate. To je realnost, v kateri živimo,\" pripoveduje Julija Karazova, prostovoljka iz Černigova. Medtem ko se številni prebivalci iz strahu pred bombnimi napadi skrivajo v zakloniščih, se prostovoljka Julija vozi po mestu in najbolj prizadetim razvaža osnovne življenjske potrebščine. Redkih nekaj minut, ko ni na poti, izkoristi za to, da obišče družino.\n\n---------------\n\n### ODSEK 2\nChunkID: 8268\nURL: https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html\nBesedilo:\nPreden mu je uspelo pobegniti na Zahod, je več kot tri dni preživel v zaklonišču. Nagneteni smo bili v umazani kleti brez osnovnih potrebščin, pripoveduje. \"Bilo nas je približno 70, otroci, odrasli, ženske, starejši, ki ne morejo hoditi. V tistih treh dneh sta se v zaklonišču celo rodila dva dojenčka. Morda se sliši nepredstavljivo,\" pravi kijevski zdravnik, a če so ruski vojaki ranjeni, pomagamo tudi njim. In s tem jim pokažemo, da smo boljši od njih, še doda. \"Putin hoče iti do konca. Mogoče bo uničil celotno Ukrajino. To je zelo bolan in zelo nor človek, zato ne vem, kaj pričakovati,\" zatrjuje Vus. A hkrati vsi trije opažajo, da Ukrajinci še nikoli niso bili tako enotni.\n\n---------------\n\n### ODSEK 3\nChunkID: 8265\nURL: https://24ur.com/novice/tujina/nagneteni-smo-bili-v-umazani-kleti-brez-osnovnih-potrebscin.html\nBesedilo:\n'Nagneteni smo bili v umazani kleti brez osnovnih potrebščin'. Kamorkoli seže ruska roka, sledi uničenje, pripovedujejo zdravnik iz Kijeva, prostovoljka iz Černigova in Kijevčan, ki mu je uspelo pobegniti na Zahod. Za našo oddajo so opisali razmere v obleganih ukrajinskih mestih. Mesto Černigov je trenutno v ruševinah. Tam je zaradi zračnih napadov umrlo 47 civilistov. Tudi v Kijevu vlada vojno stanje. Urgentne službe imamo polne roke dela, delamo dan in noč, pripoveduje kijevski zdravnik. Ko je potrebno, pa oskrbijo tudi ruske vojake. Pred zračnimi napadi se prebivalci Kijeva zatekajo v zaklonišča. Ko v zakloniščih ni več prostora, se skrivajo v kleteh in parkirnih hišah. Tam je mrzlo in velika gneča, pripoveduje Kijevčan.",
+    "eval_id": "eval_000033"
+  },
+  {
+    "question": "Kaj je povzročilo zaostritev spora med Rusijo in Gruzijo glede čečenskih borcev in kakšne obtožbe je Rusija naslovila na Gruzijo?",
+    "answer": "Zaostritev spora med Rusijo in Gruzijo je povzročila ruska letalska napada na severna območja Gruzije, kjer se skrivajo čečenski uporniki [ChunkID: 19319]. Rusija je Gruzijo obtožila, da je čečenskim upornikom dovolila neovirano vstopiti na jug Čečenije, kjer so ubili osem pripadnikov ruskih obmejnih enot [ChunkID: 19319].",
+    "references": [
+      {
+        "chunk_id": "19319",
+        "url": "https://24ur.com/novice/svet/cecenski-borci-vir-spora-med-rusijo-in-gruzijo.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"19319\", \"url\": \"https://24ur.com/novice/svet/cecenski-borci-vir-spora-med-rusijo-in-gruzijo.html\"}]",
+    "cited_chunk_ids": [
+      "19319"
+    ],
+    "referenced_chunk_ids": [
+      "19319"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 19319\nURL: https://24ur.com/novice/svet/cecenski-borci-vir-spora-med-rusijo-in-gruzijo.html\nBesedilo:\nČečenski borci vir spora med Rusijo in Gruzijo. Po ruskih letalskih napadih na severna območja Gruzije, kjer naj bi se skrivali čečenski uporniki, se je spor med državama še zaostril. Rusko zunanje ministrstvo je gruzijskega veleposlanika Abačidza poklicalo na pogovor, v katerem je Rusija obsodila odnos Tbilisija do čečenskih \"teroristov\". Moskva gruzijskim oblastem pripisuje \"vso odgovornost\" za sobotni vdor čečenskih borcev na rusko ozemlje. Rusija trdi, da je Gruzija skupini čečenskih upornikov, ki se skrivajo v severni gruzijski soteski Pankisi, dovolila neovirano vstopiti na jug Čečenije, kjer so uporniki ubili osem pripadnikov ruskih obmejnih enot.\n\n---------------\n\n### ODSEK 2\nChunkID: 19263\nURL: https://24ur.com/novice/svet/moskva-proti-tbilisiju.html\nBesedilo:\nMoskva proti Tbilisiju. Potem ko je Gruzija aretirala štiri ruske častnike, ki naj bi vohunili, se je Rusija obrnila na Varnostni svet ZN. Gruzinske oblasti so v sredo aretirale štiri ruske častnike, ki jih obtožujejo vohunjenja, policija pa je obkolila poveljstvo ruskih sil v Tbilisiju. S tem se je začel diplomatski spor med sosednjima državama, ki se vse bolj zaostruje.Razmere med Rusijo in Gruzijo so se močno zaostrile v zadnjih tednih, ko se je ta država z zvezo NATO dogovorila, da bodo začeli pogovore o tesnejšem zavezništvu. Rusija je v Portorožu članice zavezništva obtožila, da Gruziji prodajajo orožje.Gruzija Rusijo obtožuje, da s podporo separatističnim težnjam Abhazije in Južne Osetije spodkopava njeno oblast.Hkrati trdijo, da je Moskva začela gospodarsko vojno proti Gruziji, saj naj bi bojkotirala uvoz gruzinskih izdelkov.\n\n---------------\n\n### ODSEK 3\nChunkID: 19259\nURL: https://24ur.com/novice/svet/spor-se-zaostruje.html\nBesedilo:\nSpor se zaostruje. Gruzija grozi z izgonom aretiranih ruskih vojakov, Rusija pa je odložila umik svojih čet iz Gruzije. V luči stopnjevanja napetosti med Gruzijo in njeno sosedo Rusijo je slednja, ki ima v Gruziji še dve vojaški oporišči, odložila umik svojih čet iz te države, ki naj bi bil sicer končan do konca leta 2008. Kot je povedal ruski poveljnik severnokavkaškega vojaškega okrožja, general Aleksander Baranov, so letošnji načrti za umik preostanka ruskih vojakov iz Gruzije do nadaljnjega odloženi.Rusija medtem nadaljuje z evakuacijo svojega osebja iz Tbilisija, kjer naj bi Rusi ne bili več varni.",
+    "eval_id": "eval_000034"
+  },
+  {
+    "question": "Kaj je Roman Abramovič storil s svojim premoženjem tik pred rusko invazijo na Ukrajino februarja 2022 in kako se je spremenil delež njegovih otrok v njegovem premoženju po tem obdobju?",
+    "answer": "Roman Abramovič je pred rusko invazijo na Ukrajino februarja 2022 svoje premoženje prepisoval na svoje otroke, med drugim je februarja 2022 v roke svojih potomcev predal deset čezmejnih skladov z ukupno vrednostjo slabe štiri milijarde evrov [ChunkID: 8857]. Po tem obdobju so se deleže njegovih otrok v njegovem premoženju povečali, saj so si že pred predajo premoženja lastili raznolike deleže njegovih podjetij, jaht, letal in nepremičnin, a so z izvedbo tega prenosu pridobili dodatne sredstva.",
+    "references": [
+      {
+        "chunk_id": "8857",
+        "url": "https://24ur.com/novice/tujina/tik-pred-rusko-invazijo-abramovic-svoje-premozenje-prenesel-na-otroke.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"8857\", \"url\": \"https://24ur.com/novice/tujina/tik-pred-rusko-invazijo-abramovic-svoje-premozenje-prenesel-na-otroke.html\"}]",
+    "cited_chunk_ids": [
+      "8857"
+    ],
+    "referenced_chunk_ids": [
+      "8857"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 8857\nURL: https://24ur.com/novice/tujina/tik-pred-rusko-invazijo-abramovic-svoje-premozenje-prenesel-na-otroke.html\nBesedilo:\nTik pred rusko invazijo Abramovič svoje premoženje prenesel na otroke. Luksuzne posesti, superjahte, helikopterji, zasebna letala ... Vse to si je pred začetkom ruske invazije na Ukrajino lastil ruski oligarh Roman Abramovič. A še pred prvim napadom Rusije na Ukrajino lanskega februarja je svoje premoženje začel prepisovati na svoje otroke, s čimer je uspešno obvaroval 'svoje' imetje. Med drugim je februarja 2022 v roke svojih potomcev predal deset čezmejnih skladov. Skupna sredstva v vseh so znašala slabe štiri milijarde evrov, prenesla pa so se na sedem njegovih otrok. Marca se je nato Unija odločila, da bo proti Putinovemu zavezniku in poslovnežu uvedla sankcije, med katerimi je tudi zaseg premoženja. Njegovi otroci so si sicer že pred predajo premoženja lastili raznolike deleže njegovih podjetij, jaht, letal in nepremičnin.\n\n---------------\n\n### ODSEK 2\nChunkID: 8447\nURL: https://24ur.com/novice/tujina/oligarhi.html\nBesedilo:\nRoman Abramovič, \"Putinov športni bankir\", ki ima pod palcem 18 milijard dolarjev in bo del pogače zdaj namenil pomoči Ukrajini, je le eden od 500 najbogatejših ruskih oligarhov, ki imajo pod palcem vsak po najmanj 100 milijonov dolarjev, skupaj pa v rokah 40 % ruskega bogastva, je razkrila skupina Boston Consulting.Preberi še Abramovič bo prodal Chelsea in ves denar namenil žrtvam vojne v UkrajiniOb Abramoviču, lastniku britanskega nogometnega kluba Chelsea, so v milijardnih višavah še superbogataši:- Aleksej Mordašov, jeklar, 29,1 milijarde,- Vladimir Potanin, kovinarski mogotec, 27 milijard,- Vladimir Lisin, jeklar in transportnik, 26,2 milijarde in - Vagit Alekperov, naftar, 24,9 milijarde.Vojna proti njihovemu bogastvu je tako rekoč jedrsko orožje, ki poleg njih prizadene tudi druge Ruse in Evropejce - a vsaj ne pomeni pogubnega uničenja planeta, položaj oslikuje ekonomist dr. Matej Lahovnik.\n\n---------------\n\n### ODSEK 3\nChunkID: 14709\nURL: https://24ur.com/novice/tujina/abramovic.html\nBesedilo:\nAbramoviču na Otoku zamrznili premoženje. Sankcije zaradi ruskega napada na Ukrajino so doletele tudi Romana Abramoviča. Je namreč eden od sedmih ruskih oligarhov, ki jim je britanska vlada uvedla sankcije. Pod vprašajem je tudi prodaja kluba Chelsea, saj Abramovič ne sme potovati na Otok niti opravljati transakcij s posamezniki ali podjetji znotraj države. Ruski lastnik angleškega nogometnega kluba Chelsea, Roman Abramovič, je tarča zadnjih sankcij britanske vlade. Med drugim so mu zamrznili premoženje v Združenem kraljestvu in mu prepovedali potovanje na Otok. Gre za odgovor na rusko invazijo na Ukrajino. Sankcije so usmerjene proti ruskim bogatašem, ki imajo svoje premoženje v Združenem kraljestvu. Britanski premier Boris Johnson je ob tem dejal, da ne more biti nobenih varnih zatočišč za tiste, ki podpirajo invazijo.",
+    "eval_id": "eval_000035"
+  },
+  {
+    "question": "Katera ruska letala so preletela ameriški rušilec USS Donald Cook v Baltskem morju in kakšne so bile okoliščine teh preletov?",
+    "answer": "Ruska bojna letala so večkrat nizko preletela ameriško vojaško ladjo USS Donald Cook v Baltskem morju, simulirala napad in se ni odzvala na večkratna varnostna opozorila [ChunkID: 20615]. Nad ladjo je v nizki višini večkrat zaokrožil tudi ruski vojaški helikopter. Incident je potrdil Pentagon, ki je zaznamoval agresivne manevre ruskih letal v neposredni bližini ladje.",
+    "references": [
+      {
+        "chunk_id": "20615",
+        "url": "https://24ur.com/novice/svet/ruska-bojna-letala-veckrat-preletela-ameriski-rusilec-v-baltskem-morju.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"20615\", \"url\": \"https://24ur.com/novice/svet/ruska-bojna-letala-veckrat-preletela-ameriski-rusilec-v-baltskem-morju.html\"}]",
+    "cited_chunk_ids": [
+      "20615"
+    ],
+    "referenced_chunk_ids": [
+      "20615"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 20615\nURL: https://24ur.com/novice/svet/ruska-bojna-letala-veckrat-preletela-ameriski-rusilec-v-baltskem-morju.html\nBesedilo:\nVIDEO: Ruska bojna letala večkrat preletela ameriški rušilec v Baltskem morju. Napetosti med ZDA in Rusijo se znova stopnjujejo. Ruska bojna letala so večkrat nizko preletela ameriško vojaško ladjo v Baltskem morju. Letalo je simuliralo napad in se ni odzvalo na večkratna varnostna opozorila, so sporočili iz evropskega poveljstva ameriške vojske. Nad ladjo je v nizki višini večkrat zaokrožil tudi ruski vojaški helikopter. Ruska bojna letala so ta teden večkrat nizko preletela ameriško vojaško ladjo v Baltskem morju, so v sredo sporočili iz Pentagona. Kot so zatrdili, so ruska letala v ponedeljek in torek izvedla agresivne manevre v neposredni bližini rušilca USS Donald Cook, ki je bil v mednarodnih vodah.Nad ladjo je v torek na nizki višini večkrat zaokrožil tudi ruski vojaški helikopter, s katerega so fotografirali.\n\n---------------\n\n### ODSEK 2\nChunkID: 12939\nURL: https://24ur.com/novice/tujina/rusija-na-daljnem-vzhodu-prestregla-ameriski-rusilec.html\nBesedilo:\nRusija na Daljnem vzhodu prestregla ameriški rušilec. Rusko obrambno ministrstvo je sporočilo, da je ruska mornarica v Japonskem morju prestregla ameriški rušilec, ki naj bi vplul v ruske teritorialne vode. Tovrstni incidenti med ZDA in Rusijo so sicer precej redki, a po poročanju tujih tiskovnih agencij kažejo zdajšnje stanje odnosov med obema velesilama, ki so na zelo nizki ravni. Glede na sporočilo ruskega obrambnega ministrstva je ameriški raketni rušilec USS John S. McCain nekaj čez 5. uro po srednjeevropskem času vplul v ruske ozemeljske vode v Zalivu Petra velikega. Vplul naj bi kar dva kilometra globoko čez rusko mejo.Ruski rušilec Admiral Vinogradov je nato Američanom zagrozil, da jih bodo iz ruskih voda pregnali tudi s silo, če bo treba.\n\n---------------\n\n### ODSEK 3\nChunkID: 17718\nURL: https://24ur.com/novice/tujina/rusija-nad-crnim-morjem-prestregla-britanski-bojni-letali.html\nBesedilo:\nLetali naj bi po mnenju Moskve poskušali kršiti njen zračni prostor, vendar ju je ruski lovec uspešno odvrnil.Tudi aprila je rusko bojno letalo spremljalo nemško vojaško letalo nad Baltskim morjem, medtem ko so Natovi lovci istega meseca nad Baltikom prestregli tri ruska bojna letala.Preberi še Ameriška vojska objavila posnetek trka drona in ruskega lovcaPred tem se je ruski lovec Su-27 marca nad Črnim morjem pobližje srečal z ameriškim brezpilotnim letalnikom. Po navedbah ZDA je trčil v letalnik in mu poškodoval propeler, zaradi česar so ga morali spustiti do morske gladine. Rusko obrambno ministrstvo je potrdilo, da sta ruska lovca prestregla dron, a zavrnilo, da sta letali krivi za njegov padec.",
+    "eval_id": "eval_000036"
+  },
+  {
+    "question": "Kaj je Denis Pušilin trdil o Mariupolu in ukrajinskih vojaki v tovarni Azovstal ter kakšne so bile razmere v mestu med rusko invazijo?",
+    "answer": "Denis Pušilin je trdil, da so separatistične sile na vzhodu Ukrajine zavzele Mariupol in da je pristanišče pod nadzorom ruskih sil, ter da je v bližini tovarne Azovstal obkroženih najmanj 1500 ukrajinskih vojakov [ChunkID: 10342]. Prav tako je dejal, da bo daljše zavzetje mesta povzročilo večje trpljenje civilstva [ChunkID: 10310]. Razmere v Mariupolu so bile grozljive: med napadi so umrli več tisoč civilistov, preživeli pa poročajo o lakoti, mrazu in skrivanju v kletih [ChunkID: 10342].",
+    "references": [
+      {
+        "chunk_id": "10342",
+        "url": "https://24ur.com/novice/tujina/ukrajina/slovo-ukrajinskih-marincev-to-bo-nasa-poslednja-bitka-spominjajte-se-nas.html"
+      },
+      {
+        "chunk_id": "10310",
+        "url": "https://24ur.com/novice/tujina/zelenski-meni-da-je-v-mariupolu-umrlo-vec-deset-tisoc-ljudi.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"10342\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/slovo-ukrajinskih-marincev-to-bo-nasa-poslednja-bitka-spominjajte-se-nas.html\"}, {\"chunk_id\": \"10310\", \"url\": \"https://24ur.com/novice/tujina/zelenski-meni-da-je-v-mariupolu-umrlo-vec-deset-tisoc-ljudi.html\"}]",
+    "cited_chunk_ids": [
+      "10310",
+      "10342"
+    ],
+    "referenced_chunk_ids": [
+      "10310",
+      "10342"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 10342\nURL: https://24ur.com/novice/tujina/ukrajina/slovo-ukrajinskih-marincev-to-bo-nasa-poslednja-bitka-spominjajte-se-nas.html\nBesedilo:\nVodja proruskih upornikov Denis Pušilin je v ponedeljek trdil, da so separatistične sile na vzhodu Ukrajine zavzele Mariupol ter dejal, da je mariupolsko pristanišče že pod nadzorom ruskih sil. Kot trdi, je v bližini tovarne Azovstal obkroženih najmanj 1500 ukrajinskih vojakov. Slednji naj bi se poskušali prebiti iz Mariupola, a je bil po poročanju ruskih oblasti ta poskus onemogočen, del ukrajinske vojske je bil ob tem uničen, del pa naj bi se predal.Mariupol se je sicer vse od začetka ruske invazije na Ukrajino, 24. februarja, soočil z enimi najhujših napadov. V mestu naj bi med napadi umrlo več tisoč civilistov. Preživeli medtem poročajo o grozljivih razmerah v mestu, ki je praktično zravnano s tlemi, o lakoti in mrazu, civilistih, ki se skrivajo v kleteh.\n\n---------------\n\n### ODSEK 2\nChunkID: 10310\nURL: https://24ur.com/novice/tujina/zelenski-meni-da-je-v-mariupolu-umrlo-vec-deset-tisoc-ljudi.html\nBesedilo:\nTo pomeni smrt za nekatere od nas in ujetništvo za preostale,\" so sporočili pripadniki 36. mornariške brigade, ki pristanišče branijo 47 dni in so po lastnih navedbah naredili \"vse, kar je mogoče in nemogoče\", da bi ohranili nadzor nad mestom.Proruski separatisti naj bi nato res prevzeli nadzor nad pristaniščem v mestu. Tako je v televizijskem govoru zatrdil vodja ljudske republike Doneck Denis Pušilin. Dejal je, da dlje ko se bo zavzetje mesta odlašalo, dlje bo tamkajšnje civilno prebivalstvo trpelo. Po njegovih navedbah naj bi se preostale ukrajinske sile v Mariupolu zatekle v metalurško tovarno Azovstal, česar pa zaenkrat ni bilo mogoče neodvisno preveriti.Velika Britanija medtem svari, da bi lahko Rusija v Mariupolu uporabila fosforno strelivo, ki naj bi ga že uporabila na območju Donecka, poroča BBC.\n\n---------------\n\n### ODSEK 3\nChunkID: 9879\nURL: https://24ur.com/novice/tujina/ukrajina/ruske-sile-naj-bi-se-zacele-umikati-iz-okolice-harkova.html\nBesedilo:\nTrdil je tudi, da je Putin v zelo slabem psihičnem in fizičnem stanju ter da je zelo bolan. Njegovih trditev ni mogoče preveriti, opozarja BBC.Mariupol: 'Potekajo zelo zapletena pogajanja o naslednji fazi evakuacijske misije'Ukrajinski predsednik Zelenski je v tokratnem nagovoru spregovoril tudi o razmerah v Mariupolu. Zavzem pristaniškega mesta na jugu Ukrajine je za Moskvo ključnega pomena. Ker ima dobro strateško vojaško pozicijo, ga ruska vojska bombardira že več mesecev. 1 4 Mariupol APMariupol APMariupol APMariupol APZadnji branilci mesta so ostali ujeti v jeklarni Azovstal, Zelenski pa je dejal, da je treba evakuirati \"veliko število\" ranjenih. \"Potekajo zelo zapletena pogajanja o naslednji fazi evakuacijske misije,\" je dejal in pojasnil, da gre za evakuacijo hudo ranjenih in zdravnikov.",
+    "eval_id": "eval_000037"
+  },
+  {
+    "question": "Kaj je ruski obrambni minister Sergej Šojgu povedal o ukrajinski protiofenzivi v regiji Herson in kakšne informacije so podane o izmenjavi vojakov med Ukrajino in Rusijo?",
+    "answer": "Ruski obrambni minister Sergej Šojgu je povedal, da je ukrajinska protiofenziva v regiji Herson \"v veliki meri neuspešna\" in da so ukrajinske sile utrpele velike izgube, ter da je njen cilj ustvarjanje iluzije na Zahodu o sposobnosti Ukrajine izvajanja protinapadov [ChunkID: 7086]. Informacije o izmenjavi vojakov med Ukrajino in Rusijo so podane kot izmenjava 14 Ukrajincev in neznano število Rusov [ChunkID: 7086].",
+    "references": [
+      {
+        "chunk_id": "7086",
+        "url": "https://24ur.com/novice/tujina/ukrajina/ukrajina-nadaljuje-ofenzivo-v-kateri-so-po-mnenju-rusije-utrpeli-hude-izgube.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"7086\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/ukrajina-nadaljuje-ofenzivo-v-kateri-so-po-mnenju-rusije-utrpeli-hude-izgube.html\"}]",
+    "cited_chunk_ids": [
+      "7086"
+    ],
+    "referenced_chunk_ids": [
+      "7086"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 7086\nURL: https://24ur.com/novice/tujina/ukrajina/ukrajina-nadaljuje-ofenzivo-v-kateri-so-po-mnenju-rusije-utrpeli-hude-izgube.html\nBesedilo:\nUkrajina nadaljuje ofenzivo, Rusija: Sovražnik je utrpel velike izgube. Ukrajinska protiofenziva v južni regiji Herson je v veliki meri neuspešna, njihove sile pa so utrpele velike izgube, je dejal ruski obrambni minister Sergej Šojgu in dodal, da je cilj protiofenzive zgolj ustvarjanje iluzije na Zahodu, da je ukrajinska vojska sposobna izvajanja protinapadov. Ukrajinska stran trdi, da napredujejo, saj naj bi njihova vojska v ponedeljek prebila rusko frontno črto v južni regiji Herson. V senci spopadov sta si državi izmenjali več zajetih vojakov. Izmenjava je vključevala 14 Ukrajincev in zaenkrat še neznano število Rusov, je na Telegramu sporočil koordinacijski urad za vojne ujetnike v Kijevu.\n\n---------------\n\n### ODSEK 2\nChunkID: 9827\nURL: https://24ur.com/novice/tujina/ukrajina/v-rusijo-odpeljanih-vec-kot-1000-zajetih-ukrajinskih-vojakov.html\nBesedilo:\nS tem so omogočili prehod civilistov in blaga prek vzhodnega ukrajinskega ozemlja, ki je zdaj pod ruskim nadzorom.Ruski obrambni minister Sergej Šojgu je v konferenčnem klicu dejal, da je vojska v sodelovanju z ruskimi železnicami obnovila 1200 kilometrov železniških tirov in odprla ceste, s katerimi želi omogočiti promet med Rusijo in regijo Donbas ter Krimom. Prek severnokrimskega kanala se medtem nadaljuje tudi oskrba z vodo, pravi Šojgu.Preberi še Ukrajina osvobodila več vasi na jugu države, Rusi zavzeli del SeverodoneckaPrek kopenskega koridorja želi Rusija omogočiti, da začne v Mariupol, Berdjansk in Herson, pristaniška mesta na jugovzhodu Ukrajine, ki jih je zasegla Rusija, dostavljati blago. Kot je zatrdil Šojgu, pristanišči v Mariupolu in Berdjanskem delujeta normalno in sta pripravljeni na pošiljanje žita.\n\n---------------\n\n### ODSEK 3\nChunkID: 7087\nURL: https://24ur.com/novice/tujina/ukrajina/ukrajina-nadaljuje-ofenzivo-v-kateri-so-po-mnenju-rusije-utrpeli-hude-izgube.html\nBesedilo:\n\"Ukrajinske sile nadaljujejo s poskusi napadov med mestoma Mikolajiv in Krivoj Rog ter tudi na drugih območjih, sovražnik pa je utrpel velike izgube,\" je na Telegramu sporočil Šojgu. Pri tem je dodal, da je edini cilj Kijeva v ofenzivi \"ustvariti iluzijo med zahodnimi uradniki, da je ukrajinska vojska sposobna izvajanja napadov\".Hkrati je ruski obrambni minister poročal o nadaljnjem napredovanju ruskih sil v vzhodni Ukrajini in dejal, da so zasedle močno utrjeno mesto Piski, ki leži tik ob regiji Doneck. Ukrajinska vojska naj bi sicer v ponedeljek prebila rusko frontno črto v južni regiji Herson, vojaško akcijo pa je označila za uvodno fazo obsežne ukrajinske protiofenzive.Za ogled potrebujemo tvojo privolitev za vstavljanje vsebin družbenih omrežij in tretjih ponudnikov.",
+    "eval_id": "eval_000038"
+  },
+  {
+    "question": "Kaj se je zgodilo med protiteroristično akcijo v Mahačkali in koliko ljudi je umrlo na obeh straneh?",
+    "answer": "Med protiteroristično akcijo v Mahačkali je umrlo pet skrajnežev in trije pripadniki ruskih posebnih enot alfa [ChunkID: 21053].",
+    "references": [
+      {
+        "chunk_id": "21053",
+        "url": "https://24ur.com/novice/svet/preprecili-ponovitev-krute-morije.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"21053\", \"url\": \"https://24ur.com/novice/svet/preprecili-ponovitev-krute-morije.html\"}]",
+    "cited_chunk_ids": [
+      "21053"
+    ],
+    "referenced_chunk_ids": [
+      "21053"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 21052\nURL: https://24ur.com/novice/svet/preprecili-ponovitev-krute-morije.html\nBesedilo:\nPreprečili ponovitev krute morije. Pripadniki ruskih posebnih enot alfa so v Dagestanu preprečili teroristični napad podoben tistemu v Beslanu. Vodja republiške uprave ruske obveščevalne službe FSB Nikolaj Grjaznov je v soboto zvečer pojasnil, da je bilo v dveh protiterorističnih akcijah, ki so jih izvedli v soboto v ruski republiki Dagestan, v mestih Kaspijsk in Mahačkala, skupno ubitih deset ljudi, med njimi šest teroristov in štirje pripadniki varnostnih sil.Predstavnik dagestanskega notranjega ministrstva Abdulmanap Musajev je prav tako potrdil, da so skrajneži pripravljali teroristični napad, med katerim naj bi zajeli večje število talcev. Kot je pojasnil, so med akcijo odkrili tudi večjo količino orožja, streliva in eksploziva.Po besedah Grjaznova so v Kaspijsku opravili več hišnih preiskav in v neki hiši odkrili skupino, ki je pripravljala teroristični napad.\n\n---------------\n\n### ODSEK 2\nChunkID: 21053\nURL: https://24ur.com/novice/svet/preprecili-ponovitev-krute-morije.html\nBesedilo:\nPrišlo je do streljanja, pri čemer je bil ubit tudi eden znanih teroristov Magomedžagir Akajev ter trije pripadniki zveznih varnostnih sil. V Mahačkali pa so se skrajneži zatekli v neko hišo, akcija pa se je tam po 15 urah končala po posredovanju posebnih enot ruskega ministrstva za obrambo. Umrlo je pet skrajnežev in trije pripadniki ruskih posebnih enot alfa.Nadaljujejo se protesti proti Putinovi reformiZaradi množičnih protestov proti odpravi nekaterih socialnih olajšav za upokojence je danes že drugi dan zaporedoma blokiran promet v rojstnem kraju ruskega predsednika Vladimirja Putina Sankt Peterburg. Okoli 10.000 starejših protestnikov je že v soboto preplavilo Sankt Peterburg in paraliziralo promet ter od lokalnega guvernerja zahtevalo subvencionirane cene za javne storitve, da bi se lahko prilagodili reformi.\n\n---------------\n\n### ODSEK 3\nChunkID: 21044\nURL: https://24ur.com/novice/svet/spomin-na-beslan.html\nBesedilo:\nPripadniki ruske posebne enote so se za vstop v okupirano šolsko poslopje odločili po nizu eksplozij v notranjosti šole in begu talcev. Ob vstopu v poslopje se je vnel spopad s teroristi, pri čemer je umrlo 320 talcev, 12 pripadnikov varnostnih sil in 31 teroristov, skoraj 800 ljudi je bilo ranjenih.Vse okoliščine krvavih dogodkov še vedno niso znane. Preiskava še poteka, njeni rezultati pa naj bi bili znani konec septembra. Na smrtno ječo pa je bil medtem že obsojen edini preživeli izmed 32 ugrabiteljev, 24-letni Čečen Nurpači Kulajev. Eden najvidnejših voditeljev čečenskih upornikov Šamil Basajev, ki je prevzel odgovornost za napad v Beslanu, pa je bil julija ubit.",
+    "eval_id": "eval_000039"
+  },
+  {
+    "question": "Kdo je Andrej Medvedjev, kakšna je njegova povezava z Wagnerjevo skupino in kje se trenutno nahaja?",
+    "answer": "Andrej Medvedjev je bivši član ruske skupine plačancev Wagner, ki se je boril v Ukrajini, a nato zapustil fronto in je trenutno v Oslu, kjer prosi za azil [ChunkID: 13326]. Priznal je, da je bil del Wagnerjeve skupine, vendar je izključil, da je bil del \"hrane za topove\" [ChunkID: 1602].",
+    "references": [
+      {
+        "chunk_id": "13326",
+        "url": "https://24ur.com/novice/tujina/ja-sluzil-sem-wagnerju-a-nihce-se-ne-rodi-pameten.html"
+      },
+      {
+        "chunk_id": "1602",
+        "url": "https://24ur.com/novice/tujina/jevgenij-prigozin-je-nor-ubili-ga-bodo-njegovi-lastni-ljudje.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"13326\", \"url\": \"https://24ur.com/novice/tujina/ja-sluzil-sem-wagnerju-a-nihce-se-ne-rodi-pameten.html\"}, {\"chunk_id\": \"1602\", \"url\": \"https://24ur.com/novice/tujina/jevgenij-prigozin-je-nor-ubili-ga-bodo-njegovi-lastni-ljudje.html\"}]",
+    "cited_chunk_ids": [
+      "13326",
+      "1602"
+    ],
+    "referenced_chunk_ids": [
+      "13326",
+      "1602"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 13326\nURL: https://24ur.com/novice/tujina/ja-sluzil-sem-wagnerju-a-nihce-se-ne-rodi-pameten.html\nBesedilo:\n'Ja, služil sem Wagnerju. A nihče se ne rodi pameten'. Andrej Medvedjev je prvi znani pripadnik Wagnerjevih plačancev, ki se je boril v Ukrajini, a nato fronto zapustil. Trenutno je v Oslu, kjer prosi za azil, za svoja dejanja pa mu je, kot pravi, žal. V novem intervjuju za Reuters je 26-letnik razložil, da v resnici ni tak, kot si ga predstavljamo. Pred dobrima dvema tednoma so na rusko-norveški meji prijeli Andreja Medvedjeva, nekdanjega Wagnerjevega plačanca, ki se je na ruski strani boril tudi v vojni v Ukrajini. Od takrat je o svoji izkušnji že nekajkrat spregovoril z mediji, v tokratnem pogovoru pa dejal, da mu je za njegovo vpletenost v vojni žal.\n\n---------------\n\n### ODSEK 2\nChunkID: 1602\nURL: https://24ur.com/novice/tujina/jevgenij-prigozin-je-nor-ubili-ga-bodo-njegovi-lastni-ljudje.html\nBesedilo:\n'Jevgenij Prigožin je nor, ubili ga bodo njegovi ljudje'. Andrej Medvedjev, dezerter iz zloglasne ruske skupine Wagner, se je ukrajinskemu ljudstvu javno opravičil. Po njegovih besedah so Wagnerjevi plačanci poslani v boj kot \"hrana za topove\", kot je pojasnil, pa vojaki ne trpinčijo civilnega prebivalstva. 26-letni nekdanji ruski plačanec je na Norveško nezakonito vstopil januarja, da bi tam zaprosil za azil. Za France24 je pojasnil, da je tvegal in pobegnil, čeprav je vedel, da so Wagnerjevi dezerterji podvrženi zelo zelo hudim oblikam mučenja, če jih dobijo. Zdaj upa, da bo dobil azil na Norveškem. Če bi ga poslali v Rusijo, bo \"vsaj povedal resnico\", za to pa je pripravljen plačati ceno, je pojasnil.\n\n---------------\n\n### ODSEK 3\nChunkID: 10218\nURL: https://24ur.com/novice/tujina/pobegli-placanec-wagnerja-priznal-da-se-je-na-norveskem-pretepal-pijan.html\nBesedilo:\nPobegli plačanec Wagnerja priznal, da se je na Norveškem pretepal pijan. Nekdanji član ruske skupine plačancev Wagner Andrei Medvedjev, ki je na Norveškem zaprosil za azil, je priznal vpletenost v pretep v enem od barov v Oslu. Še pred tem je v javnosti nosil tudi zračno pištolo. Priznal je, da ga je \"zelo sram\". 1 2 Andrei Medvedjev na sodišči na Norveškem ProfimediaAndrei Medvedjev na sodišči na Norveškem Profimedia26-letnik je priznal, da se je 22. februarja pred barom v Oslu sprl in oviral delo policistov, zanikal pa je navedbe, da je bil do policistov nasilen, za kar je predvidena kazen treh let zapora. Prav tako je priznal krivdo, da je 14. marca na javnem mestu nosil zračno pištolo.",
+    "eval_id": "eval_000040"
+  },
+  {
+    "question": "Kako ameriška administracija ocenjuje ruske sankcije proti Zahodu in kakšne posledice pričakujejo za Rusijo ter ameriške potrošnike?",
+    "answer": "Ameriška administracija ocenjuje ruske sankcije proti Zahodu kot politično motivirane in zanemarljive, saj bodo posledice sankcij veliko hujše za Rusijo kot za Zahod [ChunkID: 20463]. Ruske sankcije so za ameriške potrošnike dobra novica, saj bodo znižale cene perutnine, ki predstavlja velik del ameriškega prehrambenega izvoza v Rusijo [ChunkID: 20463].",
+    "references": [
+      {
+        "chunk_id": "20463",
+        "url": "https://24ur.com/novice/svet/ruski-embargo-tovornjaki-s-hrano-se-ze-obracajo-na-mejah.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"20463\", \"url\": \"https://24ur.com/novice/svet/ruski-embargo-tovornjaki-s-hrano-se-ze-obracajo-na-mejah.html\"}]",
+    "cited_chunk_ids": [
+      "20463"
+    ],
+    "referenced_chunk_ids": [
+      "20463"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 20463\nURL: https://24ur.com/novice/svet/ruski-embargo-tovornjaki-s-hrano-se-ze-obracajo-na-mejah.html\nBesedilo:\nTo vključuje tudi krizno rezervo, ki je že na voljo,\" je zagotovil.Predstavniki ameriške administracije so ruske sankcije proti Zahodu označili za politično motivirane in zanemarljive. Po prepričanju Washingtona gre dejansko za sankcije proti Rusom samim, saj bodo posledice sankcij veliko hujše zanje kot pa za Zahod. Ruske sankcije so za ameriške potrošnike celo dobra novica, saj bodo znižale cene tamkajšnje perutnine, ki predstavlja velik del ameriškega prehrambenega izvoza v Rusijo.Tudi nemški kmetijski minister Christian Schmidt miri, da posledice ne bodo tako hude, kot se skuša prikazati v javnosti. Kot trdi, je ruski trg že tako tvegan in se je nemški izvoz na ta trg že zdaj drastično zmanjševal.\n\n---------------\n\n### ODSEK 2\nChunkID: 18156\nURL: https://24ur.com/novice/tujina/zda-napovedale-gospodarske-sankcije-proti-rusiji.html\nBesedilo:\nZDA napovedale gospodarske sankcije proti Rusiji. Ameriška vlada je v skladu s pričakovanji uvedla nove sankcije proti Rusiji zaradi računalniških vdorov in vpletanja v volitve. ZDA so izgnale deset ruskih diplomatov in kaznovale več deset oseb in podjetij. Gre za prvi povračilni ukrep ZDA zaradi vdora v sistem podjetja SolarWinds in okužbe programske opreme, ki jo uporabljajo ameriške vladne agencije, z virusom. Na ta način so Rusi dobili dostop do najmanj devetih vladnih agencij.Ameriški obveščevalci so prav tako ugotovili, da je ruski predsednik Vladimir Putin tako kot leta 2016 tudi pred lanskoletnimi volitvami odobril operacijo vpliva na ameriške volivce v korist Donalda Trumpa.\n\n---------------\n\n### ODSEK 3\nChunkID: 9130\nURL: https://24ur.com/novice/tujina/veljati-naj-bi-zacele-sankcije-eu-proti-rusiji.html\nBesedilo:\n\"Nobenega dvoma ne bi smelo biti - sankcije bodo deležne ostrega odziva, ne nujno simetričnega, vendar dobro preračunanega in bolečega za ameriško stran,\" pa je po sporočilo rusko zunanje ministrstvo. Dodali so, da je Washington uvedel nove sankcije proti Rusiji, ker želi \"spremeniti rusko usmeritev\". \"Rusija je dokazala, da je ne glede na vse posledice sankcij sposobna zmanjšati škodo na najmanjšo možno raven. Še več, pritisk v obliki sankcij ne bo vplival na našo pripravljenost, da odločno branimo svoje interese,\" je še zapisano v izjavi ruskega zunanjega ministrstva.Po poročanju ruske tiskovne agencije Tass so v Moskvi še dejali, da je paket sankcij, ki ga je sedaj razglasila ameriška administracija, že 101. po vrsti in del \"neskončnih poskusov Washingtona\", da spremeni politiko Rusije.",
+    "eval_id": "eval_000041"
+  },
+  {
+    "question": "Kako je tiskovni predstavnik Kremlja Dmitrij Peskov opisal spremembe ameriške zunanje politike pod predsednikom Donaldom Trumpom in kakšen je njegov pogled na odnose med Rusijo in ZDA?",
+    "answer": "Dmitrij Peskov je poudaril, da se spremembe ameriške zunanje politike pod Trumpom v veliki meri ujemanje z ruskimi stališči [ChunkID: 4793], in da Rusija ostaja pripravljena na enakopraven dialog z ZDA, vendar še niso prejeli signalov iz Washingtona [ChunkID: 19706]. Poudaril je tudi željo ZDA za konstruktivno sodelovanje z Rusijo pri prizadevanjih za mir med Rusijo in Ukrajino [ChunkID: 17797].",
+    "references": [
+      {
+        "chunk_id": "4793",
+        "url": "https://24ur.com/novice/tujina/rusija-nova-ameriska-zunanja-politika-sovpada-z-naso-vizijo.html"
+      },
+      {
+        "chunk_id": "19706",
+        "url": "https://24ur.com/novice/tujina/kremelj-o-trumpu-cakamo-na-signale-ki-pa-jih-se-nismo-prejeli.html"
+      },
+      {
+        "chunk_id": "17797",
+        "url": "https://24ur.com/novice/tujina/razocarani-trump-si-zeli-rusko-ukrajinskega-dogovora.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"4793\", \"url\": \"https://24ur.com/novice/tujina/rusija-nova-ameriska-zunanja-politika-sovpada-z-naso-vizijo.html\"}, {\"chunk_id\": \"19706\", \"url\": \"https://24ur.com/novice/tujina/kremelj-o-trumpu-cakamo-na-signale-ki-pa-jih-se-nismo-prejeli.html\"}, {\"chunk_id\": \"17797\", \"url\": \"https://24ur.com/novice/tujina/razocarani-trump-si-zeli-rusko-ukrajinskega-dogovora.html\"}]",
+    "cited_chunk_ids": [
+      "17797",
+      "19706",
+      "4793"
+    ],
+    "referenced_chunk_ids": [
+      "17797",
+      "19706",
+      "4793"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 4793\nURL: https://24ur.com/novice/tujina/rusija-nova-ameriska-zunanja-politika-sovpada-z-naso-vizijo.html\nBesedilo:\nRusija: Nova ameriška zunanja politika sovpada z našo vizijo. Kremelj ocenjuje, da so korenite spremembe ameriške zunanje politike v veliki meri v skladu z ruskimi stališči. \"Nova administracija hitro spreminja vse konfiguracije svoje zunanje politike. To v veliki meri sovpada z našo vizijo,\" je za rusko državno televizijo dejal tiskovni predstavnik Kremlja Dmitrij Peskov. Ponoči so sicer ruske sile znova napadle Ukrajino z droni. Od prihoda v Belo hišo 20. januarja je ameriški predsednik Donald Trump precej spremenil zunanjo politiko ZDA v primerjavi z zunanjo politiko svojega predhodnika Joeja Bidna in se tesneje povezal z Moskvo.\n\n---------------\n\n### ODSEK 2\nChunkID: 19706\nURL: https://24ur.com/novice/tujina/kremelj-o-trumpu-cakamo-na-signale-ki-pa-jih-se-nismo-prejeli.html\nBesedilo:\nKremelj o Trumpu: Čakamo na signale, ki pa jih še nismo prejeli. Rusija ostaja pripravljena na enakopraven in vzajemno spoštljiv dialog z ZDA, je dejal tiskovni predstavnik Kremlja Dmitrij Peskov ter dodal, da Moskva v komentarjih ameriškega predsednika Donalda Trumpa glede vojne v Ukrajini in njegovih grožnjah z novimi sankcijami ne vidi nič posebej novega. \"Ne vidimo nič posebej novega,\" je Peskov odgovoril na novinarsko vprašanje o izjavah Trumpa, ki je v sredo med drugim zagrozil z novimi sankcijami proti Rusiji, če ne bo hitrega dogovora, ki bi končal vojno v Ukrajini. \"Še naprej smo pripravljeni na dialog, na enakopraven in medsebojno spoštljiv dialog,\" je dodal Peskov. \"Čakamo na signale, ki pa jih še nismo prejeli,\" je dodal.\n\n---------------\n\n### ODSEK 3\nChunkID: 17797\nURL: https://24ur.com/novice/tujina/razocarani-trump-si-zeli-rusko-ukrajinskega-dogovora.html\nBesedilo:\nOb tem je potrdil željo ZDA za konstruktivno sodelovanje z Rusijo pri prizadevanjih za trajen mir med Rusijo in Ukrajino. \"Washington je sedaj pripravljen rešiti probleme v bilateralnih odnosih,\" je čestitko Rubia pohvalil tiskovni predstavnik Kremlja Dimitrij Peskov, poroča AFP.",
+    "eval_id": "eval_000042"
+  },
+  {
+    "question": "Kaj razkrivajo prestreženi klici ruskih vojakov o njihovih razmerah na fronti blizu ukrajinskega Limana in kakšne dogodke so omenili v teh klicih?",
+    "answer": "Prestreženi klici razkrivajo hude razmere ruskih vojakov, kot so pomanjkanje hrane in vode, ter uporabo fosfornih bomb. V klicih so omenili, da vojaki prebivajo v spalnih vrečah, so zdravstveno slabostni in da so bili izpostavljeni intenzivnim napadom. [ChunkID: 11889][ChunkID: 11891]",
+    "references": [
+      {
+        "chunk_id": "11889",
+        "url": "https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html"
+      },
+      {
+        "chunk_id": "11891",
+        "url": "https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"11889\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html\"}, {\"chunk_id\": \"11891\", \"url\": \"https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html\"}]",
+    "cited_chunk_ids": [
+      "11889",
+      "11891"
+    ],
+    "referenced_chunk_ids": [
+      "11889",
+      "11891"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 11889\nURL: https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html\nBesedilo:\nPrestreženi klici ruskih vojakov: Dovolili so, da nas pokoljejo. Klici med ruskimi vojaki in njihovimi bližnjimi, ki jih je prestregla Ukrajina, razkrivajo obraz vojne in šibke točke ruske vojske. \"Nihče nam ne da nič za jesti, mama. Naše zaloge so zanič. Vodo dobivamo iz luž, jo precedimo in popijemo.\" To je klic ruskega vojaka Andreja, na fronti blizu ukrajinskega Limana, ki je 8. novembra popoldne ignoriral ukaze svojih nadrejenih in poklical svojo mamo z mobilnega telefona, piše Guardian. Kot pišejo, so klic prestregle ukrajinske sile. Dolg je pet minut in 26 sekund. Liman, ki so ga Rusi zavzeli maja, so oktobra osvobodile ukrajinske sile. Dva dni pred Andrejevim klicem, so ruske sile začele streljati na ukrajinske položaje s fosfornimi bombami, je povedal svoji materi.\n\n---------------\n\n### ODSEK 2\nChunkID: 11891\nURL: https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html\nBesedilo:\n\"Spim v spalni vreči, ves premočen, kašljam, na splošno sem uničen,\" je opisoval grozovite razmere. Sistem jih je pustil na cedilu, znašli so se v pasti: \"Dovolili so, da nas pokoljejo. \"'Discipline ni, s takšnimi klici razkrijejo svojo lokacijo'To so le trije od na tisoče klicev med vojaki, ki so jim prisluškovali ukrajinski strokovnjaki in jih objavili, če so v njih videli 'propagandno vrednost'. Še posebej v prvem obdobju vojne je bila varnost ruskih komunikacij pomanjkljiva, pogovore med vojaškimi poveljniki so lahko prestregli celo amaterji, saj je ruska vojska uporabljala odprte radijske frekvence. Kot je za Guardian komentiral strokovnjak za kibernetsko varnost Dimitrij Alperovitch, je to sicer vedno redkeje.\n\n---------------\n\n### ODSEK 3\nChunkID: 11892\nURL: https://24ur.com/novice/tujina/ukrajina/prestrezeni-klici-ruskih-vojakov.html\nBesedilo:\n\"Še vedno pa veliko vojakov prinaša mobilne telefone na fronto in se želijo pogovarjati s svojimi družinami, pri čemer jih prestrežejo,\" je dejal Alperovitch. \"To za ukrajinske varnostne službe ne predstavlja prevelikih težav.\" Peščica prestreženih klicev sama po sebi sicer slika omejeno sliko o ruskih bojnih silah, poudarjajo pri Guardianu. A po drugi strani velika količina tovrstnih klicev vseeno pokaže sliko o slabostih ruske vojske, je za Guardian komentiral nekdanji kremeljski uradnik, ki je želel ostati anonimen. Konec septembra je Vladimir Putin napovedal \"delno mobilizacijo\" 300.000 rezervistov in \"tistih z nekdanjimi vojaškimi izkušnjami\". Nekdanji ruski uradnik izpostavlja, da bo to samo poslabšalo varnostne razmere. \"Vojaki se udeležijo hitrega tečaja o tem, kako ne izdajati občutljivih informacij, vendar je to večinoma le predstava,\" je dejal uradnik.",
+    "eval_id": "eval_000043"
+  },
+  {
+    "question": "Koliko ljudi je umrlo in koliko je bilo ranjenih v nočnih ruskih napadih na Kijev, ter koliko gospodinjstev je ostalo brez elektrike?",
+    "answer": "V nočnih ruskih napadih na Kijev so umrli trije ljudje, skoraj 30 je bilo ranjenih, in več kot 600.000 gospodinjstev je ostalo brez elektrike [ChunkID: 829].",
+    "references": [
+      {
+        "chunk_id": "829",
+        "url": "https://24ur.com/novice/tujina/v-nocnih-ruskih-napadih-na-kijev-umrla-najmanj-dva.html"
+      }
+    ],
+    "references_raw": "[{\"chunk_id\": \"829\", \"url\": \"https://24ur.com/novice/tujina/v-nocnih-ruskih-napadih-na-kijev-umrla-najmanj-dva.html\"}]",
+    "cited_chunk_ids": [
+      "829"
+    ],
+    "referenced_chunk_ids": [
+      "829"
+    ],
+    "citation_reference_match": true,
+    "context": "### ODSEK 1\nChunkID: 829\nURL: https://24ur.com/novice/tujina/v-nocnih-ruskih-napadih-na-kijev-umrla-najmanj-dva.html\nBesedilo:\nVeč kot 600.000 gospodinjstev brez elektrike po nočnih ruskih napadih. V ruskih nočnih napadih na Kijev so umrli trije ljudje, skoraj 30 je ranjenih, je sporočil ukrajinski predsednik Volodimir Zelenski. Napadi so po njegovih besedah povzročili obsežno škodo. V mestu in regiji je brez elektrike ostalo prek 600.000 odjemalcev V obsežnem napadu na ukrajinsko energetsko infrastrukturo so po poročanju Reutersa ruske sile v noči na soboto ubile tri ljudi in ranile skoraj 30 drugih. Po navedbah ukrajinskih oblasti je brez električne energije ostalo več kot 600.000 gospodinjstev, od tega več kot 500.000 v Kijevu.\n\n---------------\n\n### ODSEK 2\nChunkID: 6545\nURL: https://24ur.com/novice/tujina/ukrajina/ruske-rakete-zadele-porodnisnico-v-zaporozju-umrl-novorojencek.html\nBesedilo:\nKijev po obsežnih ruskih napadih znova brez vode in elektrike. V Kijevu so se ugasnile sirene, ki so opozarjale na zračne napade. Sirene še zmeraj odzvanjajo v šestih drugih ukrajinskih regijah. Po obsežnih ruskih raketnih napadih je brez vode in elektrike danes ostalo 80 odstotkov gospodinjstev. Ubite so najmanj štiri osebe, šest je ranjenih. Na jugu Zaporožja so rakete zadele območje porodnišnice, v napadu je umrl dojenček.\n\n---------------\n\n### ODSEK 3\nChunkID: 635\nURL: https://24ur.com/novice/tujina/ukrajina/eksplozije-v-kijevu-v-zraku-poljski-lovci.html\nBesedilo:\nTrenutek, ko dron zadane blok v Kijevu. Rusija: Napadli smo vojaške objekte. Ruska vojska je z droni in raketami napadla Kijev in okolico, pri čemer je umrla ena oseba, več pa je bilo ranjenih, so sporočile lokalne ukrajinske oblasti. Dodale so, da je po napadih več sto tisoč ljudi ostalo brez ogrevanja in elektrike. \"Od sinoči je bilo izstreljenih skoraj 500 dronov /.../ in 40 raket. Glavna tarča je Kijev – energetski objekti in civilna infrastruktura,\" je na omrežju X sporočil ukrajinski predsednik Volodimir Zelenski, ki je že na poti v ZDA na srečanje s Trumpom. Rusija sicer trdi, da je napadla infrastrukturo, vojaške in energetske objekte, medtem pa je v javnosti zaokrožil posnetek napada na stanovanjski blok.",
+    "eval_id": "eval_000044"
+  }
+]

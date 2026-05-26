@@ -17,9 +17,9 @@ from embedding import load_embedding_model
 from LLM_templates import run_signature_direct_query, run_signature_rag, RAG_ZeroShot_Signature, RAG_OneShot_Signature
 
 
-LLM_MODEL = 'ollama_chat/qwen3:32b'
+LLM_MODEL = 'ollama_chat/qwen3:14b'
 
-MODEL_ANSWER_MODE = 'direct' # direct, rag_zero_shot, rag_one_shot
+MODEL_ANSWER_MODE = 'rag_one_shot' # direct, rag_zero_shot, rag_one_shot
 EVAL_DATASET_PATH = "evaluation_dataset.json"
 
 EMBEDDING_MODEL_KEY = 'bge-m3'
@@ -28,7 +28,7 @@ RERANKING_MODEL_KEY = 'mmarco'
 RERANKING_RETURN_N = 3
 
 
-lm = dspy.LM(LLM_MODEL, api_base='http://localhost:11434', api_key='')
+lm = dspy.LM(LLM_MODEL, api_base='http://localhost:11434', api_key='', num_retries=5)
 dspy.configure(lm=lm)
 
 embedding_model, embedding_dim, model_db_id = load_embedding_model(model_key=EMBEDDING_MODEL_KEY, cache_dir='../models')
@@ -116,6 +116,7 @@ if __name__ == "__main__":
         print(f"Running evaluation: {eval_id}")
 
         answer_dict = get_answer_dict(eval_query)
+        answer_dict['eval_id'] = eval_id
         answer_dicts.append(answer_dict)
 
 
