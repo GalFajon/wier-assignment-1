@@ -20,7 +20,7 @@ from LLM_templates import run_signature_direct_query, run_signature_rag, RAG_Zer
 LLM_MODEL = 'ollama_chat/qwen3:14b'
 
 MODEL_ANSWER_MODE = 'rag_one_shot' # direct, rag_zero_shot, rag_one_shot
-EVAL_DATASET_PATH = "evaluation_dataset.json"
+EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset_unbiased.json"
 
 EMBEDDING_MODEL_KEY = 'bge-m3'
 EMBEEDDING_SIMILARITY_RETURN_N = 50

@@ -1,0 +1,2235 @@
+{
+  "metadata": {
+    "dataset_path": "eval_datasets/evaluation_dataset.json",
+    "answers_path": "eval_answers/ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_mmarco_3.json",
+    "judge_model": "gpt-4o-mini",
+    "temperature": 0.0
+  },
+  "aggregate": {
+    "n": 44,
+    "mean_overall_semantic_score": 0.7545454545454546,
+    "mean_key_fact_coverage_score": 0.6414042207792208,
+    "answer_addressed_rate": 0.9772727272727273,
+    "hallucination_rate": 0.0,
+    "contradiction_rate": 0.022727272727272728,
+    "major_error_rate": 0.09090909090909091,
+    "total_key_facts": 183,
+    "total_covered": 100,
+    "total_implied": 3,
+    "total_partial": 20,
+    "total_missing": 58,
+    "total_contradicted": 2,
+    "strict_key_fact_coverage": 0.546448087431694,
+    "relaxed_key_fact_coverage": 0.6150273224043715
+  },
+  "examples": [
+    {
+      "eval_id": "eval_000001",
+      "query": "Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical današnji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?",
+      "expected_answer": "Rusko ministrstvo za izredne razmere je v boj proti požarom že napotilo več sto tisoč gasilcev in približno 2000 pripadnikov vojske, današnji odlok Medvedjeva pa pomeni vpoklic še dodatnih vojakov. Požari v zahodni Rusiji so povzročili že 40 smrtnih žrtev in uničili 128.500 hektarov ozemlja. Glavni vzrok za požare je vroče in suho vreme, ki je izsušilo velike dele ozemlja in zanetilo podrastje.",
+      "candidate_answer": "Rusko ministrstvo za izredne razmere je že napotilo več sto tisoč gasilcev in približno 2000 pripadnikov vojske. Današnji odlok Medvedjeva pa pomeni vpoklic še dodatnih vojakov (število ni navedeno). Požari so povzročili 40 smrtnih žrtev in uničili 128.500 hektarov ozemlja. Glavni vzrok za požare je vroče in suho vreme, ki je izsušilo ozemlje in zanetilo podrastje [ChunkID: 21105].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 5,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Rusko ministrstvo za izredne razmere je v boj proti požarom že napotilo več sto tisoč gasilcev in približno 2000 pripadnikov vojske.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja število gasilcev in vojakov."
+        },
+        {
+          "fact": "Današnji odlok Medvedjeva pomeni vpoklic še dodatnih vojakov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja vpoklic dodatnih vojakov."
+        },
+        {
+          "fact": "Najhujši požari v zahodni Rusiji so povzročili 40 smrtnih žrtev.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor navaja točno število smrtnih žrtev."
+        },
+        {
+          "fact": "Požari so uničili 128.500 hektarov ozemlja.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor navaja točno površino uničenega ozemlja."
+        },
+        {
+          "fact": "Glavni vzrok za številne požare je vroče in suho vreme, ki je izsušilo velike dele ozemlja in zanetilo podrastje.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno opisuje vremenske pogoje kot vzrok za požare."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je celovit in pokriva vsa ključna dejstva."
+    },
+    {
+      "eval_id": "eval_000002",
+      "query": "Kaj je ruski predsednik Vladimir Putin povedal o uporabi nove rakete Orešnik in o vplivu zahodnih raket na rusko posebno operacijo v Ukrajini?",
+      "expected_answer": "Putin je zatrdil, da zahodne države ne bodo mogle prestreči ruskih raket, kot je nova raketa Orešnik, in da trenutno ni nobenih načinov za boj proti temu orožju. Prav tako je dejal, da zahodne rakete ne bodo vplivale na izid ruske posebne operacije v Ukrajini.",
+      "candidate_answer": "Ruski predsednik Vladimir Putin je potrdil, da Rusija nadaljuje testiranje balističnih raket srednjega dosega Orešnik, ki so bile \"uspešno testirane\" [ChunkID: 970]. Poudaril je, da zahodne rakete dolgega dosega ne bodo vplivale na izid ruske posebne operacije v Ukrajini [ChunkID: 977].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.3333333333333333,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Putin je zatrdil, da zahodne države ne bodo mogle prestreči ruskih raket, kot je nova raketa Orešnik.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja, da zahodne države ne bodo mogle prestreči raket Orešnik."
+        },
+        {
+          "fact": "Trenutno ni nobenih načinov za boj proti orožju, kot je raketa Orešnik.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje informacij o tem, da ni načinov za boj proti raketi Orešnik."
+        },
+        {
+          "fact": "Putin je dejal, da zahodne rakete ne bodo vplivale na izid ruske posebne operacije v Ukrajini.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da zahodne rakete ne bodo vplivale na izid operacije."
+        }
+      ],
+      "missing_facts": [
+        "Putin je zatrdil, da zahodne države ne bodo mogle prestreči ruskih raket, kot je nova raketa Orešnik.",
+        "Trenutno ni nobenih načinov za boj proti orožju, kot je raketa Orešnik."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva le del informacij, manjkajo ključni elementi o prestrezanju in boju proti raketam."
+    },
+    {
+      "eval_id": "eval_000003",
+      "query": "Katere obtožbe je Gruzija izpostavila proti Rusiji pred Meddržavnim sodiščem v Haagu in kako je Rusija odgovorila na te obtožbe?",
+      "expected_answer": "Gruzija je pred Meddržavnim sodiščem v Haagu obtožila Rusijo dolgotrajnega in nepretrganega etničnega čiščenja na gruzijskem ozemlju, vključno z nasilnim pregonom etničnih Gruzijcev iz Južne Osetije in Abhazije, požiganjem hiš, umori civilistov in plenjenjem lastnine. Prav tako je Gruzija navedla, da je bilo več kot 150.000 Gruzijcev notranje razseljenih zaradi ruske invazije. Gruzijski zastopnik Pajam Ahavan je poudaril, da se etnično čiščenje nadaljuje kljub premirju. Rusija je vse očitke odločno zanikala in trdila, da ni sprožila oboroženih aktivnosti, ter da je bila prisiljena poslati svoje vojake zaradi gruzijskega napada na Južno Osetijo in Abhazijo.",
+      "candidate_answer": "Gruzija je pred Meddržavnim sodiščem v Haagu Rusijo obtožila dolgotrajnega in nepretrganega \"etničnega čiščenja\" na gruzijskem ozemlju ter sodišče pozvala, naj izda odredbo o uvedbi začasnih varnostnih ukrepov [ChunkID: 19244]. Rusija je vse očitke odločno zanikala in zavračala obtožbe, da krši dogovor o prekinitvi ognja [ChunkID: 19194].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.4166666666666667,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 6,
+      "key_fact_judgments": [
+        {
+          "fact": "Gruzija je pred Meddržavnim sodiščem v Haagu obtožila Rusijo dolgotrajnega in nepretrganega etničnega čiščenja na gruzijskem ozemlju.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja obtožbo o etničnem čiščenju."
+        },
+        {
+          "fact": "Rusija je nasilno preganjala etnično gruzijsko prebivalstvo v Južni Osetiji in Abhaziji, vključno z požiganjem hiš, umori civilistov in plenjenjem lastnine.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja konkretnih dejanj, kot so požiganje hiš in umori."
+        },
+        {
+          "fact": "Več kot 150.000 Gruzijcev je bilo notranje razseljenih zaradi ruske invazije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja notranjega razseljevanja Gruzijcev."
+        },
+        {
+          "fact": "Etnično čiščenje nad Gruzijci se nadaljuje kljub premirju, sprejetem slab teden po začetku ruskega vojaškega posredovanja.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja nadaljevanja etničnega čiščenja kljub premirju."
+        },
+        {
+          "fact": "Rusija je vse očitke o etničnem čiščenju odločno zanikala.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je Rusija zanikala obtožbe."
+        },
+        {
+          "fact": "Rusija trdi, da ni sprožila oboroženih aktivnosti in da je bila prisiljena poslati svoje vojake zaradi gruzijskega napada na Južno Osetijo in Abhazijo.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja, da je Rusija zavrnila obtožbe o kršitvi dogovora o prekinitvi ognja, vendar ne navaja, da je bila prisiljena na vojaške aktivnosti."
+        }
+      ],
+      "missing_facts": [
+        "Rusija je nasilno preganjala etnično gruzijsko prebivalstvo v Južni Osetiji in Abhaziji, vključno z požiganjem hiš, umori civilistov in plenjenjem lastnine.",
+        "Več kot 150.000 Gruzijcev je bilo notranje razseljenih zaradi ruske invazije.",
+        "Etnično čiščenje nad Gruzijci se nadaljuje kljub premirju, sprejetem slab teden po začetku ruskega vojaškega posredovanja."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere obtožbe, vendar manjka več ključnih informacij o dejanjih Rusije in posledicah za Gruzijce."
+    },
+    {
+      "eval_id": "eval_000004",
+      "query": "Kaj so sporočili kijevska mestna uprava, kijevska vojaška uprava in Sergij Popko o jutranjem ruskem zračnem napadu na Kijev, vključno z uporabo orožja, učinkovitostjo protizračne obrambe in posledicami napada?",
+      "expected_answer": "Kijevska mestna uprava je sporočila, da je bil jutranji ruski zračni napad na Kijev brez primere glede moči, intenzivnosti in raznolikosti orožja. Kijevska vojaška uprava je poročala, da je obramba uspela uničiti vse prihajajoče rakete. Sergij Popko je navedel, da so verjetno uporabili manevrirne rakete in da je protizračna obramba sestrelila vse rakete in drone nad Kijevom, skupno 29 raket in štiri brezpilotnike. Napad so izvedli strateški bombniki tipa Tu-95S in TU-160 z manevrirnimi raketami tipa X-101/555. Zaradi padajočih delcev je izbruhnil požar v soseski Darnica, brez poškodovanih, ter še en požar v okrožju Desnyansky, o poškodovanih ni podatkov.",
+      "candidate_answer": "Kijevska mestna uprava je sporočila, da je bil napad \"brez primere v smislu moči, intenzivnosti in raznolikosti uporabljenega orožja\" [ChunkID: 14135]. Kijevska vojaška uprava je poročala, da je obramba uspela uničiti vse prihajajoče rakete [ChunkID: 14135]. Sergij Popko je omenjal \"srdit raketni napad\" z raketami iz strateških bombnikov nad Kaspijskim jezerom [ChunkID: 14135]. Požar je izbruhnil v soseski Darnica in v okrožju Desnyansky, vendar ni bilo poškodovanih oseb [ChunkID: 14135].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.5833333333333334,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 6,
+      "key_fact_judgments": [
+        {
+          "fact": "Jutranji ruski zračni napad na Kijev je bil brez primere glede moči, intenzivnosti in raznolikosti uporabljenega orožja.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je bil napad brez primere v smislu moči, intenzivnosti in raznolikosti orožja."
+        },
+        {
+          "fact": "Kijevska vojaška uprava je poročala, da je obramba uničila vse prihajajoče rakete.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je obramba uspela uničiti vse prihajajoče rakete."
+        },
+        {
+          "fact": "Sergij Popko je navedel, da so verjetno uporabili manevrirne rakete in da je protizračna obramba sestrelila vse rakete in drone nad Kijevom.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja 'srdit raketni napad', vendar ne navaja manevrirnih raket ali sestreljenih dronov."
+        },
+        {
+          "fact": "Skupno so sestrelili 29 raket in štiri brezpilotnike.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja števila sestreljenih raket in brezpilotnikov."
+        },
+        {
+          "fact": "Napad so izvedli strateški bombniki tipa Tu-95S in TU-160 z manevrirnimi raketami tipa X-101/555.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne navaja tipov bombnikov ali raket."
+        },
+        {
+          "fact": "Zaradi padajočih delcev je izbruhnil požar v soseski Darnica, brez poškodovanih, in še en požar v okrožju Desnyansky, o poškodovanih ni podatkov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je požar izbruhnil v Darnici in Desnyanskem, brez poškodovanih."
+        }
+      ],
+      "missing_facts": [
+        "Skupno so sestrelili 29 raket in štiri brezpilotnike.",
+        "Napad so izvedli strateški bombniki tipa Tu-95S in TU-160 z manevrirnimi raketami tipa X-101/555."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva večino ključnih dejstev, vendar manjkajo pomembne informacije o številu raket in tipih bombnikov."
+    },
+    {
+      "eval_id": "eval_000005",
+      "query": "Kaj je bil po mnenju anonimnega predstavnika ukrajinskih specialnih enot namen avtomobila z eksplozivom na jezu Kahovka in kakšno vlogo je imela eksplozija iz strojnice?",
+      "expected_answer": "Po mnenju anonimnega predstavnika ukrajinskih specialnih enot za komunikacije je bil namen avtomobila z eksplozivom dvojen: ustaviti vsako ukrajinsko napredovanje na jezu in okrepiti načrtovano eksplozijo, ki izvira iz strojnice, ter uničiti vrh jezu. Avtobomba sama za popolno uničenje ni bila dovolj. Eksplozija, ki je uničila Kahovko, pa naj bi prišla prav z območja strojnice na jezu.",
+      "candidate_answer": "Po mnenju anonimnega predstavnika ukrajinskih specialnih enot je bil namen avtomobila z eksplozivom dvojben: ustaviti vsako ukrajinsko napredovanje na jezu in okrepiti načrtovano eksplozijo iz strojnice, ter uničiti vrh jezu [ChunkID: 4268]. Eksplozija iz strojnice je bila namenjena dodatnemu uničenju vrha jezu, kar bi sicer avtobomba sama ne bi lahko dosegla.",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Namen avtomobila z eksplozivom je bil ustaviti ukrajinsko napredovanje na jezu in okrepiti načrtovano eksplozijo iz strojnice ter uničiti vrh jezu.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Namen avtomobila je bil pravilno opisan."
+        },
+        {
+          "fact": "Avtobomba sama ni bila dovolj za popolno uničenje jezu.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Omenjeno je, da avtobomba sama ne bi mogla doseči uničenja, vendar ni izrecno navedeno, da ni bila dovolj za popolno uničenje."
+        },
+        {
+          "fact": "Eksplozija, ki je uničila Kahovko, naj bi prišla z območja strojnice na jezu.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja, da je eksplozija prišla z območja strojnice."
+        }
+      ],
+      "missing_facts": [
+        "Eksplozija, ki je uničila Kahovko, naj bi prišla z območja strojnice na jezu."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka informacija o izvoru eksplozije, ki je uničila Kahovko."
+    },
+    {
+      "eval_id": "eval_000006",
+      "query": "Kakšne so bile značilnosti brezpilotnikov, ki jih je uporabila ukrajinska varnostna služba pri napadu na Krimski most, in kako so opisali njihov razvoj ter povezavo z zahodnimi partnerji?",
+      "expected_answer": "Brezpilotniki v morju so edinstveni izum ukrajinske varnostne službe, razviti brez sodelovanja z zasebnimi podjetji. Imajo podzemni proizvodni obrat na ozemlju Ukrajine. Zahodni partnerji so pokazali zanimanje, vendar oprema ni povezana z Zahodom.",
+      "candidate_answer": "Ukrajinska varnostna služba je pri napadu uporabila eksperimentalni morski brezpilotnik Sea Baby [ChunkID: 5494]. Razvoj opreme so izvajali sami, brez sodelovanja z zasebnimi podjetji [ChunkID: 5496], in so poudarili, da so zahodni partnerji izražali zanimanje, vendar ni bilo povezave z Zahodom [ChunkID: 5496].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 0.75,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Brezpilotniki v morju so edinstveni izum ukrajinske varnostne službe.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja eksperimentalni morski brezpilotnik, kar implicira edinstvenost."
+        },
+        {
+          "fact": "Pri razvoju brezpilotnikov niso sodelovali z nobenim zasebnim podjetjem.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da so razvoj izvajali sami."
+        },
+        {
+          "fact": "Ukrajina ima podzemni proizvodni obrat za brezpilotnike na svojem ozemlju.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja podzemnega proizvodnega obrata."
+        },
+        {
+          "fact": "Zahodni partnerji so pokazali zanimanje za brezpilotnike, vendar oprema ni povezana z Zahodom.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno opisuje zanimanje zahodnih partnerjev in pomanjkanje povezave."
+        }
+      ],
+      "missing_facts": [
+        "Ukrajina ima podzemni proizvodni obrat za brezpilotnike na svojem ozemlju."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je zelo dober, vendar manjka informacija o podzemnem proizvodnem obratu."
+    },
+    {
+      "eval_id": "eval_000007",
+      "query": "Kdaj in kje naj bi potekal shod v podporo Ukrajini v Ljubljani ter kakšne posledice je Janez Janša napovedal, če Rusija uspe s svojo invazijo na Ukrajino?",
+      "expected_answer": "Shod naj bi potekal v sredo ob 17. uri v Ljubljani, natančnejšo lokacijo pa naj bi sporočili danes. Janez Janša je napovedal, da če Rusija uspe s svojo invazijo in pade Kijev, bo sledil domino učinek, ki bo prizadel Moldavijo, Gruzijo, Zahodni Balkan in baltske države.",
+      "candidate_answer": "Shod v podporo Ukrajini naj bi potekal sredo ob 17. uri v Ljubljani, natančnejšo lokacijo pa namerava sporočiti danes [ChunkID: 17690]. Janez Janša je napovedal, da bo uspehu Rusije v Ukrajini sledil \"domino učinek\", saj bi se težave razširile na Moldavijo, Gruzijo, Zahodni Balkan in baltske države [ChunkID: 17690].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 4,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Shod v podporo Ukrajini v Ljubljani naj bi potekal v sredo ob 17. uri.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja čas in kraj shoda."
+        },
+        {
+          "fact": "Natančnejšo lokacijo shoda naj bi sporočili danes.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja, da bo lokacija sporočena danes."
+        },
+        {
+          "fact": "Janez Janša je opozoril, da če Rusija v Ukrajini ne bo ustavljena in pade Kijev, bo sledil domino učinek.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno navaja Janševo napoved o domino učinku."
+        },
+        {
+          "fact": "Po Janši bodo naslednja cilja Moldavija, Gruzija, Zahodni Balkan in baltske države.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno navaja, katere države so omenjene kot naslednja cilja."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor popolnoma pokriva vse ključne informacije iz referenčnega odgovora."
+    },
+    {
+      "eval_id": "eval_000008",
+      "query": "Kdo so ruski vidni obrazi, ki so izginili iz javnosti po začetku ruske invazije na Ukrajino, in kakšne so okoliščine izginotja Sergeja Šojguja in Viktorja Zolotova?",
+      "expected_answer": "Po začetku ruske invazije na Ukrajino so iz javnosti izginili ruski obrambni minister Sergej Šojgu in glavni varnostni uradniki, med njimi Viktor Zolotov, Igor Kostjukov, Valerij Gerasimov in Aleksander Bortnikov. Sergej Šojgu je izginil iz javnosti 11. marca, čeprav se je na kratko pojavil na posnetku, ki naj bi bil pristen, a so nekateri menili, da je bil posnetek montiran. Ukrajinska stran meni, da je doživel infarkt in je v okrevališču, kar naj bi bilo posledica nestrinjanja z Vladimirjem Putinom. Viktor Zolotov je izginil 13. marca, takoj po obisku katedrale Kristusa Odrešenika, kjer je sprejel ikono od patriarha, in se je pritožil, da vojna z Ukrajino ne poteka tako hitro, kot bi si želeli. Od takrat se ni več pojavljal na posnetkih, zadnja fotografija z njim je iz 22. marca.",
+      "candidate_answer": "Ruski vidni obrazi, ki so izginili iz javnosti po začetku invazije, vključujejo obrambnega ministra Sergeja Šojguja in vodje nacionalne garde Viktorja Zolotova. Šojgu je izginil 11. marca, pojavil se je na zaslonih le kratko, kar nekateri povezujejo s montažo, medtem ko Ukrajina trdi, da je imel infarkt in je v okrevališču, morda po nestrinjanju z Putinom [ChunkID: 15099]. Zolotov pa je izginil 13. marca po obisku katedrale in sprejemu ikone iz rok patriarha, nato pa se je pritožil, da vojna \"ne gre vse tako hitro, kot bi si želeli\" [ChunkID: 15100].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.6666666666666666,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 4,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 6,
+      "key_fact_judgments": [
+        {
+          "fact": "Ruski obrambni minister Sergej Šojgu je izginil iz javnosti 11. marca.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja datum izginotja Šojguja."
+        },
+        {
+          "fact": "Ukrajinska stran meni, da je Šojgu doživel infarkt in je v okrevališču, kar naj bi bilo posledica nestrinjanja z Vladimirjem Putinom.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor navaja, da Ukrajina trdi, da je Šojgu imel infarkt in je v okrevališču zaradi nestrinjanja z Putinom."
+        },
+        {
+          "fact": "Viktor Zolotov, vodja nacionalne garde, je izginil 13. marca po obisku katedrale Kristusa Odrešenika in sprejemu ikone od patriarha.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno opisuje Zolotovo izginotje in okoliščine obiska katedrale."
+        },
+        {
+          "fact": "Zolotov se je pritožil, da vojna z Ukrajino ne poteka tako hitro, kot bi si želeli.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor navaja Zolotovo pritožbo glede poteka vojne."
+        },
+        {
+          "fact": "Od 13. marca se Zolotov ni več pojavljal na posnetkih, zadnja fotografija z njim je iz 22. marca.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja, da se Zolotov od 13. marca ni več pojavljal na posnetkih in da je zadnja fotografija z njim iz 22. marca."
+        },
+        {
+          "fact": "Poleg Šojguja in Zolotova so izginili tudi Igor Kostjukov, Valerij Gerasimov in Aleksander Bortnikov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja drugih vidnih obrazov, ki so izginili."
+        }
+      ],
+      "missing_facts": [
+        "Od 13. marca se Zolotov ni več pojavljal na posnetkih, zadnja fotografija z njim je iz 22. marca.",
+        "Poleg Šojguja in Zolotova so izginili tudi Igor Kostjukov, Valerij Gerasimov in Aleksander Bortnikov."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je večinoma pravilen, vendar manjka nekaj pomembnih informacij o Zolotovu in drugih izginulih."
+    },
+    {
+      "eval_id": "eval_000009",
+      "query": "Kdo je Leonid Volkov, kje in kako je bil napaden ter kakšne poškodbe je utrpel?",
+      "expected_answer": "Leonid Volkov je tesni zaveznik pokojnega ruskega opozicijskega voditelja Alekseja Navalnega in ena vidnejših osebnosti ruske opozicije. Napaden je bil pred svojim domom v Vilniusu, Litva, okoli 22. ure po tamkajšnjem času. Napadalec ga je napadel s kladivom in solzivcem, razbil okno avtomobila, ga udarjal in mu zlomil roko ter povzročil 15 udarcev v nogo. Na Volkovo telesu so vidne modrice okoli očesa, rdečina na čelu in kri na nogi.",
+      "candidate_answer": "Leonid Volkov je tesen zaveznik pokojnega ruskega opozicijskega voditelja Alekseja Navalnega [ChunkID: 10068]. Bil je napaden pred svojim domom v Vilniusu, Litva, kjer mu je napadalec razbil okno avtomobila, uporabil solzivec in ga udarjal s kladivom, kar je povzročilo zlom leve roke in poškodbo noge [ChunkID: 10067, 10055].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.6,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 2,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Leonid Volkov je tesni zaveznik Alekseja Navalnega in vidna osebnost ruske opozicije.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da je Volkov zaveznik Navalnega."
+        },
+        {
+          "fact": "Napad se je zgodil pred njegovim domom v Vilniusu, Litva, okoli 22. ure po tamkajšnjem času.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor navaja, da se je napad zgodil pred domom v Vilniusu, vendar ne omenja časa napada."
+        },
+        {
+          "fact": "Napadalec je uporabil kladivo in solzivec, razbil okno avtomobila in Volkova udarjal.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno opisuje uporabo kladiva in solzivca ter razbitje okna avtomobila."
+        },
+        {
+          "fact": "Volkov ima zlomljeno roko in je prejel 15 udarcev v nogo.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omenja zlom leve roke, vendar ne navaja števila udarcev v nogo."
+        },
+        {
+          "fact": "Na Volkovi telesu so vidne modrice okoli očesa, rdečina na čelu in kri na nogi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja modric, rdečine ali krvi."
+        }
+      ],
+      "missing_facts": [
+        "Na Volkovi telesu so vidne modrice okoli očesa, rdečina na čelu in kri na nogi."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je večinoma pravilen, vendar manjka nekaj podrobnosti o času napada in poškodbah."
+    },
+    {
+      "eval_id": "eval_000010",
+      "query": "Kaj je Volodimir Zelenski povedal voditeljem držav G7 o nedavnih zračnih napadih na Ukrajino in kakšne ukrepe je predlagal?",
+      "expected_answer": "Volodimir Zelenski je voditeljem držav G7 povedal, da je bilo na Ukrajino izstreljenih več kot 100 raket v nedavnih zračnih napadih. Poudaril je, da mir onemogoča ena sama oseba. Pozval jih je, naj nad Rusijo uvedejo še strožje sankcije in naj Ukrajini pošljejo več sistemov za zračno obrambo, saj je zračna obramba glavna prednost Ukrajine, še posebej ker so zaradi napadov nekatera velika mesta ostala brez vode in elektrike.",
+      "candidate_answer": "Volodimir Zelenski je voditeljem držav G7 pozval, naj nad Rusijo uvedejo strožje sankcije in Ukrajini pošljejo več sistemov za zračno obrambo, saj je zaradi napadov nekaj mest brez vode in elektrike [ChunkID: 5410]. Dodatno je poudaril pomembnost protiletalskih sistemov, kot so Patriot, za zmanjšanje škode pri raketnih napadih [ChunkID: 5398].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "V nedavnih zračnih napadih na Ukrajino je bilo izstreljenih več kot 100 raket.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja števila izstreljenih raket."
+        },
+        {
+          "fact": "Volodimir Zelenski je povedal, da mir onemogoča ena sama oseba.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vključuje te informacije."
+        },
+        {
+          "fact": "Zelenski je pozval voditelje držav G7, naj nad Rusijo uvedejo še strožje sankcije.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je Zelenski pozval k strožjim sankcijam."
+        },
+        {
+          "fact": "Zelenski je pozval, naj Ukrajini pošljejo več sistemov za zračno obrambo.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je Zelenski pozval k več sistemom za zračno obrambo."
+        },
+        {
+          "fact": "Zračna obramba je glavna prednost Ukrajine, ker so zaradi napadov nekatera velika mesta ostala brez vode in elektrike.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja, da so mesta brez vode in elektrike, vendar ne izpostavi, da je zračna obramba glavna prednost."
+        }
+      ],
+      "missing_facts": [
+        "V nedavnih zračnih napadih na Ukrajino je bilo izstreljenih več kot 100 raket.",
+        "Volodimir Zelenski je povedal, da mir onemogoča ena sama oseba."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere ključne točke, vendar manjka pomemben del informacij."
+    },
+    {
+      "eval_id": "eval_000011",
+      "query": "Kdo je bil Ivan Safronov, kako je umrl in zakaj njegovi kolegi ne verjamejo uradni razlagi o njegovi smrti?",
+      "expected_answer": "Ivan Safronov je bil ruski novinar, ki je preiskoval ruske orožarske posle s Sirijo in Iranom. Umrl je v sumljivih okoliščinah, ko naj bi skočil skozi okno iz petega nadstropja. Preiskovalci menijo, da je storil samomor, vendar njegovi kolegi in znanci temu ne verjamejo, saj je Safronov ljubil življenje, imel uspešno kariero, srečno družinsko življenje, bil poročen in imel dva otroka.",
+      "candidate_answer": "Ivan Safronov je bil ruski novinar, ki je preiskoval ruske orožarske posle s Sirijo in Iranom. Umrl je v sumljivih okoliščinah, ko je skočil skozi okno iz petega nadstropja, a njegovi kolegi ne verjamejo uradni razlagi samomora, saj je po njihovih navedbah ljubil življenje in imel uspešno kariero ter srečno družinsko življenje [ChunkID: 14103]. Njegovi kolegi tudi menijo, da ni imel razloga za smrt, saj je bil zadnji v dolgi vrsti sumljivih smrti ruskih novinarjev [ChunkID: 14104].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.625,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Ivan Safronov je bil ruski novinar, ki je preiskoval ruske orožarske posle s Sirijo in Iranom.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da je bil Ivan Safronov ruski novinar, ki je preiskoval orožarske posle."
+        },
+        {
+          "fact": "Ivan Safronov je umrl v sumljivih okoliščinah, ko naj bi skočil skozi okno iz petega nadstropja.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno opisuje okoliščine njegove smrti."
+        },
+        {
+          "fact": "Preiskovalci menijo, da je Ivan Safronov storil samomor, a preiskujejo tudi morebitno spodbujanje k samomoru.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja, da preiskovalci preučujejo tudi možnost spodbujanja k samomoru."
+        },
+        {
+          "fact": "Safronovi kolegi in znanci ne verjamejo zgodbi o samomoru, ker je Safronov ljubil življenje, imel uspešno kariero, srečno družinsko življenje, bil poročen in imel dva otroka.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omenja, da so kolegi verjeli, da je ljubil življenje in imel uspešno kariero, vendar ne navaja, da je bil poročen in imel dva otroka."
+        }
+      ],
+      "missing_facts": [
+        "Preiskovalci menijo, da je Ivan Safronov storil samomor, a preiskujejo tudi morebitno spodbujanje k samomoru."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je večinoma pravilen, vendar manjka informacija o preiskovalni razlagi in delno pokriva osebno življenje Safronova."
+    },
+    {
+      "eval_id": "eval_000012",
+      "query": "Kaj je Vladimir Putin povedal o možnostih doseganja ciljev v Ukrajini, pogovorih z Zahodom in uporabi jedrskega orožja?",
+      "expected_answer": "Vladimir Putin je prepričan, da bo Moskva dosegla svoje cilje v Ukrajini in da so vrata za pogovore odprta, pri čemer je poudaril, da bodo za vsak dogovor potrebna trdna jamstva Zahoda. Omenil je tudi možnost uporabe jedrskega orožja, če bi se situacija zaostrila. Dodal je, da ZDA razvijajo jedrsko orožje, vendar to ne pomeni, da so pripravljene začeti jedrsko vojno jutri, ter da imajo ustrezne načrte, za katere tudi Rusija ve. Poudaril je, da ZDA razvijajo vse, tako kot Rusija, in da imajo primerljivo jedrsko triado.",
+      "candidate_answer": "Vladimir Putin je izrazil prepričanje, da bo Moskva dosegla svoje cilje v Ukrajini, pri čemer je poudaril, da so vrata za pogovore odprta, vendar za vsak dogovor potrebna trdna jamstva Zahoda. Poleg tega je omenil možnost uporabe jedrskega orožja, če bi se situacija zaostrila [ChunkID: 15518].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 6,
+      "key_fact_judgments": [
+        {
+          "fact": "Vladimir Putin je prepričan, da bo Moskva dosegla svoje cilje v Ukrajini.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno izraža Putinovo prepričanje o doseganju ciljev v Ukrajini."
+        },
+        {
+          "fact": "Putin je povedal, da so vrata za pogovore odprta, a bodo za vsak dogovor potrebna trdna jamstva Zahoda.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno povzema Putinovo izjavo o pogovorih in jamstvih."
+        },
+        {
+          "fact": "Putin je omenil možnost uporabe jedrskega orožja, če bi se situacija zaostrila.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor vključuje omembo možnosti uporabe jedrskega orožja."
+        },
+        {
+          "fact": "Putin je dejal, da ZDA razvijajo jedrsko orožje, vendar to ne pomeni, da so pripravljene začeti jedrsko vojno jutri.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja ZDA in njihovega razvoja jedrskega orožja."
+        },
+        {
+          "fact": "Putin je povedal, da imajo ZDA ustrezne načrte, za katere tudi Rusija ve, in da razvijajo vse, tako kot Rusija.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne vključuje informacij o načrtih ZDA in primerjavi z Rusijo."
+        },
+        {
+          "fact": "ZDA imajo primerljivo jedrsko triado kot Rusija.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja jedrske triade ZDA in Rusije."
+        }
+      ],
+      "missing_facts": [
+        "Putin je dejal, da ZDA razvijajo jedrsko orožje, vendar to ne pomeni, da so pripravljene začeti jedrsko vojno jutri.",
+        "Putin je povedal, da imajo ZDA ustrezne načrte, za katere tudi Rusija ve, in da razvijajo vse, tako kot Rusija.",
+        "ZDA imajo primerljivo jedrsko triado kot Rusija."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva ključne informacije o ciljih v Ukrajini in pogovorih, a manjka pomemben del o jedrskem orožju in ZDA."
+    },
+    {
+      "eval_id": "eval_000013",
+      "query": "Koliko ljudi je umrlo pri sestrelitvi letala MH17, iz katerih držav so bili največji delež žrtev in kakšni so bili odzivi mednarodnih organov glede iskanja odgovornih?",
+      "expected_answer": "Pri sestrelitvi letala MH17 je umrlo 298 ljudi iz desetih držav, med njimi je bilo 196 Nizozemcev. Varnostni svet ZN je 22. julija sprejel resolucijo, ki zahteva pregon odgovornih, a odgovornih še niso našli. Nizozemski preiskovalci so potrdili sume o sestrelitvi, a niso opredelili odgovornih. Nizozemski svet za varnost bo objavil poročilo o vzroku strmoglavljenja, ne pa o odgovornosti. Rusija nasprotuje iskanju odgovornih in verjetno bo blokirala ustanovitev posebnega sodišča ZN za sojenje.",
+      "candidate_answer": "Pri sestrelitvi letala MH17 je umrlo 298 ljudi, med katerimi je bilo največ Nizozemcev (193), nato 27 Avstralcov in 43 Malezijcev [ChunkID: 14144]. Mednarodni organi, kot je Združeni narodi, so ugotovili, da je Rusija odgovorna za sestrelitev po mednarodnem pravu, kar so pozdravile Ukrajina, Avstralija in Nizozemska [ChunkID: 14144]. Vendar je v enem od odsekov omenjeno, da je še vedno neznano, kdo je odgovoren [ChunkID: 14782].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.39166666666666666,
+      "answer_addresses_question": true,
+      "contains_major_error": true,
+      "contains_contradiction": true,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 1,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 1,
+      "num_key_facts": 6,
+      "key_fact_judgments": [
+        {
+          "fact": "Pri sestrelitvi letala MH17 je umrlo 298 ljudi iz desetih držav.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Podatki o številu umrlih so pravilni."
+        },
+        {
+          "fact": "Med žrtvami je bilo 196 Nizozemcev.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Število Nizozemcev je napačno navedeno (193 namesto 196)."
+        },
+        {
+          "fact": "Varnostni svet ZN je 22. julija sprejel resolucijo, ki zahteva pregon odgovornih.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odziv Varnostnega sveta ZN ni omenjen."
+        },
+        {
+          "fact": "Nizozemski preiskovalci so potrdili sume o sestrelitvi, a niso opredelili odgovornih.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Omenjeno je, da je neznano, kdo je odgovoren, kar implicira, da niso opredeljeni."
+        },
+        {
+          "fact": "Nizozemski svet za varnost bo objavil poročilo o vzroku strmoglavljenja, ne pa o odgovornosti.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Informacija o poročilu Nizozemskega sveta za varnost ni vključena."
+        },
+        {
+          "fact": "Rusija nasprotuje iskanju odgovornih in verjetno bo blokirala ustanovitev posebnega sodišča ZN za sojenje.",
+          "status": "contradicted",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor trdi, da je Rusija odgovorna, kar nasprotuje dejstvu, da še niso našli odgovornih."
+        }
+      ],
+      "missing_facts": [
+        "Varnostni svet ZN je 22. julija sprejel resolucijo, ki zahteva pregon odgovornih.",
+        "Nizozemski svet za varnost bo objavil poročilo o vzroku strmoglavljenja, ne pa o odgovornosti."
+      ],
+      "incorrect_or_unsupported_claims": [
+        "Število Nizozemcev je napačno navedeno (193 namesto 196).",
+        "Trditev, da je Rusija odgovorna, je v nasprotju z dejstvom, da odgovorni še niso bili opredeljeni."
+      ],
+      "short_reason": "Odgovor vsebuje nekatere pravilne informacije, vendar je večinoma nepopoln in vsebuje nasprotja."
+    },
+    {
+      "eval_id": "eval_000014",
+      "query": "Kaj je Aleksej Navalni avgusta lani storil, zaradi česar je bil obsojen na dodatnih 19 let zapora, in kako je med prestajanjem kazni vplival na Kremlj?",
+      "expected_answer": "Avgusta lani je bil Aleksej Navalni spoznan za krivega ustanovitve in financiranja ekstremistične organizacije ter obsojen na dodatnih 19 let zapora. Med prestajanjem kazni je bil velik trn v peti Kremlju, saj je večkrat kritiziral Putina in njegovo politiko, zlasti invazijo na Ukrajino, njegova protikorupcijska skupina pa je bila ukinjena, številni podporniki pa so bili prisiljeni v izgnanstvo ali obsojeni na zaporne kazni.",
+      "candidate_answer": "Aleksej Navalni je avgusta lani bil obsojen na dodatnih 19 let zapora zaradi ustvarjanja ekstremistične organizacije in financiranja ekstremističnih dejanj [ChunkID: 16746][ChunkID: 18728][ChunkID: 18733]. Med prestajanjem kazni je bil velik trn v peti Kremlju, saj je pogosto kritiziral Putina in njegovo politiko, zlasti invazijo na Ukrajino, kar je izrazil v izjavah na sodnih posnetkih [ChunkID: 16746].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.6666666666666666,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Avgusta lani je bil Aleksej Navalni spoznan za krivega ustanovitve in financiranja ekstremistične organizacije in obsojen na dodatnih 19 let zapora.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je Navalni obsojen zaradi ustvarjanja ekstremistične organizacije in financiranja ekstremističnih dejanj."
+        },
+        {
+          "fact": "Med prestajanjem kazni je Navalni večkrat kritiziral Putina in njegovo politiko, zlasti invazijo na Ukrajino.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je Navalni pogosto kritiziral Putina in njegovo politiko, kar je v skladu z referenčnim odgovorom."
+        },
+        {
+          "fact": "Navalnija protikorupcijska skupina je bila ukinjena, številni njegovi podporniki pa so bili prisiljeni v izgnanstvo ali obsojeni na zaporne kazni.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja ukinitve Navalnija protikorupcijske skupine in usode njegovih podpornikov."
+        }
+      ],
+      "missing_facts": [
+        "Navalnija protikorupcijska skupina je bila ukinjena, številni njegovi podporniki pa so bili prisiljeni v izgnanstvo ali obsojeni na zaporne kazni."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka informacija o usodi Navalnija protikorupcijske skupine in njegovih podpornikov."
+    },
+    {
+      "eval_id": "eval_000015",
+      "query": "Kaj je po mnenju Andreja Benedejčiča pomenila smrt Jevgenija Prigožina za položaj Vladimirja Putina in kako je bilo organizirano letalsko potovanje Prigožina v času nesreče?",
+      "expected_answer": "Po mnenju Andreja Benedejčiča smrt Jevgenija Prigožina krepi položaj Vladimirja Putina, saj je sporočilo vsem, da je poveljnik in gospodar samo eden – Putin v Kremlju. V času nesreče sta bili v zraku dve letali povezani s Prigožinom; letalo, ki je strmoglavilo, je letelo proti Sankt Peterburgu, drugo pa iz Sankt Peterburga proti Moskvi, kar je bil način operiranja Prigožina, da se ne bi vedelo, s katerim letalom gre.",
+      "candidate_answer": "Po mnenju Andreja Benedejčiča smrt Jevgenija Prigožina krepi položaj Vladimira Putina in posluša, da je \"poveljnik in gospodar samo eden – Putin v Kremlju\" [ChunkID: 6506]. V času nesreče so bila dva letala povezana s Prigožinom: eno letelo proti Sankt Peterburgu, drugo pa vzletelo iz Sankt Peterburga proti Moskvi, kar je bilo Prigožinov način operiranja, ki je bil vedno previden [ChunkID: 6506].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 5,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Smrt Jevgenija Prigožina krepi položaj Vladimirja Putina.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da smrt Prigožina krepi položaj Putina."
+        },
+        {
+          "fact": "Sporočilo smrti Prigožina je, da je poveljnik in gospodar samo eden – Putin v Kremlju.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor vključuje točno izjavo o Putinu kot edinem poveljniku."
+        },
+        {
+          "fact": "V času nesreče sta bili v zraku dve letali povezani s Prigožinom.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da sta bili v zraku dve letali povezani s Prigožinom."
+        },
+        {
+          "fact": "Letalo, ki je strmoglavilo, je letelo proti Sankt Peterburgu, drugo pa iz Sankt Peterburga proti Moskvi.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor natančno opisuje smeri letal v času nesreče."
+        },
+        {
+          "fact": "Tak način letalskega potovanja je bil način operiranja Prigožina, da se ne bi vedelo, s katerim letalom gre.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor pojasnjuje, da je bil to Prigožinov previden način operiranja."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je popoln in natančno pokriva vsa ključna dejstva."
+    },
+    {
+      "eval_id": "eval_000016",
+      "query": "Zakaj je bil moskovski župan Jurij Lužkov odstavljen in kdo je odločitev podpiral?",
+      "expected_answer": "Jurij Lužkov je bil odstavljen, ker ni več užival zaupanja ruskega predsednika Dmitrija Medvedjeva zaradi slabega odnosa med njima. Odločitev je podpiral uradni Kremelj in Vladimir Putin, ki je pojasnil, da drugače ni bilo mogoče razrešiti nastale situacije.",
+      "candidate_answer": "Moskovskega župana Jurija Lužkova je uradni Kremelj odpustil, ker ne uživa več zaupanja ruskega predsednika Dmitrija Medvedjeva [ChunkID: 21314]. Odločitev je podpiral tudi Vladimir Putin [ChunkID: 21315].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.6666666666666666,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Jurij Lužkov je bil odstavljen, ker ni več užival zaupanja ruskega predsednika Dmitrija Medvedjeva.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da Lužkov ne uživa več zaupanja Medvedjeva."
+        },
+        {
+          "fact": "Uradni Kremelj in Vladimir Putin sta odločitev o odstavitvi Lužkova podprla.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je odločitev podprl uradni Kremelj in Vladimir Putin."
+        },
+        {
+          "fact": "Putin je pojasnil, da je župan moral oditi, ker se ni razumel s predsednikom Medvedjevom in drugače ni bilo mogoče razrešiti nastale situacije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja pojasnila, zakaj je bila odločitev nujna."
+        }
+      ],
+      "missing_facts": [
+        "Putin je pojasnil, da je župan moral oditi, ker se ni razumel s predsednikom Medvedjevom in drugače ni bilo mogoče razrešiti nastale situacije."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka pomembno pojasnilo."
+    },
+    {
+      "eval_id": "eval_000017",
+      "query": "Kaj je ruski obrambni minister Sergej Šojgu povedal o pogajanjih o Ukrajini in kakšne informacije je izrazil glede napada na koncertno dvorano v Moskvi?",
+      "expected_answer": "Sergej Šojgu je poudaril, da je Moskva pripravljena na dialog o Ukrajini in da bi bil načrtovan krog mirovnih pogajanj v Ženevi brez sodelovanja Rusije nesmiseln. Pogajanja bi lahko temeljila na osnutku dokumenta iz marca 2022 v Istanbulu, ki predvideva, da Ukrajina opusti težnje po vstopu v Nato in ostane nevtralna, vendar takrat ni bil dosežen končni dogovor. Šojgu je tudi izrazil, da ima Moskva informacije o ukrajinski vpletenosti pri organizaciji terorističnega napada na koncertno dvorano v predmestju Moskve, kjer je bilo ubitih 145 ljudi, čeprav je Ukrajina vse obtožbe ostro zanikala, odgovornost pa je prevzela podružnica Islamske države.",
+      "candidate_answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Moskva je pripravljena na dialog o Ukrajini in meni, da bi bil načrtovan krog mirovnih pogajanj v Ženevi brez sodelovanja Rusije nesmiseln.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje nobenih informacij o pripravljenosti Moskve na dialog."
+        },
+        {
+          "fact": "Pogajanja bi lahko temeljila na osnutku dokumenta iz marca 2022 v Istanbulu, ki predvideva, da Ukrajina opusti težnje po vstopu v Nato in ostane nevtralna.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja osnutka dokumenta iz marca 2022."
+        },
+        {
+          "fact": "Takrat ni bil dosežen končni dogovor, pogovori so hitro propadli.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje informacij o neuspehu pogovorov."
+        },
+        {
+          "fact": "Šojgu ima informacije o ukrajinski vpletenosti pri organizaciji terorističnega napada na koncertno dvorano v Moskvi, kjer je bilo ubitih 145 ljudi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja informacij o ukrajinski vpletenosti pri napadu."
+        },
+        {
+          "fact": "Ukrajina je ostro zanikala vse obtožbe o povezavi z napadom, odgovornost pa je prevzela podružnica Islamske države.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje informacij o ukrajinskem zanikanju obtožb."
+        }
+      ],
+      "missing_facts": [
+        "Moskva je pripravljena na dialog o Ukrajini in meni, da bi bil načrtovan krog mirovnih pogajanj v Ženevi brez sodelovanja Rusije nesmiseln.",
+        "Pogajanja bi lahko temeljila na osnutku dokumenta iz marca 2022 v Istanbulu, ki predvideva, da Ukrajina opusti težnje po vstopu v Nato in ostane nevtralna.",
+        "Takrat ni bil dosežen končni dogovor, pogovori so hitro propadli.",
+        "Šojgu ima informacije o ukrajinski vpletenosti pri organizaciji terorističnega napada na koncertno dvorano v Moskvi, kjer je bilo ubitih 145 ljudi.",
+        "Ukrajina je ostro zanikala vse obtožbe o povezavi z napadom, odgovornost pa je prevzela podružnica Islamske države."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne vsebuje nobenih relevantnih informacij o Šojguovih izjavah."
+    },
+    {
+      "eval_id": "eval_000018",
+      "query": "Kaj je uradnik iz rafinerije povedal o naboju ukrajinskih dronov v primerjavi s prejšnjimi napadi in kako je ruski predsednik Vladimir Putin komentiral čezmejno obstreljevanje?",
+      "expected_answer": "Uradnik iz rafinerije je povedal, da so naboji, ki so jih tokrat nosili ukrajinski droni, bili večji kot v prejšnjih napadih. Ruski predsednik Vladimir Putin je v petek čezmejno obstreljevanje navedel kot razlog za ruske vojaške operacije v harkovski regiji.",
+      "candidate_answer": "Uradnik iz rafinerije je dejal, da so naboji, ki jih so nosili ukrajinski droni, bili večji kot v prejšnjih napadih [ChunkID: 1882]. Ruski predsednik Vladimir Putin je tovrstno čezmejno obstreljevanje navedel kot razlog za ruske vojaške operacije v harkovski regiji [ChunkID: 384].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 2,
+      "key_fact_judgments": [
+        {
+          "fact": "Uradnik iz rafinerije je povedal, da so naboji ukrajinskih dronov tokrat bili večji kot v prejšnjih napadih.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da so bili naboji večji."
+        },
+        {
+          "fact": "Ruski predsednik Vladimir Putin je v petek čezmejno obstreljevanje navedel kot razlog za ruske vojaške operacije v harkovski regiji.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je Putin čezmejno obstreljevanje navedel kot razlog za vojaške operacije."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je popoln in natančno pokriva vsa ključna dejstva."
+    },
+    {
+      "eval_id": "eval_000019",
+      "query": "Kaj je generalni sekretar zveze Nato Anders Fogh Rasmussen povedal o ratifikaciji novega sporazuma Start med ZDA in Rusijo ter kakšna so njegova pričakovanja glede vpliva tega sporazuma na strateško partnerstvo med zavezništvom in Rusijo?",
+      "expected_answer": "Anders Fogh Rasmussen je toplo pozdravil ratifikacijo novega sporazuma Start med ZDA in Rusijo ter poudaril, da je ta ratifikacija dobra novica za mednarodno varnost in stabilnost. Po njegovih besedah bo sporazum pomemben prispevek k okrepitvi transparentnosti, predvidljivosti in sodelovanja na področju jedrskega orožja. Poleg tega je izrazil upanje, da bo sporazum pripomogel k konkretnemu napredku pri vzpostavljanju strateškega partnerstva med zvezo Nato in Rusijo, tudi na področju protiraketne zaščite.",
+      "candidate_answer": "Generalni sekretar zveze Nato Anders Fogh Rasmussen je pozdravil ratifikacijo novega sporazuma Start med ZDA in Rusijo kot pomemben dosežek za mednarodno varnost in stabilnost, ki bo okrepil transparentnost, predvidljivost ter sodelovanje med državama [ChunkID: 13470]. Pričakovanje glede vpliva je, da bo sporazum značil za večje zaupanje in sodelovanje med Nato in Rusijo, kar je Rasmussen označil kot \"svež začetek na poti k večjemu zaupanju\" [ChunkID: 6096].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.875,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Anders Fogh Rasmussen je toplo pozdravil ratifikacijo novega sporazuma Start med ZDA in Rusijo.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Rasmussen je pozdravil ratifikacijo kot pomemben dosežek."
+        },
+        {
+          "fact": "Ratifikacija sporazuma je dobra novica za mednarodno varnost in stabilnost.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Omenjena je kot pomemben dosežek za mednarodno varnost in stabilnost."
+        },
+        {
+          "fact": "Sporazum bo pomemben prispevek k okrepitvi transparentnosti, predvidljivosti in sodelovanja na področju jedrskega orožja.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Rasmussen omenja krepitev transparentnosti, predvidljivosti in sodelovanja."
+        },
+        {
+          "fact": "Rasmussen upa, da bo sporazum pripomogel k napredku pri vzpostavljanju strateškega partnerstva med zvezo Nato in Rusijo, tudi na področju protiraketne zaščite.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Omenjeno je zaupanje in sodelovanje, vendar ni specifično omenjeno področje protiraketne zaščite."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka specifičnost glede protiraketne zaščite."
+    },
+    {
+      "eval_id": "eval_000020",
+      "query": "Kje je bil Aleksej Navalni premesten in kakšne so značilnosti tega zapora po navedbah njegovih zaveznikov in tiskovne predstavnice?",
+      "expected_answer": "Aleksej Navalni je bil premesten v kazensko kolonijo strogega režima UK-6 'Melekhovo', ki se nahaja v bližini mesta Vladimir, približno 250 kilometrov vzhodno od Moskve. Ta zapor je znan kot eden najgrozljivejših zaporov v Rusiji, saj je bil večkrat tarča medijskih preiskav zaradi domnevnih zlorab zapornikov. Tiskovna predstavnica Navalnega, Kira Jarmiš, je potrdila, da je kolonija znana po mučenju in ubijanju zapornikov.",
+      "candidate_answer": "Aleksej Navalni je bil premestjen v kazensko kolonijo UK-6 \"Melekhovo\", ki se nahaja blizu mesta Vladimir, približno 250 kilometrov vzhodno od Moskve. Njegovi zavezniki so to opisali kot \"enega najgrozljivejših zaporov v Rusiji\" [ChunkID: 20033]. Tiskovna predstavnica Kira Jarmiš je dodala, da gre za kazensko kolonijo strogega režima [ChunkID: 18229].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.67,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 1,
+      "partial_count": 1,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Aleksej Navalni je bil premesten v kazensko kolonijo strogega režima UK-6 'Melekhovo'.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je Navalni bil premesten v to kolonijo."
+        },
+        {
+          "fact": "Kazenska kolonija UK-6 'Melekhovo' se nahaja v bližini mesta Vladimir, približno 250 kilometrov vzhodno od Moskve.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Lokacija kolonije je pravilno navedena."
+        },
+        {
+          "fact": "Zapor UK-6 'Melekhovo' je znan kot eden najgrozljivejših zaporov v Rusiji.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor navaja, da so ga zavezniki opisali kot 'enega najgrozljivejših zaporov', kar implicira to dejstvo."
+        },
+        {
+          "fact": "Zapor je bil večkrat tarča medijskih preiskav zaradi domnevnih zlorab zapornikov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja medijskih preiskav ali domnevnih zlorab zapornikov."
+        },
+        {
+          "fact": "Tiskovna predstavnica Navalnega, Kira Jarmiš, je potrdila, da je kolonija znana po mučenju in ubijanju zapornikov.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja Kiro Jarmiš in njeno izjavo o kazenskem režimu, vendar ne vključuje informacij o mučenju in ubijanju zapornikov."
+        }
+      ],
+      "missing_facts": [
+        "Zapor je bil večkrat tarča medijskih preiskav zaradi domnevnih zlorab zapornikov."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka informacija o medijskih preiskavah in mučenju."
+    },
+    {
+      "eval_id": "eval_000021",
+      "query": "Koliko denarja Danska načrtuje vložiti v ukrajinsko obrambno industrijo letos in kakšne načrte imajo glede proizvodnih linij?",
+      "expected_answer": "Danska načrtuje vložiti okoli 1,4 milijarde evrov v ukrajinsko obrambno industrijo letos, potem ko so lani vložili okoli 600 milijonov evrov. Prav tako načrtujejo možnost vzpostavitve proizvodnih linij ukrajinskih obrambnih podjetij na Danskem, kjer bi orožje lahko začeli proizvajati še letos.",
+      "candidate_answer": "Danska načrtuje vložiti okoli 1,4 milijarde evrov v ukrajinsko obrambno industrijo letos in možnost vzpostavitve proizvodnih linij ukrajinskih obrambnih podjetij na Danskem [ChunkID: 2616].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Danska bo letos v ukrajinsko obrambno industrijo vložila okoli 1,4 milijarde evrov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja znesek, ki ga Danska načrtuje vložiti."
+        },
+        {
+          "fact": "Lani je Danska v ukrajinsko obrambno industrijo vložila okoli 600 milijonov evrov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja lanskega vložka."
+        },
+        {
+          "fact": "Na Danskem načrtujejo vzpostavitev proizvodnih linij ukrajinskih obrambnih podjetij.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja možnost vzpostavitve proizvodnih linij."
+        },
+        {
+          "fact": "Orožje bi lahko na Danskem začeli proizvajati še letos.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne navaja, da bi orožje lahko začeli proizvajati letos."
+        }
+      ],
+      "missing_facts": [
+        "Lani je Danska v ukrajinsko obrambno industrijo vložila okoli 600 milijonov evrov.",
+        "Orožje bi lahko na Danskem začeli proizvajati še letos."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva ključne informacije o letošnjem vložku in načrtih za proizvodne linije, a manjka informacija o lanskemu vložku in proizvodnji orožja."
+    },
+    {
+      "eval_id": "eval_000022",
+      "query": "Kaj določa spremenjena jedrska doktrina Rusije glede konvencionalnih napadov in kakšne grožnje so navedene kot razlogi za jedrski napad?",
+      "expected_answer": "Spremenjena jedrska doktrina določa, da bo konvencionalni napad na Rusijo s strani katere koli države, ki jo podpira jedrska sila, obravnavan kot skupni napad na Rusijo in njene zaveznice, med katerimi je izpostavljena Belorusija. Grožnje, zaradi katerih bi Rusija razmišljala o jedrskem napadu, vključujejo napade z konvencionalnimi raketami, brezpilotnimi letali ali drugimi zrakoplovi.",
+      "candidate_answer": "Spremenjena jedrska doktrina Rusije določa, da bo konvencionalni napad na Rusijo s strani države, ki jo podpira jedrska sila, obravnavan kot skupni napad na Rusijo in njene zaveznice, kot je Belorusija [ChunkID: 2693]. Grožnje, zaradi katerih bi Rusija lahko razmislila o jedrskem napadu, vključujejo napade z konvencionalnimi raketami, brezpilotnimi letali ali drugimi zrakoplovi [ChunkID: 2693]. Poleg tega bi napad s strani države brez jedrskega orožja ob podpori jedrske sile bil obravnavan kot njihov skupni napad na Rusijo [ChunkID: 947].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 2,
+      "key_fact_judgments": [
+        {
+          "fact": "Konvencionalni napad na Rusijo s strani države, ki jo podpira jedrska sila, se obravnava kot skupni napad na Rusijo in njene zaveznice, vključno z Belorusijo.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da se konvencionalni napad obravnava kot skupni napad na Rusijo in njene zaveznice, vključno z Belorusijo."
+        },
+        {
+          "fact": "Grožnje, zaradi katerih bi Rusija razmišljala o jedrskem napadu, vključujejo napade z konvencionalnimi raketami, brezpilotnimi letali ali drugimi zrakoplovi.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor natančno navaja grožnje, ki bi lahko povzročile jedrski napad."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [
+        "Napad s strani države brez jedrskega orožja ob podpori jedrske sile bi bil obravnavan kot njihov skupni napad na Rusijo."
+      ],
+      "short_reason": "Odgovor je večinoma pravilen, vendar vsebuje dodatno, nepreverjeno informacijo."
+    },
+    {
+      "eval_id": "eval_000023",
+      "query": "Kje in kdaj se bosta srečala ameriški predsednik Trump in ruski predsednik Putin, kakšen je simbolni pomen lokacije in kakšne teme bodo obravnavali na srečanju?",
+      "expected_answer": "Trump in Putin se bosta v petek srečala na vojaški bazi Elmendorf-Richardson v Anchorageu na Aljaski. Lokacija ima simbolni pomen, saj je največja vojaška baza na Aljaski, ki združuje letalsko bazo Elmendorf in vojaški kompleks Fort Richardson, ter je zgodovinsko pomembna tudi za Rusijo, ker so ZDA Aljasko odkupile od Ruskega imperija pred 158 leti. Srečanje bo potekalo na stičišču interesov med ZDA in Rusijo, blizu otokov Little Diomede (ZDA) in Big Diomede (Rusija). Pogovori bodo namenjeni razpravi o aktualnih globalnih vprašanjih, predvsem o vojni v Ukrajini.",
+      "candidate_answer": "Ameriški predsednik Donald Trump in ruski predsednik Vladimir Putin se bosta srečala v petek na vojaški bazi Elmendorf-Richardson v Anchorageu na Aljaski [ChunkID: 6235]. Lokacija ima simbolni pomen za obe državi, saj je Aljaska bila odkupljena ZDA od Ruskega imperija pred 158 leti [ChunkID: 12548]. Tema srečanja ni navedena v kontekstu.",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Trump in Putin se bosta v petek srečala na vojaški bazi Elmendorf-Richardson v Anchorageu na Aljaski.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno navaja datum in lokacijo srečanja."
+        },
+        {
+          "fact": "Elmendorf-Richardson je največja vojaška baza na Aljaski, ki združuje letalsko bazo Elmendorf in vojaški kompleks Fort Richardson.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja, da je to največja vojaška baza na Aljaski."
+        },
+        {
+          "fact": "ZDA so Aljasko odkupile od Ruskega imperija pred 158 leti.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno navaja zgodovinski kontekst odkupitve Aljaske."
+        },
+        {
+          "fact": "Lokacija srečanja je simbolična in se nahaja na stičišču interesov med ZDA in Rusijo, blizu otokov Little Diomede (ZDA) in Big Diomede (Rusija).",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omenja simbolni pomen, vendar ne navaja stičišča interesov in otokov."
+        },
+        {
+          "fact": "Pogovori na Aljaski bodo namenjeni razpravi o aktualnih globalnih vprašanjih, predvsem o vojni v Ukrajini.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja tem srečanja."
+        }
+      ],
+      "missing_facts": [
+        "Elmendorf-Richardson je največja vojaška baza na Aljaski, ki združuje letalsko bazo Elmendorf in vojaški kompleks Fort Richardson.",
+        "Lokacija srečanja je simbolična in se nahaja na stičišču interesov med ZDA in Rusijo, blizu otokov Little Diomede (ZDA) in Big Diomede (Rusija).",
+        "Pogovori na Aljaski bodo namenjeni razpravi o aktualnih globalnih vprašanjih, predvsem o vojni v Ukrajini."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva osnovne informacije, vendar pomembno manjka podrobnosti o simboliki in temah srečanja."
+    },
+    {
+      "eval_id": "eval_000024",
+      "query": "Koliko civilnih žrtev je zabeležila misija ZN za spremljanje stanja človekovih pravic v Ukrajini do 11. februarja letos in kakšna je bila višina humanitarne in razvojne pomoči Slovenije Ukrajini od začetka ruske agresije?",
+      "expected_answer": "Misija ZN je do 11. februarja letos zabeležila 41.783 civilnih žrtev, od tega 12.605 smrtnih žrtev. Slovenija je od začetka ruske agresije namenila okoli 15 milijonov evrov humanitarne in razvojne pomoči Ukrajini.",
+      "candidate_answer": "Do 11. februarja letos je misija ZN za spremljanje stanja človekovih pravic v Ukrajini zabeležila 41.783 civilnih žrtev [ChunkID: 9966]. Višina humanitarne in razvojne pomoči Slovenije Ukrajini od začetka ruske agresije ni navedena v kontekstu.",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 2,
+      "key_fact_judgments": [
+        {
+          "fact": "Misija ZN za spremljanje stanja človekovih pravic v Ukrajini je do 11. februarja letos zabeležila 41.783 civilnih žrtev, od tega 12.605 smrtnih žrtev.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno navaja število civilnih žrtev."
+        },
+        {
+          "fact": "Slovenija je od začetka ruske agresije namenila okoli 15 milijonov evrov humanitarne in razvojne pomoči Ukrajini.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne navaja višine humanitarne in razvojne pomoči."
+        }
+      ],
+      "missing_facts": [
+        "Slovenija je od začetka ruske agresije namenila okoli 15 milijonov evrov humanitarne in razvojne pomoči Ukrajini."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva število civilnih žrtev, vendar ne navaja višine pomoči Slovenije."
+    },
+    {
+      "eval_id": "eval_000025",
+      "query": "Kaj je ruski plinski gigant Gazprom napovedal glede dobave plina Ukrajini in kakšne so posledice nasilja v Ukrajini po navedbah izbranega izvora?",
+      "expected_answer": "Ruski plinski gigant Gazprom grozi, da bo Ukrajini s 3. junijem ustavil dobavo plina, če ne bo poravnala zapadlih obveznosti. Ukrajina računa na pomoč Zahoda, predvsem Evropske unije, saj je ena glavnih transportnih poti plina iz Rusije. V današnjih spopadih blizu Donecka je bilo ubitih pet ljudi. Začasni ukrajinski premier Arsenij Jacenjuk je obtožil Rusijo, da stopnjuje konflikt in ovira predsedniške volitve ter zahteval izredno zasedanje Varnostnega sveta ZN o krizi.",
+      "candidate_answer": "Gazprom je napovedal ustavitev tranzita ruskega plina prek Ukrajine v Evropo, saj je območje pod nadzorom ruske vojske in tehnično ni mogoče preusmeriti dobave [ChunkID: 9633]. Posledice nasilja v Ukrajini so vključevale konec sporazuma o tranzitu, zaradi česar je Gazprom ustavil dobavo plina prek Ukrajine [ChunkID: 15680].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": true,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 4,
+      "contradicted_count": 1,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Gazprom grozi, da bo Ukrajini s 3. junijem ustavil dobavo plina, če ne bo poravnala zapadlih obveznosti.",
+          "status": "contradicted",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor navaja, da Gazprom ustavi tranzit plina, kar ne ustreza grožnji o ustavitvi dobave zaradi neplačila."
+        },
+        {
+          "fact": "Ukrajina računa na pomoč Zahoda, predvsem Evropske unije, ker je ena glavnih transportnih poti plina iz Rusije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja, da Ukrajina računa na pomoč Zahoda."
+        },
+        {
+          "fact": "V današnjih spopadih blizu Donecka je bilo ubitih pet ljudi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja žrtev v spopadih blizu Donecka."
+        },
+        {
+          "fact": "Začasni ukrajinski premier Arsenij Jacenjuk je obtožil Rusijo, da stopnjuje konflikt in ovira predsedniške volitve.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vključuje obtožb Jacenjuka proti Rusiji."
+        },
+        {
+          "fact": "Arsenij Jacenjuk je zahteval izredno zasedanje Varnostnega sveta ZN o krizi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja zahteve po zasedanju Varnostnega sveta ZN."
+        }
+      ],
+      "missing_facts": [
+        "Ukrajina računa na pomoč Zahoda, predvsem Evropske unije, ker je ena glavnih transportnih poti plina iz Rusije.",
+        "V današnjih spopadih blizu Donecka je bilo ubitih pet ljudi.",
+        "Začasni ukrajinski premier Arsenij Jacenjuk je obtožil Rusijo, da stopnjuje konflikt in ovira predsedniške volitve.",
+        "Arsenij Jacenjuk je zahteval izredno zasedanje Varnostnega sveta ZN o krizi."
+      ],
+      "incorrect_or_unsupported_claims": [
+        "Gazprom je napovedal ustavitev tranzita ruskega plina prek Ukrajine v Evropo."
+      ],
+      "short_reason": "Odgovor vsebuje napačne informacije in ne pokriva ključnih dejstev iz referenčnega odgovora."
+    },
+    {
+      "eval_id": "eval_000026",
+      "query": "Kaj je Liz Wahl povedala o razlogih za svoj odstop v etru na ruski televiziji in kako je opisala svojo izkušnjo z delom tam?",
+      "expected_answer": "Liz Wahl je povedala, da je njen odstop bil nekoliko spontan, ker je imela dovolj nepoštenega poročanja in cenzure na ruski televiziji, ki jo financira ruska vlada. Voditelje so uporabljali kot orodje za promocijo stališč ruskega predsednika Putina. Bila je nervozna, ker je odpoved dala v živo v etru, a je vedela, da mora potegniti črto. Poudarila je, da je ponosna Američanka, ki verjame v širjenje resnice, in da ne more biti del televizijske mreže, ki opravičuje Putinova dejanja. Njeni starši so prišli v ZDA kot begunci pred sovjetskimi silami, njen oče je bil vojni veteran, partner pa zdravnik v vojaški bazi, ki vsakodnevno vidi ceno vojne.",
+      "candidate_answer": "Liz Wahl je povedala, da je odstopila, ker se je Ruska televizija (RT) postala Putinovo \"trobilo\" in je poročala nepošteno o ukrajinski krizi ter Krimu, kar je vključevalo veliko cenzure in uporabo voditeljev kot orodja za promocijo ruskega predsednika [ChunkID: 18736]. Poudarila je, da ni mogla biti del televizijske mreže, ki jo financira ruska vlada in opravičuje Putinova dejanja [ChunkID: 18737]. Izkušnjo z delom je opisala kot težko, saj je bila prisiljena promovirati stališča, ki jih ne podpira, in je poudarila, da je odstop bil spontan, a resen [ChunkID: 18736].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 7,
+      "key_fact_judgments": [
+        {
+          "fact": "Liz Wahl je odstopila, ker je imela dovolj nepoštenega poročanja in cenzure na ruski televiziji, ki jo financira ruska vlada.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da je odstopila zaradi nepoštenega poročanja in cenzure."
+        },
+        {
+          "fact": "Voditelje so uporabljali kot orodje za promocijo stališč ruskega predsednika Putina.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja, da so voditelji promovirali stališča ruskega predsednika."
+        },
+        {
+          "fact": "Liz Wahl je svoj odstop dala v živo v etru in je bila pri tem nervozna, a je vedela, da mora potegniti črto.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omeni, da je odstop bil spontan, a ne navaja, da je bil v živo in da je bila nervozna."
+        },
+        {
+          "fact": "Liz Wahl je ponosna Američanka, ki verjame v širjenje resnice.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja njenega ponosa kot Američanke ali njenega prepričanja v širjenje resnice."
+        },
+        {
+          "fact": "Njeni starši so prišli v ZDA kot begunci pred sovjetskimi silami.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne vsebuje informacij o njenem družinskem ozadju."
+        },
+        {
+          "fact": "Njen oče je bil vojni veteran, njen partner pa zdravnik v vojaški bazi, ki vsakodnevno vidi ceno vojne.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja njene družine in njihovih ozadij."
+        },
+        {
+          "fact": "Liz Wahl ne more biti del televizijske mreže, ki jo plačuje ruska vlada in opravičuje Putinova dejanja.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da ne more biti del te mreže."
+        }
+      ],
+      "missing_facts": [
+        "Liz Wahl je ponosna Američanka, ki verjame v širjenje resnice.",
+        "Njeni starši so prišli v ZDA kot begunci pred sovjetskimi silami.",
+        "Njen oče je bil vojni veteran, njen partner pa zdravnik v vojaški bazi, ki vsakodnevno vidi ceno vojne."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva večino ključnih dejstev, vendar manjkajo pomembne informacije o njenem družinskem ozadju in njenem ponosu kot Američanke."
+    },
+    {
+      "eval_id": "eval_000027",
+      "query": "Kaj je Mihail Gorbačov povedal o trenutnem stanju jedrskega orožja in odnosih med ZDA in Rusijo ter kakšen zgodovinski dogodek je izpostavil v intervjuju za Time magazine?",
+      "expected_answer": "Mihail Gorbačov je povedal, da se svet spet pripravlja na vojno zaradi agresivne retorike in napovedi ameriškega predsednika Donalda Trumpa ter slabšanja odnosov med ZDA in Rusijo. Pozval je predsednika obeh držav, Donalda Trumpa in Vladimirja Putina, k zmanjšanju jedrskega arzenala in predlagal skupno resolucijo o obrambi pred jedrskim konfliktom. Izpostavil je tudi svoj zgodovinski prispevek iz osemdesetih let, ko sta Sovjetska zveza in ZDA na vrhu v Ženevi novembra 1985 razglasili, da jedrske vojne ni mogoče zmagati in se ne sme nikoli bojevati, ter da ne bosta iskali vojaške premoči, kar je bilo po svetu sprejeto z olajšanjem.",
+      "candidate_answer": "Mihail Gorbačov je opozoril, da se svet spet pripravlja na vojno [ChunkID: 17473], in pozval ruskega in ameriškega predsednika, naj zmanjšata svoja jedrska orožja [ChunkID: 17473]. V intervjuju je izpostavil svojo vlogo v 80. letih prejšnjega stoletja, ko je sodeloval z ZDA pri uničenju 80 odstotkov jedrskega orožja, ki se je nabralo med hladno vojno [ChunkID: 17473].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.375,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Mihail Gorbačov je izjavil, da se svet spet pripravlja na vojno zaradi agresivne retorike in slabšanja odnosov med ZDA in Rusijo.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor omenja, da se svet pripravlja na vojno, vendar ne omeni agresivne retorike in slabšanja odnosov."
+        },
+        {
+          "fact": "Gorbačov je pozval Donalda Trumpa in Vladimirja Putina k zmanjšanju jedrskega arzenala in predlagal skupno resolucijo o obrambi pred jedrskim konfliktom.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja poziv k zmanjšanju jedrskega orožja, vendar ne omeni predloga za skupno resolucijo."
+        },
+        {
+          "fact": "Novembra 1985 sta Sovjetska zveza in ZDA na vrhu v Ženevi razglasili, da jedrske vojne ni mogoče zmagati in se ne sme nikoli bojevati, ter da ne bosta iskali vojaške premoči.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vrha v Ženevi in izjav, ki so bile tam podane."
+        },
+        {
+          "fact": "Izjava iz leta 1985 je bila po svetu sprejeta z olajšanjem.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja, kako je bila izjava sprejeta po svetu."
+        }
+      ],
+      "missing_facts": [
+        "Novembra 1985 sta Sovjetska zveza in ZDA na vrhu v Ženevi razglasili, da jedrske vojne ni mogoče zmagati in se ne sme nikoli bojevati, ter da ne bosta iskali vojaške premoči.",
+        "Izjava iz leta 1985 je bila po svetu sprejeta z olajšanjem."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere ključne točke, vendar pomembno manjka podrobnosti o zgodovinskem dogodku in njegovem sprejemu."
+    },
+    {
+      "eval_id": "eval_000028",
+      "query": "Kolikokrat so ruski droni v dveh tednih napadli Kijev in kakšen je bil izid teh napadov po navedbah ukrajinske vojske in vodje vojaške uprave Kijeva Sergija Popka?",
+      "expected_answer": "Ruski droni so petič v dveh tednih napadli Kijev, vendar je ukrajinski sistem protizračne obrambe uničil vse izstrelke, preden so dosegli prestolnico. Žrtev ni bilo in ni poročil o večji škodi. Vodja vojaške uprave Kijeva Sergij Popko je navedel, da ti sistematični napadi z brezpilotnimi letali dokazujejo, da napadalec aktivno išče priložnost za napad na Kijev, preizkuša nove taktike, išče nove pristopne poti in poskuša razkriti lokacijo ukrajinske zračne obrambe.",
+      "candidate_answer": "Ruska drona so napadla Kijev petič v dveh tednih, vendar je ukrajinski sistem protizračne obrambe uničil vse izstrelke preden so dosegli glavno mesto [ChunkID: 5099].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Ruski droni so petič v dveh tednih napadli Kijev.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da so ruski droni napadli Kijev petič."
+        },
+        {
+          "fact": "Ukrajinski sistem protizračne obrambe je uničil vse izstrelke, preden so dosegli Kijev.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je ukrajinski sistem uničil vse izstrelke pred dosego Kijeva."
+        },
+        {
+          "fact": "Pri teh napadih ni bilo žrtev in ni poročil o večji škodi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja žrtev ali škode."
+        },
+        {
+          "fact": "Vodja vojaške uprave Kijeva Sergij Popko je izjavil, da napadalec išče priložnost za napad, preizkuša nove taktike in poskuša razkriti lokacijo zračne obrambe.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vključuje informacij o izjavah Sergija Popka."
+        }
+      ],
+      "missing_facts": [
+        "Pri teh napadih ni bilo žrtev in ni poročil o večji škodi.",
+        "Vodja vojaške uprave Kijeva Sergij Popko je izjavil, da napadalec išče priložnost za napad, preizkuša nove taktike in poskuša razkriti lokacijo zračne obrambe."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva ključne informacije o napadih, a manjka podrobnosti o žrtvah in izjavah vodje vojaške uprave."
+    },
+    {
+      "eval_id": "eval_000029",
+      "query": "Kako se je spremenila proizvodnja v majhni tovarni na levem bregu reke Dneper v Kijevu in kako zaposleni opisujejo pomen svojega dela?",
+      "expected_answer": "Majhna tovarna na levem bregu reke Dneper v Kijevu je nekoč izdelovala hotelske uniforme, zdaj pa proizvaja ukrajinske zastave. Zaposleni pravijo, da vsak Ukrajinec čuti te barve, ki jih vidijo povsod – na nebu in v pšenici, kar jim daje užitek, veselje in pozitivna čustva, ker je njihovo delo koristno.",
+      "candidate_answer": "Proizvodnja v tovarni je spremenila svoj usmeritev s proizvodnje hotelskih uniform v izdelavo ukrajinskih zastav. Zaposleni opisujejo svoje delo kot koristno in pozitivno, saj jih te barve v zastavah vnetijo užitek in veselje [ChunkID: 7093].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.875,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Majhna tovarna na levem bregu reke Dneper v Kijevu je nekoč izdelovala hotelske uniforme.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je tovarna prej izdelovala hotelske uniforme."
+        },
+        {
+          "fact": "Zdaj ta tovarna proizvaja ukrajinske zastave.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da tovarna zdaj izdeluje ukrajinske zastave."
+        },
+        {
+          "fact": "Zaposleni pravijo, da vsak Ukrajinec čuti barve zastave, ki jih vidijo na nebu in v pšenici.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja, da zaposleni čutijo užitek in veselje zaradi barv, vendar ne navaja, da jih vidijo na nebu in v pšenici."
+        },
+        {
+          "fact": "To jim daje užitek, veselje in pozitivna čustva, ker je njihovo delo koristno.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da zaposleni opisujejo svoje delo kot koristno in pozitivno ter da jim daje užitek in veselje."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka del informacij o tem, kako zaposleni doživljajo barve zastave."
+    },
+    {
+      "eval_id": "eval_000030",
+      "query": "Kdo vodi ekipo IAEA, koliko članov šteje, kakšne naloge bodo opravili v nuklearki v Zaporožju in kakšna so varnostna zagotovila za pot do tja?",
+      "expected_answer": "Ekipo IAEA vodi Rafael Grossi. Ekipa šteje 13 strokovnjakov. Njihove naloge vključujejo oceno fizične škode v elektrarni, stanje osebja, ugotavljanje funkcionalnosti varnostnih in zaščitnih sistemov ter izvedbo nujnih nadzornih dejavnosti. Za varno pot do nuklearke, ki je od Kijeva oddaljena približno 450 kilometrov, so dobili izrecna varnostna zagotovila tako od ruske kot ukrajinske strani.",
+      "candidate_answer": "Ekipa IAEA vodi Rafael Grossi [ChunkID: 7167], sestavljena je iz 13 strokovnjakov [ChunkID: 7169]. Naloge vključujejo ocenjevanje fizične škode, stanja osebja, funkcionalnosti varnostnih sistemov in izvedbo nujnih nadzornih dejavnosti [ChunkID: 7169]. Varnostna zagotovila so bile pridobljena od obeh strani [ChunkID: 7167].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 0.75,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Ekipo IAEA vodi Rafael Grossi.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da ekipo vodi Rafael Grossi."
+        },
+        {
+          "fact": "Ekipa IAEA šteje 13 strokovnjakov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno navaja, da ekipa šteje 13 strokovnjakov."
+        },
+        {
+          "fact": "Naloge ekipe vključujejo oceno fizične škode v elektrarni, stanje osebja, ugotavljanje funkcionalnosti varnostnih in zaščitnih sistemov ter izvedbo nujnih nadzornih dejavnosti.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pokriva vse naloge ekipe, kot so navedene v referenčnem odgovoru."
+        },
+        {
+          "fact": "Za varno pot do nuklearke, ki je od Kijeva oddaljena približno 450 kilometrov, so dobili izrecna varnostna zagotovila tako od ruske kot ukrajinske strani.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja razdalje do Kijeva in ne navaja, da so varnostna zagotovila pridobljena od obeh strani."
+        }
+      ],
+      "missing_facts": [
+        "Za varno pot do nuklearke, ki je od Kijeva oddaljena približno 450 kilometrov, so dobili izrecna varnostna zagotovila tako od ruske kot ukrajinske strani."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je zelo dober, vendar manjka informacija o razdalji do Kijeva in varnostnih zagotovilih."
+    },
+    {
+      "eval_id": "eval_000031",
+      "query": "Kakšen je namen sredstev, ki bodo namenjena v obrambni proračun, in kakšna podjetja se lahko prijavijo za sodelovanje pri proizvodnji streliva?",
+      "expected_answer": "Sredstva, namenjena obrambnemu proračunu, bodo v veliki meri šla nazaj v gospodarstvo. Prijavijo se lahko tudi podjetja, ki nimajo orožarske proizvodnje, a bi lahko proizvajala le del streliva ali granate, na primer livarne za izdelavo tulcev ali kovinskih ohišij min, ki bi jih nato druga podjetja polnila.",
+      "candidate_answer": "Sredstva iz obrambnega proračuna so namenjena podpori gospodarstvu, saj se večji del sredstev vrača v ekonomijo [ChunkID: 5703]. Za sodelovanje pri proizvodnji streliva se lahko prijavijo tudi podjetja brez orožarske proizvodnje, ki bi lahko izdelovala del streliva ali granate, na primer tulce ali kovinsko ohišje mine [ChunkID: 5703]. Slovenija išče podjetja, ki bi lahko proizvajala pehotno in topniško strelivo, vključno z granati kalibra 155 mm in 120 mm [ChunkID: 5700].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.8333333333333334,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Sredstva, ki se bodo namenjala v obrambni proračun, bodo v zelo veliki meri šla nazaj v gospodarstvo.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da se sredstva vračajo v gospodarstvo."
+        },
+        {
+          "fact": "Prijavijo se lahko tudi podjetja, ki nimajo orožarske proizvodnje, a bi lahko proizvajala le del streliva ali granate.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da se lahko prijavijo podjetja brez orožarske proizvodnje."
+        },
+        {
+          "fact": "Livarne bi lahko izdelovale tulce ali kovinsko ohišje mine, ki bi jih nato druga podjetja polnila.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja tulce in kovinsko ohišje mine, vendar ne navaja, da bi jih druga podjetja polnila."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka del informacij o polnjenju streliva."
+    },
+    {
+      "eval_id": "eval_000032",
+      "query": "Kaj je Julija Navalna povedala o učinkovitosti resolucij in sankcij proti Vladimirju Putinu ter kakšen pristop je predlagala v boju proti ruskemu režimu?",
+      "expected_answer": "Julija Navalna je povedala, da resolucije in sankcije Putina ne ganejo in da ga ne bosta prizadela še ena resolucija ali sklop sankcij, ki se ne razlikuje od prejšnjega. Predlagala je nov, inovativni pristop, ki vključuje uporabo metod boja proti organiziranemu kriminalu, saj je Putina označila za vodjo skupine organiziranega kriminala.",
+      "candidate_answer": "Julija Navalna je povedala, da resolucije in sankcije proti Putinu ne delujejo, saj se ne razlikujejo od prejšnjih, in da je potreben nov pristop, kot so metode boja proti organiziranemu kriminalu [ChunkID: 16753]. Predlagala je, da se mora boriti proti \"kriminalni združbi\", ki jo vodi Putin, s politično inovacijo [ChunkID: 16753]. Poleg tega je poudarila, da Putin \"zmožen vsega\" in da se z njim ne more pogajati [ChunkID: 11645].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.8333333333333334,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Julija Navalna je povedala, da resolucije in sankcije Putina ne ganejo.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da resolucije in sankcije ne delujejo."
+        },
+        {
+          "fact": "Julija Navalna je predlagala nov pristop, ki vključuje metode boja proti organiziranemu kriminalu.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja nov pristop, ki vključuje metode boja proti organiziranemu kriminalu."
+        },
+        {
+          "fact": "Putina je označila za vodjo skupine organiziranega kriminala.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor uporablja izraz 'kriminalna združba', kar je blizu, vendar ne navaja neposredno, da je Putin vodja te skupine."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je večinoma pravilen, vendar delno nepopoln pri označitvi Putina."
+    },
+    {
+      "eval_id": "eval_000033",
+      "query": "Kaj se je zgodilo v zaklonišču v Kijevu v treh dneh, ki jih je nekdo preživel tam, in kdo pripoveduje o razdeljevanju osnovnih življenjskih potrebščin v mestu Černigov?",
+      "expected_answer": "V treh dneh, ki jih je nekdo preživel v improviziranem zaklonišču v Kijevu, sta se rodila dva dojenčka. Prostovoljka Julija Karazova iz Černigova pripoveduje, da se vozi po mestu in najbolj prizadetim razvaža osnovne življenjske potrebščine.",
+      "candidate_answer": "V treh dneh v zaklonišču v Kijevu se je rodila dva dojenčka [ChunkID: 8266, 8268]. O razdeljevanju osnovnih potrebščin v Černigovu pripoveduje prostovoljka Julija Karazova [ChunkID: 8266].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 2,
+      "key_fact_judgments": [
+        {
+          "fact": "V treh dneh, ki jih je nekdo preživel v improviziranem zaklonišču v Kijevu, sta se rodila dva dojenčka.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da sta se rodila dva dojenčka v zaklonišču v Kijevu."
+        },
+        {
+          "fact": "Prostovoljka Julija Karazova iz Černigova razvaža osnovne življenjske potrebščine najbolj prizadetim prebivalcem mesta.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da Julija Karazova pripoveduje o razdeljevanju osnovnih potrebščin v Černigovu."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je popoln in pravilno pokriva vsa ključna dejstva."
+    },
+    {
+      "eval_id": "eval_000034",
+      "query": "Kaj je povzročilo zaostritev spora med Rusijo in Gruzijo glede čečenskih borcev in kakšne obtožbe je Rusija naslovila na Gruzijo?",
+      "expected_answer": "Spor med Rusijo in Gruzijo se je zaostril po ruskih letalskih napadih na severna območja Gruzije, kjer naj bi se skrivali čečenski uporniki. Rusko zunanje ministrstvo je gruzijskega veleposlanika poklicalo na pogovor in obsodilo odnos Tbilisija do čečenskih 'teroristov'. Rusija gruzijskim oblastem pripisuje vso odgovornost za sobotni vdor čečenskih borcev na rusko ozemlje ter trdi, da je Gruzija dovolila čečenskim upornikom neovirano vstopiti na jug Čečenije, kjer so ubili osem pripadnikov ruskih obmejnih enot.",
+      "candidate_answer": "Zaostritev spora med Rusijo in Gruzijo je povzročila ruska letalska napada na severna območja Gruzije, kjer se skrivajo čečenski uporniki [ChunkID: 19319]. Rusija je Gruzijo obtožila, da je čečenskim upornikom dovolila neovirano vstopiti na jug Čečenije, kjer so ubili osem pripadnikov ruskih obmejnih enot [ChunkID: 19319].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.625,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Spor med Rusijo in Gruzijo se je zaostril po ruskih letalskih napadih na severna območja Gruzije, kjer naj bi se skrivali čečenski uporniki.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da so ruski letalski napadi povzročili zaostritev spora."
+        },
+        {
+          "fact": "Rusko zunanje ministrstvo je gruzijskega veleposlanika poklicalo na pogovor in obsodilo odnos Tbilisija do čečenskih 'teroristov'.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja pogovora z gruzijskim veleposlanikom ali obsodbe odnosa Tbilisija."
+        },
+        {
+          "fact": "Rusija gruzijskim oblastem pripisuje vso odgovornost za sobotni vdor čečenskih borcev na rusko ozemlje.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omeni obtožbo, vendar ne navaja, da Rusija pripisuje vso odgovornost Gruziji."
+        },
+        {
+          "fact": "Rusija trdi, da je Gruzija dovolila čečenskim upornikom neovirano vstopiti na jug Čečenije, kjer so ubili osem pripadnikov ruskih obmejnih enot.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno navaja obtožbo glede neoviranega vstopa čečenskih upornikov."
+        }
+      ],
+      "missing_facts": [
+        "Rusko zunanje ministrstvo je gruzijskega veleposlanika poklicalo na pogovor in obsodilo odnos Tbilisija do čečenskih 'teroristov'."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva ključne informacije, vendar manjka pomemben del o pogovoru z veleposlanikom."
+    },
+    {
+      "eval_id": "eval_000035",
+      "query": "Kaj je Roman Abramovič storil s svojim premoženjem tik pred rusko invazijo na Ukrajino februarja 2022 in kako se je spremenil delež njegovih otrok v njegovem premoženju po tem obdobju?",
+      "expected_answer": "Roman Abramovič je tik pred rusko invazijo na Ukrajino februarja 2022 začel prenašati svoje premoženje na svoje otroke, med drugim je februarja 2022 predal deset čezmejnih skladov s skupno vrednostjo slabih štirih milijard evrov na sedem svojih otrok. Po tem obdobju se je delež njegovih otrok v njegovem premoženju v večini precej povečal, na primer njihov delež v premoženjskem skladu jahte Eclipse se je dvignil za 49 odstotkov.",
+      "candidate_answer": "Roman Abramovič je pred rusko invazijo na Ukrajino februarja 2022 svoje premoženje prepisoval na svoje otroke, med drugim je februarja 2022 v roke svojih potomcev predal deset čezmejnih skladov z ukupno vrednostjo slabe štiri milijarde evrov [ChunkID: 8857]. Po tem obdobju so se deleže njegovih otrok v njegovem premoženju povečali, saj so si že pred predajo premoženja lastili raznolike deleže njegovih podjetij, jaht, letal in nepremičnin, a so z izvedbo tega prenosu pridobili dodatne sredstva.",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.7125,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 1,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Februarja 2022 je Roman Abramovič začel prenašati svoje premoženje na svoje otroke.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je Abramovič prepisoval premoženje na svoje otroke."
+        },
+        {
+          "fact": "Februarja 2022 je predal deset čezmejnih skladov s skupno vrednostjo slabih štirih milijard evrov na sedem svojih otrok.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da je predal deset čezmejnih skladov z vrednostjo slabe štiri milijarde evrov."
+        },
+        {
+          "fact": "Po februarju 2022 se je delež otrok v večini njegovih premoženjskih deležev precej povečal.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor omenja, da so se deleži otrok povečali, vendar ne natančno pojasni, da se je to zgodilo v večini premoženj."
+        },
+        {
+          "fact": "Delež otrok v premoženjskem skladu jahte Eclipse se je dvignil za 49 odstotkov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja specifičnega povečanja deleža otrok v premoženjskem skladu jahte Eclipse."
+        }
+      ],
+      "missing_facts": [
+        "Delež otrok v premoženjskem skladu jahte Eclipse se je dvignil za 49 odstotkov."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka specifična informacija o povečanju deleža v premoženjskem skladu jahte Eclipse."
+    },
+    {
+      "eval_id": "eval_000036",
+      "query": "Katera ruska letala so preletela ameriški rušilec USS Donald Cook v Baltskem morju in kakšne so bile okoliščine teh preletov?",
+      "expected_answer": "Ruska lovca SU-24 sta v ponedeljek večkrat na nizki višini preletela ameriški rušilec USS Donald Cook med vajo pristanka na krovu, pri čemer nista imela oborožitve in sta letela zelo blizu ladje, po nekaterih ocenah celo na razdalji desetih metrov. V torek je nad ladjo najprej letel ruski helikopter, približno 40 minut kasneje pa sta jo preletela še ruska lovca SU-24. Rusko letalo je simuliralo napad in se ni odzvalo na večkratna varnostna opozorila v angleškem in ruskem jeziku, so sporočili iz evropskega poveljstva ameriške vojske (Eucom).",
+      "candidate_answer": "Ruska bojna letala so večkrat nizko preletela ameriško vojaško ladjo USS Donald Cook v Baltskem morju, simulirala napad in se ni odzvala na večkratna varnostna opozorila [ChunkID: 20615]. Nad ladjo je v nizki višini večkrat zaokrožil tudi ruski vojaški helikopter. Incident je potrdil Pentagon, ki je zaznamoval agresivne manevre ruskih letal v neposredni bližini ladje.",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.5,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 2,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Ruska lovca SU-24 sta v ponedeljek večkrat na nizki višini preletela ameriški rušilec USS Donald Cook med vajo pristanka na krovu.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omenja nizke prelete, vendar ne specificira, da so to bila lovca SU-24 in da je šlo za vajo pristanka."
+        },
+        {
+          "fact": "Lovci SU-24 niso imeli oborožitve in so leteli zelo blizu ladje, po nekaterih ocenah celo na razdalji desetih metrov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja, da letala niso imela oborožitve in da so letela zelo blizu ladje."
+        },
+        {
+          "fact": "V torek je nad ladjo najprej letel ruski helikopter, približno 40 minut kasneje pa sta jo preletela še ruska lovca SU-24.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Kandidatni odgovor omenja helikopter, vendar ne natančno časovno zaporedje in ne omenja, da sta lovca SU-24 preletela ladjo kasneje."
+        },
+        {
+          "fact": "Rusko letalo je simuliralo napad in se ni odzvalo na večkratna varnostna opozorila v angleškem in ruskem jeziku.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da so letala simulirala napad in se niso odzvala na opozorila."
+        }
+      ],
+      "missing_facts": [
+        "Lovci SU-24 niso imeli oborožitve in so leteli zelo blizu ladje, po nekaterih ocenah celo na razdalji desetih metrov.",
+        "V torek je nad ladjo najprej letel ruski helikopter, približno 40 minut kasneje pa sta jo preletela še ruska lovca SU-24."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva nekatere ključne informacije, vendar manjkajo pomembni detajli o letalih in časovnem zaporedju."
+    },
+    {
+      "eval_id": "eval_000037",
+      "query": "Kaj je Denis Pušilin trdil o Mariupolu in ukrajinskih vojaki v tovarni Azovstal ter kakšne so bile razmere v mestu med rusko invazijo?",
+      "expected_answer": "Denis Pušilin je trdil, da so separatistične sile zavzele Mariupol in da je mariupolsko pristanišče pod nadzorom ruskih sil. V bližini tovarne Azovstal je po njegovih navedbah obkroženih najmanj 1500 ukrajinskih vojakov, ki so poskušali pobegniti, a so jih ruske sile onemogočile, del vojakov je bil uničen, del pa se je predal. Mariupol je bil od začetka ruske invazije 24. februarja izpostavljen enim najhujših napadov, v katerih je umrlo več tisoč civilistov. Mesto je praktično porušeno, prebivalci pa poročajo o lakoti, mrazu in skrivanju v kleteh.",
+      "candidate_answer": "Denis Pušilin je trdil, da so separatistične sile na vzhodu Ukrajine zavzele Mariupol in da je pristanišče pod nadzorom ruskih sil, ter da je v bližini tovarne Azovstal obkroženih najmanj 1500 ukrajinskih vojakov [ChunkID: 10342]. Prav tako je dejal, da bo daljše zavzetje mesta povzročilo večje trpljenje civilstva [ChunkID: 10310]. Razmere v Mariupolu so bile grozljive: med napadi so umrli več tisoč civilistov, preživeli pa poročajo o lakoti, mrazu in skrivanju v kletih [ChunkID: 10342].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.7142857142857143,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 5,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 7,
+      "key_fact_judgments": [
+        {
+          "fact": "Denis Pušilin je trdil, da so separatistične sile zavzele Mariupol.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da so separatistične sile zavzele Mariupol."
+        },
+        {
+          "fact": "Mariupolsko pristanišče je po njegovih navedbah pod nadzorom ruskih sil.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor potrjuje, da je pristanišče pod nadzorom ruskih sil."
+        },
+        {
+          "fact": "V bližini tovarne Azovstal je obkroženih najmanj 1500 ukrajinskih vojakov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor navaja, da je v bližini tovarne Azovstal obkroženih najmanj 1500 ukrajinskih vojakov."
+        },
+        {
+          "fact": "Ukrajinski vojaki so poskušali pobegniti iz Mariupola, a so jih ruske sile onemogočile; del vojakov je bil uničen, del pa se je predal.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja, da so ukrajinski vojaki poskušali pobegniti in da so jih ruske sile onemogočile."
+        },
+        {
+          "fact": "Mariupol je bil od začetka ruske invazije 24. februarja izpostavljen enim najhujših napadov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja začetka ruske invazije in hudih napadov na Mariupol."
+        },
+        {
+          "fact": "V Mariupolu je med napadi umrlo več tisoč civilistov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor navaja, da je med napadi umrlo več tisoč civilistov."
+        },
+        {
+          "fact": "Mesto je praktično zravnano s tlemi, prebivalci pa poročajo o lakoti, mrazu in skrivanju v kleteh.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor omenja grozljive razmere, vključno z lakoto, mrazom in skrivanjem v kleteh."
+        }
+      ],
+      "missing_facts": [
+        "Ukrajinski vojaki so poskušali pobegniti iz Mariupola, a so jih ruske sile onemogočile; del vojakov je bil uničen, del pa se je predal.",
+        "Mariupol je bil od začetka ruske invazije 24. februarja izpostavljen enim najhujših napadov."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor pokriva večino ključnih dejstev, vendar manjka pomemben del o poskusih ukrajinskih vojakov, da pobegnejo, in o začetku invazije."
+    },
+    {
+      "eval_id": "eval_000038",
+      "query": "Kaj je ruski obrambni minister Sergej Šojgu povedal o ukrajinski protiofenzivi v regiji Herson in kakšne informacije so podane o izmenjavi vojakov med Ukrajino in Rusijo?",
+      "expected_answer": "Ruski obrambni minister Sergej Šojgu je izjavil, da je ukrajinska protiofenziva v južni regiji Herson v veliki meri neuspešna in da so ukrajinske sile utrpele velike izgube. Po njegovem mnenju je cilj protiofenzive ustvarjanje iluzije na Zahodu, da je ukrajinska vojska sposobna izvajanja protinapadov. Ukrajinska stran pa trdi, da so prebili rusko frontno črto v regiji Herson. Poleg tega sta si Ukrajina in Rusija izmenjali več zajetih vojakov, pri čemer je bilo izmenjanih 14 Ukrajincev in zaenkrat še neznano število Rusov.",
+      "candidate_answer": "Ruski obrambni minister Sergej Šojgu je povedal, da je ukrajinska protiofenziva v regiji Herson \"v veliki meri neuspešna\" in da so ukrajinske sile utrpele velike izgube, ter da je njen cilj ustvarjanje iluzije na Zahodu o sposobnosti Ukrajine izvajanja protinapadov [ChunkID: 7086]. Informacije o izmenjavi vojakov med Ukrajino in Rusijo so podane kot izmenjava 14 Ukrajincev in neznano število Rusov [ChunkID: 7086].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 0.8,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 4,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 1,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Ruski obrambni minister Sergej Šojgu je dejal, da je ukrajinska protiofenziva v južni regiji Herson v veliki meri neuspešna.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da je Šojgu izjavil, da je protiofenziva neuspešna."
+        },
+        {
+          "fact": "Po Šojgu so ukrajinske sile utrpele velike izgube.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor vključuje informacijo o velikih izgubah ukrajinskih sil."
+        },
+        {
+          "fact": "Šojgu meni, da je cilj ukrajinske protiofenzive ustvarjanje iluzije na Zahodu o sposobnosti ukrajinske vojske za protinapade.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno povzema Šojgovo mnenje o cilju protiofenzive."
+        },
+        {
+          "fact": "Ukrajinska vojska trdi, da je prebila rusko frontno črto v južni regiji Herson.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Kandidatni odgovor ne omenja trditev ukrajinske vojske o preboju frontne črte."
+        },
+        {
+          "fact": "Ukrajina in Rusija sta si izmenjali več zajetih vojakov, vključno z 14 Ukrajinci in zaenkrat neznanim številom Rusov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor pravilno navaja informacije o izmenjavi vojakov."
+        }
+      ],
+      "missing_facts": [
+        "Ukrajinska vojska trdi, da je prebila rusko frontno črto v južni regiji Herson."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je zelo dober, vendar manjka informacija o trditvi ukrajinske vojske."
+    },
+    {
+      "eval_id": "eval_000039",
+      "query": "Kaj se je zgodilo med protiteroristično akcijo v Mahačkali in koliko ljudi je umrlo na obeh straneh?",
+      "expected_answer": "V Mahačkali je prišlo do streljanja, v katerem je bil ubit znani terorist Magomedžagir Akajev in trije pripadniki zveznih varnostnih sil. Skrajneži so se zatekli v hišo, kjer se je po 15 urah končala akcija posebnih enot ruskega ministrstva za obrambo. Umrlo je pet skrajnežev in trije pripadniki ruskih posebnih enot alfa.",
+      "candidate_answer": "Med protiteroristično akcijo v Mahačkali je umrlo pet skrajnežev in trije pripadniki ruskih posebnih enot alfa [ChunkID: 21053].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.25,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "V Mahačkali je bil ubit terorist Magomedžagir Akajev.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja terorista Magomedžagirja Akajeva."
+        },
+        {
+          "fact": "V streljanju so umrli trije pripadniki zveznih varnostnih sil.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja treh pripadnikov zveznih varnostnih sil."
+        },
+        {
+          "fact": "Skrajneži so se zatekli v hišo, kjer je akcija trajala 15 ur.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja, da so se skrajneži zatekli v hišo in da je akcija trajala 15 ur."
+        },
+        {
+          "fact": "Umrlo je pet skrajnežev in trije pripadniki ruskih posebnih enot alfa.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor pravilno navaja število umrlih skrajnežev in pripadnikov ruskih posebnih enot."
+        }
+      ],
+      "missing_facts": [
+        "V Mahačkali je bil ubit terorist Magomedžagir Akajev.",
+        "V streljanju so umrli trije pripadniki zveznih varnostnih sil.",
+        "Skrajneži so se zatekli v hišo, kjer je akcija trajala 15 ur."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva le del informacij in manjka več ključnih dejstev."
+    },
+    {
+      "eval_id": "eval_000040",
+      "query": "Kdo je Andrej Medvedjev, kakšna je njegova povezava z Wagnerjevo skupino in kje se trenutno nahaja?",
+      "expected_answer": "Andrej Medvedjev je prvi znani pripadnik Wagnerjevih plačancev, ki se je boril v Ukrajini, a nato fronto zapustil. Trenutno je v Oslu, kjer prosi za azil.",
+      "candidate_answer": "Andrej Medvedjev je bivši član ruske skupine plačancev Wagner, ki se je boril v Ukrajini, a nato zapustil fronto in je trenutno v Oslu, kjer prosi za azil [ChunkID: 13326]. Priznal je, da je bil del Wagnerjeve skupine, vendar je izključil, da je bil del \"hrane za topove\" [ChunkID: 1602].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Andrej Medvedjev je prvi znani pripadnik Wagnerjevih plačancev, ki se je boril v Ukrajini.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor jasno navaja, da se je Medvedjev boril v Ukrajini kot član Wagnerjeve skupine."
+        },
+        {
+          "fact": "Andrej Medvedjev je fronto zapustil.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor potrjuje, da je Medvedjev zapustil fronto."
+        },
+        {
+          "fact": "Trenutno je v Oslu, kjer prosi za azil.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Kandidatni odgovor natančno navaja, da je Medvedjev trenutno v Oslu in prosi za azil."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor je popoln in natančno pokriva vse ključne informacije."
+    },
+    {
+      "eval_id": "eval_000041",
+      "query": "Kako ameriška administracija ocenjuje ruske sankcije proti Zahodu in kakšne posledice pričakujejo za Rusijo ter ameriške potrošnike?",
+      "expected_answer": "Ameriška administracija ocenjuje ruske sankcije proti Zahodu kot politično motivirane in zanemarljive. Po njihovem prepričanju so sankcije dejansko usmerjene proti Rusom samim, saj bodo posledice sankcij veliko hujše za Rusijo kot za Zahod. Za ameriške potrošnike so ruske sankcije celo dobra novica, saj bodo znižale cene ameriške perutnine, ki predstavlja velik del ameriškega prehrambenega izvoza v Rusijo.",
+      "candidate_answer": "Ameriška administracija ocenjuje ruske sankcije proti Zahodu kot politično motivirane in zanemarljive, saj bodo posledice sankcij veliko hujše za Rusijo kot za Zahod [ChunkID: 20463]. Ruske sankcije so za ameriške potrošnike dobra novica, saj bodo znižale cene perutnine, ki predstavlja velik del ameriškega prehrambenega izvoza v Rusijo [ChunkID: 20463].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Ameriška administracija označuje ruske sankcije proti Zahodu kot politično motivirane in zanemarljive.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da ameriška administracija ruske sankcije ocenjuje kot politično motivirane in zanemarljive."
+        },
+        {
+          "fact": "Po prepričanju Washingtona bodo posledice sankcij veliko hujše za Rusijo kot za Zahod.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno izraža prepričanje, da bodo posledice sankcij hujše za Rusijo kot za Zahod."
+        },
+        {
+          "fact": "Ruske sankcije bodo znižale cene ameriške perutnine, kar je dobra novica za ameriške potrošnike.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor navaja, da bodo ruske sankcije znižale cene perutnine, kar je pozitivno za ameriške potrošnike."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je popoln in pokriva vsa ključna dejstva."
+    },
+    {
+      "eval_id": "eval_000042",
+      "query": "Kako je tiskovni predstavnik Kremlja Dmitrij Peskov opisal spremembe ameriške zunanje politike pod predsednikom Donaldom Trumpom in kakšen je njegov pogled na odnose med Rusijo in ZDA?",
+      "expected_answer": "Dmitrij Peskov je ocenil, da so korenite spremembe ameriške zunanje politike pod predsednikom Donaldom Trumpom v veliki meri v skladu z ruskimi stališči in da nova administracija hitro spreminja vse konfiguracije svoje zunanje politike, kar sovpada z rusko vizijo. Hkrati pa je izpostavil, da Rusijo in ZDA čaka še dolga pot, saj so dvostranski odnosi utrpeli ogromno škodo.",
+      "candidate_answer": "Dmitrij Peskov je poudaril, da se spremembe ameriške zunanje politike pod Trumpom v veliki meri ujemanje z ruskimi stališči [ChunkID: 4793], in da Rusija ostaja pripravljena na enakopraven dialog z ZDA, vendar še niso prejeli signalov iz Washingtona [ChunkID: 19706]. Poudaril je tudi željo ZDA za konstruktivno sodelovanje z Rusijo pri prizadevanjih za mir med Rusijo in Ukrajino [ChunkID: 17797].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.3333333333333333,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "Dmitrij Peskov je dejal, da so korenite spremembe ameriške zunanje politike v veliki meri v skladu z ruskimi stališči.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da se spremembe ameriške zunanje politike ujemajo z ruskimi stališči."
+        },
+        {
+          "fact": "Nova administracija hitro spreminja vse konfiguracije svoje zunanje politike.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja hitrih sprememb konfiguracij zunanje politike."
+        },
+        {
+          "fact": "Peskov je izpostavil, da Rusijo in ZDA čaka še dolga pot, saj so dvostranski odnosi utrpeli ogromno škodo.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja dolge poti in škode v dvostranskih odnosih."
+        }
+      ],
+      "missing_facts": [
+        "Nova administracija hitro spreminja vse konfiguracije svoje zunanje politike.",
+        "Peskov je izpostavil, da Rusijo in ZDA čaka še dolga pot, saj so dvostranski odnosi utrpeli ogromno škodo."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva del vprašanja, vendar manjka pomemben del informacij o spremembah in škodi v odnosih."
+    },
+    {
+      "eval_id": "eval_000043",
+      "query": "Kaj razkrivajo prestreženi klici ruskih vojakov o njihovih razmerah na fronti blizu ukrajinskega Limana in kakšne dogodke so omenili v teh klicih?",
+      "expected_answer": "Prestreženi klic ruskega vojaka Andreja blizu ukrajinskega Limana 8. novembra razkriva, da vojak ni dobival hrane, je pil vodo iz luž, ki so jo precedili, in je ignoriral ukaze nadrejenih, da je poklical svojo mamo. Dva dni pred tem so ruske sile začele streljati na ukrajinske položaje s fosfornimi bombami. Liman so Rusi zavzeli maja, oktobra pa so ga osvobodile ukrajinske sile.",
+      "candidate_answer": "Prestreženi klici razkrivajo hude razmere ruskih vojakov, kot so pomanjkanje hrane in vode, ter uporabo fosfornih bomb. V klicih so omenili, da vojaki prebivajo v spalnih vrečah, so zdravstveno slabostni in da so bili izpostavljeni intenzivnim napadom. [ChunkID: 11889][ChunkID: 11891]",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.375,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 4,
+      "key_fact_judgments": [
+        {
+          "fact": "Vojak Andrej je 8. novembra poklical svojo mamo z mobilnega telefona na fronti blizu ukrajinskega Limana.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja imena vojaka ali datuma klica."
+        },
+        {
+          "fact": "Vojak je povedal, da niso dobivali hrane, zaloge so bile slabe, vodo so pili iz luž, ki so jo precedili.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja pomanjkanje hrane in vode, vendar ne natančno opisuje, da so pili vodo iz luž."
+        },
+        {
+          "fact": "Dva dni pred Andrejevim klicem so ruske sile začele streljati na ukrajinske položaje s fosfornimi bombami.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor omenja uporabo fosfornih bomb."
+        },
+        {
+          "fact": "Liman so Rusi zavzeli maja, oktobra pa so ga osvobodile ukrajinske sile.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje informacij o zavzetju in osvoboditvi Limana."
+        }
+      ],
+      "missing_facts": [
+        "Vojak Andrej je 8. novembra poklical svojo mamo z mobilnega telefona na fronti blizu ukrajinskega Limana.",
+        "Liman so Rusi zavzeli maja, oktobra pa so ga osvobodile ukrajinske sile."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor zajema nekatere informacije, vendar pomembno manjka kontekst in specifičnosti."
+    },
+    {
+      "eval_id": "eval_000044",
+      "query": "Koliko ljudi je umrlo in koliko je bilo ranjenih v nočnih ruskih napadih na Kijev, ter koliko gospodinjstev je ostalo brez elektrike?",
+      "expected_answer": "V nočnih ruskih napadih na Kijev so umrli trije ljudje, skoraj 30 je ranjenih, brez elektrike pa je ostalo več kot 600.000 gospodinjstev, od tega več kot 500.000 v Kijevu.",
+      "candidate_answer": "V nočnih ruskih napadih na Kijev so umrli trije ljudje, skoraj 30 je bilo ranjenih, in več kot 600.000 gospodinjstev je ostalo brez elektrike [ChunkID: 829].",
+      "overall_semantic_score": 1.0,
+      "key_fact_coverage_score": 1.0,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 3,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 0,
+      "contradicted_count": 0,
+      "num_key_facts": 3,
+      "key_fact_judgments": [
+        {
+          "fact": "V nočnih ruskih napadih na Kijev so umrli trije ljudje.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Dejstvo je jasno in pravilno navedeno."
+        },
+        {
+          "fact": "V nočnih ruskih napadih na Kijev je skoraj 30 ljudi ranjenih.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Dejstvo je jasno in pravilno navedeno."
+        },
+        {
+          "fact": "Brez elektrike je ostalo več kot 600.000 gospodinjstev, od tega več kot 500.000 v Kijevu.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Dejstvo je jasno in pravilno navedeno."
+        }
+      ],
+      "missing_facts": [],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Kandidatni odgovor popolnoma pokriva vse ključne informacije iz referenčnega odgovora."
+    }
+  ]
+}

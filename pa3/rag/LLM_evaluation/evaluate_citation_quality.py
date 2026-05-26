@@ -7,7 +7,7 @@ from collections import defaultdict
 
 EVAL_DATASET_PATH = "evaluation_dataset.json"
 ANSWERS_PATH = "eval_answers/ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_mmarco_3.json"
-# ANSWERS_PATH = "eval_answers/ollama_chat-qwen3-4b_rag_one_shot_bge-m3_50_mmarco_3.json"
+K = 3
 
 
 def load_answers(answers_path: str) -> dict:
@@ -35,6 +35,7 @@ def load_eval_dataset(dataset_path: str) -> list:
 def to_str_set(values: list) -> set[str]:
     return set(str(v) for v in values)
 
+
 def chunk_sort_key(x):
     x = str(x)
     if x.isdigit():
@@ -58,17 +59,22 @@ def score_citation_quality(
     partial_support = to_str_set(partial_support_chunk_ids)
     hard_negatives = to_str_set(hard_negative_chunk_ids)
 
-    # Required chunks are always acceptable positives.
     acceptable = acceptable | required
-
-    # Partial supports are useful/relevant, but not full evidence for the expected answer.
     partial_support = partial_support - acceptable
-
-    # Hard negatives should only contain true negatives.
     hard_negatives = hard_negatives - acceptable - partial_support
-
-    # All chunks the model surfaced, either inline or in references_json.
     all_surfaced = cited | referenced
+
+    hit_at_k = bool(all_surfaced & acceptable)
+
+    precision_at_k = (
+        len(all_surfaced & acceptable) / len(all_surfaced)
+        if all_surfaced else None
+    )
+
+    recall_at_k = (
+        len(all_surfaced & acceptable) / len(acceptable)
+        if acceptable else None
+    )
 
     required_hit = bool(all_surfaced & required)
     acceptable_hit = bool(all_surfaced & acceptable)
@@ -92,10 +98,14 @@ def score_citation_quality(
 
     cited_reference_match = cited == referenced
 
-    cited_without_reference = sorted(cited - referenced)
-    referenced_without_citation = sorted(referenced - cited)
+    cited_without_reference = sorted(cited - referenced, key=chunk_sort_key)
+    referenced_without_citation = sorted(referenced - cited, key=chunk_sort_key)
 
     return {
+        "hit_at_k": hit_at_k,
+        "precision_at_k": precision_at_k,
+        "recall_at_k": recall_at_k,
+
         "required_hit": required_hit,
         "acceptable_hit": acceptable_hit,
         "partial_support_hit": partial_support_hit,
@@ -156,14 +166,33 @@ def run_eval(dataset_path: str, answers_path: str):
         }
         results.append(result)
 
-        status = "✓" if score["required_hit"] else "✗"
+        status = "✓" if score["hit_at_k"] else "✗"
         partial = " ~ PARTIAL" if score["partial_support_hit"] else ""
         neg = " ⚠ HARD NEG" if score["hard_negative_hit"] else ""
         ref_mismatch = " ⚠ REF MISMATCH" if not score["cited_reference_match"] else ""
 
         print(f"[{status}] {eval_id}{partial}{neg}{ref_mismatch}")
-        print(f"  required_hit={score['required_hit']}  acceptable_hit={score['acceptable_hit']}  partial_support_hit={score['partial_support_hit']}")
-        print(f"  hard_negative_hit={score['hard_negative_hit']}  cited_reference_match={score['cited_reference_match']}")
+
+        print(
+            f"  hit@{K}={score['hit_at_k']}  "
+            f"precision@{K}={score['precision_at_k']:.2f}" if score["precision_at_k"] is not None
+            else f"  hit@{K}={score['hit_at_k']}  precision@{K}=N/A"
+        )
+
+        if score["recall_at_k"] is not None:
+            print(f"  recall@{K}={score['recall_at_k']:.2f}")
+        else:
+            print(f"  recall@{K}=N/A")
+
+        print(
+            f"  required_hit={score['required_hit']}  "
+            f"acceptable_hit={score['acceptable_hit']}  "
+            f"partial_support_hit={score['partial_support_hit']}"
+        )
+        print(
+            f"  hard_negative_hit={score['hard_negative_hit']}  "
+            f"cited_reference_match={score['cited_reference_match']}"
+        )
 
         if score["required_recall"] is not None:
             print(f"  required_recall={score['required_recall']:.2f}")
@@ -217,6 +246,20 @@ def run_eval(dataset_path: str, answers_path: str):
     n = len(results)
 
     if n:
+        hit_at_k_count = sum(r["hit_at_k"] for r in results)
+
+        precision_at_k_values = [
+            r["precision_at_k"]
+            for r in results
+            if r["precision_at_k"] is not None
+        ]
+
+        recall_at_k_values = [
+            r["recall_at_k"]
+            for r in results
+            if r["recall_at_k"] is not None
+        ]
+
         req_hits = sum(r["required_hit"] for r in results)
         acc_hits = sum(r["acceptable_hit"] for r in results)
         partial_hits = sum(r["partial_support_hit"] for r in results)
@@ -243,12 +286,46 @@ def run_eval(dataset_path: str, answers_path: str):
 
         print("=" * 50)
         print(f"AGGREGATE  (n={n})")
+
+        hit_at_k = hit_at_k_count / n
+        mean_precision_at_k = None
+        mean_recall_at_k = None
+        
+        if precision_at_k_values:
+           mean_precision_at_k = sum(precision_at_k_values) / len(precision_at_k_values)
+        
+        if recall_at_k_values:
+            mean_recall_at_k = sum(recall_at_k_values) / len(recall_at_k_values)
+        
+        print()
+        print("MAIN METRICS")
+        print(f"  hit@{K}                  : {hit_at_k:.1%}")
+
+        if precision_at_k_values:
+            print(
+                f"  mean_precision@{K}       : "
+                f"{mean_precision_at_k:.2f}"
+            )
+        else:
+            print(f"  mean_precision@{K}       : N/A")
+
+        if recall_at_k_values:
+            print(
+                f"  mean_recall@{K}          : "
+                f"{mean_recall_at_k:.2f}"
+            )
+        else:
+            print(f"  mean_recall@{K}          : N/A")
+
+        print()
+        print("RAW / DEBUG METRICS")
         print(f"  required_hit_rate        : {req_hits / n:.1%}")
         print(f"  acceptable_hit_rate      : {acc_hits / n:.1%}")
         print(f"  partial_support_hit_rate : {partial_hits / n:.1%}")
         print(f"  hard_negative_rate       : {neg_hits / n:.1%}")
         print(f"  citation_reference_match : {ref_matches / n:.1%}")
 
+        
         if req_recalls:
             print(f"  mean_required_recall     : {sum(req_recalls) / len(req_recalls):.2f}")
 
@@ -258,8 +335,22 @@ def run_eval(dataset_path: str, answers_path: str):
         if partial_recalls:
             print(f"  mean_partial_recall      : {sum(partial_recalls) / len(partial_recalls):.2f}")
 
-    return results
+    return results, hit_at_k, mean_precision_at_k, mean_recall_at_k
 
 
 if __name__ == "__main__":
-    results = run_eval(EVAL_DATASET_PATH, ANSWERS_PATH)
+    results, hit_at_k, mean_prec_at_k, mean_recall_at_k = run_eval(EVAL_DATASET_PATH, ANSWERS_PATH)
+
+    metrics_output = {
+        "answers_file": ANSWERS_PATH,
+        "hit_at_k": hit_at_k,
+        "mean_precision_at_k": mean_prec_at_k,
+        "mean_recall_at_k": mean_recall_at_k,
+    }
+
+    metrics_output_path = "citation_quality_metrics.json"
+
+    with open(metrics_output_path, "w", encoding="utf-8") as f:
+        json.dump(metrics_output, f, ensure_ascii=False, indent=2)
+
+    print(f"Saved citation quality metrics to {metrics_output_path}")

@@ -1,0 +1,1193 @@
+{
+  "metadata": {
+    "dataset_path": "eval_datasets/evaluation_dataset_unbiased.json",
+    "answers_path": "eval_answers/ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_mmarco_3_unbiased.json",
+    "judge_model": "gpt-4o-mini",
+    "temperature": 0.0
+  },
+  "aggregate": {
+    "n": 20,
+    "mean_overall_semantic_score": 0.29,
+    "mean_key_fact_coverage_score": 0.1815,
+    "answer_addressed_rate": 0.6,
+    "hallucination_rate": 0.0,
+    "contradiction_rate": 0.0,
+    "major_error_rate": 0.45,
+    "total_key_facts": 100,
+    "total_covered": 7,
+    "total_implied": 9,
+    "total_partial": 7,
+    "total_missing": 77,
+    "total_contradicted": 0,
+    "strict_key_fact_coverage": 0.07,
+    "relaxed_key_fact_coverage": 0.1815
+  },
+  "examples": [
+    {
+      "eval_id": "eval_000001",
+      "query": "Kako je Donald Trump po vrnitvi na položaj spremenil pristop ZDA do vojne med Rusijo in Ukrajino?",
+      "expected_answer": "Donald Trump si prizadeva za hitrejša pogajanja in postavlja pod vprašaj obseg dolgoročne ameriške vojaške pomoči Ukrajini. Njegova administracija poudarja delitev bremena med evropskimi zavezniki ter daje prednost izogibanju neposredni eskalaciji z Rusijo. Kritiki menijo, da bi to lahko prisililo Ukrajino v ozemeljske koncesije, podporniki pa trdijo, da bi to lahko pospešilo mirovna pogajanja.",
+      "candidate_answer": "Donald Trump je po vrnitvi na položaj predsednika ZDA spremenil politiko ZDA do Rusije, prekinal mednarodno izolacijo in začel pogovore o miru s Putinom, kar je povzročilo zaskrbljenost v Ukrajini in Evropi [ChunkID: 6047]. Hkrati je zavzel ostrejše stališče do Moskve in kritiziral ukrajinskega predsednika Zelenskega [ChunkID: 14846].",
+      "overall_semantic_score": 0.2,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": true,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Donald Trump se je zavzemal za hitrejša pogajanja glede vojne v Ukrajini.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Trumpovega prizadevanja za hitrejša pogajanja."
+        },
+        {
+          "fact": "Trump je postavil pod vprašaj dolgoročno raven ameriške vojaške pomoči Ukrajini.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vprašanja o ameriški vojaški pomoči."
+        },
+        {
+          "fact": "Njegova administracija je poudarjala večjo delitev bremena med evropskimi državami.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava delitve bremena med evropskimi zavezniki."
+        },
+        {
+          "fact": "Kritiki so trdili, da bi njegova politika lahko prisilila Ukrajino v koncesije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja kritik glede morebitnih koncesij Ukrajine."
+        },
+        {
+          "fact": "Podporniki pa so menili, da bi njegov pristop lahko pospešil mirovna pogajanja.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vključuje mnenj podpornikov o pospeševanju mirovnih pogajanj."
+        }
+      ],
+      "missing_facts": [
+        "Donald Trump se je zavzemal za hitrejša pogajanja glede vojne v Ukrajini.",
+        "Trump je postavil pod vprašaj dolgoročno raven ameriške vojaške pomoči Ukrajini.",
+        "Njegova administracija je poudarjala večjo delitev bremena med evropskimi državami.",
+        "Kritiki so trdili, da bi njegova politika lahko prisilila Ukrajino v koncesije.",
+        "Podporniki pa so menili, da bi njegov pristop lahko pospešil mirovna pogajanja."
+      ],
+      "incorrect_or_unsupported_claims": [
+        "Trump je prekinal mednarodno izolacijo in začel pogovore o miru s Putinom."
+      ],
+      "short_reason": "Odgovor ne pokriva ključnih dejstev o Trumpovem pristopu do vojne v Ukrajini."
+    },
+    {
+      "eval_id": "eval_000002",
+      "query": "Katera so glavna nesoglasja med Volodimirjem Zelenskim in Vladimirjem Putinom glede morebitnega mirovnega sporazuma?",
+      "expected_answer": "Volodimir Zelenski vztraja pri ohranitvi ozemeljske celovitosti Ukrajine in varnostnih jamstvih, medtem ko Vladimir Putin zahteva priznanje ozemelj pod ruskim nadzorom ter omejitve ukrajinskih ambicij glede zveze NATO. Ukrajina zahteva umik ruskih vojakov in obnovitev suverenosti, Rusija pa vojno predstavlja kot zaščito svojih strateških interesov.",
+      "candidate_answer": "Glavna nesoglasja med Zelenskim in Putinom glede morebitnega mirovnega sporazuma vključujejo:  \n1. **Vrnitev ozemelj**: Zelenski zahteva vrnitev vseh zasedenih ozemelj Ukrajine, medtem ko Putinov svetovalec poudarja možnost kompromisov [ChunkID: 14489].  \n2. **Poučnost mirovnega sporazuma**: Zelenski ne zaupa Putinu in meni, da bi se Rusija v prihodnosti lahko \"vrnila\" na ozemlje, medtem ko Putinov svetovalec izraža željo po trajnem miru [ChunkID: 10662].  \n3. **Zahteve za nadomestilo in odgovornost**: Zelenski zahteva nadomestilo za škodo, povzročeno z vojno, ter pregon vojnih zločinov, kar ni omenjano kot Putinova predlog [ChunkID: 4145].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.1,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 4,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Volodimir Zelenski podpira ohranitev ozemeljske celovitosti Ukrajine.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Zelenski zahteva vrnitev vseh zasedenih ozemelj, kar delno pokriva ohranitev ozemeljske celovitosti."
+        },
+        {
+          "fact": "Ukrajina v vsakem sporazumu zahteva varnostna jamstva.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja varnostnih jamstev."
+        },
+        {
+          "fact": "Vladimir Putin želi priznanje ozemelj pod ruskim nadzorom.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Putinovih zahtev po priznanju ozemelj."
+        },
+        {
+          "fact": "Rusija nasprotuje vstopu Ukrajine v zvezo NATO.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja nasprotovanja Rusije vstopu Ukrajine v NATO."
+        },
+        {
+          "fact": "Ukrajina zahteva umik ruskih vojakov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja zahteve po umiku ruskih vojakov."
+        }
+      ],
+      "missing_facts": [
+        "Ukrajina v vsakem sporazumu zahteva varnostna jamstva.",
+        "Vladimir Putin želi priznanje ozemelj pod ruskim nadzorom.",
+        "Rusija nasprotuje vstopu Ukrajine v zvezo NATO.",
+        "Ukrajina zahteva umik ruskih vojakov."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor se osredotoča na nekatere aspekte nesoglasij, vendar pomembna dejstva manjkajo."
+    },
+    {
+      "eval_id": "eval_000003",
+      "query": "Kako je vojna v Ukrajini vplivala na odnose med Rusijo in državami zveze NATO?",
+      "expected_answer": "Vojna je okrepila sodelovanje med članicami zveze NATO in povzročila povečanje obrambnih izdatkov po Evropi. Države, kot sta Finska in Švedska, so se zaradi varnostnih skrbi glede Rusije približale zvezi NATO oziroma se ji pridružile. Rusija širitev zveze NATO dojema kot neposredno grožnjo, odnosi med Rusijo in Zahodom pa so na najnižji ravni po hladni vojni.",
+      "candidate_answer": "Vojna v Ukrajini je povzročila napetosti med Rusijo in državami zveze NATO, kar je vodilo v uvedbo sankcij, ki so vplivale tudi na evropsko gospodarstvo [ChunkID: 20491]. Poleg tega je Rusija poskušala odprtost svojih odnosov s nekaterimi državami, kot je Srbija, medtem ko so države NATO poudarjale potrebo po koordinaciji odziva na ruska dejanja [ChunkID: 20358]. Putin je poudaril, da bi ukrajinsko članstvo v NATO pomenilo jedrsko vojno, kar bi v dolgoročnem smislu zamrznilo konflikt, v katerem bi Rusija pridobila nekaj, kar ne bi bila nikoli več pripravljena vračati [ChunkID: 7441].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.27,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 1,
+      "partial_count": 1,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Članice zveze NATO so po invaziji povečale obrambne izdatke.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja povečanja obrambnih izdatkov članic NATO."
+        },
+        {
+          "fact": "Finska se je po ruski invaziji pridružila zvezi NATO.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Finske in njenega članstva v NATO."
+        },
+        {
+          "fact": "Švedska se je zaradi varnostnih skrbi približala članstvu v zvezi NATO.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Švedske in njenega približevanja NATO."
+        },
+        {
+          "fact": "Rusija širitev zveze NATO dojema kot grožnjo.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor nakazuje, da Rusija vidi grožnjo v članstvu Ukrajine v NATO."
+        },
+        {
+          "fact": "Odnosi med Rusijo in Zahodom so se po začetku vojne močno poslabšali.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja napetosti, vendar ne izraža, da so odnosi na najnižji ravni po hladni vojni."
+        }
+      ],
+      "missing_facts": [
+        "Članice zveze NATO so po invaziji povečale obrambne izdatke.",
+        "Finska se je po ruski invaziji pridružila zvezi NATO.",
+        "Švedska se je zaradi varnostnih skrbi približala članstvu v zvezi NATO."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor se dotika nekaterih vidikov, a pomembna dejstva o obrambnih izdatkih in članstvu držav NATO so manjkajoča."
+    },
+    {
+      "eval_id": "eval_000004",
+      "query": "Zakaj analitike skrbi možnost jedrske eskalacije, povezane z Rusijo?",
+      "expected_answer": "Analitike skrbi jedrska eskalacija, ker ima Rusija enega največjih jedrskih arzenalov na svetu in je med vojno večkrat omenjala jedrsko odvračanje. Vojaški neuspehi ali neposredna vpletenost zveze NATO bi lahko dodatno povečali napetosti. Tudi omejena uporaba jedrskega orožja bi imela hude humanitarne posledice, čeprav medsebojno odvračanje zmanjšuje verjetnost obsežne jedrske vojne.",
+      "candidate_answer": "Analitiki skrbijo zaradi možnosti uporabe taktičnega jedrskega orožja, ki ima nižjo eksplozivno silo in krajši domet, vendar bi lahko povzročilo velike škode [ChunkID: 18858]. Poleg tega obstaja tveganje, da bi se napetosti med Rusijo in Zahodom razvile v jedrsko eskalacijo, še posebej zaradi morebitne uporabe ruskega vesoljskega orožja, ki bi lahko ogrozilo ameriške satelite [ChunkID: 16412].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.16999999999999998,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 1,
+      "partial_count": 0,
+      "missing_count": 4,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Rusija ima velik jedrski arzenal.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja velikosti ruskega jedrskega arzenala."
+        },
+        {
+          "fact": "Ruski uradniki so med vojno omenjali jedrsko odvračanje.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omeni jedrskega odvračanja, ki ga omenjajo ruski uradniki."
+        },
+        {
+          "fact": "Analitiki se bojijo eskalacije, če bi se zveza NATO neposredno vključila v konflikt.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vpletenosti zveze NATO v konflikt."
+        },
+        {
+          "fact": "Uporaba jedrskega orožja bi imela velike humanitarne posledice.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor nakazuje, da bi uporaba jedrskega orožja povzročila velike škode, vendar ne izrecno omenja humanitarnih posledic."
+        },
+        {
+          "fact": "Medsebojno odvračanje zmanjšuje verjetnost obsežne jedrske vojne.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja medsebojnega odvračanja in njegove vloge pri zmanjševanju verjetnosti jedrske vojne."
+        }
+      ],
+      "missing_facts": [
+        "Rusija ima velik jedrski arzenal.",
+        "Ruski uradniki so med vojno omenjali jedrsko odvračanje.",
+        "Analitiki se bojijo eskalacije, če bi se zveza NATO neposredno vključila v konflikt.",
+        "Medsebojno odvračanje zmanjšuje verjetnost obsežne jedrske vojne."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor se osredotoča na taktično jedrsko orožje, a ne pokriva ključnih dejstev o ruskem arzenalu in jedrskem odvračanju."
+    },
+    {
+      "eval_id": "eval_000005",
+      "query": "Kako se je Donald Trump postavil glede vojaške pomoči Ukrajini?",
+      "expected_answer": "Donald Trump je poudarjal, da bi morale evropske države bolj prispevati k obrambi Ukrajine, in izrazil skepticizem glede neomejene ameriške podpore. Zavzema se za hitro končanje vojne. Kritiki menijo, da bi zmanjšana pomoč oslabila Ukrajino, medtem ko podporniki verjamejo, da to omejuje pretirano ameriško vpletenost v tujini.",
+      "candidate_answer": "Donald Trump je odločil, da prekine vojaško pomoč Ukrajini po javnem sporu z ukrajinskim predsednikom Volodimirjem Zelenskim [ChunkID: 12612].",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Donald Trump je trdil, da bi morala Evropa bolj prispevati k obrambi Ukrajine.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Trumpovega stališča o evropski pomoči."
+        },
+        {
+          "fact": "Trump je izrazil skepticizem glede neomejene ameriške podpore.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje Trumpovega skeptičnega stališča do ameriške podpore."
+        },
+        {
+          "fact": "Trump je poudarjal potrebo po hitrem koncu vojne.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Trumpovega stališča o hitrem končanju vojne."
+        },
+        {
+          "fact": "Kritiki se bojijo, da bi zmanjšana pomoč oslabila Ukrajino.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava kritičnih mnenj o zmanjšani pomoči."
+        },
+        {
+          "fact": "Podporniki verjamejo, da manjše obveznosti omejujejo pretirano ameriško vpletenost.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja stališč podpornikov glede ameriške vpletenosti."
+        }
+      ],
+      "missing_facts": [
+        "Donald Trump je trdil, da bi morala Evropa bolj prispevati k obrambi Ukrajine.",
+        "Trump je izrazil skepticizem glede neomejene ameriške podpore.",
+        "Trump je poudarjal potrebo po hitrem koncu vojne.",
+        "Kritiki se bojijo, da bi zmanjšana pomoč oslabila Ukrajino.",
+        "Podporniki verjamejo, da manjše obveznosti omejujejo pretirano ameriško vpletenost."
+      ],
+      "incorrect_or_unsupported_claims": [
+        "Donald Trump je odločil, da prekine vojaško pomoč Ukrajini."
+      ],
+      "short_reason": "Odgovor je napačen in ne pokriva ključnih dejstev o Trumpovem stališču do vojaške pomoči Ukrajini."
+    },
+    {
+      "eval_id": "eval_000006",
+      "query": "Kakšno vlogo imajo sankcije pri slabitvi ruskega gospodarstva med vojno v Ukrajini?",
+      "expected_answer": "Sankcije ciljajo na ruske banke, omejujejo izvoz tehnologije in vplivajo na ruski energetski izvoz. Njihov namen je zmanjšati gospodarsko sposobnost Rusije za nadaljevanje vojne. Rusija se je delno prilagodila s povečanjem trgovine s Kitajsko in Indijo, vendar sankcije še vedno ustvarjajo dolgoročni gospodarski pritisk.",
+      "candidate_answer": "Sankcije so namenjene srednjeročni ali dolgoročni oslabitvi ruskega gospodarstva, kar bi omejilo Rusijo pri vodenju vojne [ChunkID: 19424]. Kljub temu je Rusija našla načine, kako se izogniti sankcijam in iskati nove trge, kar kaže, da sankcije ne delujejo popolnoma učinkovito [ChunkID: 10981]. Poleg tega ruska država beleži rekordne dobičke iz prodaje nafte in plina, kar poudarja, da sankcije še ne značijo resne oslabitve gospodarstva [ChunkID: 9927].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.37,
+      "answer_addresses_question": true,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 1,
+      "partial_count": 2,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Zahodne sankcije so ciljale na ruske banke.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja sankcij, ki ciljajo na ruske banke."
+        },
+        {
+          "fact": "Sankcije so omejile izvoz tehnologije v Rusijo.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja omejitve izvoza tehnologije."
+        },
+        {
+          "fact": "Ruski energetski izvoz je bil prizadet zaradi sankcij.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor omeni, da Rusija beleži rekordne dobičke iz prodaje nafte in plina, kar implicira, da sankcije niso učinkovite pri omejevanju energetske industrije."
+        },
+        {
+          "fact": "Rusija je povečala trgovino s Kitajsko in Indijo.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omeni, da je Rusija našla nove trge, vendar ne specificira, da gre za Kitajsko in Indijo."
+        },
+        {
+          "fact": "Sankcije ustvarjajo dolgoročni gospodarski pritisk na Rusijo.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omeni, da so sankcije namenjene oslabitvi gospodarstva, vendar ne izpostavi dolgoročnega pritiska."
+        }
+      ],
+      "missing_facts": [
+        "Zahodne sankcije so ciljale na ruske banke.",
+        "Sankcije so omejile izvoz tehnologije v Rusijo."
+      ],
+      "incorrect_or_unsupported_claims": [
+        "Ruska država beleži rekordne dobičke iz prodaje nafte in plina, kar poudarja, da sankcije še ne značijo resne oslabitve gospodarstva."
+      ],
+      "short_reason": "Odgovor se osredotoča na splošno učinkovitost sankcij, ne pokriva ključnih dejstev o njihovem cilju in učinku."
+    },
+    {
+      "eval_id": "eval_000007",
+      "query": "Kako je konflikt v Ukrajini vplival na svetovne cene energije in evropsko energetsko politiko?",
+      "expected_answer": "Vojna je zmotila energetsko oskrbo Evrope, predvsem dobavo zemeljskega plina. Evropske države so zmanjšale odvisnost od ruskega plina in pospešile vlaganja v obnovljive vire energije. Cene energije so po svetu narasle, kar je prispevalo k inflaciji in dolgoročnim spremembam evropske energetske politike.",
+      "candidate_answer": "Konflikt v Ukrajini je povzročil višje svetovne cene energije, saj destabilizira trge in povečuje cene nafte ter energentov [ChunkID: 17361]. V evropski energetski politiki je bilo izraženo upanje, da bo uskladitev prioritete zelenega prehoda pomagala stabilizirati cene energentov, kljub izzivom, ki jih povzroča vojna [ChunkID: 17361]. Vpliv vojne je hujšal inflacijo in povzročil ekonomsko upočasnitev v Evropi, kar poudarja študija švicarske centralne banke [ChunkID: 10446].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.5700000000000001,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 1,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Vojna je zmotila energetsko oskrbo Evrope.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor nakazuje, da je vojna destabilizirala trge, kar implicira motnje v oskrbi."
+        },
+        {
+          "fact": "Evropske države so zmanjšale odvisnost od ruskega plina.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja zmanjšanja odvisnosti od ruskega plina."
+        },
+        {
+          "fact": "Cene energije so po invaziji po svetu narasle.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor jasno navaja, da je konflikt povzročil višje svetovne cene energije."
+        },
+        {
+          "fact": "Inflacija se je delno povečala zaradi višjih cen energije.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor omenja, da je vpliv vojne hujšal inflacijo."
+        },
+        {
+          "fact": "Evropa je pospešila vlaganja v obnovljive vire energije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vlaganj v obnovljive vire energije."
+        }
+      ],
+      "missing_facts": [
+        "Evropske države so zmanjšale odvisnost od ruskega plina.",
+        "Evropa je pospešila vlaganja v obnovljive vire energije."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere ključne točke, vendar manjka pomemben del o zmanjšanju odvisnosti od ruskega plina in vlaganjih v obnovljive vire."
+    },
+    {
+      "eval_id": "eval_000008",
+      "query": "Zakaj Kitajska velja za pomembnega strateškega partnerja Rusije med vojno?",
+      "expected_answer": "Kitajska Rusiji zagotavlja gospodarsko in diplomatsko podporo prek trgovine, nakupov energije in strateškega sodelovanja. Rusija ima koristi od alternativnih trgov zunaj Zahoda, kar zmanjšuje vpliv sankcij. Kitajska se hkrati izogiba neposredni vojaški vpletenosti, da bi omejila mednarodne odzive.",
+      "candidate_answer": "Kitajska velja za pomembnega strateškega partnerja Rusije med vojno zaradi utrjenega gospodarskega sodelovanja, kot je naročilo ruske energije, in diplomatskega podpora, kot je izjava premierja Li Qianga o celovitem strateškem partnerstvu [ChunkID: 5763]. Poleg tega Kitajska in Rusija sodelujeta na podlagi strateškega partnerstva do leta 2030, kot je bilo napovedano med srečanjem predsednikov Ši in Putina [ChunkID: 4529].",
+      "overall_semantic_score": 0.8,
+      "key_fact_coverage_score": 0.5700000000000001,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 2,
+      "implied_count": 1,
+      "partial_count": 0,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Kitajska je med vojno povečala trgovino z Rusijo.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor omenja utrjeno gospodarsko sodelovanje, kar implicira povečano trgovino."
+        },
+        {
+          "fact": "Kitajska kupuje ruske energetske izvozne proizvode.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor neposredno omenja naročilo ruske energije."
+        },
+        {
+          "fact": "Rusija ima koristi od alternativnih trgov zunaj Zahoda.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja koristi Rusije od alternativnih trgov."
+        },
+        {
+          "fact": "Kitajska in Rusija strateško sodelujeta.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor omenja strateško partnerstvo med Kitajsko in Rusijo."
+        },
+        {
+          "fact": "Kitajska se izogiba neposredni vojaški vpletenosti v konflikt.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja, da se Kitajska izogiba vojaški vpletenosti."
+        }
+      ],
+      "missing_facts": [
+        "Rusija ima koristi od alternativnih trgov zunaj Zahoda.",
+        "Kitajska se izogiba neposredni vojaški vpletenosti v konflikt."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor je večinoma pravilen, vendar manjka nekaj ključnih informacij."
+    },
+    {
+      "eval_id": "eval_000009",
+      "query": "Kakšen vpliv je imel konflikt med Izraelom in Iranom na širšo varnostno situacijo na Bližnjem vzhodu?",
+      "expected_answer": "Konflikt med Izraelom in Iranom je povečal strah pred širšo regionalno vojno, v katero bi bile vključene tudi posredniške skupine in sosednje države. Napetosti vplivajo na naftne trge, pomorske poti in regionalna zavezništva. Mednarodni akterji si prizadevajo preprečiti nadaljnjo eskalacijo.",
+      "candidate_answer": "Konflikt med Izraelom in Iranom je povečal napetosti na Bližnjem vzhodu, saj so Iran in njegovi zavezniki zagrozili z odzivom, kar lahko vodi v širšo regionalno vojno [ChunkID: 12409].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.1,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 4,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Konflikt med Izraelom in Iranom je povečal strah pred regionalno vojno.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja možnost širše regionalne vojne, vendar ne izpostavi strahu."
+        },
+        {
+          "fact": "V regionalne napetosti so vključene tudi posredniške skupine.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja posredniških skupin."
+        },
+        {
+          "fact": "Naftni trgi se odzivajo na nestabilnost na Bližnjem vzhodu.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava vpliva na naftne trge."
+        },
+        {
+          "fact": "Pomorske poti v regiji imajo strateški pomen.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja pomorskih poti."
+        },
+        {
+          "fact": "Mednarodni akterji si prizadevajo preprečiti eskalacijo.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omeni prizadevanj mednarodnih akterjev."
+        }
+      ],
+      "missing_facts": [
+        "V regionalne napetosti so vključene tudi posredniške skupine.",
+        "Naftni trgi se odzivajo na nestabilnost na Bližnjem vzhodu.",
+        "Pomorske poti v regiji imajo strateški pomen.",
+        "Mednarodni akterji si prizadevajo preprečiti eskalacijo."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor se osredotoča na napetosti, a ne pokriva vseh ključnih dejstev."
+    },
+    {
+      "eval_id": "eval_000010",
+      "query": "Zakaj Abrahamovi sporazumi ponovno postajajo osrednji del ameriške diplomacije na Bližnjem vzhodu?",
+      "expected_answer": "Abrahamovi sporazumi veljajo za okvir za krepitev regionalnega sodelovanja proti skupnim varnostnim grožnjam, predvsem Iranu. Sporazumi izboljšujejo gospodarske in diplomatske odnose med Izraelom in arabskimi državami. Združene države Amerike podpirajo širitev teh sporazumov kot način stabilizacije regije.",
+      "candidate_answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Abrahamovi sporazumi so normalizirali odnose med Izraelom in nekaterimi arabskimi državami.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "odgovor ne omenja normalizacije odnosov"
+        },
+        {
+          "fact": "Sporazumi so povečali regionalno sodelovanje.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "odgovor ne omenja regionalnega sodelovanja"
+        },
+        {
+          "fact": "Iran več udeležencev vidi kot skupno varnostno grožnjo.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "odgovor ne omenja Irana kot varnostne grožnje"
+        },
+        {
+          "fact": "Po normalizaciji so se izboljšale gospodarske vezi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "odgovor ne omenja izboljšanja gospodarskih vezi"
+        },
+        {
+          "fact": "Združene države Amerike podpirajo širitev sporazumov.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "odgovor ne omenja podpore ZDA za širitev sporazumov"
+        }
+      ],
+      "missing_facts": [
+        "Abrahamovi sporazumi so normalizirali odnose med Izraelom in nekaterimi arabskimi državami.",
+        "Sporazumi so povečali regionalno sodelovanje.",
+        "Iran več udeležencev vidi kot skupno varnostno grožnjo.",
+        "Po normalizaciji so se izboljšale gospodarske vezi.",
+        "Združene države Amerike podpirajo širitev sporazumov."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne vsebuje nobenih relevantnih informacij o Abrahamovih sporazumih."
+    },
+    {
+      "eval_id": "eval_000011",
+      "query": "Kako se je Izrael odzval na poročila o morebitnem novem sporazumu med ZDA in Iranom?",
+      "expected_answer": "Izraelski uradniki se bojijo, da bi nov sporazum med ZDA in Iranom Iranu omogočil ohranitev delov njegovega jedrskega programa. Izrael trdi, da bi Iran lahko uporabil odpravo sankcij za krepitev regionalnih posredniških skupin. Podporniki diplomacije menijo, da lahko sporazumi zmanjšajo tveganje neposredne eskalacije, vendar vprašanje ostaja zelo razdeljujoče.",
+      "candidate_answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Izraelski uradniki se bojijo, da bi Iran ohranil jedrske zmogljivosti.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vsebuje informacij o strahu Izraela glede jedrskih zmogljivosti Irana."
+        },
+        {
+          "fact": "Nekateri menijo, da bi odprava sankcij lahko okrepila skupine, ki jih podpira Iran.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja možnosti, da bi odprava sankcij okrepila iranske posredniške skupine."
+        },
+        {
+          "fact": "Podporniki diplomacije trdijo, da sporazumi zmanjšujejo tveganje eskalacije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vključuje mnenja podpornikov diplomacije o zmanjšanju tveganja eskalacije."
+        },
+        {
+          "fact": "Iranski jedrski program je za Izrael pomembno varnostno vprašanje.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava pomena iranskega jedrskega programa za varnost Izraela."
+        },
+        {
+          "fact": "Razprave o diplomaciji med ZDA in Iranom ostajajo zelo razdeljujoče.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja razdeljenosti mnenj o diplomaciji med ZDA in Iranom."
+        }
+      ],
+      "missing_facts": [
+        "Izraelski uradniki se bojijo, da bi Iran ohranil jedrske zmogljivosti.",
+        "Nekateri menijo, da bi odprava sankcij lahko okrepila skupine, ki jih podpira Iran.",
+        "Podporniki diplomacije trdijo, da sporazumi zmanjšujejo tveganje eskalacije.",
+        "Iranski jedrski program je za Izrael pomembno varnostno vprašanje.",
+        "Razprave o diplomaciji med ZDA in Iranom ostajajo zelo razdeljujoče."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne vsebuje nobenih relevantnih informacij o izraelskem odzivu na sporazum med ZDA in Iranom."
+    },
+    {
+      "eval_id": "eval_000012",
+      "query": "Katere so glavne kritike Benjamina Netanjahuja glede nedavnega konflikta z Iranom?",
+      "expected_answer": "Kritiki Benjamina Netanjahuja obtožujejo, da daje prednost vojaškim odzivom pred diplomatskimi rešitvami ter prispeva k regionalni nestabilnosti. Drugi menijo, da so njegove politike nujne za izraelsko varnost. Domače politične polemike dodatno vplivajo na javno dojemanje njegovega vodstva.",
+      "candidate_answer": "Benjamin Netanjahu je zaradi korupcijskih škandalih uporabljal konflikt z Iranom kot možno taktiko za izboljšanje svojega političnega položaja pred volitvami [ChunkID: 4731]. Poleg tega je njegova vloga v vplivu na Trumpove odločitve povzročila vprašanja glede transparentnosti [ChunkID: 4730].",
+      "overall_semantic_score": 0.2,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Kritiki Benjamina Netanjahuja obtožujejo, da daje prednost vojaškim rešitvam.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vojaških rešitev ali kritik glede tega."
+        },
+        {
+          "fact": "Podporniki menijo, da Netanjahu daje prednost izraelski varnosti.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne vključuje mnenj podpornikov o varnosti."
+        },
+        {
+          "fact": "Netanjahu se sooča z domačimi političnimi polemikami.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja domačih političnih polemik."
+        },
+        {
+          "fact": "Regionalna nestabilnost vpliva na dojemanje njegovega vodstva.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava regionalne nestabilnosti."
+        },
+        {
+          "fact": "Varnostna politika je osrednji del razprav o Netanjahuju.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor se ne osredotoča na varnostno politiko."
+        }
+      ],
+      "missing_facts": [
+        "Kritiki Benjamina Netanjahuja obtožujejo, da daje prednost vojaškim rešitvam.",
+        "Podporniki menijo, da Netanjahu daje prednost izraelski varnosti.",
+        "Netanjahu se sooča z domačimi političnimi polemikami.",
+        "Regionalna nestabilnost vpliva na dojemanje njegovega vodstva.",
+        "Varnostna politika je osrednji del razprav o Netanjahuju."
+      ],
+      "incorrect_or_unsupported_claims": [
+        "Odgovor se osredotoča na korupcijske škandale in Trumpove odločitve, kar ni v skladu s kritiko glede konflikta z Iranom."
+      ],
+      "short_reason": "Odgovor se ne osredotoča na glavne kritike Netanjahuja in ne pokriva ključnih dejstev."
+    },
+    {
+      "eval_id": "eval_000013",
+      "query": "Kako bi lahko obnovljene napetosti med Izraelom in Iranom vplivale na svetovne naftne trge?",
+      "expected_answer": "Obnovljene napetosti med Izraelom in Iranom bi lahko ogrozile transportne poti za nafto na Bližnjem vzhodu, zlasti okoli Hormuške ožine. Trgi se običajno hitro odzovejo na znake regionalnega konflikta, višje cene nafte pa lahko prispevajo k inflaciji in gospodarski negotovosti po svetu.",
+      "candidate_answer": "\"Obnovljene napetosti bi lahko vplivale na manjšo dobavljivost naftnih derivatov, kar bi lahko povzročilo povečanje cen na svetovnih trgu [ChunkID: 5143].\"",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.33999999999999997,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 2,
+      "partial_count": 0,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Napetosti na Bližnjem vzhodu lahko ogrozijo naftne transportne poti.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Kandidatni odgovor nakazuje, da bi napetosti lahko vplivale na dobavljivost, kar implicira ogrožanje transportnih poti."
+        },
+        {
+          "fact": "Hormuška ožina je strateško pomembna za izvoz nafte.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Hormuške ožine ali njene strateške pomembnosti."
+        },
+        {
+          "fact": "Cene nafte med regionalnimi konflikti pogosto narastejo.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Povečanje cen na svetovnem trgu je omenjeno, kar implicira, da bi napetosti lahko povzročile višje cene."
+        },
+        {
+          "fact": "Višje cene nafte lahko prispevajo k inflaciji.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vpliva višjih cen na inflacijo."
+        },
+        {
+          "fact": "Države, ki uvažajo energijo, so ranljive za motnje v oskrbi.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava ranljivosti držav, ki uvažajo energijo."
+        }
+      ],
+      "missing_facts": [
+        "Hormuška ožina je strateško pomembna za izvoz nafte.",
+        "Višje cene nafte lahko prispevajo k inflaciji.",
+        "Države, ki uvažajo energijo, so ranljive za motnje v oskrbi."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor nakazuje vpliv napetosti na dobavljivost in cene, a ne pokriva vseh ključnih dejstev."
+    },
+    {
+      "eval_id": "eval_000014",
+      "query": "Zakaj zalivske države vse pogosteje iščejo varnostna partnerstva zunaj Združenih držav Amerike?",
+      "expected_answer": "Zalivske države vse bolj diverzificirajo svoja varnostna partnerstva, ker niso prepričane o dolgoročnih ameriških zavezah v regiji. Države, kot sta Savdska Arabija in Združeni arabski emirati, krepijo vezi s Kitajsko, Rusijo in regionalnimi partnerji ter si prizadevajo za večjo strateško prilagodljivost.",
+      "candidate_answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Zalivske države dvomijo o dolgoročni ameriški zavezanosti regiji.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja dvomov o ameriški zavezanosti."
+        },
+        {
+          "fact": "Savdska Arabija je razširila odnose s Kitajsko.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja razširitve odnosov s Kitajsko."
+        },
+        {
+          "fact": "Zalivske države vodijo bolj raznolike zunanjepolitične strategije.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne pokriva raznolikosti zunanjepolitičnih strategij."
+        },
+        {
+          "fact": "Regionalna partnerstva so postala pomembnejša.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja pomena regionalnih partnerstev."
+        },
+        {
+          "fact": "Gospodarsko sodelovanje vpliva na varnostne strategije zalivskih držav.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava vpliva gospodarskega sodelovanja."
+        }
+      ],
+      "missing_facts": [
+        "Zalivske države dvomijo o dolgoročni ameriški zavezanosti regiji.",
+        "Savdska Arabija je razširila odnose s Kitajsko.",
+        "Zalivske države vodijo bolj raznolike zunanjepolitične strategije.",
+        "Regionalna partnerstva so postala pomembnejša.",
+        "Gospodarsko sodelovanje vpliva na varnostne strategije zalivskih držav."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne ponuja nobenih relevantnih informacij o iskanju varnostnih partnerstev."
+    },
+    {
+      "eval_id": "eval_000015",
+      "query": "Kako je vojna v Ukrajini vplivala na vojaške inovacije, zlasti na področju uporabe dronov?",
+      "expected_answer": "Vojna v Ukrajini je pospešila razvoj in uporabo dronov za nadzor, ciljanje in napade. Obe strani uporabljata poceni drone skupaj z naprednimi vojaškimi sistemi. Konflikt je pokazal, kako pomembno lahko uporaba dronov vpliva na sodobno bojevanje, zato številne države prilagajajo svoje vojaške doktrine.",
+      "candidate_answer": "Vojna v Ukrajini je povečala uporabo dronov na obeh straneh, kjer jih Ukrajinci uporabljajo za boj proti ruskim dronom, medtem ko Rusija razvija lastne proizvodne kapacitete za brezpilotnike [ChunkID: 1344]. Poleg tega se v konfliktu pojavljajo tudi oboroženi kopenski roboti, ki opravljajo naloge na bojišču, ter droni za detekcijo min in reševanje žrtev [ChunkID: 527][ChunkID: 4622].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.37,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 1,
+      "partial_count": 0,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Vojna v Ukrajini je pospešila uporabo vojaških dronov.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor omenja povečano uporabo dronov na obeh straneh."
+        },
+        {
+          "fact": "Droni se uporabljajo za nadzorovanje.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja uporabe dronov za nadzor."
+        },
+        {
+          "fact": "Droni se uporabljajo za napade in ciljanje.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja uporabe dronov za napade in ciljanje."
+        },
+        {
+          "fact": "Poceni droni so se izkazali za vojaško učinkovite.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor nakazuje, da so droni učinkoviti, vendar ne omenja, da so poceni."
+        },
+        {
+          "fact": "Države prilagajajo vojaške doktrine na podlagi izkušenj iz Ukrajine.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja prilagajanja vojaških doktrin."
+        }
+      ],
+      "missing_facts": [
+        "Vojna v Ukrajini je pospešila uporabo vojaških dronov.",
+        "Droni se uporabljajo za nadzorovanje.",
+        "Droni se uporabljajo za napade in ciljanje.",
+        "Države prilagajajo vojaške doktrine na podlagi izkušenj iz Ukrajine."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere vidike, a manjka pomemben del informacij o uporabi dronov in prilagajanju doktrin."
+    },
+    {
+      "eval_id": "eval_000016",
+      "query": "S kakšnimi izzivi se sooča Donald Trump pri poskusih posredovanja tako v konfliktih na Bližnjem vzhodu kot tudi v Ukrajini hkrati?",
+      "expected_answer": "Donald Trump se sooča z izzivom usklajevanja podpore zaveznikom z obljubami o zmanjšanju ameriške vpletenosti v tuje konflikte. Vojni v Ukrajini in na Bližnjem vzhodu vključujeta različne akterje, zavezništva in strateška tveganja. Domače politične delitve in vprašanja mednarodne verodostojnosti ZDA dodatno otežujejo sprejemanje odločitev.",
+      "candidate_answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Donald Trump želi zmanjšati ameriško vpletenost v tuje vojne.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja Trumpove želje po zmanjšanju vpletenosti."
+        },
+        {
+          "fact": "Konflikta v Ukrajini in na Bližnjem vzhodu vključujeta različna zavezništva.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava konfliktov in zavezništev."
+        },
+        {
+          "fact": "Ameriške politične odločitve vplivajo na mednarodno verodostojnost.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vpliva ameriških odločitev na verodostojnost."
+        },
+        {
+          "fact": "Domače politične delitve vplivajo na zunanjepolitične odločitve.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava domačih političnih delitev."
+        },
+        {
+          "fact": "Usklajevanje diplomacije in vojaške podpore je politično zahtevno.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja izzivov usklajevanja diplomacije in podpore."
+        }
+      ],
+      "missing_facts": [
+        "Donald Trump želi zmanjšati ameriško vpletenost v tuje vojne.",
+        "Konflikta v Ukrajini in na Bližnjem vzhodu vključujeta različna zavezništva.",
+        "Ameriške politične odločitve vplivajo na mednarodno verodostojnost.",
+        "Domače politične delitve vplivajo na zunanjepolitične odločitve.",
+        "Usklajevanje diplomacije in vojaške podpore je politično zahtevno."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne obravnava izzivov, s katerimi se Trump sooča."
+    },
+    {
+      "eval_id": "eval_000017",
+      "query": "Kako družbena omrežja oblikujejo javno mnenje o vojnah v Ukrajini in Izraelu?",
+      "expected_answer": "Družbena omrežja hitro širijo posnetke z bojišč, politične narative in propagando, povezano z obema konfliktoma. Vplivajo na javno mnenje, zbiranje sredstev in mednarodno ozaveščenost. Hkrati ostajajo dezinformacijske kampanje in lažne informacije zelo razširjene, kar povzroča težave pri moderiranju vsebin in ohranjanju zaupanja javnosti.",
+      "candidate_answer": "Na podlagi podanega konteksta ni mogoče ugotoviti, kako družbena omrežja oblikujejo javno mnenje o vojnah v Izraelu, saj kontekst ne omenja Izraela. Vzrok za to je, da se kontekst osredotoča le na Ukrajino in Rusijo [ChunkID: 14676].",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Družbena omrežja hitro širijo posnetke z bojišč.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja širjenja posnetkov z bojišč."
+        },
+        {
+          "fact": "Vlade in skupine uporabljajo spletno propagando.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne pokriva uporabe propagande."
+        },
+        {
+          "fact": "Dezinformacijske kampanje so med konflikti pogoste.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja dezinformacijskih kampanj."
+        },
+        {
+          "fact": "Družbena omrežja vplivajo na mednarodno javno mnenje.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava vpliva na javno mnenje."
+        },
+        {
+          "fact": "Platforme se težko spopadajo s škodljivimi dezinformacijami.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja težav pri moderiranju vsebin."
+        }
+      ],
+      "missing_facts": [
+        "Družbena omrežja hitro širijo posnetke z bojišč.",
+        "Vlade in skupine uporabljajo spletno propagando.",
+        "Dezinformacijske kampanje so med konflikti pogoste.",
+        "Družbena omrežja vplivajo na mednarodno javno mnenje.",
+        "Platforme se težko spopadajo s škodljivimi dezinformacijami."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne obravnava vprašanja in ne pokriva ključnih dejstev."
+    },
+    {
+      "eval_id": "eval_000018",
+      "query": "Kakšne so humanitarne posledice dolgotrajnega vojskovanja v Gazi in Ukrajini?",
+      "expected_answer": "Vojne so povzročile obsežne civilne žrtve, razseljevanje prebivalstva, uničenje infrastrukture in humanitarne krize. Milijoni Ukrajincev in Palestincev se soočajo s pomanjkanjem stanovanj, zdravstvene oskrbe in osnovnih storitev. Humanitarne organizacije se še naprej soočajo z logističnimi in političnimi izzivi, dolgoročne psihološke in gospodarske posledice pa bodo verjetno trajale več let.",
+      "candidate_answer": "Na podlagi podanega konteksta ni mogoče ugotoviti humanitarnih posledic v Gazi, saj kontekst vsebuje informacije samo o Ukrajini. V Ukrajini so humanitarne posledice vojne vključevale poškodovanje vodovodnih sistemov, moteno oskrbo z elektriko, uničenje letališč, onesnaženje vode, izgube civilistov in masovni beg prebivalstva [ChunkID: 5808]. Poleg tega so bile poškodovane bolnišnice in izobraževalne ustanove, kar je povzročilo zdravstvene krize [ChunkID: 14853].",
+      "overall_semantic_score": 0.4,
+      "key_fact_coverage_score": 0.3,
+      "answer_addresses_question": true,
+      "contains_major_error": true,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 0,
+      "partial_count": 1,
+      "missing_count": 3,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Vojne so povzročile civilne žrtve.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor omenja izgube civilistov."
+        },
+        {
+          "fact": "Milijoni ljudi so bili razseljeni.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja razseljevanja prebivalstva."
+        },
+        {
+          "fact": "Infrastruktura je bila močno poškodovana.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja poškodbe vodovodnih sistemov in bolnišnic, vendar ne pokriva celotne infrastrukture."
+        },
+        {
+          "fact": "Humanitarne organizacije se soočajo z logističnimi težavami.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja izzivov, s katerimi se soočajo humanitarne organizacije."
+        },
+        {
+          "fact": "Pričakovati je dolgoročne psihološke posledice.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja psiholoških posledic."
+        }
+      ],
+      "missing_facts": [
+        "Milijoni ljudi so bili razseljeni.",
+        "Humanitarne organizacije se soočajo z logističnimi težavami.",
+        "Pričakovati je dolgoročne psihološke posledice."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere humanitarne posledice v Ukrajini, a ne omenja Gaze in pomembna dejstva so manjkajoča."
+    },
+    {
+      "eval_id": "eval_000019",
+      "query": "Kako bi lahko prihodnje ameriške volitve vplivale na zunanjo politiko ZDA do Rusije, Ukrajine in Izraela?",
+      "expected_answer": "Prihodnje ameriške volitve bi lahko bistveno spremenile raven vojaške pomoči, diplomatske prioritete in strategije zavezništev. Različne administracije lahko podpirajo močnejše posredovanje ali zmanjšano mednarodno vpletenost. Ker ameriška zunanja politika močno vpliva na NATO, Ukrajino, Izrael in diplomacijo na Bližnjem vzhodu, svet pozorno spremlja izide volitev.",
+      "candidate_answer": "Na podlagi podanega konteksta tega ni mogoče ugotoviti.",
+      "overall_semantic_score": 0.0,
+      "key_fact_coverage_score": 0.0,
+      "answer_addresses_question": false,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 0,
+      "implied_count": 0,
+      "partial_count": 0,
+      "missing_count": 5,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Ameriške volitve lahko vplivajo na politiko vojaške pomoči.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vpliva volitev na vojaško pomoč."
+        },
+        {
+          "fact": "Različne administracije lahko zagovarjajo različne zunanjepolitične pristope.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava različnih zunanjepolitičnih pristopov."
+        },
+        {
+          "fact": "Politike zveze NATO so delno odvisne od ameriškega vodstva.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vpliva ameriške politike na NATO."
+        },
+        {
+          "fact": "Ameriška politika vpliva tako na Ukrajino kot na Izrael.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne obravnava vpliva na Ukrajino in Izrael."
+        },
+        {
+          "fact": "Mednarodni akterji pozorno spremljajo ameriške volitve.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja pozornosti mednarodnih akterjev na volitve."
+        }
+      ],
+      "missing_facts": [
+        "Ameriške volitve lahko vplivajo na politiko vojaške pomoči.",
+        "Različne administracije lahko zagovarjajo različne zunanjepolitične pristope.",
+        "Politike zveze NATO so delno odvisne od ameriškega vodstva.",
+        "Ameriška politika vpliva tako na Ukrajino kot na Izrael.",
+        "Mednarodni akterji pozorno spremljajo ameriške volitve."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor ne obravnava vprašanja in ne vsebuje ključnih dejstev."
+    },
+    {
+      "eval_id": "eval_000020",
+      "query": "Katera so največja geopolitična tveganja, ki bi se lahko pojavila, če bi se sedanji konflikti v Vzhodni Evropi in na Bližnjem vzhodu še naprej zaostrovali do leta 2026?",
+      "expected_answer": "Nadaljnje zaostrovanje konfliktov bi lahko povečalo tveganje širših regionalnih vojn, kibernetskih napadov, gospodarske nestabilnosti ter motenj v svetovni trgovini in oskrbi z energijo. Odnosi med velikimi silami, kot so ZDA, Rusija in Kitajska, bi se lahko še dodatno poslabšali, humanitarne krize pa bi se lahko razširile, če konflikti ostanejo nerešeni.",
+      "candidate_answer": "Največja geopolitična tveganja bi lahko bila povečana napetost med Rusijo in Zahodom, širjenje konfliktov zaradi Rusije in Severne Koreje (npr. novi geopolitični izzivi) [ChunkID: 14602], ter možnost vojaškega spopada Rusije z Natom [ChunkID: 78]. Poleg tega bi lahko povečali tveganja kibernetski napadi in višji stroški energije [ChunkID: 8143].",
+      "overall_semantic_score": 0.6,
+      "key_fact_coverage_score": 0.47000000000000003,
+      "answer_addresses_question": true,
+      "contains_major_error": false,
+      "contains_contradiction": false,
+      "contains_hallucination": false,
+      "covered_count": 1,
+      "implied_count": 1,
+      "partial_count": 1,
+      "missing_count": 2,
+      "contradicted_count": 0,
+      "num_key_facts": 5,
+      "key_fact_judgments": [
+        {
+          "fact": "Nadaljevanje konfliktov bi lahko destabiliziralo svetovno trgovino.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja vpliva na svetovno trgovino."
+        },
+        {
+          "fact": "Kibernetski napadi predstavljajo vse večje geopolitično tveganje.",
+          "status": "covered",
+          "score": 1.0,
+          "reason": "Odgovor izrecno omenja kibernetske napade kot tveganje."
+        },
+        {
+          "fact": "Motnje v oskrbi z energijo bi lahko povečale gospodarsko nestabilnost.",
+          "status": "partial",
+          "score": 0.5,
+          "reason": "Odgovor omenja višje stroške energije, vendar ne pove, kako to vpliva na gospodarsko nestabilnost."
+        },
+        {
+          "fact": "Odnosi med velikimi silami bi se lahko še poslabšali.",
+          "status": "implied",
+          "score": 0.85,
+          "reason": "Odgovor omenja povečano napetost med Rusijo in Zahodom, kar implicira poslabšanje odnosov."
+        },
+        {
+          "fact": "Humanitarne krize bi se lahko razširile, če se vojne nadaljujejo.",
+          "status": "missing",
+          "score": 0.0,
+          "reason": "Odgovor ne omenja humanitarnih kriz."
+        }
+      ],
+      "missing_facts": [
+        "Nadaljevanje konfliktov bi lahko destabiliziralo svetovno trgovino.",
+        "Humanitarne krize bi se lahko razširile, če se vojne nadaljujejo."
+      ],
+      "incorrect_or_unsupported_claims": [],
+      "short_reason": "Odgovor pokriva nekatere ključne točke, vendar manjka pomemben del informacij."
+    }
+  ]
+}
