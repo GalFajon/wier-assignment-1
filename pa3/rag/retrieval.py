@@ -66,6 +66,61 @@ def query_similar_chunks(engine, query_vector, dimension=384, metric="cosine", t
         return []
 
 
+
+
+def query_similar_chunks_with_id_return(engine, query_vector, dimension=384, metric="cosine", top_n=5, table_name="page_segment_vec384"):
+    table_map = {
+        384: "page_segment_vec384",
+        768: "page_segment_vec768",
+        1024: "page_segment_vec1024"
+    }
+    
+    if dimension not in table_map:
+        raise ValueError(f"Dimension {dimension} not supported. Use 384, 768, or 1024.")
+    
+    actual_table = table_map.get(dimension, table_name)
+    
+    operator_map = {
+        "cosine": "<=>",
+        "l2": "<->",
+        "l1": "<+>"
+    }
+    
+    if metric not in operator_map:
+        raise ValueError(f"Metric {metric} not supported. Use cosine, l2, or l1.")
+    
+    operator = operator_map[metric]
+    
+    vector_str = "[" + ",".join(str(v) for v in query_vector) + "]"
+    
+    sql = f"""
+        SELECT 
+            id,
+            page_id,
+            page_segment,
+            embedding {operator} '{vector_str}'::vector AS distance
+        FROM public.{actual_table}
+        ORDER BY embedding {operator} '{vector_str}'::vector
+        LIMIT :top_n;
+    """
+    
+    try:
+        with engine.connect() as connection:
+            result = connection.execute(
+                text(sql),
+                {"top_n": top_n}
+            )
+            
+            chunks = []
+            for row in result:
+                chunks.append((row[0], row[1], row[2], float(row[3])))
+            
+            return chunks
+    except Exception as e:
+        print(f"Database query error: {e}")
+        return []
+
+
 def health_check(engine):
     try:
         with engine.connect() as connection:
@@ -196,6 +251,25 @@ def get_page_by_id(engine, page_id):
             result = connection.execute(text(sql), {"page_id": page_id})
             row = result.mappings().fetchone()
             return dict(row) if row else None
+    except Exception as e:
+        print(f"Database query error: {e}")
+        return None
+    
+    
+ 
+def get_page_url_by_id(engine, page_id):
+    sql = """
+        SELECT
+            url
+        FROM public.page
+        WHERE id = :page_id;
+    """
+    # TODO: MAKE THIS RETURN URL
+    try:
+        with engine.connect() as connection:
+            result = connection.execute(text(sql), {"page_id": page_id})
+            row = result.mappings().fetchone()
+            return row["url"] if row else None
     except Exception as e:
         print(f"Database query error: {e}")
         return None
