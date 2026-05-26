@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    
+  },
+  "examples": [
+    {
+      "id": "eval_000001",
+      "query": "Kako je Donald Trump po vrnitvi na položaj spremenil pristop ZDA do vojne med Rusijo in Ukrajino?",
+      "expected_answer": "Donald Trump si prizadeva za hitrejša pogajanja in postavlja pod vprašaj obseg dolgoročne ameriške vojaške pomoči Ukrajini. Njegova administracija poudarja delitev bremena med evropskimi zavezniki ter daje prednost izogibanju neposredni eskalaciji z Rusijo. Kritiki menijo, da bi to lahko prisililo Ukrajino v ozemeljske koncesije, podporniki pa trdijo, da bi to lahko pospešilo mirovna pogajanja.",
+      "key_facts": [
+        {
+          "fact": "Donald Trump se je zavzemal za hitrejša pogajanja glede vojne v Ukrajini."
+        },
+        {
+          "fact": "Trump je postavil pod vprašaj dolgoročno raven ameriške vojaške pomoči Ukrajini."
+        },
+        {
+          "fact": "Njegova administracija je poudarjala večjo delitev bremena med evropskimi državami."
+        },
+        {
+          "fact": "Kritiki so trdili, da bi njegova politika lahko prisilila Ukrajino v koncesije."
+        },
+        {
+          "fact": "Podporniki pa so menili, da bi njegov pristop lahko pospešil mirovna pogajanja."
+        }
+      ]
+    },
+    {
+      "id": "eval_000002",
+      "query": "Katera so glavna nesoglasja med Volodimirjem Zelenskim in Vladimirjem Putinom glede morebitnega mirovnega sporazuma?",
+      "expected_answer": "Volodimir Zelenski vztraja pri ohranitvi ozemeljske celovitosti Ukrajine in varnostnih jamstvih, medtem ko Vladimir Putin zahteva priznanje ozemelj pod ruskim nadzorom ter omejitve ukrajinskih ambicij glede zveze NATO. Ukrajina zahteva umik ruskih vojakov in obnovitev suverenosti, Rusija pa vojno predstavlja kot zaščito svojih strateških interesov.",
+      "key_facts": [
+        {
+          "fact": "Volodimir Zelenski podpira ohranitev ozemeljske celovitosti Ukrajine."
+        },
+        {
+          "fact": "Ukrajina v vsakem sporazumu zahteva varnostna jamstva."
+        },
+        {
+          "fact": "Vladimir Putin želi priznanje ozemelj pod ruskim nadzorom."
+        },
+        {
+          "fact": "Rusija nasprotuje vstopu Ukrajine v zvezo NATO."
+        },
+        {
+          "fact": "Ukrajina zahteva umik ruskih vojakov."
+        }
+      ]
+    },
+    {
+      "id": "eval_000003",
+      "query": "Kako je vojna v Ukrajini vplivala na odnose med Rusijo in državami zveze NATO?",
+      "expected_answer": "Vojna je okrepila sodelovanje med članicami zveze NATO in povzročila povečanje obrambnih izdatkov po Evropi. Države, kot sta Finska in Švedska, so se zaradi varnostnih skrbi glede Rusije približale zvezi NATO oziroma se ji pridružile. Rusija širitev zveze NATO dojema kot neposredno grožnjo, odnosi med Rusijo in Zahodom pa so na najnižji ravni po hladni vojni.",
+      "key_facts": [
+        {
+          "fact": "Članice zveze NATO so po invaziji povečale obrambne izdatke."
+        },
+        {
+          "fact": "Finska se je po ruski invaziji pridružila zvezi NATO."
+        },
+        {
+          "fact": "Švedska se je zaradi varnostnih skrbi približala članstvu v zvezi NATO."
+        },
+        {
+          "fact": "Rusija širitev zveze NATO dojema kot grožnjo."
+        },
+        {
+          "fact": "Odnosi med Rusijo in Zahodom so se po začetku vojne močno poslabšali."
+        }
+      ]
+    },
+    {
+      "id": "eval_000004",
+      "query": "Zakaj analitike skrbi možnost jedrske eskalacije, povezane z Rusijo?",
+      "expected_answer": "Analitike skrbi jedrska eskalacija, ker ima Rusija enega največjih jedrskih arzenalov na svetu in je med vojno večkrat omenjala jedrsko odvračanje. Vojaški neuspehi ali neposredna vpletenost zveze NATO bi lahko dodatno povečali napetosti. Tudi omejena uporaba jedrskega orožja bi imela hude humanitarne posledice, čeprav medsebojno odvračanje zmanjšuje verjetnost obsežne jedrske vojne.",
+      "key_facts": [
+        {
+          "fact": "Rusija ima velik jedrski arzenal."
+        },
+        {
+          "fact": "Ruski uradniki so med vojno omenjali jedrsko odvračanje."
+        },
+        {
+          "fact": "Analitiki se bojijo eskalacije, če bi se zveza NATO neposredno vključila v konflikt."
+        },
+        {
+          "fact": "Uporaba jedrskega orožja bi imela velike humanitarne posledice."
+        },
+        {
+          "fact": "Medsebojno odvračanje zmanjšuje verjetnost obsežne jedrske vojne."
+        }
+      ]
+    },
+    {
+      "id": "eval_000005",
+      "query": "Kako se je Donald Trump postavil glede vojaške pomoči Ukrajini?",
+      "expected_answer": "Donald Trump je poudarjal, da bi morale evropske države bolj prispevati k obrambi Ukrajine, in izrazil skepticizem glede neomejene ameriške podpore. Zavzema se za hitro končanje vojne. Kritiki menijo, da bi zmanjšana pomoč oslabila Ukrajino, medtem ko podporniki verjamejo, da to omejuje pretirano ameriško vpletenost v tujini.",
+      "key_facts": [
+        {
+          "fact": "Donald Trump je trdil, da bi morala Evropa bolj prispevati k obrambi Ukrajine."
+        },
+        {
+          "fact": "Trump je izrazil skepticizem glede neomejene ameriške podpore."
+        },
+        {
+          "fact": "Trump je poudarjal potrebo po hitrem koncu vojne."
+        },
+        {
+          "fact": "Kritiki se bojijo, da bi zmanjšana pomoč oslabila Ukrajino."
+        },
+        {
+          "fact": "Podporniki verjamejo, da manjše obveznosti omejujejo pretirano ameriško vpletenost."
+        }
+      ]
+    },
+    {
+      "id": "eval_000006",
+      "query": "Kakšno vlogo imajo sankcije pri slabitvi ruskega gospodarstva med vojno v Ukrajini?",
+      "expected_answer": "Sankcije ciljajo na ruske banke, omejujejo izvoz tehnologije in vplivajo na ruski energetski izvoz. Njihov namen je zmanjšati gospodarsko sposobnost Rusije za nadaljevanje vojne. Rusija se je delno prilagodila s povečanjem trgovine s Kitajsko in Indijo, vendar sankcije še vedno ustvarjajo dolgoročni gospodarski pritisk.",
+      "key_facts": [
+        {
+          "fact": "Zahodne sankcije so ciljale na ruske banke."
+        },
+        {
+          "fact": "Sankcije so omejile izvoz tehnologije v Rusijo."
+        },
+        {
+          "fact": "Ruski energetski izvoz je bil prizadet zaradi sankcij."
+        },
+        {
+          "fact": "Rusija je povečala trgovino s Kitajsko in Indijo."
+        },
+        {
+          "fact": "Sankcije ustvarjajo dolgoročni gospodarski pritisk na Rusijo."
+        }
+      ]
+    },
+    {
+      "id": "eval_000007",
+      "query": "Kako je konflikt v Ukrajini vplival na svetovne cene energije in evropsko energetsko politiko?",
+      "expected_answer": "Vojna je zmotila energetsko oskrbo Evrope, predvsem dobavo zemeljskega plina. Evropske države so zmanjšale odvisnost od ruskega plina in pospešile vlaganja v obnovljive vire energije. Cene energije so po svetu narasle, kar je prispevalo k inflaciji in dolgoročnim spremembam evropske energetske politike.",
+      "key_facts": [
+        {
+          "fact": "Vojna je zmotila energetsko oskrbo Evrope."
+        },
+        {
+          "fact": "Evropske države so zmanjšale odvisnost od ruskega plina."
+        },
+        {
+          "fact": "Cene energije so po invaziji po svetu narasle."
+        },
+        {
+          "fact": "Inflacija se je delno povečala zaradi višjih cen energije."
+        },
+        {
+          "fact": "Evropa je pospešila vlaganja v obnovljive vire energije."
+        }
+      ]
+    },
+    {
+      "id": "eval_000008",
+      "query": "Zakaj Kitajska velja za pomembnega strateškega partnerja Rusije med vojno?",
+      "expected_answer": "Kitajska Rusiji zagotavlja gospodarsko in diplomatsko podporo prek trgovine, nakupov energije in strateškega sodelovanja. Rusija ima koristi od alternativnih trgov zunaj Zahoda, kar zmanjšuje vpliv sankcij. Kitajska se hkrati izogiba neposredni vojaški vpletenosti, da bi omejila mednarodne odzive.",
+      "key_facts": [
+        {
+          "fact": "Kitajska je med vojno povečala trgovino z Rusijo."
+        },
+        {
+          "fact": "Kitajska kupuje ruske energetske izvozne proizvode."
+        },
+        {
+          "fact": "Rusija ima koristi od alternativnih trgov zunaj Zahoda."
+        },
+        {
+          "fact": "Kitajska in Rusija strateško sodelujeta."
+        },
+        {
+          "fact": "Kitajska se izogiba neposredni vojaški vpletenosti v konflikt."
+        }
+      ]
+    },
+    {
+      "id": "eval_000009",
+      "query": "Kakšen vpliv je imel konflikt med Izraelom in Iranom na širšo varnostno situacijo na Bližnjem vzhodu?",
+      "expected_answer": "Konflikt med Izraelom in Iranom je povečal strah pred širšo regionalno vojno, v katero bi bile vključene tudi posredniške skupine in sosednje države. Napetosti vplivajo na naftne trge, pomorske poti in regionalna zavezništva. Mednarodni akterji si prizadevajo preprečiti nadaljnjo eskalacijo.",
+      "key_facts": [
+        {
+          "fact": "Konflikt med Izraelom in Iranom je povečal strah pred regionalno vojno."
+        },
+        {
+          "fact": "V regionalne napetosti so vključene tudi posredniške skupine."
+        },
+        {
+          "fact": "Naftni trgi se odzivajo na nestabilnost na Bližnjem vzhodu."
+        },
+        {
+          "fact": "Pomorske poti v regiji imajo strateški pomen."
+        },
+        {
+          "fact": "Mednarodni akterji si prizadevajo preprečiti eskalacijo."
+        }
+      ]
+    },
+    {
+      "id": "eval_000010",
+      "query": "Zakaj Abrahamovi sporazumi ponovno postajajo osrednji del ameriške diplomacije na Bližnjem vzhodu?",
+      "expected_answer": "Abrahamovi sporazumi veljajo za okvir za krepitev regionalnega sodelovanja proti skupnim varnostnim grožnjam, predvsem Iranu. Sporazumi izboljšujejo gospodarske in diplomatske odnose med Izraelom in arabskimi državami. Združene države Amerike podpirajo širitev teh sporazumov kot način stabilizacije regije.",
+      "key_facts": [
+        {
+          "fact": "Abrahamovi sporazumi so normalizirali odnose med Izraelom in nekaterimi arabskimi državami."
+        },
+        {
+          "fact": "Sporazumi so povečali regionalno sodelovanje."
+        },
+        {
+          "fact": "Iran več udeležencev vidi kot skupno varnostno grožnjo."
+        },
+        {
+          "fact": "Po normalizaciji so se izboljšale gospodarske vezi."
+        },
+        {
+          "fact": "Združene države Amerike podpirajo širitev sporazumov."
+        }
+      ]
+    },
+    {
+      "id": "eval_000011",
+      "query": "Kako se je Izrael odzval na poročila o morebitnem novem sporazumu med ZDA in Iranom?",
+      "expected_answer": "Izraelski uradniki se bojijo, da bi nov sporazum med ZDA in Iranom Iranu omogočil ohranitev delov njegovega jedrskega programa. Izrael trdi, da bi Iran lahko uporabil odpravo sankcij za krepitev regionalnih posredniških skupin. Podporniki diplomacije menijo, da lahko sporazumi zmanjšajo tveganje neposredne eskalacije, vendar vprašanje ostaja zelo razdeljujoče.",
+      "key_facts": [
+        {
+          "fact": "Izraelski uradniki se bojijo, da bi Iran ohranil jedrske zmogljivosti."
+        },
+        {
+          "fact": "Nekateri menijo, da bi odprava sankcij lahko okrepila skupine, ki jih podpira Iran."
+        },
+        {
+          "fact": "Podporniki diplomacije trdijo, da sporazumi zmanjšujejo tveganje eskalacije."
+        },
+        {
+          "fact": "Iranski jedrski program je za Izrael pomembno varnostno vprašanje."
+        },
+        {
+          "fact": "Razprave o diplomaciji med ZDA in Iranom ostajajo zelo razdeljujoče."
+        }
+      ]
+    },
+    {
+      "id": "eval_000012",
+      "query": "Katere so glavne kritike Benjamina Netanjahuja glede nedavnega konflikta z Iranom?",
+      "expected_answer": "Kritiki Benjamina Netanjahuja obtožujejo, da daje prednost vojaškim odzivom pred diplomatskimi rešitvami ter prispeva k regionalni nestabilnosti. Drugi menijo, da so njegove politike nujne za izraelsko varnost. Domače politične polemike dodatno vplivajo na javno dojemanje njegovega vodstva.",
+      "key_facts": [
+        {
+          "fact": "Kritiki Benjamina Netanjahuja obtožujejo, da daje prednost vojaškim rešitvam."
+        },
+        {
+          "fact": "Podporniki menijo, da Netanjahu daje prednost izraelski varnosti."
+        },
+        {
+          "fact": "Netanjahu se sooča z domačimi političnimi polemikami."
+        },
+        {
+          "fact": "Regionalna nestabilnost vpliva na dojemanje njegovega vodstva."
+        },
+        {
+          "fact": "Varnostna politika je osrednji del razprav o Netanjahuju."
+        }
+      ]
+    },
+    {
+      "id": "eval_000013",
+      "query": "Kako bi lahko obnovljene napetosti med Izraelom in Iranom vplivale na svetovne naftne trge?",
+      "expected_answer": "Obnovljene napetosti med Izraelom in Iranom bi lahko ogrozile transportne poti za nafto na Bližnjem vzhodu, zlasti okoli Hormuške ožine. Trgi se običajno hitro odzovejo na znake regionalnega konflikta, višje cene nafte pa lahko prispevajo k inflaciji in gospodarski negotovosti po svetu.",
+      "key_facts": [
+        {
+          "fact": "Napetosti na Bližnjem vzhodu lahko ogrozijo naftne transportne poti."
+        },
+        {
+          "fact": "Hormuška ožina je strateško pomembna za izvoz nafte."
+        },
+        {
+          "fact": "Cene nafte med regionalnimi konflikti pogosto narastejo."
+        },
+        {
+          "fact": "Višje cene nafte lahko prispevajo k inflaciji."
+        },
+        {
+          "fact": "Države, ki uvažajo energijo, so ranljive za motnje v oskrbi."
+        }
+      ]
+    },
+    {
+      "id": "eval_000014",
+      "query": "Zakaj zalivske države vse pogosteje iščejo varnostna partnerstva zunaj Združenih držav Amerike?",
+      "expected_answer": "Zalivske države vse bolj diverzificirajo svoja varnostna partnerstva, ker niso prepričane o dolgoročnih ameriških zavezah v regiji. Države, kot sta Savdska Arabija in Združeni arabski emirati, krepijo vezi s Kitajsko, Rusijo in regionalnimi partnerji ter si prizadevajo za večjo strateško prilagodljivost.",
+      "key_facts": [
+        {
+          "fact": "Zalivske države dvomijo o dolgoročni ameriški zavezanosti regiji."
+        },
+        {
+          "fact": "Savdska Arabija je razširila odnose s Kitajsko."
+        },
+        {
+          "fact": "Zalivske države vodijo bolj raznolike zunanjepolitične strategije."
+        },
+        {
+          "fact": "Regionalna partnerstva so postala pomembnejša."
+        },
+        {
+          "fact": "Gospodarsko sodelovanje vpliva na varnostne strategije zalivskih držav."
+        }
+      ]
+    },
+    {
+      "id": "eval_000015",
+      "query": "Kako je vojna v Ukrajini vplivala na vojaške inovacije, zlasti na področju uporabe dronov?",
+      "expected_answer": "Vojna v Ukrajini je pospešila razvoj in uporabo dronov za nadzor, ciljanje in napade. Obe strani uporabljata poceni drone skupaj z naprednimi vojaškimi sistemi. Konflikt je pokazal, kako pomembno lahko uporaba dronov vpliva na sodobno bojevanje, zato številne države prilagajajo svoje vojaške doktrine.",
+      "key_facts": [
+        {
+          "fact": "Vojna v Ukrajini je pospešila uporabo vojaških dronov."
+        },
+        {
+          "fact": "Droni se uporabljajo za nadzorovanje."
+        },
+        {
+          "fact": "Droni se uporabljajo za napade in ciljanje."
+        },
+        {
+          "fact": "Poceni droni so se izkazali za vojaško učinkovite."
+        },
+        {
+          "fact": "Države prilagajajo vojaške doktrine na podlagi izkušenj iz Ukrajine."
+        }
+      ]
+    },
+    {
+      "id": "eval_000016",
+      "query": "S kakšnimi izzivi se sooča Donald Trump pri poskusih posredovanja tako v konfliktih na Bližnjem vzhodu kot tudi v Ukrajini hkrati?",
+      "expected_answer": "Donald Trump se sooča z izzivom usklajevanja podpore zaveznikom z obljubami o zmanjšanju ameriške vpletenosti v tuje konflikte. Vojni v Ukrajini in na Bližnjem vzhodu vključujeta različne akterje, zavezništva in strateška tveganja. Domače politične delitve in vprašanja mednarodne verodostojnosti ZDA dodatno otežujejo sprejemanje odločitev.",
+      "key_facts": [
+        {
+          "fact": "Donald Trump želi zmanjšati ameriško vpletenost v tuje vojne."
+        },
+        {
+          "fact": "Konflikta v Ukrajini in na Bližnjem vzhodu vključujeta različna zavezništva."
+        },
+        {
+          "fact": "Ameriške politične odločitve vplivajo na mednarodno verodostojnost."
+        },
+        {
+          "fact": "Domače politične delitve vplivajo na zunanjepolitične odločitve."
+        },
+        {
+          "fact": "Usklajevanje diplomacije in vojaške podpore je politično zahtevno."
+        }
+      ]
+    },
+    {
+      "id": "eval_000017",
+      "query": "Kako družbena omrežja oblikujejo javno mnenje o vojnah v Ukrajini in Izraelu?",
+      "expected_answer": "Družbena omrežja hitro širijo posnetke z bojišč, politične narative in propagando, povezano z obema konfliktoma. Vplivajo na javno mnenje, zbiranje sredstev in mednarodno ozaveščenost. Hkrati ostajajo dezinformacijske kampanje in lažne informacije zelo razširjene, kar povzroča težave pri moderiranju vsebin in ohranjanju zaupanja javnosti.",
+      "key_facts": [
+        {
+          "fact": "Družbena omrežja hitro širijo posnetke z bojišč."
+        },
+        {
+          "fact": "Vlade in skupine uporabljajo spletno propagando."
+        },
+        {
+          "fact": "Dezinformacijske kampanje so med konflikti pogoste."
+        },
+        {
+          "fact": "Družbena omrežja vplivajo na mednarodno javno mnenje."
+        },
+        {
+          "fact": "Platforme se težko spopadajo s škodljivimi dezinformacijami."
+        }
+      ]
+    },
+    {
+      "id": "eval_000018",
+      "query": "Kakšne so humanitarne posledice dolgotrajnega vojskovanja v Gazi in Ukrajini?",
+      "expected_answer": "Vojne so povzročile obsežne civilne žrtve, razseljevanje prebivalstva, uničenje infrastrukture in humanitarne krize. Milijoni Ukrajincev in Palestincev se soočajo s pomanjkanjem stanovanj, zdravstvene oskrbe in osnovnih storitev. Humanitarne organizacije se še naprej soočajo z logističnimi in političnimi izzivi, dolgoročne psihološke in gospodarske posledice pa bodo verjetno trajale več let.",
+      "key_facts": [
+        {
+          "fact": "Vojne so povzročile civilne žrtve."
+        },
+        {
+          "fact": "Milijoni ljudi so bili razseljeni."
+        },
+        {
+          "fact": "Infrastruktura je bila močno poškodovana."
+        },
+        {
+          "fact": "Humanitarne organizacije se soočajo z logističnimi težavami."
+        },
+        {
+          "fact": "Pričakovati je dolgoročne psihološke posledice."
+        }
+      ]
+    },
+    {
+      "id": "eval_000019",
+      "query": "Kako bi lahko prihodnje ameriške volitve vplivale na zunanjo politiko ZDA do Rusije, Ukrajine in Izraela?",
+      "expected_answer": "Prihodnje ameriške volitve bi lahko bistveno spremenile raven vojaške pomoči, diplomatske prioritete in strategije zavezništev. Različne administracije lahko podpirajo močnejše posredovanje ali zmanjšano mednarodno vpletenost. Ker ameriška zunanja politika močno vpliva na NATO, Ukrajino, Izrael in diplomacijo na Bližnjem vzhodu, svet pozorno spremlja izide volitev.",
+      "key_facts": [
+        {
+          "fact": "Ameriške volitve lahko vplivajo na politiko vojaške pomoči."
+        },
+        {
+          "fact": "Različne administracije lahko zagovarjajo različne zunanjepolitične pristope."
+        },
+        {
+          "fact": "Politike zveze NATO so delno odvisne od ameriškega vodstva."
+        },
+        {
+          "fact": "Ameriška politika vpliva tako na Ukrajino kot na Izrael."
+        },
+        {
+          "fact": "Mednarodni akterji pozorno spremljajo ameriške volitve."
+        }
+      ]
+    },
+    {
+      "id": "eval_000020",
+      "query": "Katera so največja geopolitična tveganja, ki bi se lahko pojavila, če bi se sedanji konflikti v Vzhodni Evropi in na Bližnjem vzhodu še naprej zaostrovali do leta 2026?",
+      "expected_answer": "Nadaljnje zaostrovanje konfliktov bi lahko povečalo tveganje širših regionalnih vojn, kibernetskih napadov, gospodarske nestabilnosti ter motenj v svetovni trgovini in oskrbi z energijo. Odnosi med velikimi silami, kot so ZDA, Rusija in Kitajska, bi se lahko še dodatno poslabšali, humanitarne krize pa bi se lahko razširile, če konflikti ostanejo nerešeni.",
+      "key_facts": [
+        {
+          "fact": "Nadaljevanje konfliktov bi lahko destabiliziralo svetovno trgovino."
+        },
+        {
+          "fact": "Kibernetski napadi predstavljajo vse večje geopolitično tveganje."
+        },
+        {
+          "fact": "Motnje v oskrbi z energijo bi lahko povečale gospodarsko nestabilnost."
+        },
+        {
+          "fact": "Odnosi med velikimi silami bi se lahko še poslabšali."
+        },
+        {
+          "fact": "Humanitarne krize bi se lahko razširile, če se vojne nadaljujejo."
+        }
+      ]
+    }
+  ]
+}
