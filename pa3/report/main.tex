@@ -1,0 +1,80 @@
+\documentclass[conference]{IEEEtran}
+
+\ifCLASSINFOpdf
+
+\else
+
+\fi
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+\title{WEIR - Assignment 3 - Retrieval-Augmented Generation}
+
+
+
+\author{\IEEEauthorblockN{Maj Bregar, Gal Fajon, Alen Leban}
+
+\IEEEauthorblockA{ Faculty of Computer and Information Science\\Ve\v cna pot 113, 1000 Ljubljana}
+}
+
+\maketitle
+
+\begin{abstract}
+This report describes a Retrieval-Augmented Generation (RAG) system built on top of the
+PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval + reranking + generation) and without context (LLM-only). We focus on transparent retrieval, explicit evidence in prompts, and the impact of retrieval quality on generated answers.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+This assignment extends our PA2 retrieval system with a language model to create a
+RAG pipeline that can answer questions in two modes: \emph{With Context}, where the
+model receives retrieved document chunks as explicit evidence, and (2) \emph{Without
+Context}, where the model answers directly from its parameters. The goal is to analyze
+how retrieval quality affects answer quality, transparency, and failure modes.
+
+\section{Implementation Summary}
+
+\subsection{Models and tooling}
+Our implementation was based on the example provided in the exercises and supports three model 
+components: an embedding model for retrieval, cross-encoder reranker for candidate refinement, and an LLM for answer generation.
+We interact with embedding and reranking models via \texttt{sentence-transformers} and
+use pgvector-backed SQL queries for similarity search. Example embedding models include
+\texttt{BAAI/bge-m3}, \texttt{all-MiniLM-L6-v2}, and \texttt{all-mpnet-base-v2}; example
+rerankers include \texttt{cross-encoder/mmarco-mMiniLMv2-L12-H384-v1} and
+\texttt{cross-encoder/ms-marco-MiniLM-L-12-v2}. For generation, we access a local
+Ollama model (e.g., \texttt{ollama\_chat/llama3.2:1b}) and route requests through DSPy
+so that the same query can be issued in \emph{With Context} and \emph{Without Context}
+modes using consistent prompting.
+
+\subsection{Document storage and chunking}
+We reuse the PA2 database schema and chunked documents. Chunks are stored in dimension
+specific tables (\texttt{page\_segment\_vec384}, \texttt{page\_segment\_vec768},
+\texttt{page\_segment\_vec1024}) along with page IDs and model IDs.
+
+\subsection{Retrieval and reranking}
+A user query is embedded using the selected embedding model. We then retrieve the top-$k$
+segments from pgvector using a configurable similarity metric (cosine, L2, or L1). The
+retrieved candidates are reranked with a cross-encoder. The final top-$n$ chunks are
+formatted into a context block that becomes explicit evidence for the With Context mode.
+
+\subsection{Prompt construction}
+The system defines two DSPy signatures:
+\texttt{SimpleRAG} (context + question) and \texttt{SimpleQuery} (question only). The
+\emph{With Context} mode feeds retrieved evidence plus the user question to the LLM. The \emph{Without Context} mode submits only the question.
+
+\section{Conclusion}
+We implemented a transparent RAG pipeline on top of the PA2 retrieval system, supporting
+both evidence-grounded and LLM-only answering modes. The system exposes retrieved evidence and enables a direct comparison of answer quality across the two modes. 
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+\end{document}
