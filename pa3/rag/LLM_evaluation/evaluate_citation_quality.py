@@ -5,10 +5,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import json
 from collections import defaultdict
 
-EVAL_DATASET_PATH = "evaluation_dataset.json"
-ANSWERS_PATH = "eval_answers/ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_mmarco_3.json"
+ANSWERS_PATH = "eval_answers/ollama_chat-qwen3-8b_rag_one_shot_bge-m3_50_mmarco_3.json"
 K = 3
 
+
+EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset.json"
 
 def load_answers(answers_path: str) -> dict:
     with open(answers_path, "r", encoding="utf-8") as f:

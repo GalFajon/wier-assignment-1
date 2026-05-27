@@ -67,58 +67,75 @@ def query_similar_chunks(engine, query_vector, dimension=384, metric="cosine", t
 
 
 
+def query_similar_chunks_with_id_return(engine, query_vector, dimension=384, metric="cosine", top_n=5, table_name="page_segment_vec384", min_segment_length=100):
+    ann_candidate_mult = 50
 
-def query_similar_chunks_with_id_return(engine, query_vector, dimension=384, metric="cosine", top_n=5, table_name="page_segment_vec384"):
     table_map = {
         384: "page_segment_vec384",
         768: "page_segment_vec768",
         1024: "page_segment_vec1024"
     }
-    
+
     if dimension not in table_map:
         raise ValueError(f"Dimension {dimension} not supported. Use 384, 768, or 1024.")
-    
-    actual_table = table_map.get(dimension, table_name)
-    
+
+    actual_table = table_map[dimension]
+
     operator_map = {
         "cosine": "<=>",
         "l2": "<->",
         "l1": "<+>"
     }
-    
+
     if metric not in operator_map:
         raise ValueError(f"Metric {metric} not supported. Use cosine, l2, or l1.")
-    
-    operator = operator_map[metric]
-    
-    vector_str = "[" + ",".join(str(v) for v in query_vector) + "]"
-    
+
+    op = operator_map[metric]
+
+    ann_limit = max(top_n * ann_candidate_mult, 1000)
+    ef_search = min(max(ann_limit, 200), 1000)
+
     sql = f"""
-        SELECT 
-            id,
-            page_id,
-            page_segment,
-            embedding {operator} '{vector_str}'::vector AS distance
-        FROM public.{actual_table}
-        ORDER BY embedding {operator} '{vector_str}'::vector
+        WITH ann_candidates AS (
+            SELECT id
+            FROM public.{actual_table}
+            WHERE LENGTH(page_segment) >= :min_segment_length
+            ORDER BY embedding {op} (:query_vec)::vector
+            LIMIT :ann_limit
+        )
+        SELECT
+            p.id,
+            p.page_id,
+            p.page_segment,
+            p.embedding {op} (:query_vec)::vector AS distance
+        FROM public.{actual_table} p
+        INNER JOIN ann_candidates a ON p.id = a.id
+        WHERE LENGTH(p.page_segment) >= :min_segment_length
+        ORDER BY p.embedding {op} (:query_vec)::vector
         LIMIT :top_n;
     """
-    
+
     try:
         with engine.connect() as connection:
+            connection.execute(text("SET enable_seqscan = on;"))
+            connection.execute(text("SET enable_indexscan = on;"))
+            connection.execute(text("SET enable_bitmapscan = on;"))
+            connection.execute(text(f"SET hnsw.ef_search = {ef_search};"))
+
             result = connection.execute(
                 text(sql),
-                {"top_n": top_n}
-            )
-            
-            chunks = []
-            for row in result:
-                chunks.append((row[0], row[1], row[2], float(row[3])))
-            
-            return chunks
+                {"query_vec": query_vector, "top_n": top_n, "ann_limit": ann_limit, "min_segment_length": min_segment_length}
+            ).fetchall()
+
+        return [(row[0], row[1], row[2], float(row[3])) for row in result]
+
     except Exception as e:
         print(f"Database query error: {e}")
         return []
+
+
+
+
 
 
 def health_check(engine):

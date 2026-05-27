@@ -17,18 +17,23 @@ from embedding import load_embedding_model
 from LLM_templates import run_signature_direct_query, run_signature_rag, RAG_ZeroShot_Signature, RAG_OneShot_Signature
 
 
-LLM_MODEL = 'ollama_chat/qwen3:14b'
+LLM_MODEL = 'ollama_chat/qwen3:4b'
 
-MODEL_ANSWER_MODE = 'rag_one_shot' # direct, rag_zero_shot, rag_one_shot
-EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset_unbiased.json"
+MODEL_ANSWER_MODE = 'direct' # direct, rag_zero_shot, rag_one_shot
+UNBIASED_DATASET = True
 
 EMBEDDING_MODEL_KEY = 'bge-m3'
 EMBEEDDING_SIMILARITY_RETURN_N = 50
-RERANKING_MODEL_KEY = 'mmarco'
-RERANKING_RETURN_N = 3
+RERANKING_MODEL_KEY = 'bge'
+RERANKING_RETURN_N = 7
 
 
-lm = dspy.LM(LLM_MODEL, api_base='http://localhost:11434', api_key='', num_retries=5)
+if UNBIASED_DATASET:
+    EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset_unbiased.json"
+else:
+    EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset.json"
+
+lm = dspy.LM(LLM_MODEL, api_base='http://localhost:11434', api_key='', num_retries=3)
 dspy.configure(lm=lm)
 
 embedding_model, embedding_dim, model_db_id = load_embedding_model(model_key=EMBEDDING_MODEL_KEY, cache_dir='../models')
@@ -120,14 +125,22 @@ if __name__ == "__main__":
         answer_dicts.append(answer_dict)
 
 
-    output_json_path = (
-        f"{slugify_filename(LLM_MODEL)}_"
-        f"{MODEL_ANSWER_MODE}_"
-        f"{EMBEDDING_MODEL_KEY}_"
-        f"{EMBEEDDING_SIMILARITY_RETURN_N}_"
-        f"{RERANKING_MODEL_KEY}_"
-        f"{RERANKING_RETURN_N}.json"
-    )
+
+    output_json_path = f"{slugify_filename(LLM_MODEL)}"
+    
+    if MODEL_ANSWER_MODE == 'direct':
+        output_json_path += "_direct"
+    else:
+        output_json_path += f"_{MODEL_ANSWER_MODE}"
+        output_json_path += f"_{EMBEDDING_MODEL_KEY}"
+        output_json_path += f"_{EMBEEDDING_SIMILARITY_RETURN_N}"
+        output_json_path += f"_{RERANKING_MODEL_KEY}"
+        output_json_path += f"_{RERANKING_RETURN_N}"
+    
+    if UNBIASED_DATASET:
+        output_json_path += "_unbiased"
+    
+    output_json_path += ".json"
 
     with open(output_json_path, "w", encoding="utf-8") as f:
         json.dump(answer_dicts, f, ensure_ascii=False, indent=2)

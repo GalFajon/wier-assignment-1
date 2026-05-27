@@ -7,6 +7,7 @@ RERANKING_MODELS = {
     "mmarco": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
     "ms-marco": "cross-encoder/ms-marco-MiniLM-L-12-v2",
     "qnli": "cross-encoder/qnli-distilroberta-base",
+    "bge": "BAAI/bge-reranker-v2-m3",
 }
 
 DEFAULT_RERANKER = "mmarco"
