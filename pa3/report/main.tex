@@ -11,6 +11,7 @@
 \usepackage{caption}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage[inkscape=auto]{svg}
 \usepackage{verbatim}
 
 
@@ -97,12 +98,12 @@ Besedilo:
 ---------------
 \end{verbatim}
 
-\section{Evaluation}
+\section{Evaluation procedure}
 
 We implemented a systematic three-stage evaluation framework centered on a curated dataset.
 
-\subsection{Evaluation Dataset}
-The evaluation dataset comprises approximately 50 queries constructed via a supervised process. Each query is grounded in a specific text window comprising one or more consecutive chunks from a randomly sampled page, ensuring diverse content. For each window, an LLM generates a factual question in Slovenian alongside a concise expected answer and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
+\subsection{Dataset}
+The evaluation dataset comprises 50 queries constructed via a supervised process using GPT-4.1-mini (via OpenAI API) as a question and expected-answer generator. For each sampled page, text windows are selected and GPT-4.1-mini generates a factual question in Slovenian, a concise expected answer, and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
 
 \textbf{Example:} One dataset entry asks ``\textit{Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical danes\u017enji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?}''. The expected answer references four key facts, described in a single chunk: deployment of hundreds of thousands of firefighters and approximately 2000 military personnel, Medvedev's decree calling additional troops, 40 deaths and 128,500 hectares destroyed, hot and dry weather as root cause.
 
@@ -117,11 +118,66 @@ Answer semantic quality is assessed using GPT-4 as a judge. For each query, the 
 
 \textbf{Example:} Consider the query ``\textit{Kako je Donald Trump po vrnitvi na položaj spremenil pristop ZDA do vojne med Rusijo in Ukrajino?}''. The expected answer identifies five key facts: Trump's advocacy for faster negotiations, questioning long-term U.S. military aid to Ukraine, emphasis on burden-sharing among European allies, critics' concern about territorial concessions, supporters' view on accelerated peace talks. An LLM model that answered ``\textit{Donald Trump ni v trenutno v predsedovanju ZDA, zato ni mogoče ugotoviti, kako bi spremenil pristop do vojne med Rusijo in Ukrajino\dots}'' received a semantic score of 0.0 and key-fact coverage score of 0.0, with all five facts marked as \textit{missing}. The judge's reasoning noted ``\textit{Odgovor ne odgovarja na vprašanje, saj zanika možnost ocene Trumpovega pristopa po vrnitvi na položaj in ne pokrije nobenega ključnega dejstva\dots}''  This example illustrates the judge's treatment of factually incorrect or question-misaligned responses.
 
+\section{Evaluation Findings}
+
+\subsection{Retrieval Performance and Model Selection}
+Our retrieval evaluation assessed 50 queries across multiple embedding and reranking configurations. For the \texttt{bge-m3} embedding model without reranking, we observe strong early-ranking performance: NDCG@2 = 0.983 (std 0.056), NDCG@3 = 0.917 (std 0.100), with gradual degradation to NDCG@10 = 0.760 (std 0.134). This indicates that relevant chunks are typically placed within the top two to three positions, with degradation as ranking depth increases.
+
+Reranking with \texttt{ms-marco-MiniLM-L6-v2} yields comparable early performance (NDCG@2 = 0.973, NDCG@3 = 0.918) but marginally improves mid-range rankings (NDCG@6 through NDCG@10 all exceed no-reranker scores by 0.01-0.03).
+
+Comparative performance across model and reranker combinations is visualized in Figures \ref{fig:ndcg_mean} and \ref{fig:ndcg_std}. The mean NDCG scores across all cut-offs show consistent patterns: \texttt{bge-m3} with no reranking achieves competitive performance, while reranked variants (ms-marco, mmarco, bge) cluster at slightly higher means. Standard deviations remain elevated across configurations, indicating case-by-case variance in retrieval effectiveness, suggesting that no single configuration dominates uniformly.
+
+\begin{figure}[h]
+\centering
+\includesvg[width=0.45\textwidth]{model_reranker_llm_scored_mean.svg}
+\caption{Mean NDCG@$k$ across embedding and reranking configurations. Bars represent average scores over 50 test queries.}
+\label{fig:ndcg_mean}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includesvg[width=0.45\textwidth]{model_reranker_llm_scored_std.svg}
+\caption{Standard deviation of NDCG@$k$ across configurations.}
+\label{fig:ndcg_std}
+\end{figure}
+
+\subsection{LLM-Agnostic Baseline: Model Size and Answer Quality}
+
+We evaluated three Qwen model sizes in direct (no-context) mode to isolate language capability from retrieval grounding.
+
+As mentioned above, each question includes five key facts extracted from expected answers. For each fact, an external LLM judge (GPT-4) assigns a coverage status: \texttt{covered} (1.0), \texttt{implied} (0.85), \texttt{partial} (0.5), \texttt{missing} (0.0), or \texttt{contradicted} (0.0). The key-fact coverage score is the arithmetic mean of individual fact scores across all facts. This metric favors exact coverage but maintains partial credit for implicit or partial information.
+
+The external judge rates overall answer quality on a 0.0--1.0 scale based on five rubric dimensions: directness and clarity in addressing the question, comprehensiveness relative to expected answer, freedom from major factual errors, presence of unsupported claims, and coherence and readability. The judge assigns scores at 0.0-1.0 multiples of 0.2 (e.g., 0.0, 0.2, 0.4, 0.6, 0.8, 1.0).
+
+The final answer quality score combines coverage and semantic quality as: $\text{score}_{\text{composite}} = 0.65 \cdot \text{coverage} + 0.35 \cdot \text{semantic}$. The 0.65/0.35 weighting emphasizes factual grounding but recognizes fluency and semantic appropriateness. Penalties apply via multiplication by 0.5 for three conditions: answer contains contradictions, answer contains major errors, answer does not address the question. Multiple violations compound multiplicatively (e.g., contradicted answer that also doesn't address question: $\text{score}_{\text{final}} = \text{score}_{\text{composite}} \times 0.5 \times 0.5 = 0.25 \times \text{score}_{\text{composite}}$).
+
+Per-example metrics are aggregated across 20 test examples. Mean coverage and semantic scores are simple arithmetic means across examples.
+
+Results confirm clear model-size sensitivity:
+
+\begin{itemize}
+    \item \textbf{Qwen 4B}: Mean key-fact coverage 0.486, semantic score 0.58, composite quality 0.516. Hallucination rate 30\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 90\%.
+    
+    \item \textbf{Qwen 8B}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
+    
+    \item \textbf{Qwen 14B}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0.05\%, major-error rate 10\%, question-address rate 95\%.
+\end{itemize}
+
+The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists.
+
+\subsection{Key-Fact Coverage Breakdown}
+
+Across the 14B baseline, out of 100 assessed key facts: 37 were directly covered, 14 implied through paraphrase, 12 partially addressed with missing components, 36 completely missing, and 1 contradicted. The tight clustering of strict (covered-only) coverage (0.37 vs composite 0.549) indicates that models struggle to comprehensively address all components of multi-part questions, but often convey partial or inferred understanding. The absence of contradictions under no-context evaluation suggests the fallback mechanism is reliable: when uncertain, models correctly default to uncertain rather than assert falsehoods.
+
+\subsection{Question-Alignment and Error Patterns}
+
+Question-address rates of 90-95\% suggest that models understand the posed questions and attempt substantive responses rather than deflecting. Major-error rates (10-15\%) indicate that roughly one in ten answers contains critical semantic or factual mistakes. Common error patterns include: temporal misalignment (providing outdated information or conflating time periods), scope misalignment (answering a related but different question), partial reasoning (correctly identifying some key concepts but missing causal or comparative relationships).
+
 \section{Conclusion}
 We implemented a RAG pipeline on top of the PA2 retrieval system, supporting both evidence-grounded and LLM-only answering modes.
 The design emphasizes explicit evidence presentation and machine-checkable references, enabling direct comparison of answer quality across modes.
 
-\bibliographystyle{IEEEtran}
-\bibliography{ref}
+%\bibliographystyle{IEEEtran}
+%\bibliography{ref}
 
 \end{document}
