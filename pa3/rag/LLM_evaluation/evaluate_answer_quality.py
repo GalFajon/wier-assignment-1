@@ -15,9 +15,10 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset_unbiased.json"
-ANSWERS_PATH = "eval_baseline_model_selection/answers/ollama_chat-qwen3-4b_direct_unbiased.json"
-OUTPUT_PATH = "ollama_chat-qwen3-4b_direct_unbiased_ANSWER_QUALITY.json"
+EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset.json"
+
+ANSWERS_PATH = "eval_querying_styles/answers/ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7.json"
+OUTPUT_PATH = "ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_ANSWER_QUALITY.json"
 
 OPENAI_JUDGE_MODEL = "gpt-4.1"
 MAX_RETRIES = 3

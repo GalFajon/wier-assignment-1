@@ -1,0 +1,7 @@
+{
+  "answers_file": "eval_querying_styles/answers/ollama_chat-qwen3-14b_direct.json",
+  "k": 7,
+  "hit_at_k": 0.0,
+  "mean_precision_at_k": null,
+  "mean_recall_at_k": 0.0
+}

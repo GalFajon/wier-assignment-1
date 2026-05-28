@@ -17,10 +17,10 @@ from embedding import load_embedding_model
 from LLM_templates import run_signature_direct_query, run_signature_rag, RAG_ZeroShot_Signature, RAG_OneShot_Signature
 
 
-LLM_MODEL = 'ollama_chat/qwen3:4b'
+LLM_MODEL = 'ollama_chat/qwen3:14b'
 
-MODEL_ANSWER_MODE = 'direct' # direct, rag_zero_shot, rag_one_shot
-UNBIASED_DATASET = True
+MODEL_ANSWER_MODE = 'rag_one_shot' # direct, rag_zero_shot, rag_one_shot
+UNBIASED_DATASET = False
 
 EMBEDDING_MODEL_KEY = 'bge-m3'
 EMBEEDDING_SIMILARITY_RETURN_N = 50

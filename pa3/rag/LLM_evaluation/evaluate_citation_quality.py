@@ -5,8 +5,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import json
 from collections import defaultdict
 
-ANSWERS_PATH = "eval_answers/ollama_chat-qwen3-8b_rag_one_shot_bge-m3_50_mmarco_3.json"
-K = 3
+
+
+
+ANSWERS_PATH = "eval_querying_styles/answers/ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7.json"
+K = 7
+
+OUTPUT_PATH = "ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_CITATION_QUALITY.json"
 
 
 EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset.json"
@@ -97,7 +102,7 @@ def score_citation_quality(
         if partial_support else None
     )
 
-    cited_reference_match = cited == referenced
+    cited_reference_match = bool(cited) and cited == referenced
 
     cited_without_reference = sorted(cited - referenced, key=chunk_sort_key)
     referenced_without_citation = sorted(referenced - cited, key=chunk_sort_key)
@@ -344,14 +349,13 @@ if __name__ == "__main__":
 
     metrics_output = {
         "answers_file": ANSWERS_PATH,
+        "k" : K,
         "hit_at_k": hit_at_k,
         "mean_precision_at_k": mean_prec_at_k,
         "mean_recall_at_k": mean_recall_at_k,
     }
 
-    metrics_output_path = "citation_quality_metrics.json"
-
-    with open(metrics_output_path, "w", encoding="utf-8") as f:
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(metrics_output, f, ensure_ascii=False, indent=2)
 
-    print(f"Saved citation quality metrics to {metrics_output_path}")
+    print(f"Saved citation quality metrics to {OUTPUT_PATH}")
