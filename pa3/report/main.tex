@@ -51,14 +51,18 @@ We experimented with multiple publicly available embedding backbones and cross-e
 % WHICH ONES, HOW?
 For generation we use a locally served model via Ollama and interface with the LLM through \texttt{DSPy}.
 
-\subsection{Document storage and chunking}
+\subsection{Document storage, chunking and chunk filtering}
 We reuse the PA2 database schema and chunked documents.
-% WE ALSO PERFORM FILTERING ON THE CHUNKS, DESCRIBE HOW
 
-\subsection{Retrieval and reranking}
-For evidence-grounded answering, the pipeline embeds the user query, retrieves the top-$k$ most similar text segments from pgvector
-using a configurable similarity metric (cosine, L2, or L1), and reranks the candidates with a cross-encoder.
-The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
+To mitigate noise from very short segments (e.g., headers, keywords, or stray fragments that clutter the vector space),
+retrieval incorporates a minimum segment length filter set at 100 characters by default. This filter is applied at the database
+level during similarity search: both the approximate nearest neighbor (ANN) candidate selection and the final ranking stage
+exclude segments shorter than the threshold, ensuring that only substantive text blocks are candidate for evidence.
+
+\subsection{Retrieval}
+For evidence-grounded answering, the pipeline embeds the user query, retrieves the top-$k$ most similar segments from pgvector
+using a configurable similarity metric (cosine, L2, or L1)—filtered to exclude short segments—and reranks the candidates with
+a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
 
 To support systematic evaluation of grounding, we additionally perform a lightweight consistency check between in-text citations
 and a machine-readable reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers
