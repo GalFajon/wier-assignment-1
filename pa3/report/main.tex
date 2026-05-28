@@ -11,6 +11,8 @@
 \usepackage{caption}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage[inkscape=auto]{svg}
+\usepackage{verbatim}
 
 
 \begin{document}
@@ -28,53 +30,154 @@
 
 \begin{abstract}
 This report describes a Retrieval-Augmented Generation (RAG) system built on top of the
-PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval + reranking + generation) and without context (LLM-only). We focus on transparent retrieval, explicit evidence in prompts, and the impact of retrieval quality on generated answers.
+PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval + reranking + generation) and without context (LLM-only).
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-This assignment extends our PA2 retrieval system with a language model to create a
-RAG pipeline that can answer questions in two modes: \emph{With Context}, where the
-model receives retrieved document chunks as explicit evidence, and (2) \emph{Without
-Context}, where the model answers directly from its parameters. The goal is to analyze
-how retrieval quality affects answer quality, transparency, and failure modes.
+This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: \emph{With Context}, where the model receives retrieved document chunks as explicit evidence, and \emph{Without
+Context}, where the model answers directly from its parameters.
 
 \section{Implementation Summary}
 
 \subsection{Models and tooling}
-Our implementation was based on the example provided in the exercises and supports three model 
-components: an embedding model for retrieval, cross-encoder reranker for candidate refinement, and an LLM for answer generation.
-We interact with embedding and reranking models via \texttt{sentence-transformers} and
-use pgvector-backed SQL queries for similarity search. Example embedding models include
-\texttt{BAAI/bge-m3}, \texttt{all-MiniLM-L6-v2}, and \texttt{all-mpnet-base-v2}; example
-rerankers include \texttt{cross-encoder/mmarco-mMiniLMv2-L12-H384-v1} and
-\texttt{cross-encoder/ms-marco-MiniLM-L-12-v2}. For generation, we access a local
-Ollama model (e.g., \texttt{ollama\_chat/llama3.2:1b}) and route requests through DSPy
-so that the same query can be issued in \emph{With Context} and \emph{Without Context}
-modes using consistent prompting.
+Our system consists of three model components: a sentence embedding model for dense retrieval, a reranker to refine candidates, and a large language model (LLM) for answer generation. We experimented with multiple models for both embedding and reranking. For answer generation, we use a locally served model via Ollama and interface with the LLM through \texttt{DSPy}.
 
-\subsection{Document storage and chunking}
-We reuse the PA2 database schema and chunked documents. Chunks are stored in dimension
-specific tables (\texttt{page\_segment\_vec384}, \texttt{page\_segment\_vec768},
-\texttt{page\_segment\_vec1024}) along with page IDs and model IDs.
+\subsection{Document storage, chunking and chunk filtering}
+We reuse the PA2 database schema and chunked documents.
 
-\subsection{Retrieval and reranking}
-A user query is embedded using the selected embedding model. We then retrieve the top-$k$
-segments from pgvector using a configurable similarity metric (cosine, L2, or L1). The
-retrieved candidates are reranked with a cross-encoder. The final top-$n$ chunks are
-formatted into a context block that becomes explicit evidence for the With Context mode.
+To mitigate noise from very short segments (e.g., headers, keywords, or stray fragments that clutter the vector space),
+retrieval incorporates a minimum segment length filter set at 100 characters by default. This filter is applied during similarity search: both the approximate nearest neighbor (ANN) candidate selection and the final ranking stage exclude segments shorter than the threshold, ensuring that only substantive text blocks are candidate for evidence.
+
+\subsection{Retrieval}
+For evidence-grounded answering, the pipeline embeds the user query, retrieves the top-$k$ most similar segments from pgvector
+using a configurable similarity metric (cosine, L2, or L1) and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
+
+To support systematic evaluation of grounding, we additionally perform a consistency check between in-text citations
+and a machine-readable reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
 
 \subsection{Prompt construction}
-The system defines two DSPy signatures:
-\texttt{SimpleRAG} (context + question) and \texttt{SimpleQuery} (question only). The
-\emph{With Context} mode feeds retrieved evidence plus the user question to the LLM. The \emph{Without Context} mode submits only the question.
+We use two prompting regimes.
+
+\emph{With Context} prompts are designed for strict evidence-grounded answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list (identifier and URL) that matches the cited identifiers exactly. References that are not cited in the answer are disallowed.
+
+If the context is insufficient to answer the question, the model must output the exact fallback message:
+
+\begin{verbatim}
+Na podlagi podanega konteksta 
+tega ni mogoče ugotoviti.
+\end{verbatim}
+
+In this case, the structured reference list must be empty.
+
+\emph{Without Context} prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers
+from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
+
+\begin{verbatim}
+Brez dodatnega konteksta tega ni mogoče 
+zanesljivo ugotoviti.
+\end{verbatim}
+
+All prompts are executed as single-turn generations. There is no explicit multi-step reasoning procedure in the implementation.
+Any constraint on reasoning, found in the system prompts, is expressed as natural-language guidance in the prompt rather than a programmatic enforcement on the functionality of the model.
+
+\subsection{Explainable context formatting and validation}
+Retrieved evidence is formatted as human-readable blocks that are passed to the LLM as the context. Each block includes a local header, a segment identifier used for citations, the page URL, and the chunk text. Including URLs directly in the context reduces the need for the model to invent sources and supports
+the structured reference output.
+
+Below we include the template used to construct the evidence context for a specific chunk (values in braces are filled in at runtime):
+
+\begin{verbatim}
+### ODSEK {i}
+ChunkID: {chunk_id}
+URL: {page_url}
+Besedilo:
+{text}
+
+---------------
+\end{verbatim}
+
+\section{Evaluation procedure}
+
+We implemented a systematic three-stage evaluation framework centered on a curated dataset.
+
+\subsection{Dataset}
+The evaluation dataset comprises 50 queries constructed via a supervised process using GPT-4.1-mini (via OpenAI API) as a question and expected-answer generator. For each sampled page, text windows are selected and GPT-4.1-mini generates a factual question in Slovenian, a concise expected answer, and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
+
+\textbf{Example:} One dataset entry asks ``\textit{Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical danes\u017enji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?}''. The expected answer references four key facts, described in a single chunk: deployment of hundreds of thousands of firefighters and approximately 2000 military personnel, Medvedev's decree calling additional troops, 40 deaths and 128,500 hectares destroyed, hot and dry weather as root cause.
+
+\subsection{Retrieval Evaluation}
+Retrieval quality is measured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}, \texttt{all-MiniLM-L6-v2}, \texttt{all-mpnet-base-v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}, \texttt{bge-reranker-v2-m3}).
+
+\subsection{Citation Quality Evaluation}
+For evidence-grounded answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and machine-readable references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
+
+\subsection{Answer Quality Evaluation}
+Answer semantic quality is assessed using GPT-4 as a judge. For each query, the judge compares the model's answer against the standard expected answer and key facts using a detailed rubric. Evaluation dimensions include key-fact coverage (marked as covered, implied, partial, missing, or contradicted), overall semantic score (0.0--1.0 scale), direct question-answer alignment (true/false), and presence of major errors. The rubric is flexible: paraphrases are accepted, citation formatting does not affect semantic scoring, and factually correct supplementary information is tolerated.
+
+\textbf{Example:} Consider the query ``\textit{Kako je Donald Trump po vrnitvi na položaj spremenil pristop ZDA do vojne med Rusijo in Ukrajino?}''. The expected answer identifies five key facts: Trump's advocacy for faster negotiations, questioning long-term U.S. military aid to Ukraine, emphasis on burden-sharing among European allies, critics' concern about territorial concessions, supporters' view on accelerated peace talks. An LLM model that answered ``\textit{Donald Trump ni v trenutno v predsedovanju ZDA, zato ni mogoče ugotoviti, kako bi spremenil pristop do vojne med Rusijo in Ukrajino\dots}'' received a semantic score of 0.0 and key-fact coverage score of 0.0, with all five facts marked as \textit{missing}. The judge's reasoning noted ``\textit{Odgovor ne odgovarja na vprašanje, saj zanika možnost ocene Trumpovega pristopa po vrnitvi na položaj in ne pokrije nobenega ključnega dejstva\dots}''  This example illustrates the judge's treatment of factually incorrect or question-misaligned responses.
+
+\section{Evaluation Findings}
+
+\subsection{Retrieval Performance and Model Selection}
+Our retrieval evaluation assessed 50 queries across multiple embedding and reranking configurations. For the \texttt{bge-m3} embedding model without reranking, we observe strong early-ranking performance: NDCG@2 = 0.983 (std 0.056), NDCG@3 = 0.917 (std 0.100), with gradual degradation to NDCG@10 = 0.760 (std 0.134). This indicates that relevant chunks are typically placed within the top two to three positions, with degradation as ranking depth increases.
+
+Reranking with \texttt{ms-marco-MiniLM-L6-v2} yields comparable early performance (NDCG@2 = 0.973, NDCG@3 = 0.918) but marginally improves mid-range rankings (NDCG@6 through NDCG@10 all exceed no-reranker scores by 0.01-0.03).
+
+Comparative performance across model and reranker combinations is visualized in Figures \ref{fig:ndcg_mean} and \ref{fig:ndcg_std}. The mean NDCG scores across all cut-offs show consistent patterns: \texttt{bge-m3} with no reranking achieves competitive performance, while reranked variants (ms-marco, mmarco, bge) cluster at slightly higher means. Standard deviations remain elevated across configurations, indicating case-by-case variance in retrieval effectiveness, suggesting that no single configuration dominates uniformly.
+
+\begin{figure}[h]
+\centering
+\includesvg[width=0.45\textwidth]{model_reranker_llm_scored_mean.svg}
+\caption{Mean NDCG@$k$ across embedding and reranking configurations. Bars represent average scores over 50 test queries.}
+\label{fig:ndcg_mean}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includesvg[width=0.45\textwidth]{model_reranker_llm_scored_std.svg}
+\caption{Standard deviation of NDCG@$k$ across configurations.}
+\label{fig:ndcg_std}
+\end{figure}
+
+\subsection{LLM-Agnostic Baseline: Model Size and Answer Quality}
+
+We evaluated three Qwen model sizes in direct (no-context) mode to isolate language capability from retrieval grounding.
+
+As mentioned above, each question includes five key facts extracted from expected answers. For each fact, an external LLM judge (GPT-4) assigns a coverage status: \texttt{covered} (1.0), \texttt{implied} (0.85), \texttt{partial} (0.5), \texttt{missing} (0.0), or \texttt{contradicted} (0.0). The key-fact coverage score is the arithmetic mean of individual fact scores across all facts. This metric favors exact coverage but maintains partial credit for implicit or partial information.
+
+The external judge rates overall answer quality on a 0.0--1.0 scale based on five rubric dimensions: directness and clarity in addressing the question, comprehensiveness relative to expected answer, freedom from major factual errors, presence of unsupported claims, and coherence and readability. The judge assigns scores at 0.0-1.0 multiples of 0.2 (e.g., 0.0, 0.2, 0.4, 0.6, 0.8, 1.0).
+
+The final answer quality score combines coverage and semantic quality as: $\text{score}_{\text{composite}} = 0.65 \cdot \text{coverage} + 0.35 \cdot \text{semantic}$. The 0.65/0.35 weighting emphasizes factual grounding but recognizes fluency and semantic appropriateness. Penalties apply via multiplication by 0.5 for three conditions: answer contains contradictions, answer contains major errors, answer does not address the question. Multiple violations compound multiplicatively (e.g., contradicted answer that also doesn't address question: $\text{score}_{\text{final}} = \text{score}_{\text{composite}} \times 0.5 \times 0.5 = 0.25 \times \text{score}_{\text{composite}}$).
+
+Per-example metrics are aggregated across 20 test examples. Mean coverage and semantic scores are simple arithmetic means across examples.
+
+Results confirm clear model-size sensitivity:
+
+\begin{itemize}
+    \item \textbf{Qwen 4B}: Mean key-fact coverage 0.486, semantic score 0.58, composite quality 0.516. Hallucination rate 30\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 90\%.
+    
+    \item \textbf{Qwen 8B}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
+    
+    \item \textbf{Qwen 14B}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0.05\%, major-error rate 10\%, question-address rate 95\%.
+\end{itemize}
+
+The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists.
+
+\subsection{Key-Fact Coverage Breakdown}
+
+Across the 14B baseline, out of 100 assessed key facts: 37 were directly covered, 14 implied through paraphrase, 12 partially addressed with missing components, 36 completely missing, and 1 contradicted. The tight clustering of strict (covered-only) coverage (0.37 vs composite 0.549) indicates that models struggle to comprehensively address all components of multi-part questions, but often convey partial or inferred understanding. The absence of contradictions under no-context evaluation suggests the fallback mechanism is reliable: when uncertain, models correctly default to uncertain rather than assert falsehoods.
+
+\subsection{Question-Alignment and Error Patterns}
+
+Question-address rates of 90-95\% suggest that models understand the posed questions and attempt substantive responses rather than deflecting. Major-error rates (10-15\%) indicate that roughly one in ten answers contains critical semantic or factual mistakes. Common error patterns include: temporal misalignment (providing outdated information or conflating time periods), scope misalignment (answering a related but different question), partial reasoning (correctly identifying some key concepts but missing causal or comparative relationships).
 
 \section{Conclusion}
-We implemented a transparent RAG pipeline on top of the PA2 retrieval system, supporting
-both evidence-grounded and LLM-only answering modes. The system exposes retrieved evidence and enables a direct comparison of answer quality across the two modes. 
+We implemented a RAG pipeline on top of the PA2 retrieval system, supporting both evidence-grounded and LLM-only answering modes.
+The design emphasizes explicit evidence presentation and machine-checkable references, enabling direct comparison of answer quality across modes.
 
-\bibliographystyle{IEEEtran}
-\bibliography{ref}
+%\bibliographystyle{IEEEtran}
+%\bibliography{ref}
 
 \end{document}
