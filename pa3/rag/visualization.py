@@ -1,12 +1,13 @@
 import json
 
-from dotenv import load_dotenv
-import dspy
+# from dotenv import load_dotenv
+# import dspy
+import os 
 import numpy as np
 # from sklearn.decomposition import PCA, TruncatedSVD
 # from sklearn.manifold import TSNE
 # from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import cosine_similarity
+# from sklearn.metrics.pairwise import cosine_similarity
 from matplotlib import pyplot as plt
 # from sqlalchemy import Engine, create_engine
 # import tqdm
@@ -16,29 +17,29 @@ from matplotlib import pyplot as plt
 # import stopwordsiso as stopwords
 # from sklearn.metrics import ndcg_score
 
-from embedding import embed_text, load_embedding_model
-from main import SimpleQuery, SimpleRAG
-from reranking import load_reranking_model
-from rag_context import retrieve_context, retrieve_context_loaded_model
+# from embedding import embed_text, load_embedding_model
+# from main import SimpleQuery, SimpleRAG
+# from reranking import load_reranking_model
+# from rag_context import retrieve_context, retrieve_context_loaded_model
 
-# cmap = plt.get_cmap("tab20")
+cmap = plt.get_cmap("tab10")
 
 
-model_names = {
-        1: "all-MiniLM-L6-v2",
-        8: "sentence-transformers/all-mpnet-base-v2",
-        9: "BAAI/bge-m3",
-        10: "EMBEDDIA/sloberta",
-        13: "cjvt/crosloengual-bert-si-nli"
-    }
+# model_names = {
+#         1: "all-MiniLM-L6-v2",
+#         8: "sentence-transformers/all-mpnet-base-v2",
+#         9: "BAAI/bge-m3",
+#         10: "EMBEDDIA/sloberta",
+#         13: "cjvt/crosloengual-bert-si-nli"
+#     }
 
-model_dims = {
-        1: 384,
-        8: 768,
-        9: 1024,
-        10: 768,
-        13: 768
-    }
+# model_dims = {
+#         1: 384,
+#         8: 768,
+#         9: 1024,
+#         10: 768,
+#         13: 768
+#     }
 
 # from ParserSettings import load_settings
 # from db_api import get_random_page_segments, get_segments_by_model, get_segments_by_id, get_random_page_ids, get_page_segment_ids
@@ -162,65 +163,209 @@ model_dims = {
 
 
 
-def eval_dataset(dataset, embedding_model, dimension, reranker_model, num_candidates=10, num_final=3):
+# def eval_dataset(dataset, embedding_model, dimension, reranker_model, num_candidates=10, num_final=3):
 
-    similarities_no_context = []
-    similarities_context = []
+#     similarities_no_context = []
+#     similarities_context = []
 
-    rag_module = dspy.Predict(SimpleRAG)
-    query_module = dspy.Predict(SimpleQuery)
+#     rag_module = dspy.Predict(SimpleRAG)
+#     query_module = dspy.Predict(SimpleQuery)
 
-    for i, row in enumerate(dataset):
-        print("----------------------------")
-        print(f"Question {i}: {row["question"]}")
-        context = retrieve_context_loaded_model(row["question"], embedding_model, dimension, reranker_model, num_candidates=num_candidates, num_final=num_final)
-        print("----RAG----")
-        print(f"Context: {context[:256]}")
-        response_rag = rag_module(context=context, question=row["question"])["answer"]
-        print(f"Response: {response_rag[:256]}")
+#     for i, row in enumerate(dataset):
+#         print("----------------------------")
+#         print(f"Question {i}: {row["question"]}")
+#         context = retrieve_context_loaded_model(row["question"], embedding_model, dimension, reranker_model, num_candidates=num_candidates, num_final=num_final)
+#         print("----RAG----")
+#         print(f"Context: {context[:256]}")
+#         response_rag = rag_module(context=context, question=row["question"])["answer"]
+#         print(f"Response: {response_rag[:256]}")
 
-        response_rag_embedding = np.array([embed_text(embedding_model, response_rag)])
-        answer_embedding = np.array([embed_text(embedding_model, row["answer"])])
+#         response_rag_embedding = np.array([embed_text(embedding_model, response_rag)])
+#         answer_embedding = np.array([embed_text(embedding_model, row["answer"])])
 
-        similarity_rag = cosine_similarity(response_rag_embedding, answer_embedding)
-        print("Response answer similarity (RAG): " + str(similarity_rag))
+#         similarity_rag = cosine_similarity(response_rag_embedding, answer_embedding)
+#         print("Response answer similarity (RAG): " + str(similarity_rag))
 
-        similarities_context.append(similarity_rag[0][0])
+#         similarities_context.append(similarity_rag[0][0])
 
-        print("----No Contex----")
-        response_query = query_module(question=row["question"])["answer"]
-        response_query_embedding = np.array([embed_text(embedding_model, response_query)])
-        print(f"Response: {response_query[:256]}")
-        similarity_query = cosine_similarity(response_query_embedding, answer_embedding)
-        print("Response answer similarity (NO CONTEXT): " + str(similarity_query))
-        similarities_no_context.append(similarity_query[0][0])
+#         print("----No Contex----")
+#         response_query = query_module(question=row["question"])["answer"]
+#         response_query_embedding = np.array([embed_text(embedding_model, response_query)])
+#         print(f"Response: {response_query[:256]}")
+#         similarity_query = cosine_similarity(response_query_embedding, answer_embedding)
+#         print("Response answer similarity (NO CONTEXT): " + str(similarity_query))
+#         similarities_no_context.append(similarity_query[0][0])
         
 
+#     plt.figure()
+#     plt.bar(np.arange(len(similarities_no_context)) - 0.2, np.array(similarities_no_context), width=0.4, label="No context")
+#     plt.bar(np.arange(len(similarities_context))+0.2, np.array(similarities_context), width=0.4, label="with context")
+#     plt.legend()
+#     plt.show()
+
+def load_answer_quality_results(filename: str, folder_path="/LLM_evaluation/eval_baseline_model_selection/quality_evaluations"):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(dir_path + f"{folder_path}/{filename}", encoding="UTF8") as f:
+        jsonFile = json.load(f)
+        return jsonFile
+    return None
+
+def plot_answers_quality_comparison(model_names: list[str]):
+
+    # plot_models_semantic_scores(model_names, 10)
+    # plot_zero_one_shot_comparison(model_names, 5)
+    # plot_key_fact_coverage_score(withRagResults, withoutRagResults) # TODO: fix
+    # plot_aggregate_results(model_names)
+    # plot_dataset_comparison_aggregate_results()
+    plot_precision_at_k()
+    # plot_hit_at_k()
+    
+
+def plot_models_semantic_scores(model_names, n):
+    
     plt.figure()
-    plt.bar(np.arange(len(similarities_no_context)) - 0.2, np.array(similarities_no_context), width=0.4, label="No context")
-    plt.bar(np.arange(len(similarities_context))+0.2, np.array(similarities_context), width=0.4, label="with context")
-    plt.legend()
+    plt.title("Overall baseline semantic scores of queries for each model")
+    plt.xticks(np.arange(n))
+    plt.grid()
+    w = 0.6
+    for i,m in enumerate(model_names):
+        # withRagResults = load_answer_quality_results(f"ollama_chat-{m}_direct_unbiased_ANSWER_QUALITY.json")
+        withoutRagResults = load_answer_quality_results(f"ollama_chat-{m}_direct_unbiased_ANSWER_QUALITY.json") # TODO: generate results for without rag
+        #plt.bar(np.arange(n) - w/2 + 2*(i-0.5) / len(model_names) * w, [e["overall_semantic_score"] for e in withRagResults["examples"][:n]], width=w/len(model_names), label=f"{m} (no ctx)", color=cmap(i), alpha=0.5)
+        plt.bar(np.arange(n) - w/2 + ((i-0.5) + 1)/ len(model_names) * w, [e["overall_semantic_score"] for e in withoutRagResults["examples"][:n]], width=w/len(model_names), label=f"{m}", color=cmap(i))
+    plt.ylabel("Quality score")
+    plt.xlabel("Query number")
+    plt.legend().set_draggable(True)
     plt.show()
 
+def plot_zero_one_shot_comparison(model_names, n):
+    
+    plt.figure()
+    plt.title("Zero vs one shot comparison between models on queries")
+    plt.xticks(np.arange(n))
+    plt.grid()
+    w = 0.3
+    zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-b14_rag_zero_shot_bge-m3_50_bge_7_unbiased.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-b14_rag_one_shot_bge-m3_50_bge_7_unbiased.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    plt.bar(np.arange(n) - w/2, [e["overall_semantic_score"] for e in zeroShotResults["examples"][:n]], width=w/len(model_names), label=f"zero shot")
+    plt.bar(np.arange(n) - w/2, [e["overall_semantic_score"] for e in oneShotResults["examples"][:n]], width=w/len(model_names), label=f"one shot")
+    plt.ylabel("Quality score")
+    plt.xlabel("Query number")
+    plt.legend().set_draggable(True)
+    plt.show()
+
+def plot_precision_at_k():
+    
+    plt.figure()
+    plt.title("Mean citation precision@k")
+    plt.grid()
+    w = 0.3
+    # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    plt.plot([7], zeroShotResults["mean_precision_at_k"], "o", label="zero shot")
+    plt.plot([7], oneShotResults["mean_precision_at_k"], "o", label="one shot")
+    plt.ylabel("Score")
+    plt.xlabel("k")
+    plt.legend().set_draggable(True)
+    plt.show()
+
+def plot_hit_at_k():
+    
+    plt.figure()
+    plt.title("Mean citation hit@k")
+    plt.grid()
+    w = 0.3
+    # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    plt.plot([7], zeroShotResults["hit_at_k"], "o", label="zero shot")
+    plt.plot([7], oneShotResults["hit_at_k"], "o", label="one shot")
+    plt.ylabel("Score")
+    plt.xlabel("k")
+    plt.legend().set_draggable(True)
+    plt.show()
+    
+def plot_key_fact_coverage_score(withRagResults, withoutRagResults):
+    plt.figure()
+    plt.title("Overall semantic scores for each query")
+    plt.xticks(np.arange(withRagResults["aggregate"]["n"], step=2))
+    plt.bar(np.arange(withRagResults["aggregate"]["n"])-0.2, [e["key_fact_coverage_score"] for e in withRagResults["examples"]], width=0.4, label="no context")
+    plt.bar(np.arange(withoutRagResults["aggregate"]["n"])+0.2, [e["key_fact_coverage_score"] for e in withoutRagResults["examples"]], width=0.4, label="with context")
+    plt.ylabel("Quality score")
+    plt.xlabel("Query number")
+    plt.legend().set_draggable(True)
+    plt.show()
+
+def plot_aggregate_results(model_names):
+    plt.figure()
+    plt.title("Overall scores")
+    plt.grid()
+    metric_labels = ["Mean overall\nsemantic score", "Mean key fact\n coverage score", "Strict key fact\ncoverage", "Mean answer\nquality score"]
+    plt.xticks(ticks=np.arange(len(metric_labels)), labels=metric_labels)
+    w = 0.4
+    for i,m in enumerate(model_names):
+        withoutRagResults = load_answer_quality_results(f"ollama_chat-{m}_direct_unbiased_ANSWER_QUALITY.json") # TODO: generate results for without rag
+        plt.bar(np.arange(len(metric_labels)) - w/2 + ((i-0.5) + 1)/len(model_names) * w, [
+            withoutRagResults["aggregate"]["mean_overall_semantic_score"],
+            withoutRagResults["aggregate"]["mean_key_fact_coverage_score"],
+            withoutRagResults["aggregate"]["strict_key_fact_coverage"],
+            withoutRagResults["aggregate"]["mean_answer_quality_score"],
+        ], width=w/len(model_names), label=f"{m}", color=cmap(i))
+    plt.ylabel("Score")
+    plt.legend().set_draggable(True)
+    plt.show()
+
+def plot_dataset_comparison_aggregate_results():
+    plt.figure()
+    plt.grid()
+    plt.title("Overall baseline scores on biased and unbiased datasets")
+    metric_labels = ["Mean overall\nsemantic score", "Mean key fact\n coverage score", "Strict key fact\ncoverage", "Mean answer\nquality score"]
+    plt.xticks(ticks=np.arange(len(metric_labels)), labels=metric_labels)
+    w = 0.4
+    styles=["direct", "rag_zero_shot_bge-m3_50_bge_7", "rag_one_shot_bge-m3_50_bge_7"]
+    style_labels=["direct", "zero-shot", "one-shot"]
+    for i,s in enumerate(styles):
+        unbiasedResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_{s}_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations")
+        biasedResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_{s}_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations")
+        plt.bar(np.arange(len(metric_labels)) - w/2 + i * w / len(styles), [
+            unbiasedResults["aggregate"]["mean_overall_semantic_score"],
+            unbiasedResults["aggregate"]["mean_key_fact_coverage_score"],
+            unbiasedResults["aggregate"]["strict_key_fact_coverage"],
+            unbiasedResults["aggregate"]["mean_answer_quality_score"],
+        ], width=w / len(styles), label=f"unbiased {style_labels[i]}", color=cmap(0), alpha=0.4 + i * 0.3)
+        plt.bar(np.arange(len(metric_labels)) + w/2 + i * w / len(styles), [
+            biasedResults["aggregate"]["mean_overall_semantic_score"],
+            biasedResults["aggregate"]["mean_key_fact_coverage_score"],
+            biasedResults["aggregate"]["strict_key_fact_coverage"],
+            biasedResults["aggregate"]["mean_answer_quality_score"],
+        ], width=w / len(styles), label=f"biased {style_labels[i]}", color=cmap(1), alpha=0.4 + i * 0.3)
+    plt.ylabel("Score")
+    plt.legend().set_draggable(True)
+    handles, labels = plt.gca().get_legend_handles_labels()
+    order = [0, 2, 4, 1, 3, 5]
+    plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order]).set_draggable(True)
+    plt.show()
 
 if __name__ == '__main__':
     
     
-    load_dotenv()
+    plot_answers_quality_comparison(["qwen3-4b", "qwen3-8b", "qwen3-14b"])
+    # load_dotenv()
 
-    lm = dspy.LM('ollama_chat/llama3.2:1b', api_base='http://localhost:11434', api_key='')
+    # lm = dspy.LM('ollama_chat/llama3.2:1b', api_base='http://localhost:11434', api_key='')
 
-    dspy.configure(lm=lm)
+    # dspy.configure(lm=lm)
 
-    print("Main")
-    embedding_model_key = "bge-m3"
-    reranker_model_key = "mmarco"
-    embedding_model, dimension, model_id = load_embedding_model(embedding_model_key)
-    reranker = load_reranking_model(reranker_model_key)
-    dataset = None
-    with open("dataset.json", encoding="UTF8") as f:
-        dataset = json.load(f)
+    # print("Main")
+    # embedding_model_key = "bge-m3"
+    # reranker_model_key = "mmarco"
+    # embedding_model, dimension, model_id = load_embedding_model(embedding_model_key)
+    # reranker = load_reranking_model(reranker_model_key)
+    # dataset = None
+    # with open("dataset.json", encoding="UTF8") as f:
+    #     dataset = json.load(f)
 
-    dataset = dataset[:10]
-    eval_dataset(dataset, embedding_model, dimension, reranker)
+    # dataset = dataset[:10]
+    # eval_dataset(dataset, embedding_model, dimension, reranker)
 
