@@ -212,18 +212,18 @@ def load_answer_quality_results(filename: str, folder_path="/LLM_evaluation/eval
 
 def plot_answers_quality_comparison(model_names: list[str]):
 
-    # plot_models_semantic_scores(model_names, 10)
-    # plot_zero_one_shot_comparison(model_names, 5)
-    # plot_key_fact_coverage_score(withRagResults, withoutRagResults) # TODO: fix
-    # plot_aggregate_results(model_names)
-    # plot_dataset_comparison_aggregate_results()
+    plot_models_semantic_scores(model_names, 10)
+    plot_zero_one_shot_comparison(model_names, 10)
+    plot_key_fact_coverage_score(model_names, 10)
+    plot_aggregate_results(model_names)
+    plot_dataset_comparison_aggregate_results()
     plot_precision_at_k()
-    # plot_hit_at_k()
+    plot_hit_at_k()
     
 
 def plot_models_semantic_scores(model_names, n):
     
-    plt.figure()
+    plt.figure(figsize=(8, 5))
     plt.title("Overall baseline semantic scores of queries for each model")
     plt.xticks(np.arange(n))
     plt.grid()
@@ -233,30 +233,30 @@ def plot_models_semantic_scores(model_names, n):
         withoutRagResults = load_answer_quality_results(f"ollama_chat-{m}_direct_unbiased_ANSWER_QUALITY.json") # TODO: generate results for without rag
         #plt.bar(np.arange(n) - w/2 + 2*(i-0.5) / len(model_names) * w, [e["overall_semantic_score"] for e in withRagResults["examples"][:n]], width=w/len(model_names), label=f"{m} (no ctx)", color=cmap(i), alpha=0.5)
         plt.bar(np.arange(n) - w/2 + ((i-0.5) + 1)/ len(model_names) * w, [e["overall_semantic_score"] for e in withoutRagResults["examples"][:n]], width=w/len(model_names), label=f"{m}", color=cmap(i))
-    plt.ylabel("Quality score")
+    plt.ylabel("Score")
     plt.xlabel("Query number")
     plt.legend().set_draggable(True)
     plt.show()
 
 def plot_zero_one_shot_comparison(model_names, n):
     
-    plt.figure()
+    plt.figure(figsize=(8, 5))
     plt.title("Zero vs one shot comparison between models on queries")
     plt.xticks(np.arange(n))
     plt.grid()
-    w = 0.3
-    zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-b14_rag_zero_shot_bge-m3_50_bge_7_unbiased.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
-    oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-b14_rag_one_shot_bge-m3_50_bge_7_unbiased.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
-    plt.bar(np.arange(n) - w/2, [e["overall_semantic_score"] for e in zeroShotResults["examples"][:n]], width=w/len(model_names), label=f"zero shot")
-    plt.bar(np.arange(n) - w/2, [e["overall_semantic_score"] for e in oneShotResults["examples"][:n]], width=w/len(model_names), label=f"one shot")
-    plt.ylabel("Quality score")
+    w = 0.25
+    zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    plt.bar(np.arange(n) - w/2, [e["overall_semantic_score"] for e in zeroShotResults["examples"][:n]], width=w, label=f"zero shot")
+    plt.bar(np.arange(n) + w/2, [e["overall_semantic_score"] for e in oneShotResults["examples"][:n]], width=w, label=f"one shot")
+    plt.ylabel("Score")
     plt.xlabel("Query number")
     plt.legend().set_draggable(True)
     plt.show()
 
 def plot_precision_at_k():
     
-    plt.figure()
+    plt.figure(figsize=(8, 5))
     plt.title("Mean citation precision@k")
     plt.grid()
     w = 0.3
@@ -272,7 +272,7 @@ def plot_precision_at_k():
 
 def plot_hit_at_k():
     
-    plt.figure()
+    plt.figure(figsize=(8, 5))
     plt.title("Mean citation hit@k")
     plt.grid()
     w = 0.3
@@ -286,19 +286,24 @@ def plot_hit_at_k():
     plt.legend().set_draggable(True)
     plt.show()
     
-def plot_key_fact_coverage_score(withRagResults, withoutRagResults):
-    plt.figure()
-    plt.title("Overall semantic scores for each query")
-    plt.xticks(np.arange(withRagResults["aggregate"]["n"], step=2))
-    plt.bar(np.arange(withRagResults["aggregate"]["n"])-0.2, [e["key_fact_coverage_score"] for e in withRagResults["examples"]], width=0.4, label="no context")
-    plt.bar(np.arange(withoutRagResults["aggregate"]["n"])+0.2, [e["key_fact_coverage_score"] for e in withoutRagResults["examples"]], width=0.4, label="with context")
-    plt.ylabel("Quality score")
+def plot_key_fact_coverage_score(model_names, n):
+    plt.figure(figsize=(8, 5))
+    plt.title("Key fact coverage score")
+    plt.xticks(np.arange(n))
+    plt.grid()
+    w = 0.6
+    for i,m in enumerate(model_names):
+        # withRagResults = load_answer_quality_results(f"ollama_chat-{m}_direct_unbiased_ANSWER_QUALITY.json")
+        withoutRagResults = load_answer_quality_results(f"ollama_chat-{m}_direct_unbiased_ANSWER_QUALITY.json") # TODO: generate results for without rag
+        #plt.bar(np.arange(n) - w/2 + 2*(i-0.5) / len(model_names) * w, [e["overall_semantic_score"] for e in withRagResults["examples"][:n]], width=w/len(model_names), label=f"{m} (no ctx)", color=cmap(i), alpha=0.5)
+        plt.bar(np.arange(n) - w/2 + ((i-0.5) + 1)/ len(model_names) * w, [e["key_fact_coverage_score"] for e in withoutRagResults["examples"][:n]], width=w/len(model_names), label=f"{m}", color=cmap(i))
+    plt.ylabel("Score")
     plt.xlabel("Query number")
     plt.legend().set_draggable(True)
     plt.show()
 
 def plot_aggregate_results(model_names):
-    plt.figure()
+    plt.figure(figsize=(8, 5))
     plt.title("Overall scores")
     plt.grid()
     metric_labels = ["Mean overall\nsemantic score", "Mean key fact\n coverage score", "Strict key fact\ncoverage", "Mean answer\nquality score"]
@@ -317,7 +322,7 @@ def plot_aggregate_results(model_names):
     plt.show()
 
 def plot_dataset_comparison_aggregate_results():
-    plt.figure()
+    plt.figure(figsize=(8, 5))
     plt.grid()
     plt.title("Overall baseline scores on biased and unbiased datasets")
     metric_labels = ["Mean overall\nsemantic score", "Mean key fact\n coverage score", "Strict key fact\ncoverage", "Mean answer\nquality score"]
