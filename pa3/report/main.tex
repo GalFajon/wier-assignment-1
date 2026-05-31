@@ -162,7 +162,7 @@ Results confirm clear model-size sensitivity:
     
     \item \textbf{Qwen 8B}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
     
-    \item \textbf{Qwen 14B}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0.05\%, major-error rate 10\%, question-address rate 95\%.
+    \item \textbf{Qwen 14B}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 95\%.
 \end{itemize}
 
 The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists.
