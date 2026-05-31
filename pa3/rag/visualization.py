@@ -214,12 +214,11 @@ def plot_answers_quality_comparison(model_names: list[str]):
 
     # plot_models_semantic_scores(model_names, 10)
     # plot_zero_one_shot_comparison(model_names, 10)
-    plot_aggregate_zero_one_shot_comparison()
+    # plot_aggregate_zero_one_shot_comparison()
     # plot_key_fact_coverage_score(model_names, 10)
     # plot_aggregate_results(model_names)
     # plot_dataset_comparison_aggregate_results()
-    # plot_precision_at_k()
-    # plot_hit_at_k()
+    plot_at_k_metrics()
     
 
 def plot_models_semantic_scores(model_names, n):
@@ -308,47 +307,112 @@ def plot_aggregate_zero_one_shot_comparison():
     plt.legend().set_draggable(True)
     plt.show()
 
-def plot_at_k_metrics():
+def plot_hit_at_k():
     
     plt.figure(figsize=(8, 5))
-    plt.title("Mean citation precision@k")
+    plt.title("Mean citation hit@k")
     plt.grid()
     ks = [3, 5, 7, 9, 11]
     zeroShotY = []
     oneShotY = []
     for k in ks:
-        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
-        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+
+        zeroShotY.append(zeroShotResults["hit_at_k"])
+        oneShotY.append(oneShotResults["hit_at_k"])
+    # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    plt.plot(ks, zeroShotY, label="zero shot")
+    plt.plot(ks, oneShotY, label="one shot")
+    plt.ylabel("Mean hit@k")
+    plt.xlabel("k")
+    plt.ylim(0, 1.05)
+    plt.legend().set_draggable(True)
+    plt.show()
+
+def plot_at_k_metrics():
+    
+    fig, ax = plt.subplots(3, 1)
+    plt.suptitle("Citation scores @k")
+    ax[0].grid()
+    ax[1].grid()
+    ax[2].grid()
+
+    ax[0].set_ylabel("Mean precision@k")
+    ax[0].set_ylim(0, 1.05)
+
+    ax[1].set_ylabel("Hit@k")
+    ax[1].set_ylim(0, 1.05)
+
+    ax[2].set_ylabel("Mean recall@k")
+    ax[2].set_ylim(0, 1.05)
+
+    ks = [3, 5, 7, 9, 11]
+
+    zeroShotY = []
+    oneShotY = []
+
+    for k in ks:
+        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
 
         zeroShotY.append(zeroShotResults["mean_precision_at_k"])
         oneShotY.append(oneShotResults["mean_precision_at_k"])
     # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
-    plt.plot(ks, zeroShotY, "o", label="zero shot")
-    plt.plot(ks, oneShotY, "o", label="one shot")
-    plt.ylabel("Score")
+    ax[0].plot(ks, zeroShotY, label="zero shot")
+    ax[0].plot(ks, oneShotY, label="one shot")
+
+    zeroShotY = []
+    oneShotY = []
+
+    for k in ks:
+        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+
+        zeroShotY.append(zeroShotResults["hit_at_k"])
+        oneShotY.append(oneShotResults["hit_at_k"])
+    # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    ax[1].plot(ks, zeroShotY, label="zero shot")
+    ax[1].plot(ks, oneShotY, label="one shot")
+
+    zeroShotY = []
+    oneShotY = []
+
+    for k in ks:
+        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+
+        zeroShotY.append(zeroShotResults["mean_recall_at_k"])
+        oneShotY.append(oneShotResults["mean_recall_at_k"])
+    # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+    ax[2].plot(ks, zeroShotY, label="zero shot")
+    ax[2].plot(ks, oneShotY, label="one shot")
+
+
     plt.xlabel("k")
     plt.legend().set_draggable(True)
     plt.show()
 
-def plot_hit_at_k():
+def plot_recall_at_k():
     
     plt.figure(figsize=(8, 5))
-    plt.title("Mean citation precision@k")
+    plt.title("Mean citation recall@k")
     plt.grid()
     ks = [3, 5, 7, 9, 11]
     zeroShotY = []
     oneShotY = []
     for k in ks:
-        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
-        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
+        zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
+        oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_{k}_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_llm_retrieve_k/citation_evaluation") # TODO: generate zero and one shot results
 
-        zeroShotY.append(zeroShotResults["mean_hit_at_k"])
-        oneShotY.append(oneShotResults["mean_precision_at_k"])
+        zeroShotY.append(zeroShotResults["mean_recall_at_k"])
+        oneShotY.append(oneShotResults["mean_recall_at_k"])
     # directResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_CITATION_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/citation_evaluations") # TODO: generate zero and one shot results
-    plt.plot(ks, zeroShotY, "o", label="zero shot")
-    plt.plot(ks, oneShotY, "o", label="one shot")
-    plt.ylabel("Score")
+    plt.plot(ks, zeroShotY, label="zero shot")
+    plt.plot(ks, oneShotY, label="one shot")
+    plt.ylabel("Mean recall@k")
     plt.xlabel("k")
+    plt.ylim(0, 1.05)
     plt.legend().set_draggable(True)
     plt.show()
     

@@ -205,18 +205,18 @@ Question-address rates of 90-95\% suggest that models understand the posed quest
 
 \subsection{Citation evaluation scores}
 
-The \texttt{qwen3-14b} model was tested for different citation metrics. For \texttt{hit@k} and \texttt{recall@k}
+The \texttt{qwen3-14b} model was tested for different citation metrics. Both zero and one-shot perform similarly on all tested values of $k$ which is expected, although a slight dip for one-shot in the \texttt{mean precision@k} metric is a bit unusual. Perhaps the additional example might have confused the model slightly.
 
 \begin{figure}
 \centering
-\includesvg[width=0.45\textwidth]{mean_citation_hit_at_k.svg}
-\caption{Mean citation hit@k for both zero-shot and one-shot prompting for the \texttt{qwen3-14b} model.}
+\includesvg[width=0.45\textwidth]{citation_scores_at_k.svg}
+\caption{Mean citation scores @k for both zero-shot and one-shot prompting for the \texttt{qwen3-14b} model.}
 \label{fig:model_key_fact_coverage}
 \end{figure}
 
 \subsection{Zero-shot and one-shot performance}
 
-While direct answering received no instruction, both zero-shot and one-shot received similar instructions at the beginning of the query, where one-shot queries included an additional example as written in Appendix \ref{appendix:instructions}. In the comparison Figure \ref{zero_one_shot_comparison} one-shot slightly outperforms zero-shot. Both have an expected advantage on the biased dataset over direct answering. On the unbiased dataset, direct answering beats answering with context since the crawled pages don't necessarily cover all query topics.
+While direct answering received no instruction, both zero-shot and one-shot received similar instructions at the beginning of the query, where one-shot queries included an additional example as written in Appendix \ref{appendix:instructions}. In the comparison Figure \ref{fig:zero_one_shot_comparison} one-shot slightly outperforms zero-shot. Both have an expected advantage on the biased dataset over direct answering. On the unbiased dataset, direct answering beats answering with context since the crawled pages don't necessarily cover all query topics.
 
 \begin{figure}
 \centering
