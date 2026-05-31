@@ -179,6 +179,13 @@ To better understand in which scenarios certain models perform better or worse, 
 \label{fig:model_semantic_scores}
 \end{figure}
 
+\begin{figure}
+\centering
+\includesvg[width=0.45\textwidth]{model_comparison_overall_scores.svg}
+\caption{Overall semantic scores for each of the 3 \texttt{qwen3} models on the unbiased dataset.}
+\label{fig:overall_semantic_scores}
+\end{figure}
+
 \subsection{Key-Fact Coverage Breakdown}
 
 Across the 14B baseline, out of 100 assessed key facts: 37 were directly covered, 14 implied through paraphrase, 12 partially addressed with missing components, 36 completely missing, and 1 contradicted. The tight clustering of strict (covered-only) coverage (0.37 vs composite 0.549) indicates that models struggle to comprehensively address all components of multi-part questions, but often convey partial or inferred understanding. The absence of contradictions under no-context evaluation suggests the fallback mechanism is reliable: when uncertain, models correctly default to uncertain rather than assert falsehoods.
@@ -198,21 +205,14 @@ Question-address rates of 90-95\% suggest that models understand the posed quest
 
 \subsection{Citation evaluation scores}
 
-Due to time limit constraints, we were able to test the \texttt{qwen3-14b} model on citation evaluations only for $k=7$ chunks. For \texttt{hit@k} and \texttt{mean recall@k} the scores are higher for one-shot style as expected, but \texttt{mean precision@k} is unusually lower. We suspect that the added one-shot instructions might have expanded the context too much and degraded the performance slightly
+The \texttt{qwen3-14b} model was tested for different citation metrics. For \texttt{hit@k} and \texttt{recall@k}
 
-\begin{table}[h]
+\begin{figure}
 \centering
-\begin{tabular}{lccc}
-    \hline
-    Style & Hit@7 (\%) & Mean Prec.@7 (\%) & Mean Recall@7 (\%) \\
-    \hline
-    Zero-shot  & 97.73  & 71.97 & 77.08 \\
-    One-shot & 100.00 & 68.56 & 77.84 \\
-    \hline
-\end{tabular}
-\caption{Citation performance metrics for two prompting styles at k=7 chunks.}
-\label{tab:retrieval_prompting}
-\end{table}
+\includesvg[width=0.45\textwidth]{mean_citation_hit_at_k.svg}
+\caption{Mean citation hit@k for both zero-shot and one-shot prompting for the \texttt{qwen3-14b} model.}
+\label{fig:model_key_fact_coverage}
+\end{figure}
 
 \subsection{Zero-shot and one-shot performance}
 
