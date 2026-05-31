@@ -28,11 +28,8 @@ RERANKING_MODEL_KEY = os.getenv("RERANKING_MODEL_KEY", "bge")
 NUM_CANDIDATES = int(os.getenv("NUM_CANDIDATES", "25"))
 NUM_FINAL = int(os.getenv("NUM_FINAL", "5"))
 
-print(LLM_MODEL)
-
 def init_dspy():
     try:
-        print(f"[INFO] Configuring DSPy with {LLM_MODEL}\n")
         lm = dspy.LM(LLM_MODEL, api_base=OLLAMA_API_BASE, api_key="")
         dspy.configure(lm=lm)
         return True
@@ -79,8 +76,6 @@ def display_result(title, result):
 
 
 def run_all_modes(question, embedding_model, embedding_dim, reranking_model):
-    print(f"\n")
-
     print("\n[1/3] Direct Query...")
     result1 = run_signature_direct_query(question)
     display_result("MODE 1: DIRECT (No Context)", result1)
@@ -124,7 +119,7 @@ def main():
             run_all_modes(user_input, embedding_model, embedding_dim, reranking_model)
 
         except KeyboardInterrupt:
-            print("\n\n[INFO] Interrupted.")
+            print("\n\n[INFO] Exit.")
             break
         except Exception as e:
             print(f"[ERROR] {e}")
