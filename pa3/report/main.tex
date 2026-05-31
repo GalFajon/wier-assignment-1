@@ -85,9 +85,6 @@ Brez dodatnega konteksta tega ni mogoče
 zanesljivo ugotoviti.
 \end{verbatim}
 
-All prompts are executed as single-turn generations. There is no explicit multi-step reasoning procedure in the implementation.
-Any constraint on reasoning, found in the system prompts, is expressed as natural-language guidance in the prompt rather than a programmatic enforcement on the functionality of the model.
-
 \subsection{Explainable context formatting and validation}
 Retrieved evidence is formatted as human-readable blocks that are passed to the LLM as the context. Each block includes a local header, a segment identifier used for citations, the page URL, and the chunk text. Including URLs directly in the context reduces the need for the model to invent sources and supports
 the structured reference output.
