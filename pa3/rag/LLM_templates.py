@@ -3,7 +3,6 @@ from rag_context import retrieve_context_loaded_model
 import json
 import re
 
-
 class RAG_OneShot_Signature(dspy.Signature):
     """
     Si natančen asistent za odgovarjanje na vprašanja na podlagi podanega konteksta.
@@ -168,9 +167,6 @@ class RAG_ZeroShot_Signature(dspy.Signature):
             "Če answer nima citatov, mora biti: []"
         )
     )
-    
-    
-    
 
 def extract_cited_chunk_ids(answer: str) -> set[str]:
     return set(re.findall(r"\[ChunkID:\s*([^\]]+)\]", answer or ""))
@@ -228,8 +224,6 @@ def run_signature_rag(
     except Exception as e:
         print(f"Error: {e}")
         return None
-
-
 
 class DirectQuerySignature(dspy.Signature):
     """
