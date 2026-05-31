@@ -12,6 +12,6 @@ for i in {1..60}; do
   sleep 1
 done
 
-ollama pull llama3.2:1b
+ollama pull qwen3:14b
 
 wait $OLLAMA_PID
