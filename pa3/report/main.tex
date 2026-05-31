@@ -55,7 +55,7 @@ retrieval incorporates a minimum segment length filter set at 100 characters by 
 
 \subsection{Retrieval}
 For evidence-grounded answering, the pipeline embeds the user query, retrieves the top-$k$ most similar segments from pgvector
-using a cosine distance similarity metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
+using a cosine distance metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
 
 To support systematic evaluation of grounding, we additionally perform a consistency check between in-text citations
 and a reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
