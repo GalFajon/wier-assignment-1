@@ -165,7 +165,7 @@ Results confirm clear model-size sensitivity:
     \item \textbf{Qwen 14B}~\cite{qwen3_14b}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 95\%.
 \end{itemize}
 
-The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists.
+The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists. A short summary of certain metrics for all three models is shown in Figure \ref{fig:overall_semantic_scores}.
 
 To better understand in which scenarios certain models perform better or worse, a per query plot in Figure \ref{fig:model_semantic_scores} was created, where in some cases \texttt{qwen3-14b} outperforms others by 0.2 to 0.4 in score. For example, in the first query \texttt{qwen3-4b} stated that Donald Trump is currently (in 2026) not the president so he didn't influence the Russia-Ukraine conflict that much, \texttt{qwen3-8b} refused to answer due to a lack of context needed, but \texttt{qwen3-14b} managed to put together an answer that covered a few of the required key facts (semantic score was greater than 0). In the 9th query, \texttt{qwen3-8b} performed much worse than other models because it focused on enumerating countries for the major part of the answer and didn't cover enough key facts for a higher semantic score.
 
@@ -202,13 +202,13 @@ Question-address rates of 90-95\% suggest that models understand the posed quest
 
 \subsection{Citation evaluation scores}
 
-The \texttt{qwen3-14b} model was tested for different citation metrics. Both zero and one-shot perform similarly on all tested values of $k$ which is expected, although a slight dip for one-shot in the \texttt{mean precision@k} metric is unexpected. Perhaps the additional example in the task instructions could have misguided the model.
+The \texttt{qwen3-14b} model was tested for different citation metrics. As seen in the plots of Figure \ref{fig:citation_scores}, both zero and one-shot perform similarly on all tested values of $k$ which is expected, although a slight dip for one-shot in the \texttt{mean precision@k} metric is unexpected. Perhaps the additional example in the task instructions could have misguided the model.
 
 \begin{figure}
 \centering
 \includesvg[width=0.45\textwidth]{citation_scores_at_k.svg}
 \caption{Mean citation scores @k for both zero-shot and one-shot prompting for the \texttt{qwen3-14b} model.}
-\label{fig:model_key_fact_coverage}
+\label{fig:citation_scores}
 \end{figure}
 
 \subsection{Zero-shot and one-shot performance}
