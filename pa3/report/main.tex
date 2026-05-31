@@ -36,8 +36,8 @@ PA2 document retrieval pipeline from the previous assignment. The system answers
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: \emph{With Context}, where the model receives retrieved document chunks as explicit evidence, and \emph{Without
-Context}, where the model answers directly from its parameters.
+This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: With Context, where the model receives retrieved document chunks as explicit evidence, and Without
+Context, where the model answers directly from its parameters.
 
 \section{Implementation Summary}
 
@@ -55,12 +55,15 @@ For evidence-grounded answering, the pipeline embeds the user query, retrieves t
 using a cosine distance similarity metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
 
 To support systematic evaluation of grounding, we additionally perform a consistency check between in-text citations
-and a machine-readable reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
+and a reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
 
 \subsection{Prompt construction}
 We use two prompting regimes.
 
-\emph{With Context} prompts are designed for strict evidence-grounded answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list (identifier and URL) that matches the cited identifiers exactly. References that are not cited in the context are disallowed.
+With Context prompts are designed for strict evidence-grounded answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40--110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
+
+Within this With Context setting, we evaluate two prompting styles:
+zero-shot and one-shot. In the zero-shot variant, the system prompt consists only of the instruction set (grounding rules, citation format, fallback behavior, and the JSON reference constraints). In the one-shot variant, we prepend a single fully worked example (example question, example context with chunk blocks, and an example output containing both a cited answer and a valid \texttt{references\_json} list). This example is not part of the retrieved evidence for the actual question; instead, it serves as an in-prompt demonstration of the expected formatting and of the strict one-to-one correspondence between in-text ChunkID citations and the reference list.
 
 If the context is insufficient to answer the question, the model must output the exact fallback message:
 
@@ -71,7 +74,7 @@ tega ni mogoče ugotoviti.
 
 In this case, the structured reference list must be empty.
 
-\emph{Without Context} prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers
+Without Context prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers
 from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
 
 \begin{verbatim}
@@ -113,7 +116,7 @@ The second \textit{unbiased} dataset was generated directly by ChatGPT 5.5 by pr
 Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}, \texttt{all-MiniLM-L6-v2}, \texttt{all-mpnet-base-v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}, \texttt{bge-reranker-v2-m3}).
 
 \subsection{Citation Quality Evaluation}
-For evidence-grounded answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and machine-readable references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
+For evidence-grounded answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
 
 \subsection{Answer Quality Evaluation}
 Answer semantic quality is assessed using GPT-4 as a judge. For each query, the judge compares the model's answer against the standard expected answer and key facts using a detailed rubric. Evaluation dimensions include key-fact coverage (marked as covered, implied, partial, missing, or contradicted), overall semantic score (0.0--1.0 scale), direct question-answer alignment (true/false), and presence of major errors. The rubric is flexible: paraphrases are accepted, citation formatting does not affect semantic scoring, and factually correct supplementary information is tolerated.
