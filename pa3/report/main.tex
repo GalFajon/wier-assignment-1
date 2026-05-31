@@ -6,6 +6,7 @@
 
 \fi
 
+
 \hyphenation{op-tical net-works semi-conduc-tor}
 \usepackage{amsmath}
 \usepackage{caption}
@@ -13,6 +14,8 @@
 \usepackage{graphicx}
 \usepackage[inkscape=auto]{svg}
 \usepackage{verbatim}
+\usepackage{fvextra}
+\usepackage{longtable}
 
 
 \begin{document}
@@ -36,8 +39,8 @@ PA2 document retrieval pipeline from the previous assignment. The system answers
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: \emph{With Context}, where the model receives retrieved document chunks as explicit evidence, and \emph{Without
-Context}, where the model answers directly from its parameters.
+This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: With Context, where the model receives retrieved document chunks as explicit evidence, and Without
+Context, where the model answers directly from its parameters.
 
 \section{Implementation Summary}
 
@@ -55,12 +58,15 @@ For evidence-grounded answering, the pipeline embeds the user query, retrieves t
 using a cosine distance metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
 
 To support systematic evaluation of grounding, we additionally perform a consistency check between in-text citations
-and a machine-readable reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
+and a reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
 
 \subsection{Prompt construction}
 We use two prompting regimes.
 
-\emph{With Context} prompts are designed for strict evidence-grounded answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list (identifier and URL) that matches the cited identifiers exactly. References that are not cited in the context are disallowed.
+With Context prompts are designed for strict evidence-grounded answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40--110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
+
+Within this With Context setting, we evaluate two prompting styles:
+zero-shot and one-shot. In the zero-shot variant, the system prompt consists only of the instruction set (grounding rules, citation format, fallback behavior, and the JSON reference constraints). In the one-shot variant, we prepend a single fully worked example (example question, example context with chunk blocks, and an example output containing both a cited answer and a valid \texttt{references\_json} list). This example is not part of the retrieved evidence for the actual question; instead, it serves as an in-prompt demonstration of the expected formatting and of the strict one-to-one correspondence between in-text ChunkID citations and the reference list.
 
 If the context is insufficient to answer the question, the model must output the exact fallback message:
 
@@ -71,16 +77,13 @@ tega ni mogoče ugotoviti.
 
 In this case, the structured reference list must be empty.
 
-\emph{Without Context} prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers
+Without Context prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers
 from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
 
 \begin{verbatim}
 Brez dodatnega konteksta tega ni mogoče 
 zanesljivo ugotoviti.
 \end{verbatim}
-
-All prompts are executed as single-turn generations. There is no explicit multi-step reasoning procedure in the implementation.
-Any constraint on reasoning, found in the system prompts, is expressed as natural-language guidance in the prompt rather than a programmatic enforcement on the functionality of the model.
 
 \subsection{Explainable context formatting and validation}
 Retrieved evidence is formatted as human-readable blocks that are passed to the LLM as the context. Each block includes a local header, a segment identifier used for citations, the page URL, and the chunk text. Including URLs directly in the context reduces the need for the model to invent sources and supports
@@ -113,7 +116,7 @@ The second \textit{unbiased} dataset was generated directly by ChatGPT 5.5 by pr
 Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}, \texttt{all-MiniLM-L6-v2}, \texttt{all-mpnet-base-v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}, \texttt{bge-reranker-v2-m3}).
 
 \subsection{Citation Quality Evaluation}
-For evidence-grounded answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and machine-readable references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
+For evidence-grounded answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
 
 \subsection{Answer Quality Evaluation}
 Answer semantic quality is assessed using GPT-4 as a judge. For each query, the judge compares the model's answer against the standard expected answer and key facts using a detailed rubric. Evaluation dimensions include key-fact coverage (marked as covered, implied, partial, missing, or contradicted), overall semantic score (0.0--1.0 scale), direct question-answer alignment (true/false), and presence of major errors. The rubric is flexible: paraphrases are accepted, citation formatting does not affect semantic scoring, and factually correct supplementary information is tolerated.
@@ -195,7 +198,7 @@ Question-address rates of 90-95\% suggest that models understand the posed quest
 
 \subsection{Citation evaluation scores}
 
-Due to time limit constraints, we were able to test the \texttt{qwen3-14b} model on citation evaluations only for $k=7$ chunks. For \texttt{hit@k} and \texttt{mean recall@k} the scores are higher for one-shot style as expected, but \texttt{mean precision@k} is unusually lower. We suspect that the added one-shot instructions might have expanded the context too much and degraded the performance slightly.
+Due to time limit constraints, we were able to test the \texttt{qwen3-14b} model on citation evaluations only for $k=7$ chunks. For \texttt{hit@k} and \texttt{mean recall@k} the scores are higher for one-shot style as expected, but \texttt{mean precision@k} is unusually lower. We suspect that the added one-shot instructions might have expanded the context too much and degraded the performance slightly
 
 \begin{table}[h]
 \centering
@@ -208,9 +211,19 @@ Due to time limit constraints, we were able to test the \texttt{qwen3-14b} model
     \hline
 \end{tabular}
 \caption{Citation performance metrics for two prompting styles at k=7 chunks.}
-
 \label{tab:retrieval_prompting}
 \end{table}
+
+\subsection{Zero-shot and one-shot performance}
+
+While direct answering received no instruction, both zero-shot and one-shot received similar instructions at the beginning of the query, where one-shot queries included an additional example as written in Appendix \ref{appendix:instructions}. In the comparison Figure \ref{zero_one_shot_comparison} one-shot slightly outperforms zero-shot. Both have an expected advantage on the biased dataset over direct answering. On the unbiased dataset, direct answering beats answering with context since the crawled pages don't necessarily cover all query topics.
+
+\begin{figure}
+\centering
+\includesvg[width=0.48\textwidth]{model_zero_one_shot_comparison.svg}
+\caption{Direct, zero-shot and one-shot mean semantic quality comparison for both datasets for the \texttt{qwen3-14b} model.}
+\label{fig:zero_one_shot_comparison}
+\end{figure}
 
 \section{Conclusion}
 We implemented a RAG pipeline on top of the PA2 retrieval system, supporting both evidence-grounded and LLM-only answering modes.
@@ -221,8 +234,110 @@ The design emphasizes explicit evidence presentation and machine-checkable refer
 
 
 \onecolumn
-\appendix
 
+\appendices
 
+\section{One-shot prompting instructions}\label{appendix:instructions}
+For one-shot prompting we used the following instructions
+
+\begin{Verbatim}[breaklines=true]
+
+    Si natančen asistent za odgovarjanje na vprasanja na podlagi podanega konteksta.
+
+    Pravila:
+    - Odgovori izkljucno na podlagi podanega konteksta.
+    - Ne uporabljaj zunanjega znanja.
+    - Če kontekst ne vsebuje dovolj informacij za odgovor, odgovori:
+      "Na podlagi podanega konteksta tega ni mogoce ugotoviti."
+    - Odgovori v slovenscini.
+    - Odgovor naj bo dolg priblizno 40–110 besed in najvec 4 stavke.
+    - Če je vprasanje preprosto, lahko odgovori krajse, vendar ne dodajaj nepotrebnih informacij.
+    - Odgovor naj bo kratek, dejstven in neposreden.
+    - Vsako pomembno dejstveno trditev v odgovoru podpri s citatom v obliki [ChunkID: <id>].
+    - Citiraj samo ChunkID odsekov, ki neposredno podpirajo navedeno trditev.
+    - Ne navaj virov, ki so samo tematsko povezani, vendar ne podpirajo trditve.
+    - Če se odseki med seboj razlikujejo ali si nasprotujejo, to jasno povej in citiraj ustrezne ChunkID-je.
+    - Ne izmisljaj stevilk, datumov, imen, vzrokov ali posledic.
+    - Ne razmisljaj prevec dolgo, za razmisljanje (ang. reasoning) porabi maksimalno 3 do 5 povedi.
+
+    Obvezna pravila za references_json:
+    - Vedno izpolni references_json.
+    - references_json mora biti veljaven JSON seznam.
+    - Če v odgovoru uporabis citat [ChunkID: 123], mora references_json vsebovati objekt za isti chunk_id.
+    - Če references_json vsebuje chunk_id, mora biti isti ChunkID citiran tudi v odgovoru.
+    - Za vsak citirani ChunkID prepisi URL iz istega odseka v kontekstu.
+    - Ne dodajaj virov, ki niso citirani v odgovoru.
+    - Ne dodajaj virov, ki niso prisotni v kontekstu.
+    - Če odgovora ni mogoce podati na podlagi konteksta, mora biti references_json tocno: []
+
+    Spodaj je EXAMPLE. To je samo primer pravilnega obnasanja in ni del dejanskega vprasanja.
+
+    EXAMPLE INPUT:
+
+    question EXAMPLE:
+    Kateri so bili glavni razlogi za energetsko krizo v Evropi po zacetku rusko-ukrajinske vojne?
+
+    context EXAMPLE:
+    ### ODSEK 1
+    ChunkID: war-energy-001
+    URL: https://docs.example.org/ukraine-war/europe-energy
+    Besedilo:
+    Po zacetku ruske invazije na Ukrajino leta 2022 se je Evropa soocila z mocno energetsko negotovostjo. Rusija je bila pred vojno ena kljucnih dobaviteljic zemeljskega plina za evropske drzave, zato so omejitve dobave, sankcije in politicna tveganja povzrocili rast cen energije.
+
+    ---------------
+
+    ### ODSEK 2
+    ChunkID: war-energy-002
+    URL: https://docs.example.org/ukraine-war/gas-supply
+    Besedilo:
+    Dobave ruskega plina v Evropo so se po zacetku vojne zmanjsale zaradi kombinacije sankcij, ruskih protiukrepov, poskodb infrastrukture in odlocitev evropskih drzav, da zmanjsajo odvisnost od ruskih energentov.
+
+    ---------------
+
+    ### ODSEK 3
+    ChunkID: war-energy-003
+    URL: https://docs.example.org/ukraine-war/eu-response
+    Besedilo:
+    Evropske drzave so se na energetsko krizo odzvale z iskanjem alternativnih dobaviteljev plina, vecjim uvozom utekocinjenega zemeljskega plina, varcevalnimi ukrepi in pospesenimi vlaganji v obnovljive vire energije.
+
+    OUTPUT EXAMPLE:
+
+    answer EXAMPLE:
+    Energetska kriza v Evropi po zacetku rusko-ukrajinske vojne je bila povezana z zmanjsanimi dobavami ruskega plina, sankcijami, ruskimi protiukrepi, poskodbami infrastrukture in evropskim zmanjsevanjem odvisnosti od ruskih energentov [ChunkID: war-energy-002]. Evropa se je odzvala z alternativnimi dobavitelji, vecjim uvozom utekocinjenega zemeljskega plina, varcevanjem in vlaganji v obnovljive vire [ChunkID: war-energy-003].
+
+    references_json EXAMPLE:
+    [{"chunk_id": "war-energy-002", "url": "https://docs.example.org/ukraine-war/gas-supply"}, {"chunk_id": "war-energy-003", "url": "https://docs.example.org/ukraine-war/eu-response"}]
+
+    Zdaj odgovori na dejansko vprasanje. Ne izpisuj imen polj, oznak ali dodatnega oblikovanja; vrednosti vrni samo skozi DSPy izhodni polji.
+
+\end{Verbatim}
+\pagebreak
+\section{Query answering with and without context}
+
+\begin{longtable}{p{0.22\textwidth} p{0.37\textwidth} p{0.37\textwidth}}
+\hline
+\textbf{Query} & \textbf{Without Context} & \textbf{With Context (one-shot)} \\
+\hline
+Kako je Donald Trump po vrnitvi na položaj spremenil pristop ZDA do vojne med Rusijo in Ukrajino? & Donald Trump je po vrnitvi na položaj zmanjšal podporo Ukrajini in poudarjal potrebo po miru med Rusijo in Ukrajino. Pogosto je kritiziral ukrajinsko vlado in izrazil simpatijo za Rusijo, kar je nasprotujevano ameriški strategiji. Njegova politika bi lahko v prihodnosti vključevala zmanjšanje vojačne pomoči Ukrajini in večji dialog z Rusijo. Vendar njegove dejanske ukrepe še niso bile izvedene. & Donald Trump po vrnitvi na položaj predsednika ZDA spremenil politiko ZDA do Rusije, prekinil mednarodno izolacijo Rusije in začel pogovore z Putinom o mirovnih pogajanjih [ChunkID: 6047]. Združenim narodom je zavrnil ameriški predlog o prekinitvi ognja, medtem ko je kritiziral ukrajinskega predsednika Zelenskega in ga označil za diktatorja [ChunkID: 9554]. Trump se je zavzel za končanje vojne, vendar so njegovi ukrepi povzročili zaskrbljenost v Ukrajini in Evropi zaradi izključevanja njihovega vloge v pogajanjih [ChunkID: 9416]. \\ \hline
+Katera so glavna nesoglasja med Volodimirjem Zelenskim in Vladimirjem Putinom glede morebitnega mirovnega sporazuma? & Glavna nesoglasja med Zelenskim in Putinom vključujejo vprašanje suverenitete Ukrajine, posebej glede na okupirane območja, kot sta Krim in Donbass. Zelenski zahteva popolno odstopanje Rusije in priznanje Ukrajine kot suverene države, medtem ko Putin zahteva priznanje ruskih pravic in možnost razprave o obmejbovih. Poleg tega se razlikujeta glede načrtovanih reform Ukrajine, kot so demilitarizacija in nevtralnost, ki jih Zelenski zanika. Putin pa izraža željo po stabilnosti in izogibanju NATO razširjanju. & Glavna nesoglasja med Zelenskim in Putinom vključujejo usodo ukrajinskega ozemlja, ki ga zasedajo ruske sile, ter varnostna jamstva za Ukrajino [ChunkID: 344]. Zelenski zahteva popolno odstopanje Rusije z vseh ukrajinskih ozemlj, medtem ko Putin vztraja, da mora Ukrajina izgubiti del ozemlja, kot sta Herson in Zaporožje [ChunkID: 13162]. Zelenski ne zaupa Putinu in zahteva varnostna jamstva od Zahoda, medtem ko Rusija ne sprejema Ukrajine kot države [ChunkID: 5046]. \\ \hline
+Kako je vojna v Ukrajini vplivala na odnose med Rusijo in državami zveze NATO? & Vojna v Ukrajini je povzročila globoko začasnost med Rusijo in NATO državami. NATO je podprl Ukrajino z vojaško in ekonomsko pomočjo, kar je povečalo napetosti z Rusijo. Rusija je izgubila zavezanost v mednarodnih forumih, medtem ko so NATO države posilvile sankcije in povečale varnostne ukrepe v Evropi. Diplomatski odnosi so se oslabili, kar kaže na trajno razdelitev. & Vojna v Ukrajini je povzročila povečano napetost med Rusijo in državami NATO, saj je Nato povečal varovalno prisotnost v Baltskih državah [ChunkID: 12746], medtem ko je Rusija opozarjala na nevarnost širitve članstva Finske in Švedske v zvezo [ChunkID: 6997]. Finska je postala članica Nato, kar je podvojilo rusko mejo z zavezništvom [ChunkID: 6997]. Poleg tega so sankcije in geopolitične spremembe dodatno zaostrali odnose [ChunkID: 20358]. \\ \hline
+Zakaj analitike skrbi možnost jedrske eskalacije, povezane z Rusijo? & Analitiki skrbi možnost jedrske eskalacije zaradi Rusije, ker ima veliko jedrskega orozja in ga lahko uporabi kot orodje za odvet. Trenutne napetosti, kot je vojna na Ukrajini, povečujejo tveganje za napako ali nesrečno vedenje. Rusija lahko v primeru počutja grožnje uporabi jedrske orožje, kar bi lahko povzročilo globalno katastrofo. Skrbi tudi povzroča nedostopnost informacij o ruskih jedrskih strategijah. & Analitiki skrbi možnost jedrske eskalacije, povezane z Rusijo, zaradi modernizacije ruskega jedrskega orožja in naraščajoče napetosti z Zahodom, ki lahko vodi do nezamernega ali namerno izkoriščanja jedrskega orožja [ChunkID: 18858]. Rusija hraní bojne glave ločeno od prevoznikov, kar povečuje tveganje za nepredvidljivo uporabo, medtem ko so zahodni analitiki opozorjeni na katastrofalne posledice, če bi Putin presegel atomski prag [ChunkID: 18856]. \\ \hline
+Kako se je Donald Trump postavil glede vojaške pomoči Ukrajini? & Donald Trump je med svojo predsedniško mandatom večkrat izrazil omejeno podporo vojaški pomoči Ukrajini, zlasti zaradi spora o sodelovanju Ukrajine v raziskovanju korupcije v ZDA. Po prvem izpitu je bila vojaška pomoč za Ukrajino začasno preklicana, vendar je kasneje bila ponovno omogočena. Trump je pogosto poudarjal, da Ukrajina mora samostojno reševati svoje obrambne potrebe. & Donald Trump je po podatkih iz konteksta prekinil vojaško pomoč Ukrajini zaradi spora z Zelenskim [ChunkID: 12612], vendar je izrazil željo, da bi se ZDA nadaljevale s pomočjo, vendar z zahtevami za finančno zavarovanje [ChunkID: 14524]. Hkrati je kritiziral Zelenskega in izrazil začasno podporo pogajanjem z Rusijo [ChunkID: 15719]. \\ \hline
+Kakšno vlogo imajo sankcije pri slabitvi ruskega gospodarstva med vojno v Ukrajini? & Sankcije so povzročile ekonomsko izolacijo Rusije, zmanjšale dostop do globalnih trgov in zavirale gospodarski rast. Zmanjšanje izvoza naftovih produktov in omejitev dostopa do finančnih sistemov so povzročile deficite v bužgetu in inflacijo. Poleg tega so sankcije omejile investicije in pospešile kapitalno ugaščenje, kar dodatno slabi gospodarstvo. Vendar pa je rusko gospodarstvo delno zaščiteno z alternativnimi trgi in strategijami izogibanja sankcijam. & Sankcije so povzročile padec ruskega BDP za 2,2 odstotka leta 2022 in OECD napoveduje še dodatne šestodstotne izgube leta 2023 [ChunkID: 8840][ChunkID: 7537]. Medtem pa Rusija deluje na nove trge in zaslužuje rekordne dobičke iz prodaje nafte, kar zmanjšuje učinek sankcij [ChunkID: 9927]. Analitiki menijo, da so sankcije manj učinkovite za ustavitev vojne, vendar lahko v dolgoročnem času oslabijo gospodarstvo [ChunkID: 7537]. \\ \hline
+Kako je konflikt v Ukrajini vplival na svetovne cene energije in evropsko energetsko politiko? & Konflikt v Ukrajini je povzročil značilno povečanje svetovnih cen energije zaradi motenja ruskih izvoznih tokov in povečane neodvisnosti. Evropska energetska politika je posledično preusmerjena proti zmanjšanju odvisnosti od Rusije, pospešitvi prehoda na obnovljive vire in razvoju energetske varnosti. Evropska unija je pospešila ukrepe za razvoj vetrne in sončne energije ter razširila nakupovanje plina iz držav kot je ZDA. & Konflikt v Ukrajini je povzročil močno povečanje svetovnih cen energije, kot so nafta in zemeljski plin [ChunkID: 13736]. Evropska unija je v reakciji na to povečanje cen pripravljala dodatne sankcije proti Rusiji, vključno z omejitvijo uvoza zlata, ter se osredotočala na energetske vire in življenjske stroške [ChunkID: 17115]. Evropska energetska politika se je prilagajala, da bi stabilizirala cene, kar vključuje iskanje alternativnih dobaviteljev in pospeševanje prehoda na obnovljive vire [ChunkID: 17361]. \\ \hline
+Zakaj Kitajska velja za pomembnega strateškega partnerja Rusije med vojno? & Kitajska je pomembna strateška partnerka Rusije zaradi močnih gospodarskih odnosov, skupnih geopolitičnih interesi proti zahodnim vplivom in podpore Rusiji v mednarodnih vprašanjih. Kitajska podpira Rusijo v večini vprašanj, povezanih z vzhodno evropsko politiko, medtem ko Rusija omogoča Kitaji dostop do energije in trga. Obe državi sodelujeta tudi v vojaških in tehnoloških projektih, kar obeh povezuje v globalni geopolitiki. & Kitajska velja za pomembnega strateškega partnerja Rusije zaradi gospodarskega sodelovanja, podpore Rusiji v mednarodnih zadevah in skupnih ciljev proti svetovnemu redu, ki ga vodi ZDA [ChunkID: 10422]. Kitajska in Rusija sta utrdila svoje partnerstvo po ruski invaziji na Ukrajino, kar vključuje tudi podporo Rusiji pri "zaščiti nacionalne stabilnosti" [ChunkID: 8822]. Poleg tega Kitajska pomaga Rusiji z dobavo blaga za vojaško industrijo in ima naprednejšo tehnologijo, ki jo uporablja za ojačanje svojih vojaških kapacitet [ChunkID: 796]. \\ \hline
+Kakšen vpliv je imel konflikt med Izraelom in Iranom na širšo varnostno situacijo na Bližnjem vzhodu? & Konflikt med Izraelom in Iranom je povečal napetosti na Bližnjem vzhodu, saj sta državi medsebojno podpirata nasprotnike. To lahko vodi v večjo zapletenost v regiji, vključevanje drugih držav in možnost večjih vojaških dejanj. Poleg tega zmanjšuje zaupanje med državami v regiji in lahko vpliva na regionalno stabilnost ter mednarodne odnose. & Konflikt med Izraelom in Iranom je povečal napetosti na Bližnjem vzhodu, zlasti po ameriškem napadu na iranske jedrske objekte, kar je ogrožalo širšo regionalno vojno [ChunkID: 11377]. Papež in UN so opozarjala na tveganje za katastrofalne posledice za civiliste in pozvali k diplomaciji [ChunkID: 11376]. Iran in njegovi zavezniki so zagrozili z odzivom, kar dodatno zaostruje regijo [ChunkID: 12409]. \\ \hline
+Zakaj Abrahamovi sporazumi ponovno postajajo osrednji del ameriške diplomacije na Bližnjem vzhodu? & Abrahamovi sporazumi ponovno postajajo osrednji del ameriške diplomacije, ker omogočajo povezovanje Izraela s severno afriškimi državami, kar zmanjšuje iransko vpliv in povečuje stabilnost v regiji. Z njimi ZDA poskušajo ohraniti svojo vlogo mediatorja in vzpostaviti varnostne in gospodarske sodelovanja, kar podpira njihove interese v Bližnjem vzhodu. & Na podlagi podanega konteksta tega ni mogoče ugotoviti. \\ \hline
+% Kako se je Izrael odzval na poročila o morebitnem novem sporazumu med ZDA in Iranom? & Izrael je ob poročilih o morebitnem sporazumu med ZDA in Iranom izrazil globoko zaskrbljenost, predvsem zaradi morebitnega preklicanja mehanizmov, ki bi omejevali Iransko nuklearno program. Vodstvo Izraela je opozorilo na nevarnosti za regionalno stabilnost in izražalo zavzetost za zaščito svojih interesov. Če bi takšen sporazum vključeval odstop od sankcij, bi Izrael lahko obrnil na vojaške ukrepe. Vztrajno podpira možnost za izražanje odločnosti proti Iranu. & Na podlagi podanega konteksta tega ni mogoče ugotoviti. \\ \hline
+% Katere so glavne kritike Benjamina Netanjahuja glede nedavnega konflikta z Iranom? & Benjamin Netanjahu je kritiziral Irano za podporo terorističnim skupinam, kot je Hezbolah, in za izvajanje napadov na izraelske interese. Ocenjuje, da Iran ne spoštuje mednarodnih dogovorov in neustavljajo nuklearne programske aktivnosti, kar ogroža regionalno stabilnost. Poleg tega kritizira manjkajoče diplomatske prizadevanja za reševanje napetosti. & Glavne kritike Benjamina Netanjahuja glede konflikta z Iranom vključujejo uporabo vojne kot politične taktike za izboljšanje položaja pred volitvami zaradi korupcijskih škandali [ChunkID: 4731], izvajanje napadov na iransko vojsko in Hezbolah v Siriji [ChunkID: 20195], ter eskalacijo napetosti brez jasnih dokazov [ChunkID: 21345]. \\ \hline
+% Kako bi lahko obnovljene napetosti med Izraelom in Iranom vplivale na svetovne naftne trge? & Obnovljene napetosti med Izraelom in Iranom bi lahko povzročile skrbi glede varnosti naftnih prometnih poti, kot je Suhetski pristav, kar bi lahko vplivalo na ponudbo. Povečana geopolitična neustalnost pogosto poveča zahtevnost za nafto kot varno vrednostno vlogo, kar lahko poveča cene. Poleg tega bi lahko sankcije ali omejitve trgovine zmanjšale izvoz naftne surovine, kar bi lahko vplivalo na globalne trge. Vsi ti dejavniki lahko povzročijo kratkoročno povečanje cen naftne surovine. & Obnovljene napetosti med Izraelom in Iranom bi lahko povzročile zmanjšanje dobave nafte zaradi možnih napadov na infrastrukturo, kot so ladje v Hormuški ožini, kar bi povečalo cene [ChunkID: 5136]. Povečana negotovost bi lahko tudi začasno dvignila cene naftnih derivatov, kot je dizelsko gorivo, zaradi motenj v prometu in zmanjšane zmogljivosti skladiščenja [ChunkID: 5140]. Dolgoročno bi lahko izguba kapacitete za izvoz vplivala na globalne cene nafte [ChunkID: 5143]. \\ \hline
+% Zakaj zalivske države vse pogosteje iščejo varnostna partnerstva zunaj Združenih držav Amerike? & Zalivske države iščejo varnostna partnerstva zunaj ZDA, da bi zmanjšale odvisnost od ene države in zagotovile večjo avtonomijo v varnostni politiki. Povečana napetost v regiji, kot je konflikt z Irano, jih spodbuja k razvoju večstranih odnosov. Poleg tega želijo zagotoviti varnost z drugimi močnimi državami, kot so Kitajska in Rusija, ki ponujajo ekonomsko in varnostno podporo brez povezav z ZDA. To omogoča večjo strategično raznolikost in stabilnost. & Na podlagi podanega konteksta tega ni mogoče ugotoviti. \\ \hline
+% Kako je vojna v Ukrajini vplivala na vojaške inovacije, zlasti na področju uporabe dronov? & Vojna v Ukrajini je pospešila razvoj vojaških inovacij, zlasti uporabo dronov za nadzor, napad in logistiko. Ukrajina je aktivno uporabljala drony za napad na vojaška in infrastrukturna cilja, medtem ko je Rusija izboljšala svoje sisteme za obrambne in napadne drony. Konflikt je poudaril pomembnost avtonomnih in AI-podprtih dronov, kar je vodilo v razvoj novega strokovnega znanja in tehnologij. & Vojna v Ukrajini je spodbudila razvoj in širjenje uporabe dronov, ki so postali ključno orodje za boj, reševanje in obrambo. Ukrajinska vojska jih uporablja za napade na sovražne enote, prevoz eksplozivov in prepoznavanje min [ChunkID: 527]. Ruska vojska se prilagaja z uporabo lažjih prevoznih sredstev za izogibanje dronom [ChunkID: 10953]. ZDA so s tem spoznale pomembnost poceni dronov, kar je vplivalo na svojo vojaško proizvodnjo [ChunkID: 216]. \\ \hline
+% S kakšnimi izzivi se sooča Donald Trump pri poskusih posredovanja tako v konfliktih na Bližnjem vzhodu kot tudi v Ukrajini hkrati? & Donald Trump se sooča z izzivi, kot so nasprotovanje med različnimi geopolitičnimi interesoma, nejasna strategija in omejena podpora mednarodnih partnerjev. Mednarodna skupnost pogosto kritizira njegovo nekonzistentnost, kar zmanjšuje verodostojnost njegovih posredovanj. Poleg tega so njegove osebne odnose s voditelji kot je Putin pogosto v nasprotju z zanimami zahodnih zaveznikov, kar dodatno zapletajo mednarodne pritiski. & Donald Trump se pri posredovanju v konfliktih sooča s težavami, kot so razlike med zahtevi ZDA in Ukrajine glede ozemlja ter velikosti vojske [ChunkID: 2013], težavnosti pri dosegu soglasja med vsemi stranmi (Rusija, Ukrajina, Evropa) [ChunkID: 14476], ter izražene zaskrbljenosti, da bodo pogajanja potekala mimo Ukrajine in Evrope [ChunkID: 9554]. Hkrati mu težave prinaša tudi primerjava s konfliktom v Gazi, kjer je ena stran (Hamas) sposobna takoj rešiti konflikt [ChunkID: 12603]. \\ \hline
+% Kako družbena omrežja oblikujejo javno mnenje o vojnah v Ukrajini in Izraelu? & Družbena omrežja igra ključno vlogo pri širjenju informacij, propagande in emocionalnih reakcij o vojnah. V Ukrajini in Izraelu so platforme kot Twitter in TikTok uporabljene za oblikovanje javnega mnenja, poudarjanje različnih perspektiv ter razširjanje mitov ali resničnih dogodkov. Algoritmi omrežij pogosto ojačujejo polarizacijo, medtem ko viri iz občutljivih regij lahko vplivajo na mednarodno podporo ali kritike. & Družbena omrežja igra ključno vlogo pri oblikovanju javnega mnenja o vojni v Ukrajini, kjer so uporabljena za širjenje dezinformacij, propagande in deljenje izkušenj vojakov [ChunkID: 14676]. Ukrajinski vojaki delijo svoje izkušnje na družbenih omrežjih, kar vpliva na javno mnenje, medtem ko ruska propaganda uporablja omrežja za manipulacijo informacijami [ChunkID: 14676]. V kontekstu ni podatkov o vlogi družbenih omrežij v vojni v Izraelu. \\ \hline
+% Kakšne so humanitarne posledice dolgotrajnega vojskovanja v Gazi in Ukrajini? & Dolgotrajno vojskovanje v Gazi in Ukrajini je povzročilo masovno izselitev, pomanjkanje osnovnih potreb, kot so hranila, voda in zdravstvena oskrba, ter zelo visoke smrtnosti. V Gazi je pomanjkanje električne energije in zdravstvenih kapacitet še dodatno povečalo trpljenje, medtem ko v Ukrajini vojna povzroča široko destrukcijo infrastrukture in psihološko trauma za prebivalstvo. Humanitarna kriza v obeh regijah zahteva hitro in trajnostno pomoč. & Humanitarna posledica dolgotrajnega vojskovanja v Gazi je izguba človeških življenj, nepredstavljiva stopnja uničenja in težave s humanitarnimi operacijami, kjer več kot 1,3 milijona Palestincev ostaja v zatočišču [ChunkID: 1626]. V Ukrajini pa vojna povzroča izselitev skoraj 14 milijonov ljudi, uničenje bolnišnic in šol, izgubo dostopa do vode in elektrike ter povečanje potrebe po humanitarni pomoči za več kot 15,7 milijona ljudi [ChunkID: 10384][ChunkID: 10383]. \\ \hline
+% Kako bi lahko prihodnje ameriške volitve vplivale na zunanjo politiko ZDA do Rusije, Ukrajine in Izraela? & Prihodnje ameriške volitve lahko spremenijo zunanjo politiko ZDA glede na politično usmerjenost novih vlad. Če bi zmagal republikanec, bi morda poudarjal večjo sodelovanje z Rusijo in manj podpore Ukrajini, medtem ko bi demokrat poudarjal vztrajno podporo Ukrajini in strožje sankcije proti Rusiji. Izraelu bi v obeh primerih verjetno ohranili podporo, vendar bi se razlike lahko pojavile v pristopi k Izrael-Palestinski vprašanju. & Prihodnje ameriške volitve bi lahko vplivale na zunanjo politiko ZDA do Ukrajine in Rusije, saj bi lahko naslednji predsednik imel drugačno politiko, kot je ocenil Zelenski, kar bi lahko spremenilo potek vojne [ChunkID: 17676]. Trumpova vrnitev bi lahko pomenila manj podpore Ukrajini in več pragmatičnega pristopa [ChunkID: 9052]. Vpliv na Izrael pa kontekst ne omenja. \\ \hline
+% Katera so največja geopolitična tveganja, ki bi se lahko pojavila, če bi se sedanji konflikti v Vzhodni Evropi in na Bližnjem vzhodu še naprej zaostrovali do leta 2026? & Največja tveganja vključujejo širjenje vojne v Vzhodni Evropi, povečano riko za nuklearno konfrontacijo, destabilizacijo v Bližnjem vzhodu zaradi regionalnih konfliktov in povečano odvisnost od energije. Možno je tudi večje vključevanje velesil, kar bi lahko pripelje do globalnih napetosti. Povečana militarizacija in podpora zahodnim državam bi lahko še bolj zaostrovala odnose z Rusijo in Kitajsko. & Največja geopolitična tveganja pri možni eskalaciji konfliktov do leta 2026 vključujejo nekontrolirano širjenje vojne, ki bi lahko povzročilo katastrofalne posledice za civiliste [ChunkID: 11376], povečane energetske stroške in ekonomsko nestabilnost v Evropi [ChunkID: 79], refugantske pritiske ter kibernetske napade [ChunkID: 8143], možnost jedrskega konflikta [ChunkID: 1625] in globlje razpoke med Evropo, Kitajsko in Rusijo zaradi povečane odvisnosti [ChunkID: 9059]. \\ \hline
+\end{longtable}
 
 \end{document}

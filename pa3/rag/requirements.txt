@@ -1,4 +1,4 @@
-dspy-ai
+dspy
 sentence-transformers
 torch
 sqlalchemy
