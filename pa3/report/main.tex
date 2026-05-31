@@ -56,12 +56,11 @@ To mitigate noise from very short segments (e.g., headers, keywords, or stray fr
 \subsection{Retrieval}
 For answering with context, the pipeline embeds the user query, retrieves the top-$k$ most similar segments from pgvector using a cosine distance metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM.
 
-To support systematic evaluation of the provided context, we additionally perform a consistency check between in-text citations and a reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
 
 \subsection{Prompt construction}
 We use two prompting regimes.
 
-With context prompts are designed for strict evidence-based answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON format, that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
+\textit{With context} prompts are designed for strict evidence-based answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON format, that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
 
 Within this with context setting, we evaluate two prompting styles:
 zero-shot and one-shot. In the zero-shot variant, the system prompt consists only of the instruction set (grounding rules, citation format, fallback behavior, and the JSON reference constraints). In the one-shot variant, we prepend a single fully worked example (example question, example context with chunk blocks, and an example output containing both a cited answer and a valid \texttt{references\_json} list). This example is not part of the retrieved evidence for the actual question; instead, it serves as an in-prompt demonstration of the expected formatting and of the strict one-to-one correspondence between in-text ChunkID citations and the reference list. The text template defining the instruction set and the example can be read in Appendix \ref{appendix:instructions}.
@@ -75,7 +74,7 @@ tega ni mogoče ugotoviti.
 
 In this case, the structured reference list must be empty.
 
-Without context prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
+\textit{Without context} prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
 
 \begin{verbatim}
 Brez dodatnega konteksta tega ni mogoče 
@@ -100,17 +99,17 @@ Besedilo:
 
 \section{Evaluation procedure}
 
-We implemented a systematic three-stage evaluation framework centered on a curated dataset.
+We implemented a systematic three-stage evaluation framework centered on two curated datasets.
 
 \subsection{Datasets}
-The \textit{biased} evaluation dataset comprises 50 queries constructed via a supervised process using \texttt{GPT-4.1-mini} (via OpenAI API) as a question and expected-answer generator. For each sampled page, text windows are selected and \texttt{GPT-4.1-mini} generates a factual question in Slovenian, a concise expected answer, and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
+The \textit{biased} evaluation dataset comprises 44 queries constructed via a supervised process using \texttt{GPT-4.1-mini} (via OpenAI API) as a question and expected-answer generator. For each sampled page, chunk windows are selected and \texttt{GPT-4.1-mini} generates a factual question in Slovenian, a concise expected answer, and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
 
-\textbf{Example:} One dataset entry asks ``\textit{Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical današnji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?}''. The expected answer references four key facts, described in a single chunk: deployment of hundreds of thousands of firefighters and approximately 2000 military personnel, Medvedev's decree calling additional troops, 40 deaths and 128,500 hectares destroyed, hot and dry weather as root cause.
+\textbf{Example:} One dataset query asks ``\textit{Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical današnji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?}''. The expected answer references four key facts, described in a single chunk: deployment of hundreds of thousands of firefighters and approximately 2000 military personnel, Medvedev's decree calling additional troops, 40 deaths and 128,500 hectares destroyed, hot and dry weather as root cause.
 
 The second \textit{unbiased} dataset was generated directly by ChatGPT 5.5 by prompting it to generate 20 different questions on a mixed topic of Donald Trump, Iran, Ukraine, and Israel, then answered in at most 4 sentences, and provided with 5 supported atomic facts. Citations here are also disallowed since the model cannot know about our database of chunks.
 
 \subsection{Retrieval Evaluation}
-Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}~\cite{bge_m3}, \texttt{all-MiniLM-L6-v2}~\cite{all_minilm_l6_v2}, \texttt{all-mpnet-base-v2}~\cite{all_mpnet_base_v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}~\cite{ms_marco_minilm_l6_v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}~\cite{mmarco_minilmv2_l12_h384}, \texttt{bge-reranker-v2-m3}~\cite{bge_reranker_v2_m3}).
+Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against LLM-generated ground truth scores and cross-encoder rerankings. We evaluate multiple configuration combinations of the \texttt{bge-m3}~\cite{bge_m3} embedding cosine distance retrieval paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}~\cite{ms_marco_minilm_l6_v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}~\cite{mmarco_minilmv2_l12_h384}, \texttt{bge-reranker-v2-m3}~\cite{bge_reranker_v2_m3}).
 
 \subsection{Citation Quality Evaluation}
 For evidence-based answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
@@ -143,7 +142,9 @@ Comparative performance across model and reranker combinations is visualized in 
 \label{fig:ndcg_std}
 \end{figure}
 
-\subsection{LLM-Agnostic Baseline: Model Size and Answer Quality}
+
+
+\subsection{Retrieval-Agnostic Baseline: Model Size, Answer Quality}
 
 We evaluated three Qwen model sizes in direct (no-context) mode to isolate language capability from retrieval grounding.
 
@@ -151,7 +152,7 @@ As mentioned above, each question includes five key facts extracted from expecte
 
 The external judge rates overall answer quality on a 0.0--1.0 scale based on five rubric dimensions: directness and clarity in addressing the question, comprehensiveness relative to expected answer, freedom from major factual errors, presence of unsupported claims, and coherence and readability. The judge assigns scores at 0.0-1.0 multiples of 0.2 (e.g., 0.0, 0.2, 0.4, 0.6, 0.8, 1.0).
 
-The final answer quality score combines coverage and semantic quality as: $\text{score}_{\text{composite}} = 0.65 \cdot \text{coverage} + 0.35 \cdot \text{semantic}$. The 0.65/0.35 weighting emphasizes factual grounding but recognizes fluency and semantic appropriateness. Penalties apply via multiplication by 0.5 for three conditions: answer contains contradictions, answer contains major errors, answer does not address the question. Multiple violations compound multiplicatively (e.g., contradicted answer that also doesn't address question: $\text{score}_{\text{final}} = \text{score}_{\text{composite}} \times 0.5 \times 0.5 = 0.25 \times \text{score}_{\text{composite}}$).
+The final answer quality score combines key fact coverage and semantic quality as: $\text{score}_{\text{composite}} = 0.65 \cdot \text{coverage} + 0.35 \cdot \text{semantic}$. The 0.65/0.35 weighting emphasizes factual grounding but recognizes fluency and semantic appropriateness. Penalties apply via multiplication by 0.5 for three conditions: answer contains contradictions, answer contains major errors, answer does not address the question. Multiple violations compound multiplicatively (e.g., contradicted answer that also doesn't address question: $\text{score}_{\text{final}} = \text{score}_{\text{composite}} \times 0.5 \times 0.5 = 0.25 \times \text{score}_{\text{composite}}$).
 
 Per-example metrics are aggregated across 20 test examples. Mean coverage and semantic scores are simple arithmetic means across examples.
 
