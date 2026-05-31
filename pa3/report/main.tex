@@ -33,39 +33,36 @@
 
 \begin{abstract}
 This report describes a Retrieval-Augmented Generation (RAG) system built on top of the
-PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval + reranking + generation) and without context (LLM-only). We test two different querying styles, datasets, metrics, LLMs and context sizes.
+PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval, reranking and generation) and without context (LLM-only). We tested the results of these modes across multiple models and example queries using a judge and citation-reference validation.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: With Context, where the model receives retrieved document chunks as explicit evidence, and Without
-Context, where the model answers directly from its parameters.
+This assignment extends our PA2 retrieval system with a language model to create a RAG pipeline that can answer questions in two modes: with context, where the model receives retrieved document chunks as explicit evidence, and without
+context, where the model answers directly from its parameters.
 
 \section{Implementation Summary}
 
 \subsection{Models and tooling}
-Our system consists of three model components: a sentence embedding model for dense retrieval, a reranker to refine candidates, and a large language model (LLM) for answer generation. We experimented with multiple models for both embedding and reranking. For answer generation, we use a locally served model via Ollama and interface with the LLM through \texttt{DSPy}.
+Our system consists of three model components: a sentence embedding model for retrieval, a reranker to refine candidates, and a large language model (LLM) for answer generation. We experimented with multiple models for both embedding and reranking. For answer generation, we use a locally served model via Ollama and interface with the LLM through \texttt{DSPy}.
 
 \subsection{Document storage, chunking and chunk filtering}
 We reuse the PA2 database schema and chunked documents.
 
-To mitigate noise from very short segments (e.g., headers, keywords, or stray fragments that clutter the vector space),
-retrieval incorporates a minimum segment length filter set at 100 characters by default. This filter is applied during similarity search: both the approximate nearest neighbor (ANN) candidate selection and the final ranking stage exclude segments shorter than the threshold, ensuring that only substantive text blocks are candidate for evidence.
+To mitigate noise from very short segments (e.g., headers, keywords, or stray fragments that clutter the vector space), retrieval incorporates a minimum segment length filter set at 100 characters by default. This filter is applied during similarity search: both the approximate nearest neighbor candidate selection and the final ranking stage exclude segments shorter than the threshold, ensuring that only substantive text blocks are candidate for evidence.
 
 \subsection{Retrieval}
-For evidence-grounded answering, the pipeline embeds the user query, retrieves the top-$k$ most similar segments from pgvector
-using a cosine distance metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM as explicit evidence.
+For answering with context, the pipeline embeds the user query, retrieves the top-$k$ most similar segments from pgvector using a cosine distance metric and reranks the candidates with a cross-encoder. The final top-$n$ segments are formatted into a structured context block that is provided to the LLM.
 
-To support systematic evaluation of grounding, we additionally perform a consistency check between in-text citations
-and a reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
+To support systematic evaluation of the provided context, we additionally perform a consistency check between in-text citations and a reference list: the set of cited chunk identifiers in the answer is compared against the set of identifiers listed in the structured reference output.
 
 \subsection{Prompt construction}
 We use two prompting regimes.
 
-With Context prompts are designed for strict evidence-grounded answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40--110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
+With context prompts are designed for strict evidence-based answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON format, that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
 
-Within this With Context setting, we evaluate two prompting styles:
+Within this with context setting, we evaluate two prompting styles:
 zero-shot and one-shot. In the zero-shot variant, the system prompt consists only of the instruction set (grounding rules, citation format, fallback behavior, and the JSON reference constraints). In the one-shot variant, we prepend a single fully worked example (example question, example context with chunk blocks, and an example output containing both a cited answer and a valid \texttt{references\_json} list). This example is not part of the retrieved evidence for the actual question; instead, it serves as an in-prompt demonstration of the expected formatting and of the strict one-to-one correspondence between in-text ChunkID citations and the reference list.
 
 If the context is insufficient to answer the question, the model must output the exact fallback message:
@@ -77,8 +74,7 @@ tega ni mogoče ugotoviti.
 
 In this case, the structured reference list must be empty.
 
-Without Context prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers
-from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
+Without context prompts provide an LLM-only baseline. They prohibit citations and source reporting and encourage answers from general knowledge. To prevent fabricated sourcing, citations, identifiers, and URLs are explicitly disallowed. If the question clearly requires missing document-specific information, the model must return the exact fallback message:
 
 \begin{verbatim}
 Brez dodatnega konteksta tega ni mogoče 
