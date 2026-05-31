@@ -19,8 +19,6 @@ from LLM_templates import (
 from embedding import load_embedding_model
 from reranking import load_reranking_model
 
-import torch
-
 LLM_MODEL = os.getenv("LLM_MODEL", "ollama_chat/qwen3:14b")
 OLLAMA_API_BASE = os.getenv("OLLAMA_API_BASE", "http://localhost:11434")
 EMBEDDING_MODEL_KEY = os.getenv("EMBEDDING_MODEL_KEY", "bge-m3")
@@ -69,10 +67,6 @@ def display_result(title, result):
         for i, ref in enumerate(refs, 1):
             print(f"  [{i}] ChunkID: {ref.get('chunk_id')}, URL: {ref.get('url')}")
         print()
-    
-    if result.get("citation_reference_match") is not None:
-        status = "MATCH" if result["citation_reference_match"] else "MISMATCH"
-        print(f"Citation Validation: {status}\n")
 
 
 def run_all_modes(question, embedding_model, embedding_dim, reranking_model):
@@ -124,7 +118,5 @@ def main():
         except Exception as e:
             print(f"[ERROR] {e}")
 
-
-if __name__ == "__main__":
-    load_dotenv()
-    main()
+load_dotenv()
+main()
