@@ -211,9 +211,19 @@ Due to time limit constraints, we were able to test the \texttt{qwen3-14b} model
     \hline
 \end{tabular}
 \caption{Citation performance metrics for two prompting styles at k=7 chunks.}
-
 \label{tab:retrieval_prompting}
 \end{table}
+
+\subsection{Zero-shot and one-shot performance}
+
+While direct answering received no instruction, both zero-shot and one-shot received similar instructions at the beginning of the query, where one-shot queries included an additional example as written in Appendix \ref{appendix:instructions}. In the comparison Figure \ref{zero_one_shot_comparison} one-shot slightly outperforms zero-shot. Both have an expected advantage on the biased dataset over direct answering. On the unbiased dataset, direct answering beats answering with context since the crawled pages don't necessarily cover all query topics.
+
+\begin{figure}
+\centering
+\includesvg[width=0.48\textwidth]{model_zero_one_shot_comparison.svg}
+\caption{Direct, zero-shot and one-shot mean semantic quality comparison for both datasets for the \texttt{qwen3-14b} model.}
+\label{fig:zero_one_shot_comparison}
+\end{figure}
 
 \section{Conclusion}
 We implemented a RAG pipeline on top of the PA2 retrieval system, supporting both evidence-grounded and LLM-only answering modes.
@@ -227,7 +237,7 @@ The design emphasizes explicit evidence presentation and machine-checkable refer
 
 \appendices
 
-\section{One-shot prompting instructions}
+\section{One-shot prompting instructions}\label{appendix:instructions}
 For one-shot prompting we used the following instructions
 
 \begin{Verbatim}[breaklines=true]

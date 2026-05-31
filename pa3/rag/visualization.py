@@ -212,13 +212,14 @@ def load_answer_quality_results(filename: str, folder_path="/LLM_evaluation/eval
 
 def plot_answers_quality_comparison(model_names: list[str]):
 
-    plot_models_semantic_scores(model_names, 10)
-    plot_zero_one_shot_comparison(model_names, 10)
-    plot_key_fact_coverage_score(model_names, 10)
-    plot_aggregate_results(model_names)
-    plot_dataset_comparison_aggregate_results()
-    plot_precision_at_k()
-    plot_hit_at_k()
+    # plot_models_semantic_scores(model_names, 10)
+    # plot_zero_one_shot_comparison(model_names, 10)
+    plot_aggregate_zero_one_shot_comparison()
+    # plot_key_fact_coverage_score(model_names, 10)
+    # plot_aggregate_results(model_names)
+    # plot_dataset_comparison_aggregate_results()
+    # plot_precision_at_k()
+    # plot_hit_at_k()
     
 
 def plot_models_semantic_scores(model_names, n):
@@ -241,16 +242,69 @@ def plot_models_semantic_scores(model_names, n):
 def plot_zero_one_shot_comparison(model_names, n):
     
     plt.figure(figsize=(8, 5))
-    plt.title("Zero vs one shot comparison between models on queries")
+    plt.title("Direct vs zero vs one shot semantic quality comparison on queries")
     plt.xticks(np.arange(n))
     plt.grid()
-    w = 0.25
-    zeroShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
-    oneShotResults = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
-    plt.bar(np.arange(n) - w/2, [e["overall_semantic_score"] for e in zeroShotResults["examples"][:n]], width=w, label=f"zero shot")
-    plt.bar(np.arange(n) + w/2, [e["overall_semantic_score"] for e in oneShotResults["examples"][:n]], width=w, label=f"one shot")
+    w = 0.7
+    zeroShotResultsUnbiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    oneShotResultsUnbiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    zeroShotResultsBiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    oneShotResultsBiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    directResultsUnbiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    directResultsBiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    
+    offset = -w/3 - w/12
+
+    plt.bar(np.arange(n) + offset, [e["overall_semantic_score"] for e in directResultsUnbiased["examples"][:n]], width=w/6-0.01, label=f"direct (unbiased)", color=cmap(0), alpha=0.5)
+    offset += w/6
+    plt.bar(np.arange(n) + offset, [e["overall_semantic_score"] for e in directResultsBiased["examples"][:n]], width=w/6-0.01, label=f"direct (biased)", color=cmap(0))
+    offset += w/6
+    plt.bar(np.arange(n) + offset, [e["overall_semantic_score"] for e in zeroShotResultsUnbiased["examples"][:n]], width=w/6-0.01, label=f"zero shot (unbiased)", color=cmap(1), alpha=0.5)
+    offset += w/6
+    plt.bar(np.arange(n) + offset, [e["overall_semantic_score"] for e in zeroShotResultsBiased["examples"][:n]], width=w/6-0.01, label=f"zero shot (biased)", color=cmap(1))
+    offset += w/6
+    plt.bar(np.arange(n) + offset, [e["overall_semantic_score"] for e in oneShotResultsUnbiased["examples"][:n]], width=w/6-0.01, label=f"one shot (unbiased)", color=cmap(2), alpha=0.5)
+    offset += w/6
+    plt.bar(np.arange(n) + offset, [e["overall_semantic_score"] for e in oneShotResultsBiased["examples"][:n]], width=w/6-0.01, label=f"one shot (biased)", color=cmap(2))
+
     plt.ylabel("Score")
     plt.xlabel("Query number")
+    plt.legend().set_draggable(True)
+    plt.show()
+
+
+def plot_aggregate_zero_one_shot_comparison():
+    
+    plt.figure(figsize=(8, 5))
+    plt.title("Direct vs zero vs one shot mean semantic quality on both datasets")
+    plt.xticks([0, 1, 2, 3, 4, 5], ("Direct\n(unbiased)", "Zero-shot\n(unbiased)", "One-shot\n(unbiased)",
+                                    "Direct\n(biased)", "Zero-shot\n(biased)", "One-shot\n(biased)"))
+    plt.grid()
+    w = 0.7
+    zeroShotResultsUnbiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    oneShotResultsUnbiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    zeroShotResultsBiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    oneShotResultsBiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_7_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    directResultsUnbiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_unbiased_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    directResultsBiased = load_answer_quality_results(f"ollama_chat-qwen3-14b_direct_ANSWER_QUALITY.json", folder_path="/LLM_evaluation/eval_querying_styles/quality_evaluations") # TODO: generate zero and one shot results
+    
+    colors=[cmap(0, 0.5), cmap(1, 0.5), cmap(2, 0.5), cmap(0), cmap(1), cmap(2)]
+
+    # offset = -w/3 - w/12
+    plt.bar(
+        [0, 1, 2, 3, 4, 5],
+        [
+            directResultsUnbiased["aggregate"]["mean_overall_semantic_score"],
+            zeroShotResultsUnbiased["aggregate"]["mean_overall_semantic_score"],
+            oneShotResultsUnbiased["aggregate"]["mean_overall_semantic_score"],
+            directResultsBiased["aggregate"]["mean_overall_semantic_score"],
+            zeroShotResultsBiased["aggregate"]["mean_overall_semantic_score"],
+            oneShotResultsBiased["aggregate"]["mean_overall_semantic_score"],
+        ],
+        color=colors
+    )
+    
+    plt.ylabel("Score")
     plt.legend().set_draggable(True)
     plt.show()
 
