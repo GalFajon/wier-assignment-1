@@ -33,7 +33,7 @@
 
 \begin{abstract}
 This report describes a Retrieval-Augmented Generation (RAG) system built on top of the
-PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval, reranking and generation) and without context (LLM-only). We tested the results of these modes across multiple models and example queries using a judge and citation-reference validation.
+PA2 document retrieval pipeline from the previous assignment. The system answers user questions in two modes: with context (retrieval, reranking and generation) and without context (LLM-only). We tested the results of these modes across multiple models and example queries using a judge model and citation-reference validation.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -63,7 +63,7 @@ We use two prompting regimes.
 With context prompts are designed for strict evidence-based answering. Using a system prompt, they constrain the model to use only the provided context (no external knowledge), to keep answers concise (approximately 40-110 words and at most four sentences), and to support each important factual claim with an inline citation using a chunk identifier (e.g., \texttt{[ChunkID: <id>]}). In addition to the natural-language answer, the model must return a structured reference list in JSON format, that matches the cited identifiers exactly. The reference list must be a JSON array of objects with fields \texttt{chunk\_id} and \texttt{url}, e.g., \verb|[{"chunk_id": "<id>", "url": "<url>"}]|. References that are not cited in the answer are disallowed.
 
 Within this with context setting, we evaluate two prompting styles:
-zero-shot and one-shot. In the zero-shot variant, the system prompt consists only of the instruction set (grounding rules, citation format, fallback behavior, and the JSON reference constraints). In the one-shot variant, we prepend a single fully worked example (example question, example context with chunk blocks, and an example output containing both a cited answer and a valid \texttt{references\_json} list). This example is not part of the retrieved evidence for the actual question; instead, it serves as an in-prompt demonstration of the expected formatting and of the strict one-to-one correspondence between in-text ChunkID citations and the reference list.
+zero-shot and one-shot. In the zero-shot variant, the system prompt consists only of the instruction set (grounding rules, citation format, fallback behavior, and the JSON reference constraints). In the one-shot variant, we prepend a single fully worked example (example question, example context with chunk blocks, and an example output containing both a cited answer and a valid \texttt{references\_json} list). This example is not part of the retrieved evidence for the actual question; instead, it serves as an in-prompt demonstration of the expected formatting and of the strict one-to-one correspondence between in-text ChunkID citations and the reference list. The text template defining the instruction set and the example can be read in Appendix \ref{appendix:instructions}.
 
 If the context is insufficient to answer the question, the model must output the exact fallback message:
 
@@ -193,7 +193,7 @@ Across the 14B baseline, out of 100 assessed key facts: 37 were directly covered
 \label{fig:model_key_fact_coverage}
 \end{figure}
 
-In the Figure \ref{fig:model_key_fact_coverage}, the shape of the plot is similar to the one in Figure \ref{fig:model_semantic_scores} since key fact coverage and semantic score are very linked.
+Key-fact coverage was also plotted in the Figure \ref{fig:model_key_fact_coverage} for the first 10 queries to check any unexpected results. The shape of the plot is similar to the one in Figure \ref{fig:model_semantic_scores} since key fact coverage and semantic score are very linked.
 
 \subsection{Question-Alignment and Error Patterns}
 
@@ -201,7 +201,7 @@ Question-address rates of 90-95\% suggest that models understand the posed quest
 
 \subsection{Citation evaluation scores}
 
-The \texttt{qwen3-14b} model was tested for different citation metrics. Both zero and one-shot perform similarly on all tested values of $k$ which is expected, although a slight dip for one-shot in the \texttt{mean precision@k} metric is a bit unusual. Perhaps the additional example might have confused the model slightly.
+The \texttt{qwen3-14b} model was tested for different citation metrics. Both zero and one-shot perform similarly on all tested values of $k$ which is expected, although a slight dip for one-shot in the \texttt{mean precision@k} metric is unexpected. Perhaps the additional example in the task instructions could have misguided the model.
 
 \begin{figure}
 \centering
@@ -212,7 +212,7 @@ The \texttt{qwen3-14b} model was tested for different citation metrics. Both zer
 
 \subsection{Zero-shot and one-shot performance}
 
-While direct answering received no instruction, both zero-shot and one-shot received similar instructions at the beginning of the query, where one-shot queries included an additional example as written in Appendix \ref{appendix:instructions}. In the comparison Figure \ref{fig:zero_one_shot_comparison} one-shot slightly outperforms zero-shot. Both have an expected advantage on the biased dataset over direct answering. On the unbiased dataset, direct answering beats answering with context since the crawled pages don't necessarily cover all query topics.
+In the comparison Figure \ref{fig:zero_one_shot_comparison} one-shot slightly outperforms zero-shot. Both have an expected advantage on the biased dataset over direct answering. On the unbiased dataset, direct answering beats answering with context since the crawled pages don't necessarily cover all query topics.
 
 \begin{figure}
 \centering
