@@ -16,6 +16,7 @@
 \usepackage{verbatim}
 \usepackage{fvextra}
 \usepackage{longtable}
+\usepackage{url}
 
 
 \begin{document}
@@ -109,7 +110,7 @@ The \textit{biased} evaluation dataset comprises 50 queries constructed via a su
 The second \textit{unbiased} dataset was generated directly by ChatGPT 5.5 by prompting it to generate 20 different questions on a mixed topic of Donald Trump, Iran, Ukraine, and Israel, then answered in at most 4 sentences, and provided with 5 supported atomic facts. Citations here are also disallowed since the model cannot know about our database of chunks.
 
 \subsection{Retrieval Evaluation}
-Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}, \texttt{all-MiniLM-L6-v2}, \texttt{all-mpnet-base-v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}, \texttt{bge-reranker-v2-m3}).
+Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}~\cite{bge_m3}, \texttt{all-MiniLM-L6-v2}~\cite{all_minilm_l6_v2}, \texttt{all-mpnet-base-v2}~\cite{all_mpnet_base_v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}~\cite{ms_marco_minilm_l6_v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}~\cite{mmarco_minilmv2_l12_h384}, \texttt{bge-reranker-v2-m3}~\cite{bge_reranker_v2_m3}).
 
 \subsection{Citation Quality Evaluation}
 For evidence-based answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
@@ -157,11 +158,11 @@ Per-example metrics are aggregated across 20 test examples. Mean coverage and se
 Results confirm clear model-size sensitivity:
 
 \begin{itemize}
-    \item \textbf{Qwen 4B}: Mean key-fact coverage 0.486, semantic score 0.58, composite quality 0.516. Hallucination rate 30\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 90\%.
+    \item \textbf{Qwen 4B}~\cite{qwen3_4b}: Mean key-fact coverage 0.486, semantic score 0.58, composite quality 0.516. Hallucination rate 30\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 90\%.
     
-    \item \textbf{Qwen 8B}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
+    \item \textbf{Qwen 8B}~\cite{qwen3_8b}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
     
-    \item \textbf{Qwen 14B}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 95\%.
+    \item \textbf{Qwen 14B}~\cite{qwen3_14b}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 95\%.
 \end{itemize}
 
 The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists.
@@ -225,8 +226,8 @@ While direct answering received no instruction, both zero-shot and one-shot rece
 We implemented a RAG pipeline on top of the PA2 retrieval system, supporting both evidence-grounded and LLM-only answering modes.
 The design emphasizes explicit evidence presentation and machine-checkable references, enabling direct comparison of answer quality across modes.
 
-%\bibliographystyle{IEEEtran}
-%\bibliography{ref}
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
 
 
 \onecolumn
