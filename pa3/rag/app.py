@@ -23,8 +23,8 @@ LLM_MODEL = os.getenv("LLM_MODEL", "ollama_chat/qwen3:14b")
 OLLAMA_API_BASE = os.getenv("OLLAMA_API_BASE", "http://localhost:11434")
 EMBEDDING_MODEL_KEY = os.getenv("EMBEDDING_MODEL_KEY", "bge-m3")
 RERANKING_MODEL_KEY = os.getenv("RERANKING_MODEL_KEY", "bge")
-NUM_CANDIDATES = int(os.getenv("NUM_CANDIDATES", "25"))
-NUM_FINAL = int(os.getenv("NUM_FINAL", "5"))
+NUM_CANDIDATES = int(os.getenv("NUM_CANDIDATES", "50"))
+NUM_FINAL = int(os.getenv("NUM_FINAL", "7"))
 
 def init_dspy():
     try:
