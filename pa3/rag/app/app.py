@@ -79,7 +79,7 @@ def display_result(title, result):
 
 
 def run_all_modes(question, embedding_model, embedding_dim, reranking_model):
-    print(f"\n{'#'*80}\n# Query: {question}\n{'#'*80}")
+    print(f"\n")
 
     print("\n[1/3] Direct Query...")
     result1 = run_signature_direct_query(question)
