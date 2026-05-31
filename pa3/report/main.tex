@@ -16,6 +16,7 @@
 \usepackage{verbatim}
 \usepackage{fvextra}
 \usepackage{longtable}
+\usepackage{url}
 
 
 \begin{document}
@@ -102,17 +103,17 @@ Besedilo:
 We implemented a systematic three-stage evaluation framework centered on a curated dataset.
 
 \subsection{Datasets}
-The \textit{biased} evaluation dataset comprises 50 queries constructed via a supervised process using GPT-4.1-mini (via OpenAI API) as a question and expected-answer generator. For each sampled page, text windows are selected and GPT-4.1-mini generates a factual question in Slovenian, a concise expected answer, and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
+The \textit{biased} evaluation dataset comprises 50 queries constructed via a supervised process using \texttt{GPT-4.1-mini} (via OpenAI API) as a question and expected-answer generator. For each sampled page, text windows are selected and \texttt{GPT-4.1-mini} generates a factual question in Slovenian, a concise expected answer, and a set of atomic key facts. Each fact is explicitly linked to supporting chunk identifiers. Candidate chunks are then annotated as required (minimal support set), acceptable (alternative support), partial (incomplete support), or hard negatives (unrelated). The dataset is validated algorithmically: all chunk IDs are verified to exist on their pages, and malformed or unsupported examples are rejected.
 
 \textbf{Example:} One dataset entry asks ``\textit{Koliko gasilcev in vojakov je rusko ministrstvo za izredne razmere že napotilo v boj proti požarom, koliko dodatnih vojakov je vpoklical današnji odlok Medvedjeva, koliko smrtnih žrtev in koliko uničenega ozemlja so povzročili požari v zahodni Rusiji ter kateri vremenski pogoji so glavni vzrok za požare?}''. The expected answer references four key facts, described in a single chunk: deployment of hundreds of thousands of firefighters and approximately 2000 military personnel, Medvedev's decree calling additional troops, 40 deaths and 128,500 hectares destroyed, hot and dry weather as root cause.
 
 The second \textit{unbiased} dataset was generated directly by ChatGPT 5.5 by prompting it to generate 20 different questions on a mixed topic of Donald Trump, Iran, Ukraine, and Israel, then answered in at most 4 sentences, and provided with 5 supported atomic facts. Citations here are also disallowed since the model cannot know about our database of chunks.
 
 \subsection{Retrieval Evaluation}
-Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}, \texttt{all-MiniLM-L6-v2}, \texttt{all-mpnet-base-v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}, \texttt{bge-reranker-v2-m3}).
+Retrieval quality was remeasured using Normalized Discounted Cumulative Gain at multiple cut-offs. The metric is computed against the required and acceptable chunk labels. We evaluate multiple configuration combinations: different embedding models (e.g., \texttt{bge-m3}~\cite{bge_m3}, \texttt{all-MiniLM-L6-v2}~\cite{all_minilm_l6_v2}, \texttt{all-mpnet-base-v2}~\cite{all_mpnet_base_v2}) paired with different reranking strategies (e.g. no reranking, \texttt{ms-marco-MiniLM-L6-v2}~\cite{ms_marco_minilm_l6_v2}, \texttt{mmarco-mMiniLMv2-L12-H384-v1}~\cite{mmarco_minilmv2_l12_h384}, \texttt{bge-reranker-v2-m3}~\cite{bge_reranker_v2_m3}).
 
 \subsection{Citation Quality Evaluation}
-For evidence-grounded answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
+For evidence-based answering, we perform bidirectional citation-reference validation: every chunk identifier cited in the answer (via inline \texttt{[ChunkID: <id>]} markers) must appear in the structured reference JSON list, and vice versa. Additional metrics include precision and recall against the required and acceptable chunk sets (where precision = relevant citations / total citations, and recall = relevant citations / acceptable chunk set size), and detection of hard-negative contamination (citing chunks marked as unrelated in the dataset). This evaluation quantifies whether the system maintains faithful grounding between in-text citations and references, enforcing that if a fact is stated, it must be cited and if a citation is made, the cited chunk must support it.
 
 \subsection{Answer Quality Evaluation}
 Answer semantic quality is assessed using GPT-4 as a judge. For each query, the judge compares the model's answer against the standard expected answer and key facts using a detailed rubric. Evaluation dimensions include key-fact coverage (marked as covered, implied, partial, missing, or contradicted), overall semantic score (0.0--1.0 scale), direct question-answer alignment (true/false), and presence of major errors. The rubric is flexible: paraphrases are accepted, citation formatting does not affect semantic scoring, and factually correct supplementary information is tolerated.
@@ -124,9 +125,9 @@ Answer semantic quality is assessed using GPT-4 as a judge. For each query, the 
 \subsection{Retrieval Performance and Model Selection}
 Our retrieval evaluation assessed 50 queries  across multiple embedding and reranking configurations. For the \texttt{bge-m3} embedding model without reranking, we observe strong early-ranking performance: NDCG@2 = 0.983 (std 0.056), NDCG@3 = 0.917 (std 0.100), with gradual degradation to NDCG@10 = 0.760 (std 0.134). This indicates that relevant chunks are typically placed within the top two to three positions, with degradation as ranking depth increases.
 
-Reranking with \texttt{ms-marco-MiniLM-L6-v2} yields comparable early performance (NDCG@2 = 0.973, NDCG@3 = 0.918) but marginally improves mid-range rankings (NDCG@6 through NDCG@10 all exceed no-reranker scores by 0.01-0.03).
+Reranking with \texttt{ms-marco-MiniLM-L6-v2} yields comparable early performance (NDCG@2 = 0.973, NDCG@3 = 0.918) but marginally improves mid-range rankings (NDCG@6 through NDCG@10 all exceed no-reranker scores by about 0.003-0.015).
 
-Comparative performance across model and reranker combinations is visualized in Figures \ref{fig:ndcg_mean} and \ref{fig:ndcg_std}. The mean NDCG scores across all cut-offs show consistent patterns: \texttt{bge-m3} with no reranking achieves competitive performance, while reranked variants (ms-marco, mmarco, bge) cluster at slightly higher means. Standard deviations remain elevated across configurations, indicating case-by-case variance in retrieval effectiveness, suggesting that no single configuration dominates uniformly.
+Comparative performance across model and reranker combinations is visualized in Figures \ref{fig:ndcg_mean} and \ref{fig:ndcg_std}. The mean NDCG scores across all cut-offs show consistent patterns: \texttt{bge-m3} with no reranking achieves competitive performance, while reranked variants (\texttt{ms-marco}, \texttt{mmarco}, \texttt{bge}) cluster at slightly higher means. Standard deviations remain elevated across configurations, indicating case-by-case variance in retrieval effectiveness, suggesting that no single configuration dominates uniformly.
 
 \begin{figure}[h]
 \centering
@@ -146,7 +147,7 @@ Comparative performance across model and reranker combinations is visualized in 
 
 We evaluated three Qwen model sizes in direct (no-context) mode to isolate language capability from retrieval grounding.
 
-As mentioned above, each question includes five key facts extracted from expected answers. For each fact, an external LLM judge (GPT-4) assigns a coverage status: \texttt{covered} (1.0), \texttt{implied} (0.85), \texttt{partial} (0.5), \texttt{missing} (0.0), or \texttt{contradicted} (0.0). The key-fact coverage score is the arithmetic mean of individual fact scores across all facts. This metric favors exact coverage but maintains partial credit for implicit or partial information.
+As mentioned above, each question includes five key facts extracted from expected answers. For each fact, an external LLM judge (\texttt{GPT-4}) assigns a coverage status: \texttt{covered} (1.0), \texttt{implied} (0.85), \texttt{partial} (0.5), \texttt{missing} (0.0), or \texttt{contradicted} (0.0). The key-fact coverage score is the arithmetic mean of individual fact scores across all facts. This metric favors exact coverage but maintains partial credit for implicit or partial information.
 
 The external judge rates overall answer quality on a 0.0--1.0 scale based on five rubric dimensions: directness and clarity in addressing the question, comprehensiveness relative to expected answer, freedom from major factual errors, presence of unsupported claims, and coherence and readability. The judge assigns scores at 0.0-1.0 multiples of 0.2 (e.g., 0.0, 0.2, 0.4, 0.6, 0.8, 1.0).
 
@@ -157,11 +158,11 @@ Per-example metrics are aggregated across 20 test examples. Mean coverage and se
 Results confirm clear model-size sensitivity:
 
 \begin{itemize}
-    \item \textbf{Qwen 4B}: Mean key-fact coverage 0.486, semantic score 0.58, composite quality 0.516. Hallucination rate 30\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 90\%.
+    \item \textbf{Qwen 4B}~\cite{qwen3_4b}: Mean key-fact coverage 0.486, semantic score 0.58, composite quality 0.516. Hallucination rate 30\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 90\%.
     
-    \item \textbf{Qwen 8B}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
+    \item \textbf{Qwen 8B}~\cite{qwen3_8b}: Mean key-fact coverage 0.471, semantic score 0.56, composite quality 0.497. Hallucination rate 45\%, contradiction rate 0\%, major-error rate 15\%, question-address rate 90\%.
     
-    \item \textbf{Qwen 14B}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 95\%.
+    \item \textbf{Qwen 14B}~\cite{qwen3_14b}: Mean key-fact coverage 0.549, semantic score 0.67, composite quality 0.581. Hallucination rate 60\%, contradiction rate 0\%, major-error rate 10\%, question-address rate 95\%.
 \end{itemize}
 
 The 14B model achieved 13\% higher fact coverage (0.549 vs 0.486) and 16\% higher semantic score (0.67 vs 0.58) compared to the 4B model, despite 2$\times$ higher hallucination rate (60\% vs 30\%). This trade-off reflects a broader pattern in language models: larger models generate more fluent, paraphrased, and contextually adaptive answers, but simultaneously produce more fabricated details when grounding is unavailable. Contradiction rates remained near zero across all sizes, indicating that direct LLM-only answers avoid factual inconsistency with expected answers when semantic content exists.
@@ -225,8 +226,8 @@ In the comparison Figure \ref{fig:zero_one_shot_comparison} one-shot slightly ou
 We implemented a RAG pipeline on top of the PA2 retrieval system, supporting both evidence-grounded and LLM-only answering modes.
 The design emphasizes explicit evidence presentation and machine-checkable references, enabling direct comparison of answer quality across modes.
 
-%\bibliographystyle{IEEEtran}
-%\bibliography{ref}
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
 
 
 \onecolumn
