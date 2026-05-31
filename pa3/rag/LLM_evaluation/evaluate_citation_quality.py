@@ -8,10 +8,10 @@ from collections import defaultdict
 
 
 
-ANSWERS_PATH = "eval_querying_styles/answers/ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7.json"
-K = 7
+ANSWERS_PATH = "eval_llm_retrieve_k/answers/ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_9.json"
+K = 9
 
-OUTPUT_PATH = "ollama_chat-qwen3-14b_rag_zero_shot_bge-m3_50_bge_7_CITATION_QUALITY.json"
+OUTPUT_PATH = "ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_9_CITATION_QUALITY.json"
 
 
 EVAL_DATASET_PATH = "eval_datasets/evaluation_dataset.json"

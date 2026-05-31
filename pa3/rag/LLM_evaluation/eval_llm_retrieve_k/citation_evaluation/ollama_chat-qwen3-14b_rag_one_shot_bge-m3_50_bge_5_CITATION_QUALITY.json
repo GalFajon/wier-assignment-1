@@ -1,0 +1,7 @@
+{
+  "answers_file": "eval_llm_retrieve_k/answers/ollama_chat-qwen3-14b_rag_one_shot_bge-m3_50_bge_5.json",
+  "k": 5,
+  "hit_at_k": 1.0,
+  "mean_precision_at_k": 0.731060606060606,
+  "mean_recall_at_k": 0.7765151515151515
+}
